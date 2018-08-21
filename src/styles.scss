@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'theme.scss';
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+my-app {
+  display: block;
+  height: 100vh;
+}
+
+.container {
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.mat-checkbox-label {
+  text-transform: capitalize;
+}
