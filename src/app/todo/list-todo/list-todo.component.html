@@ -1,5 +1,19 @@
-<button arial-label="Disconnect" (click)="SQLSynchro()"
-	 mat-icon-button color="warn">SQL Synchro</button>
+<table>
+	<tr>
+		<th width=200>
+<button arial-label="TODOS" (click)="todoSynchro()"
+	 mat-icon-button color="warn">TODO Synchro</button>
+		</th>
+		<th width=200>
+<button arial-label="USERS" (click)="userSynchro()"
+	 mat-icon-button color="warn">User Synchro</button>
+		</th>
+		<th width=200>
+<button arial-label="ALL" (click)="allSynchro()"
+	 mat-icon-button color="warn">all Synchro</button>
+		</th>
+	</tr>
+</table>
 <table border='1'>
 	<tr>
 		<th>Done</th>
@@ -20,5 +34,16 @@
 		<td>{{todo.targetDate}}</td>
 		<td>{{todo.doneDate}}</td>
 		<td><button (click)="removeTodo(todo.idx);">Delete</button></td>
+	</tr>
+</table>
+
+<table border='1'>
+	<tr>
+		<th>User ID</th>
+		<th>User name</th>
+	</tr>
+	<tr *ngFor="let user of userList">
+		<th>{{user.id}}</th>
+		<th>{{user.value}}</th>
 	</tr>
 </table>

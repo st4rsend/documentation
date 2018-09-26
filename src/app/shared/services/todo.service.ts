@@ -10,7 +10,6 @@ import { WebSocketService, wsMessage } from './websocket.service';
 export class TodoService {
 
 	private todos: Todo[];
-	private createSQLSubject = new Subject<Todo>();
 
 	private tsSelectSQL: any = 'select T.ID, identity, U.ID, task, status, date_format(targetDate, "%d/%m/%Y"), date_format(doneDate,"%d/%m/%Y") from todos T left join users U on T.userID = U.ID';
 	private tsInsertSQL: string = 'insert into todos (UserID, task, status, targetDate, doneDate) values(';
@@ -120,12 +119,13 @@ export class TodoService {
 						false
 					));
 				}
+				console.log('TODO LIST');
 			}
 			if (scMsg.payload.command === "EOF") {
 				console.log('EOF');
 			}
 		}
-		console.log(scMsgEvent);
+		//console.log(scMsgEvent);
 		return scMsgEvent;
 	}
 }

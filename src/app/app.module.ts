@@ -17,6 +17,7 @@ import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
 import { ServerComComponent } from './server-com/server-com.component';
 
 import { TodoService } from './shared/services/todo.service';
+import { SqlListService } from './shared/services/sql-list.service';
 import { WebSocketService } from './shared/services/websocket.service';
 
 @NgModule({
@@ -37,7 +38,8 @@ import { WebSocketService } from './shared/services/websocket.service';
   ],
   providers: [
 		TodoService,
-		WebSocketService
+		WebSocketService,
+		SqlListService
 	],
   bootstrap: [AppComponent]
 })
