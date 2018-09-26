@@ -1,103 +1,95 @@
 import { Injectable } from '@angular/core';
-
 import * as Rx from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
-import { Subject } from "rxjs/Subject";
-import { Observable } from "rxjs/Observable";
 
 interface timeStamp {
-	secSinceEpoch : number;
-	nanoSec : number;
+  secSinceEpoch : number;
+  nanoSec : number;
 }
 
 interface comEncap {
-	channelID : number;
-	domain : string;
-	command : string;
-	//data : [object]
-	data : [string]
+  channelID : number;
+  domain : string;
+  command : string;
+  data : [string]
 }
 
 export interface wsMessage {
-	sequence : number;
-	time : timeStamp;
-	payload : comEncap;
+  sequence : number;
+  time : timeStamp;
+  payload : comEncap;
 }
 
-@Injectable()
+
+@Injectable({
+	providedIn: 'root'
+})
 
 export class WebSocketService {
 
   constructor() { }
 
-	private subject: Rx.Subject<MessageEvent>;
-	private connected$ = new Subject<any>();
+	private wsConnected$ = new Subject<any>();
+	public webSocket: WebSocket;
+	private currentSeq: number = 1;
 
-	public connect(url): Rx.Subject<MessageEvent> {
-		if (!this.subject) {
-			this.subject = this.create(url);
-			console.log("Successfully connected: " + url);
-			this.connected$.next(true);
+	public wsPrepareMessage(channelID: number, domain: string, command: string, data: [string]): wsMessage {
+		let message: wsMessage = {
+			sequence: this.currentSeq,
+			time: {
+				secSinceEpoch: Math.floor(Date.now()/1000),
+				nanoSec: (Date.now() % 1000) * 1000000
+			},
+			payload: {
+				channelID: channelID,
+				domain: domain,
+				command: command,
+				data: data
+			},
 		}
-		return this.subject;
+		this.currentSeq++;
+		return message;
+	}
+
+	public wsConnect(url: string){
+		this.webSocket = new WebSocket(url);
+		this.wsConnected$.next(true);
+	}
+
+	public wsDisconnect(){
+		this.webSocket.close();
+		this.wsConnected$.next(false);
 	}
 
 	public connected(): Observable<any> {
-		return this.connected$.asObservable();
+		return this.wsConnected$.asObservable();
 	}
 
-	private create(url): Rx.Subject<MessageEvent> {
-		let ws = new WebSocket(url);
-
+	public wsCreateSubject(): Rx.Subject<MessageEvent> {
 		let observable = Rx.Observable.create(
 			(obs: Rx.Observer<MessageEvent>) => {
-				ws.onmessage = obs.next.bind(obs);
-				ws.onerror = obs.error.bind(obs);
-				ws.onclose = obs.complete.bind(obs);
-				return ws.close.bind(ws);
-		})
+				this.webSocket.onmessage = obs.next.bind(obs);
+				this.webSocket.onerror = obs.error.bind(obs);
+				this.webSocket.onclose = obs.complete.bind(obs);
+				return this.webSocket.close.bind(this.webSocket);
+		});
 
-		let observer =  {
-			//next: (dataText: Object) => {
+		let observer = {
 			next: (dataText: string) => {
-				if (ws.readyState === WebSocket.OPEN) {
-
-
-					let message: wsMessage = { 
-						sequence: 0, 
-						time: { 
-							secSinceEpoch: 1534500630,
-							nanoSec: 60832341
-						},
-						payload: {
-							channelID: 0,
-							domain: "CMD",
-							command: "VERBOSITY",
-							//data: [JSON.parse('{"data":"VERBOSE ON"}').data]
-							data: ["VERBOSE ON"]
-						},
-					}
-					ws.send(JSON.stringify(message));
-
-					let message1: wsMessage = { 
-						sequence: 1, 
-						time: { 
-							secSinceEpoch: 1534500630,
-							nanoSec: 60832341
-						},
-						payload: {
-							channelID: 0,
-							domain: "SQL",
-							command: "REQ_SELECT",
-							//data: [dataText]
-							data: [dataText]
-						},
-					}
-					ws.send(JSON.stringify(message1));
+				if (this.webSocket.readyState === WebSocket.OPEN) {
+					 this.webSocket.send(JSON.stringify(dataText));
 				}
+			},
+			error: (str: string) => {
+				console.error("OBSERVER ERROR:", str);
+			},
+			complete: (str: string) => {
+				console.log("OBSERVER COMPLETE:", str);
 			}
 		}
 		return Rx.Subject.create(observer, observable);
 	}
-
 }

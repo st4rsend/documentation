@@ -3,19 +3,28 @@ import { NgModule } from '@angular/core';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule, MatToolbarModule, MatInputModule, MatIconModule } from '@angular/material';
-
-import { WebSocketService } from './shared/services/websocket.service';
+import { 
+	MatButtonModule, 
+	MatToolbarModule, 
+	MatInputModule, 
+	MatIconModule, 
+	MatCheckboxModule 
+} from '@angular/material';
 
 import { AppComponent } from './app.component';
-import { InputBoxComponent } from './input-box/input-box.component';
-import { TodoListComponent } from './todo-list/todo-list.component';
+import { ListTodoComponent } from './todo/list-todo/list-todo.component';
+import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
+import { ServerComComponent } from './server-com/server-com.component';
+
+import { TodoService } from './shared/services/todo.service';
+import { WebSocketService } from './shared/services/websocket.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    InputBoxComponent,
-    TodoListComponent,
+    ListTodoComponent,
+    CreateTodoComponent,
+    ServerComComponent,
   ],
   imports: [
     BrowserModule,
@@ -27,6 +36,7 @@ import { TodoListComponent } from './todo-list/todo-list.component';
 		MatButtonModule
   ],
   providers: [
+		TodoService,
 		WebSocketService
 	],
   bootstrap: [AppComponent]

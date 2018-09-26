@@ -1,0 +1,56 @@
+<h2>Create todo form</h2>
+
+<div class="form-group">
+	<form (ngSubmit)="createTodo()">
+		<div class="todo-user">User __________: 
+			<select 
+				name="todoUser"
+				[(ngModel)]="todo.user">
+				<option *ngFor="let user of userList" [ngValue]="user[0]">{{user[1]}}</option>
+			</select>
+		</div>
+
+		<div class="todo-label"> Label__________: 
+			<input #todoInput 
+				type="text"
+				[placeholder]="TodoLabel"
+				name="todoLabel"
+				[(ngModel)]="todo.label">
+		</div>
+
+		<div class="todo-target-date">Target date______:
+			<input
+				type="date"
+				[placeholder]="TodoTargetDate"
+				name="todoTargetDate"
+				[(ngModel)]="todo.targetDate">
+		</div>
+
+		<div class="todo-done-date">Done date_______:
+			<input
+				type="date"
+				[placeholder]="TodoDoneDate"
+				name="todoDoneDate"
+				[(ngModel)]="todo.doneDate">
+		</div>
+
+		<div class="todo-completed">Completed______:
+			<input
+				type="checkbox"
+				[placeholder]="Todocompleted"
+				name="todoCompleted"
+				[(ngModel)]="todo.completed">
+		</div>
+		<div class="todo-confirm">
+			<input type="checkbox"
+				name="todoConfirm"
+				[(ngModel)]="confirmed">
+				Confirming the above!
+		</div>
+	</form>
+	<button [disabled]="!confirmed" type="submit" (click)="emitTodo(todo); todoInput.value = ''">
+		{{buttonLabel}}
+	</button>
+</div>
+
+<h4>Todo: {{todo | json}}</h4>

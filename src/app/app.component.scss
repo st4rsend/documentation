@@ -3,13 +3,14 @@ p {
 }
 
 .container {
-  padding: 30px;
+	border: 1px solid blue;
+  padding: 10px;
+	margin: 10px 10px 10px 10px;
 }
 
 .form-container {
   display: flex;
   flex-direction: column;
-
 }
 
 .websocket-console {
@@ -21,11 +22,11 @@ p {
     word-wrap: break-word;
     white-space: pre-wrap;
     font-family: monospace, serif;
-    font-size: 1em;
+    font-size: small;
     margin: 0;
-    padding: 5px;
+    padding: 1px;
     &:nth-child(even) {
-      background-color: #fafafa;
+      background-color: #d8d8d8;
     }
   }
 }

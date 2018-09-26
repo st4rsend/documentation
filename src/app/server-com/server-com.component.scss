@@ -1,0 +1,22 @@
+.form-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.websocket-console {
+	overflow-y: scroll;
+	height: 200px;
+	width: 100%;
+	box-shadow: border-box;
+	pre {
+		word-wrap: break-word;
+		white-space: pre-wrap;
+		font-family: monospace, serif;
+		font-size: small;
+		margin: 0;
+		padding: 1px;
+		&:nth-child(even) {
+			background-color: #d8d8d8;
+		}
+	}
+}

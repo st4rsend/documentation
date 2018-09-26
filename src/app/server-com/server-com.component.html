@@ -1,0 +1,35 @@
+<form class="form-container">
+	<mat-form-field>
+		<input name="scAddress" placeholder="scAddress" [(ngModel)]="scAddress" matInput>
+		<button arial-label="Connect to server"	(click)="scConnect()"
+			matSuffix>Connect</button>
+	</mat-form-field>
+
+	<mat-form-field>
+		<input name="scDomain" placeholder="scDomain" [(ngModel)]="scDomain"
+			[disabled]="!scIsConnected" matInput>
+	</mat-form-field>
+	<mat-form-field>
+		<input name="scCommand" placeholder="scCommand" [(ngModel)]="scCommand"
+			[disabled]="!scIsConnected" matInput>
+	</mat-form-field>
+	<mat-form-field>
+		<input name="scMessage" placeholder="scMessage" [(ngModel)]="scMessage"
+			[disabled]="!scIsConnected" matInput>
+		<button arial-label="Send message" (click)="scSend($event)"
+			[disabled]="!scIsConnected" matSuffix>Send</button>
+	</mat-form-field>
+	<button arial-label="Disconnect" (click)="scDisconnect()"
+		mat-icon-button color="warn">Disconnect</button>
+</form>
+<p>
+	Server verbosity <input [(ngModel)]="scVerbosityFlag" type="checkbox" arial-label="Verbosity" (change)="scVerbosity()">
+<BR>Status scIsConnected: {{scIsConnected}}</p>
+<button (click)="toggleConsole($event)">Show/hide console</button>
+<div *ngIf="consoleVisible">
+	<div class="websocket-console" #scSt4rsend_console>
+		<ng-template ngFor let-message [ngForOf]="scMessageLog | async" let-i="index">
+			<pre>{{message}}</pre>
+		</ng-template>
+	</div>
+</div>
