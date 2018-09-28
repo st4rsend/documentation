@@ -51,12 +51,8 @@ export class ServerComComponent {
 	}
 
 	public scSend() {
-		this.scSubject = <Subject<any>>this.scWebsocket
-			.wsCreateSubject()
-			.map((scResponse: MessageEvent): any => {
-				return this.scPrint(scResponse);
-			});
-		this.scSubMessages = this.scSubject.subscribe({
+		this.scSubject = this.scWebsocket.wsSubject();
+		 this.scSubject.subscribe({
 			next(x) { },}
 		);
 		if (this.consoleVisible) {
@@ -106,7 +102,7 @@ export class ServerComComponent {
 				nanoSec: (Date.now() % 1000) * 1000000
 			},
 			payload: {
-				channelID: 0,
+				channelid: 0,
 				domain: "CMD",
 				command: "VERBOSITY",
 				data: [data]

@@ -7,6 +7,10 @@ import {Todo} from '../../shared/model/todo';
   selector: 'app-list-todo',
   templateUrl: './list-todo.component.html',
   styleUrls: ['./list-todo.component.css'],
+	providers: [
+		SqlListService,
+		TodoService
+	],
 })
 export class ListTodoComponent implements OnInit {
 
@@ -21,8 +25,8 @@ export class ListTodoComponent implements OnInit {
 		this.toggleCompletion = new EventEmitter<Todo>();
 	}
 	ngOnInit() {
-		this.todos = this.todoService.getTodos();
-		this.userList = this.sqlListService.getUsers();
+		//this.todos = this.todoService.getTodos();
+		//this.userList = this.sqlListService.getUsers();
 	}
 
 	onToggleCompletion(index: number) {
@@ -40,18 +44,18 @@ export class ListTodoComponent implements OnInit {
 		//console.log("User list:", this.userList);
 		this.todoService.SQLSynchro();
 		this.todos = this.todoService.getTodos();
-		console.log (this.todos);
+//		console.log (this.todos);
 	}
 	userSynchro() {
 		this.sqlListService.SQLSynchro();
 		this.userList = this.sqlListService.getUsers();
-		console.log (this.userList);
+//		console.log (this.userList);
 	}
 	allSynchro() {
-		this.todoService.SQLSynchro();
 		this.sqlListService.SQLSynchro();
+		this.todoService.SQLSynchro();
 		this.todos = this.todoService.getTodos();
 		this.userList = this.sqlListService.getUsers();
-		console.log (this.userList);
+//		console.log (this.userList);
 	}
 }

@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import * as Rx from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 interface timeStamp {
   secSinceEpoch : number;
@@ -11,7 +9,7 @@ interface timeStamp {
 }
 
 interface comEncap {
-  channelID : number;
+  channelid : number;
   domain : string;
   command : string;
   data : [string]
@@ -22,7 +20,6 @@ export interface wsMessage {
   time : timeStamp;
   payload : comEncap;
 }
-
 
 @Injectable({
 	providedIn: 'root'
@@ -36,7 +33,9 @@ export class WebSocketService {
 	public webSocket: WebSocket;
 	private currentSeq: number = 1;
 
-	public wsPrepareMessage(channelID: number, domain: string, command: string, data: [string]): wsMessage {
+	private socket: WebSocketSubject<any>;
+
+	public wsPrepareMessage(channelid: number, domain: string, command: string, data: [string]): wsMessage {
 		let message: wsMessage = {
 			sequence: this.currentSeq,
 			time: {
@@ -44,7 +43,7 @@ export class WebSocketService {
 				nanoSec: (Date.now() % 1000) * 1000000
 			},
 			payload: {
-				channelID: channelID,
+				channelid: channelid,
 				domain: domain,
 				command: command,
 				data: data
@@ -55,12 +54,13 @@ export class WebSocketService {
 	}
 
 	public wsConnect(url: string){
-		this.webSocket = new WebSocket(url);
+
+		this.socket = webSocket(url); 
 		this.wsConnected$.next(true);
 	}
 
 	public wsDisconnect(){
-		this.webSocket.close();
+		this.currentSeq = 1;
 		this.wsConnected$.next(false);
 	}
 
@@ -68,28 +68,8 @@ export class WebSocketService {
 		return this.wsConnected$.asObservable();
 	}
 
-	public wsCreateSubject(): Rx.Subject<MessageEvent> {
-		let observable = Rx.Observable.create(
-			(obs: Rx.Observer<MessageEvent>) => {
-				this.webSocket.onmessage = obs.next.bind(obs);
-				this.webSocket.onerror = obs.error.bind(obs);
-				this.webSocket.onclose = obs.complete.bind(obs);
-				return this.webSocket.close.bind(this.webSocket);
-		});
-
-		let observer = {
-			next: (dataText: string) => {
-				if (this.webSocket.readyState === WebSocket.OPEN) {
-					 this.webSocket.send(JSON.stringify(dataText));
-				}
-			},
-			error: (str: string) => {
-				console.error("OBSERVER ERROR:", str);
-			},
-			complete: (str: string) => {
-				console.log("OBSERVER COMPLETE:", str);
-			}
-		}
-		return Rx.Subject.create(observer, observable);
+	public wsSubject() : Subject<any> {
+		return this.socket;	
+		
 	}
 }

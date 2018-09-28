@@ -24,10 +24,6 @@ export class TodoService {
 		return this.todos;
 	}
 
-	public addTodo(todo: Todo) {
-		this.todos.push(todo);
-	}
-
 	public createTodo(todo: Todo) {
 		console.log("Creating todo: ", todo);
 		var sql = this.tsInsertSQL.concat(
@@ -37,15 +33,7 @@ export class TodoService {
 			todo.doneDate,'")');
 		console.log("SQL: ", sql);
 
-		this.tsSubject = <Subject<any>>this.webSocketService
-		.wsCreateSubject()
-		.map((tsResponse: MessageEvent): any => {
-			return this.tsParse(tsResponse);
-		});
-
-		this.tsSelectSub = this.tsSubject.subscribe({
-			next(x) { },}
-		);
+		this.tsSubject = this.webSocketService.wsSubject();
 
 		let message1 = this.webSocketService
 			.wsPrepareMessage(0,'SQL','REQ_INSERT',[sql]);
@@ -55,17 +43,12 @@ export class TodoService {
 	public deleteTodo(idx: number) {
 		console.log("Deleting todo: ", idx);
 		var sql = this.tsDeleteSQL.concat(String(idx));
-		console.log("SQL: ", sql);
 
-		this.tsSubject = <Subject<any>>this.webSocketService
-		.wsCreateSubject()
-		.map((tsResponse: MessageEvent): any => {
-			return this.tsParse(tsResponse);
+		this.tsSubject = this.webSocketService.wsSubject();
+
+		this.tsSelectSub = this.tsSubject.subscribe((value) => {
+			this.tsParse(value);
 		});
-
-		this.tsSelectSub = this.tsSubject.subscribe({
-			next(x) { },}
-		);
 
 		let message1 = this.webSocketService
 			.wsPrepareMessage(0,'SQL','REQ_DELETE',[sql]);
@@ -75,33 +58,22 @@ export class TodoService {
 	public SQLSynchro() {
 
 		this.todos = [];
-		this.tsSubject = <Subject<any>>this.webSocketService
-		.wsCreateSubject()
-		.map((tsResponse: MessageEvent): any => {
-			return this.tsParse(tsResponse);
-		});
+		this.tsSubject = this.webSocketService.wsSubject();
 
-		this.tsSelectSub = this.tsSubject.subscribe({
-			next(x) {},
-		});
-		let message1 = this.webSocketService
+		if ((this.tsSelectSub === undefined) || (this.tsSelectSub.closed === true)) {
+			this.tsSelectSub = this.tsSubject.subscribe((value) => { this.tsParse(value); });
+		}
+
+		let message = this.webSocketService
 			.wsPrepareMessage(0,'SQL','REQ_SELECT',[this.tsSelectSQL]);
-		this.tsSubject.next(message1);
+		this.tsSubject.next(message);
 	}
 
-	private tsParse(scMsgEvent: MessageEvent): MessageEvent {
-		let scMsg: wsMessage;
-		try {
-			scMsg = JSON.parse(scMsgEvent.data);
-		}
-		catch(e){
-			console.log("SCERROR: PARSE: Couldn't parse as JSON from websocket");
-			return scMsgEvent;
-		}
-		if (scMsg.payload.domain === "SQL") {
+	private tsParse(scMsg: wsMessage) {
+		if ((+scMsg.payload.channelid === 0) && (scMsg.payload.domain === "SQL")) {
 			if (scMsg.payload.command === "RESP_SELECT_DATA") {
 				if (+scMsg.payload.data[4] > 0) {
-					this.addTodo(new Todo(
+					this.todos.push(new Todo(
 						+scMsg.payload.data[0],
 						scMsg.payload.data[1],
 						scMsg.payload.data[3],
@@ -110,7 +82,7 @@ export class TodoService {
 						true
 					));
 				} else {
-					this.addTodo(new Todo(
+					this.todos.push(new Todo(
 						+scMsg.payload.data[0],
 						scMsg.payload.data[1],
 						scMsg.payload.data[3],
@@ -119,13 +91,12 @@ export class TodoService {
 						false
 					));
 				}
-				console.log('TODO LIST');
 			}
-			if (scMsg.payload.command === "EOF") {
+			if ((+scMsg.payload.channelid === 0) && (scMsg.payload.command === "EOF")) {
 				console.log('EOF');
+				this.tsSelectSub.unsubscribe();
 			}
 		}
-		//console.log(scMsgEvent);
-		return scMsgEvent;
 	}
 }
+

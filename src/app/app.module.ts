@@ -16,10 +16,6 @@ import { ListTodoComponent } from './todo/list-todo/list-todo.component';
 import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
 import { ServerComComponent } from './server-com/server-com.component';
 
-import { TodoService } from './shared/services/todo.service';
-import { SqlListService } from './shared/services/sql-list.service';
-import { WebSocketService } from './shared/services/websocket.service';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,9 +33,6 @@ import { WebSocketService } from './shared/services/websocket.service';
 		MatButtonModule
   ],
   providers: [
-		TodoService,
-		WebSocketService,
-		SqlListService
 	],
   bootstrap: [AppComponent]
 })

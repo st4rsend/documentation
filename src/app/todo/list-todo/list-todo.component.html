@@ -24,7 +24,7 @@
 		<th>Done date</th>
 		<th>Action</th>
 	</tr>
-	<tr *ngFor="let todo of todos; let index = index"
+	<tr *ngFor="let todo of todos ; let index = index"
 		[class.completed]="todo.completed">
 		<td><input type="checkbox" [checked]="todo.completed"
 			(change)="onToggleCompletion(index);"></td>

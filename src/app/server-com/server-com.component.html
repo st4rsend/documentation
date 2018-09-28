@@ -1,4 +1,6 @@
 <form class="form-container">
+	<button arial-label="Disconnect" (click)="scDisconnect()"
+		mat-icon-button color="warn">Disconnect</button>
 	<mat-form-field>
 		<input name="scAddress" placeholder="scAddress" [(ngModel)]="scAddress" matInput>
 		<button arial-label="Connect to server"	(click)="scConnect()"
@@ -19,8 +21,6 @@
 		<button arial-label="Send message" (click)="scSend($event)"
 			[disabled]="!scIsConnected" matSuffix>Send</button>
 	</mat-form-field>
-	<button arial-label="Disconnect" (click)="scDisconnect()"
-		mat-icon-button color="warn">Disconnect</button>
 </form>
 <p>
 	Server verbosity <input [(ngModel)]="scVerbosityFlag" type="checkbox" arial-label="Verbosity" (change)="scVerbosity()">

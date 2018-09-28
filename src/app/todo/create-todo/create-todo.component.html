@@ -2,14 +2,15 @@
 
 <div class="form-group">
 	<form (ngSubmit)="createTodo()">
+		<table><tr><td>
 		<div class="todo-user">User __________: 
 			<select 
 				name="todoUser"
 				[(ngModel)]="todo.user">
-				<option *ngFor="let user of userList" [ngValue]="user[0]">{{user[1]}}</option>
+				<option *ngFor="let user of userList" [ngValue]="user.id">{{user.value}}</option>
 			</select>
 		</div>
-
+		</td><td>
 		<div class="todo-label"> Label__________: 
 			<input #todoInput 
 				type="text"
@@ -17,7 +18,7 @@
 				name="todoLabel"
 				[(ngModel)]="todo.label">
 		</div>
-
+		</td></tr><tr><td>
 		<div class="todo-target-date">Target date______:
 			<input
 				type="date"
@@ -25,7 +26,7 @@
 				name="todoTargetDate"
 				[(ngModel)]="todo.targetDate">
 		</div>
-
+		</td><td>
 		<div class="todo-done-date">Done date_______:
 			<input
 				type="date"
@@ -33,7 +34,7 @@
 				name="todoDoneDate"
 				[(ngModel)]="todo.doneDate">
 		</div>
-
+		</td></tr><tr><td>
 		<div class="todo-completed">Completed______:
 			<input
 				type="checkbox"
@@ -41,12 +42,15 @@
 				name="todoCompleted"
 				[(ngModel)]="todo.completed">
 		</div>
+		</td><td>
 		<div class="todo-confirm">
 			<input type="checkbox"
 				name="todoConfirm"
 				[(ngModel)]="confirmed">
 				Confirming the above!
 		</div>
+		</td></tr>
+		</table>
 	</form>
 	<button [disabled]="!confirmed" type="submit" (click)="emitTodo(todo); todoInput.value = ''">
 		{{buttonLabel}}
