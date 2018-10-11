@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class CreateTodoComponent implements OnInit {
 
 	public todo: Todo;
-	private userList:sqlList[]=[];
+	private userList: sqlList[]=[];
 	private isConnected: boolean = false;
 	private isConnectedSub: Subscription;
 

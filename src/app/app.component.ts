@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   title = 'St4rsend';
   name: string = 'John';
 
-	private isConnected: boolean = false;
+	public isConnected: boolean = false;
 	private isConnectedSub: Subscription;
 
 	constructor( private webSocket: WebSocketService) {}
