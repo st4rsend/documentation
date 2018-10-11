@@ -2,6 +2,14 @@
 <mat-toolbar color="primary">St4rsend</mat-toolbar>
 </header>
 
+<div class="links">
+	<span><a routerLink="/todo/list" routerLinkActive="active">List Todos</a></span>
+	<span><a routerLink="/todo/create" routerLinkActive="active">Create a Todo</a></span>
+</div>
+
+<router-outlet></router-outlet>
+
+<!--
 <div class="container">
 <app-list-todo></app-list-todo>
 </div>
@@ -12,7 +20,7 @@
 		(createTodo)="createTodo($event)">
 	</app-create-todo>
 </div>
-
+-->
 <div class="container">
 <app-server-com (st4rsendMsg)="toAppComponent($event);"> </app-server-com>
 </div>

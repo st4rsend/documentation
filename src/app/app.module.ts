@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { ListTodoComponent } from './todo/list-todo/list-todo.component';
 import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
 import { ServerComComponent } from './server-com/server-com.component';
+import { AppRoutesModule } from './app-routes.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ServerComComponent } from './server-com/server-com.component';
 		MatToolbarModule,
 		MatInputModule,
 		MatIconModule,
-		MatButtonModule
+		MatButtonModule,
+		AppRoutesModule
   ],
   providers: [
 	],
