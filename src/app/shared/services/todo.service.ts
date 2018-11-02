@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject ,  Subscription } from 'rxjs';
 import { Todo } from '../model/todo';
 
 import { WebSocketService, wsMessage } from './websocket.service';

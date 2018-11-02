@@ -4,7 +4,7 @@ import { SqlListService, sqlList } from '../../shared/services/sql-list.service'
 import { Todo } from '../../shared/model/todo';
 
 import { WebSocketService } from '../../shared/services/websocket.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 
 @Component({

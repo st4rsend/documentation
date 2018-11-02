@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Subject ,  Observable } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 interface timeStamp {
@@ -12,7 +11,8 @@ interface comEncap {
   channelid : number;
   domain : string;
   command : string;
-  data : [string]
+  //data : [string]
+  data : string[]
 }
 
 export interface wsMessage {

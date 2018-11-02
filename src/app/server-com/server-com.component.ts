@@ -1,6 +1,8 @@
+
+import {scan} from 'rxjs/operators';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { Observable, Subject } from 'rxjs/Rx';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subject } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { WebSocketService, wsMessage } from '../shared/services/websocket.service';
 
@@ -56,10 +58,11 @@ export class ServerComComponent {
 			next(x) { },}
 		);
 		if (this.consoleVisible) {
-			this.scMessageLog = this.scSubject.scan((scCurrent, scChange) => {
+			this.scMessageLog = this.scSubject.pipe(scan((scCurrent, scChange) => {
 				this.scScrollEnd();
-				return [...scCurrent, scChange.data];
-			}, []);
+				//return [...scCurrent, scChange.data];
+				return [...scCurrent, scChange];
+			}, []));
 		} 
 		let message1 = this.scWebsocket.wsPrepareMessage(0,this.scDomain,this.scCommand,[this.scMessage]);
 		this.scSubject.next(message1);
