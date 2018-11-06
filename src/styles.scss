@@ -12,8 +12,15 @@ my-app {
 }
 
 .container {
-  padding: 24px;
+	border: 1px solid blue;
+  padding: 10px;
+	margin: 10px 10px 10px 10px;
   box-sizing: border-box;
+}
+
+.form-container {
+	display: flex;
+	flex-direction: column;
 }
 
 .mat-checkbox-label {

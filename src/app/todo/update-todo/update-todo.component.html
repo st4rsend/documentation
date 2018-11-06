@@ -1,0 +1,16 @@
+<h2>Update todo form</h2>
+
+<div class="form-group">
+
+	<div class="todo-ID">
+		Todo ID:
+		<input type="text"
+			placeholder="Todo ID"
+			name="todoID"
+			[formControl]="IDControl">
+	</div>
+	<button (click)="onSubmit()">Submit</button>
+</div>
+
+<p>Form Control Value: {{ IDControl.value | json }}</p>
+<p>Form Control status: {{ IDControl.status | json }}</p>

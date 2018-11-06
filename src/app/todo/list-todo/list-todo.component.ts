@@ -17,16 +17,16 @@ export class ListTodoComponent implements OnInit {
 	@Output() private toggleCompletion: EventEmitter<Todo>;
 
 	public todos: Todo[];
-	public userList: sqlList[];
+//	public userList: sqlList[];
 
-	constructor(
-	private todoService: TodoService, 
-	private sqlListService: SqlListService) {
-		this.toggleCompletion = new EventEmitter<Todo>();
-	}
+	constructor(private todoService: TodoService) {}
+//	private todoService: TodoService, 
+//	private sqlListService: SqlListService) {
+//		this.toggleCompletion = new EventEmitter<Todo>();
+//	}
+
 	ngOnInit() {
-		//this.todos = this.todoService.getTodos();
-		//this.userList = this.sqlListService.getUsers();
+		this.todoSynchro();
 	}
 
 	onToggleCompletion(index: number) {
@@ -35,27 +35,12 @@ export class ListTodoComponent implements OnInit {
 	}
 
 	removeTodo(idx: number) {
-		//this.todos.splice(idx,1);
 		this.todoService.deleteTodo(idx);
 		this.todoSynchro();
 	}
 
 	todoSynchro() {
-		//console.log("User list:", this.userList);
 		this.todoService.SQLSynchro();
 		this.todos = this.todoService.getTodos();
-//		console.log (this.todos);
-	}
-	userSynchro() {
-		this.sqlListService.SQLSynchro();
-		this.userList = this.sqlListService.getUsers();
-//		console.log (this.userList);
-	}
-	allSynchro() {
-		this.sqlListService.SQLSynchro();
-		this.todoService.SQLSynchro();
-		this.todos = this.todoService.getTodos();
-		this.userList = this.sqlListService.getUsers();
-//		console.log (this.userList);
 	}
 }

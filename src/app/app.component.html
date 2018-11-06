@@ -3,24 +3,13 @@
 </header>
 
 <div class="links">
-	<span><a routerLink="/todo/list" routerLinkActive="active">List Todos</a></span>
-	<span><a routerLink="/todo/create" routerLinkActive="active">Create a Todo</a></span>
+	<span><a routerLink="/" routerLinkActive="">Home</a></span>
+	<span *ngIf="isConnected"><a routerLink="/todo/list" routerLinkActive="active">List Todos</a></span>
+	<span *ngIf="isConnected"><a routerLink="/todo/create" routerLinkActive="active">Create a Todo</a></span>
 </div>
 
 <router-outlet></router-outlet>
 
-<!--
-<div class="container">
-<app-list-todo></app-list-todo>
-</div>
-
-<div class="container" *ngIf="isConnected">
-	<app-create-todo inputPlaceholder="New todo..."
-		buttonLabel="Add"
-		(createTodo)="createTodo($event)">
-	</app-create-todo>
-</div>
--->
 <div class="container">
 <app-server-com (st4rsendMsg)="toAppComponent($event);"> </app-server-com>
 </div>
