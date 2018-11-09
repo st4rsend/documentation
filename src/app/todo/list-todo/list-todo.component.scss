@@ -4,3 +4,9 @@ ul li {
 .completed {
 	text-decoration: line-through;
 }
+
+.container {
+	height: 300px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}

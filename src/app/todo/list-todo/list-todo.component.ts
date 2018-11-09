@@ -6,7 +6,7 @@ import {Todo} from '../../shared/model/todo';
 @Component({
   selector: 'app-list-todo',
   templateUrl: './list-todo.component.html',
-  styleUrls: ['./list-todo.component.css'],
+  styleUrls: ['./list-todo.component.scss'],
 	providers: [
 		SqlListService,
 		TodoService

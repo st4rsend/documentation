@@ -1,16 +1,44 @@
+<div class="container">
 <h2>Update todo form</h2>
 
 <div class="form-group">
-
-	<div class="todo-ID">
-		Todo ID:
+	<form [formGroup]="todoForm">
+	<table>
+	<tr><td>Todo ID:</td><td><div class="todo-ID">
 		<input type="text"
 			placeholder="Todo ID"
-			name="todoID"
-			[formControl]="IDControl">
-	</div>
+			formControlName="todoIDControl"></div>
+	</td></tr>
+	<tr><td>User _________: {{user}}</td><td>
+		<input type="text"
+			placeholder="userPlaceholder"
+			formControlName="todoUserControl">
+	</td></tr>
+	<tr><td>Label ________: {{label}}</td><td>
+		<input type="text"
+			placeholder="labelPlaceholder"
+			formControlName="todoLabelControl">
+	</td></tr>
+	<tr><td>Target date __: {{targetDate}}</td><td>
+		<input type="text"
+			placeholder="targetDatePlaceholder"
+			formControlName="todoTargetDateControl">
+	</td></tr>
+	<tr><td>Done date ____: {{doneDate}}</td><td>
+		<input type="text"
+			placeholder="doneDatePlaceholder"
+			formControlName="todoDoneDateControl">
+	</td></tr>
+	<tr><td>Completed ___: {{completed}}</td><td>
+		<input type="text"
+			placeholder="completedPlaceholder"
+			formControlName="todoCompletedControl">
+	</td></tr>
+	</table>
 	<button (click)="onSubmit()">Submit</button>
+	</form>
 </div>
 
-<p>Form Control Value: {{ IDControl.value | json }}</p>
-<p>Form Control status: {{ IDControl.status | json }}</p>
+<p>Form Control Value: {{ todoForm.value | json }}</p>
+<p>Form Control status: {{ todoForm.status | json }}</p>
+</div>

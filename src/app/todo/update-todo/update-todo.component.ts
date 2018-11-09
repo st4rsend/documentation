@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 
 import { TodoService } from '../../shared/services/todo.service';
@@ -19,7 +19,15 @@ export class UpdateTodoComponent implements OnInit {
 	public todo: Todo;
 	private userList: sqlList[]=[];
 
-	public IDControl = new FormControl();
+	public todoForm: FormGroup = new FormGroup({
+		todoIDControl: new FormControl(null),
+		todoUserControl: new FormControl(null),
+		todoLabelControl: new FormControl(null),
+		todoTargetDateControl: new FormControl(null),
+		todoDoneDateControl: new FormControl(null),
+		todoCompletedControl: new FormControl(null)
+	});
+	
 
   constructor(
 		private todoService: TodoService, 
@@ -34,6 +42,9 @@ export class UpdateTodoComponent implements OnInit {
 		this.userList = this.userListService.getUsers();
   }
 
+	onSubmit() {
+		console.log("Submitting form");
+	}
 	emitTodo(todo: Todo) {
 		//this.todoService.updateTodo(todo);
 	}

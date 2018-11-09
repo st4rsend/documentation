@@ -8,6 +8,7 @@
 	</tr>
 </table>
 <table border='1'>
+	<thead display=block>
 	<tr>
 		<th>Done</th>
 		<th>idx</th>
@@ -16,6 +17,8 @@
 		<th>Target date</th>
 		<th>Done date</th>
 	</tr>
+	</thead>
+	<tbody display=block height=250px overflow-y=auto overflow-x=hidden>
 	<tr *ngFor="let todo of todos ; let index = index"
 		[class.completed]="todo.completed">
 		<td><input type="checkbox" [checked]="todo.completed"
@@ -28,5 +31,6 @@
 		<td><a  routerLink="/todo/update/{{todo.idx}}"><button>Update</button></a></td>
 		<td><button (click)="removeTodo(todo.idx);">Delete</button></td>
 	</tr>
+	</tbody>
 </table>
 </div>

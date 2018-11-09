@@ -1,10 +1,10 @@
 <form class="form-container">
+	<button arial-label="Connect to server"	(click)="scConnect()"
+		 mat-icon-button color="primary">Connect</button>
 	<button arial-label="Disconnect" (click)="scDisconnect()"
 		mat-icon-button color="warn">Disconnect</button>
 	<mat-form-field>
 		<input name="scAddress" placeholder="scAddress" [(ngModel)]="scAddress" matInput>
-		<button arial-label="Connect to server"	(click)="scConnect()"
-			matSuffix>Connect</button>
 	</mat-form-field>
 
 	<mat-form-field>
