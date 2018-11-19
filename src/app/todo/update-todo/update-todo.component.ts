@@ -34,12 +34,26 @@ export class UpdateTodoComponent implements OnInit {
 		private userListService: SqlListService,
 		private webSocket: WebSocketService 
 	) { 
-	this.todo = new Todo(null,null,'label',null,null,false);
+		this.todo = new Todo(null,null,'label',null,null,false);
 	}
 
 
   ngOnInit() {
 		this.userList = this.userListService.getUsers();
+		this.todoService.SQLSynchro();
+		var todos: Todo[];
+		todos = this.todoService.getTodos();
+		console.log(todos);
+		console.log(this.todoService.getTodo(38));
+		//let items = [
+		var items = [
+      { id: 15, name: "first", grade: "A" },
+      { id: 35, name: "second", grade: "B" },
+      { id: 50, name: "third", grade: "B" }
+     ];
+		console. log(items);
+		console.log(typeof(items));
+		console.log(items.find( x => x.id == 35));
   }
 
 	onSubmit() {

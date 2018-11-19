@@ -19,6 +19,12 @@ export class TodoService {
 	constructor ( private webSocketService: WebSocketService ) {
 	}
 
+	public getTodo(id: number) {
+		//return this.todos.find(k => k.idx === 38);
+		console.log(this.todos);
+		
+	}
+
 	public getTodos() : Todo[] {
 		return this.todos;
 	}
