@@ -6,8 +6,6 @@ import { TodoService } from '../../shared/services/todo.service';
 import { SqlListService, sqlList } from '../../shared/services/sql-list.service';
 import { Todo } from '../../shared/model/todo';
 
-import { WebSocketService } from '../../shared/services/websocket.service';
-
 @Component({
   selector: 'app-update-todo',
   templateUrl: './update-todo.component.html',
@@ -17,6 +15,7 @@ import { WebSocketService } from '../../shared/services/websocket.service';
 export class UpdateTodoComponent implements OnInit {
 
 	public todo: Todo;
+	//public todos: Array<Todo>;
 	private userList: sqlList[]=[];
 
 	public todoForm: FormGroup = new FormGroup({
@@ -32,31 +31,20 @@ export class UpdateTodoComponent implements OnInit {
   constructor(
 		private todoService: TodoService, 
 		private userListService: SqlListService,
-		private webSocket: WebSocketService 
-	) { 
-		this.todo = new Todo(null,null,'label',null,null,false);
-	}
+	) {}
 
 
   ngOnInit() {
 		this.userList = this.userListService.getUsers();
 		this.todoService.SQLSynchro();
-		var todos: Todo[];
-		todos = this.todoService.getTodos();
-		console.log(todos);
-		console.log(this.todoService.getTodo(38));
-		//let items = [
-		var items = [
-      { id: 15, name: "first", grade: "A" },
-      { id: 35, name: "second", grade: "B" },
-      { id: 50, name: "third", grade: "B" }
-     ];
-		console. log(items);
-		console.log(typeof(items));
-		console.log(items.find( x => x.id == 35));
+		//this.todos = this.todoService.getTodos();
+
   }
 
+
 	onSubmit() {
+		this.todo = this.todoService.getTodo(52);
+		console.log(this.todo);
 		console.log("Submitting form");
 	}
 	emitTodo(todo: Todo) {

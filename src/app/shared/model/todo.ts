@@ -1,4 +1,4 @@
-interface ITodo {
+export interface ITodo {
 	idx: number;
 	user: string;
 	label: string;
@@ -17,6 +17,11 @@ export class Todo implements ITodo {
 		public doneDate: string,
 		public completed: boolean
 	){}
+
+	public getIdx(): number {
+		return this.idx;
+		console.log("idx: ",this);
+	}
 
 	public doneInTime(): boolean {
 		return this.doneDate <= this.targetDate;

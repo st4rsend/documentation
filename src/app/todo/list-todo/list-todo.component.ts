@@ -16,7 +16,7 @@ export class ListTodoComponent implements OnInit {
 
 	@Output() private toggleCompletion: EventEmitter<Todo>;
 
-	public todos: Todo[];
+	public todos: Array<Todo>;
 //	public userList: sqlList[];
 
 	constructor(private todoService: TodoService) {}
@@ -30,8 +30,8 @@ export class ListTodoComponent implements OnInit {
 	}
 
 	onToggleCompletion(index: number) {
-		let todo = this.todos[index];
-		this.toggleCompletion.emit(todo);
+		console.log(this.todoService.getTodo(index));
+		//this.toggleCompletion.emit(todo);
 	}
 
 	removeTodo(idx: number) {

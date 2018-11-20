@@ -8,7 +8,7 @@ import { WebSocketService, wsMessage } from './websocket.service';
 
 export class TodoService {
 
-	private todos: Todo[];
+	private todos: Array<Todo>;
 
 	private tsSelectSQL: any = 'select T.ID, identity, U.ID, task, status, date_format(targetDate, "%d/%m/%Y"), date_format(doneDate,"%d/%m/%Y") from todos T left join users U on T.userID = U.ID';
 	private tsInsertSQL: string = 'insert into todos (UserID, task, status, targetDate, doneDate) values(';
@@ -17,15 +17,17 @@ export class TodoService {
 	private tsSubject: Subject<any>;
 
 	constructor ( private webSocketService: WebSocketService ) {
+		console.log("Constructor TodoService");
+		this.todos = [];
 	}
 
-	public getTodo(id: number) {
-		//return this.todos.find(k => k.idx === 38);
-		console.log(this.todos);
+	public getTodo(idx: number): Todo {
+		return this.todos.find(k => k.idx === idx);
 		
 	}
 
-	public getTodos() : Todo[] {
+	//public getTodos() : Todo[] {
+	public getTodos() : Array<Todo> {
 		return this.todos;
 	}
 
@@ -62,7 +64,7 @@ export class TodoService {
 
 	public SQLSynchro() {
 
-		this.todos = [];
+		//this.todos = [];
 		this.tsSubject = this.webSocketService.wsSubject();
 
 		if ((this.tsSelectSub === undefined) || (this.tsSelectSub.closed === true)) {
@@ -75,6 +77,7 @@ export class TodoService {
 	}
 
 	private tsParse(scMsg: wsMessage) {
+		var todo: Todo;
 		if ((+scMsg.payload.channelid === 0) && (scMsg.payload.domain === "SQL")) {
 			if (scMsg.payload.command === "RESP_SELECT_DATA") {
 				if (+scMsg.payload.data[4] > 0) {
