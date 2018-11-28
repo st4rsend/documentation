@@ -4,8 +4,8 @@
 
 <div class="links">
 	<span><a routerLink="/" routerLinkActive="">Home</a></span>
-	<span *ngIf="isConnected"><a routerLink="/todo/list" routerLinkActive="active">List Todos</a></span>
-	<span *ngIf="isConnected"><a routerLink="/todo/create" routerLinkActive="active">Create a Todo</a></span>
+	<span><a routerLink="/doc/base" routerLinkActive="">Doc</a></span>
+	<span *ngIf="isConnected"><a routerLink="/todo/base" routerLinkActive="active">Todos</a></span>
 </div>
 
 <router-outlet></router-outlet>

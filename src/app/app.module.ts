@@ -13,6 +13,8 @@ import {
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
+import { DocBaseComponent } from './doc/doc-base/doc-base.component';
+import { TodoBaseComponent } from './todo/todo-base/todo-base.component';
 import { ListTodoComponent } from './todo/list-todo/list-todo.component';
 import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
 import { UpdateTodoComponent } from './todo/update-todo/update-todo.component';
@@ -22,6 +24,8 @@ import { AppRoutesModule } from './app-routes.module';
 @NgModule({
   declarations: [
     AppComponent,
+		DocBaseComponent,
+		TodoBaseComponent,
     ListTodoComponent,
     CreateTodoComponent,
 		UpdateTodoComponent,

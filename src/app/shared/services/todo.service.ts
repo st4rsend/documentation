@@ -10,16 +10,19 @@ export class TodoService {
 
 	private todos: Array<Todo>;
 
-	private tsSelectSQL: any = 'select T.ID, identity, U.ID, task, status, date_format(targetDate, "%d/%m/%Y"), date_format(doneDate,"%d/%m/%Y") from todos T left join users U on T.userID = U.ID';
+	private tsSelectSQL: any = 'select T.ID, U.ID, identity, task, status, date_format(targetDate, "%Y-%m-%d"), date_format(doneDate,"%Y-%m-%d") from todos T left join users U on T.userID = U.ID';
 	private tsInsertSQL: string = 'insert into todos (UserID, task, status, targetDate, doneDate) values(';
 	private tsDeleteSQL: string = 'delete from todos where ID=';
 	private tsSelectSub: Subscription;
 	private tsSubject: Subject<any>;
 
+	public isReady$ = new Subject<any>();
+
 	constructor ( private webSocketService: WebSocketService ) {
 		console.log("Constructor TodoService");
 		this.todos = [];
 	}
+
 
 	public getTodo(idx: number): Todo {
 		return this.todos.find(k => k.idx === idx);
@@ -34,7 +37,7 @@ export class TodoService {
 	public createTodo(todo: Todo) {
 		console.log("Creating todo: ", todo);
 		var sql = this.tsInsertSQL.concat(
-			todo.user,',"',
+			String(todo.userID),',"',
 			todo.label,'",false,"',
 			todo.targetDate,'","',
 			todo.doneDate,'")');
@@ -64,6 +67,9 @@ export class TodoService {
 
 	public SQLSynchro() {
 
+		this.isReady$.next(false);
+		this.todos = [];
+
 		//this.todos = [];
 		this.tsSubject = this.webSocketService.wsSubject();
 
@@ -83,7 +89,8 @@ export class TodoService {
 				if (+scMsg.payload.data[4] > 0) {
 					this.todos.push(new Todo(
 						+scMsg.payload.data[0],
-						scMsg.payload.data[1],
+						+scMsg.payload.data[1],
+						scMsg.payload.data[2],
 						scMsg.payload.data[3],
 						scMsg.payload.data[5],
 						scMsg.payload.data[6],
@@ -92,7 +99,8 @@ export class TodoService {
 				} else {
 					this.todos.push(new Todo(
 						+scMsg.payload.data[0],
-						scMsg.payload.data[1],
+						+scMsg.payload.data[1],
+						scMsg.payload.data[2],
 						scMsg.payload.data[3],
 						scMsg.payload.data[5],
 						scMsg.payload.data[6],
@@ -102,6 +110,7 @@ export class TodoService {
 			}
 			if ((+scMsg.payload.channelid === 0) && (scMsg.payload.command === "EOF")) {
 				console.log('EOF');
+				this.isReady$.next(true);
 				this.tsSelectSub.unsubscribe();
 			}
 		}

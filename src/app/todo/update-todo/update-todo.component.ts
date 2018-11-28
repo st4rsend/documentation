@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 import { TodoService } from '../../shared/services/todo.service';
@@ -15,8 +17,10 @@ import { Todo } from '../../shared/model/todo';
 export class UpdateTodoComponent implements OnInit {
 
 	public todo: Todo;
-	//public todos: Array<Todo>;
 	private userList: sqlList[]=[];
+	
+	public isReadySub: Subscription;
+	public isReady: boolean;
 
 	public todoForm: FormGroup = new FormGroup({
 		todoIDControl: new FormControl(null),
@@ -31,20 +35,41 @@ export class UpdateTodoComponent implements OnInit {
   constructor(
 		private todoService: TodoService, 
 		private userListService: SqlListService,
+		private route: ActivatedRoute,
 	) {}
 
 
   ngOnInit() {
 		this.userList = this.userListService.getUsers();
 		this.todoService.SQLSynchro();
-		//this.todos = this.todoService.getTodos();
-
+		this.isReadySub = this.todoService.isReady$.subscribe(x => {
+			this.isReady = x;
+			if (this.isReady) {
+				this.populate();
+			}
+		});
   }
 
+	populate() {
+		this.todo = this.todoService.getTodo(+this.route.snapshot.paramMap.get('idx'));
+		this.todoForm.patchValue({
+			todoIDControl: this.todo.idx,
+			todoUserControl: this.todo.userID,
+			todoLabelControl: this.todo.label,
+			todoTargetDateControl: this.todo.targetDate,
+			todoDoneDateControl: this.todo.doneDate,
+			todoCompletedControl: this.todo.completed
+		});
+	}
 
+	compare(val1, val2) {
+		return val1 === val2;
+	}
+
+	onRefresh() {
+		this.todoService.SQLSynchro();
+	}
 	onSubmit() {
-		this.todo = this.todoService.getTodo(52);
-		console.log(this.todo);
 		console.log("Submitting form");
 	}
 	emitTodo(todo: Todo) {

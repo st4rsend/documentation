@@ -3,6 +3,7 @@
 
 <div class="form-group">
 	<form [formGroup]="todoForm">
+	<button (click)="onRefresh()">Refresh</button>
 	<table>
 	<tr><td>Todo ID:</td><td><div class="todo-ID">
 		<input type="text"
@@ -10,9 +11,14 @@
 			formControlName="todoIDControl"></div>
 	</td></tr>
 	<tr><td>User _________: {{user}}</td><td>
-		<input type="text"
+		<select
 			placeholder="userPlaceholder"
-			formControlName="todoUserControl">
+			formControlName="todoUserControl"
+			[compareWith]="compare">
+				<option *ngFor="let user of userList" 
+					[ngValue]="user.id">{{user.value}}
+				</option>	
+		</select>
 	</td></tr>
 	<tr><td>Label ________: {{label}}</td><td>
 		<input type="text"
@@ -20,17 +26,17 @@
 			formControlName="todoLabelControl">
 	</td></tr>
 	<tr><td>Target date __: {{targetDate}}</td><td>
-		<input type="text"
+		<input type="date"
 			placeholder="targetDatePlaceholder"
 			formControlName="todoTargetDateControl">
 	</td></tr>
 	<tr><td>Done date ____: {{doneDate}}</td><td>
-		<input type="text"
+		<input type="date"
 			placeholder="doneDatePlaceholder"
 			formControlName="todoDoneDateControl">
 	</td></tr>
 	<tr><td>Completed ___: {{completed}}</td><td>
-		<input type="text"
+		<input type="checkbox"
 			placeholder="completedPlaceholder"
 			formControlName="todoCompletedControl">
 	</td></tr>

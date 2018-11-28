@@ -1,10 +1,9 @@
-<div class="container">
 	<form (ngSubmit)="createTodo()">
 		<table><tr><td>
 		<div class="todo-user">User __________: 
 			<select 
 				name="todoUser"
-				[(ngModel)]="todo.user">
+				[(ngModel)]="todo.userID">
 				<option *ngFor="let user of userList" [ngValue]="user.id">{{user.value}}</option>
 			</select>
 		</div>
@@ -50,9 +49,7 @@
 		</td></tr>
 		</table>
 	</form>
-	<button [disabled]="!confirmed" type="submit" (click)="emitTodo(todo); todoInput.value = ''">
-		{{buttonLabel}}
+	<button [disabled]="!confirmed" type="submit" (click)="createTodo(todo); todoInput.value = ''">
+	Submit	
 	</button>
-</div>
-
 <h4>Todo: {{todo | json}}</h4>

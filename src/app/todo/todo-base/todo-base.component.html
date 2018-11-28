@@ -1,0 +1,7 @@
+<div class="container">
+<button (click)="activateList();" >List Todos</button>
+<button (click)="activateCreate();">create a Todo</button>
+<div *ngIf="isListMode"><app-list-todo> </app-list-todo></div>
+<div *ngIf="isCreateMode"><app-create-todo> </app-create-todo></div>
+<div *ngIf="isUpdateMode"><app-update-todo> </app-update-todo></div>
+</div>

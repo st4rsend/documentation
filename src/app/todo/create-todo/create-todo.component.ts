@@ -25,7 +25,7 @@ export class CreateTodoComponent implements OnInit {
 		private userListService: SqlListService,
 		private webSocket: WebSocketService ) { 
 
-		this.todo = new Todo(null,null,'label',null,null,false);
+		this.todo = new Todo(null,null,null,'label',null,null,false);
 		
 	}
 
@@ -33,13 +33,7 @@ export class CreateTodoComponent implements OnInit {
 		this.userList = this.userListService.getUsers();
   }
 
-	@Input() inputPlaceholder: string;
-	@Input() buttonLabel: string;
-
-	@Output() createTodo = new EventEmitter<Todo>();
-
-	emitTodo(todo: Todo) {
-//		this.createTodo.emit(todo);
+	createTodo(todo: Todo) {
 		this.todoService.createTodo(todo);
 	}
 }
