@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   selector: 'app-create-todo',
   templateUrl: './create-todo.component.html',
   styleUrls: ['./create-todo.component.css'],
-	providers: [ TodoService, SqlListService ],
+	providers: [ SqlListService ],
 })
 export class CreateTodoComponent implements OnInit {
 

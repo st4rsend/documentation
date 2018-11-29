@@ -27,7 +27,7 @@
 		<td>{{todo.label}}</td>
 		<td>{{todo.targetDate}}</td>
 		<td>{{todo.doneDate}}</td>
-		<td><a  routerLink="/todo/update/{{todo.idx}}"><button>Update</button></a></td>
+		<td><button (click)="updateTodo(todo.idx);">Update</button></td>
 		<td><button (click)="removeTodo(todo.idx);">Delete</button></td>
 	</tr>
 	</tbody>

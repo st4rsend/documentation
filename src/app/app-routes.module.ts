@@ -4,14 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 //import { CommonModule } from '@angular/common';
 import { DocBaseComponent } from './doc/doc-base/doc-base.component';
 import { TodoBaseComponent } from './todo/todo-base/todo-base.component';
-import { UpdateTodoComponent } from './todo/update-todo/update-todo.component';
 
 const appRoutes: Routes = [
 
 	{ path: '', redirectTo: '/', pathMatch: 'full' },
 	{ path: 'doc/base', component: DocBaseComponent },
 	{ path: 'todo/base', component: TodoBaseComponent },
-	{ path: 'todo/update/:idx', component: UpdateTodoComponent },
 ];
 
 

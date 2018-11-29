@@ -9,21 +9,17 @@ import {Todo} from '../../shared/model/todo';
   styleUrls: ['./list-todo.component.scss'],
 	providers: [
 		SqlListService,
-		TodoService
 	],
 })
 export class ListTodoComponent implements OnInit {
 
 	@Output() private toggleCompletion: EventEmitter<Todo>;
+	@Output() updateRequest = new EventEmitter<number>();
 
 	public todos: Array<Todo>;
 //	public userList: sqlList[];
 
 	constructor(private todoService: TodoService) {}
-//	private todoService: TodoService, 
-//	private sqlListService: SqlListService) {
-//		this.toggleCompletion = new EventEmitter<Todo>();
-//	}
 
 	ngOnInit() {
 		this.todoSynchro();
@@ -37,6 +33,10 @@ export class ListTodoComponent implements OnInit {
 	removeTodo(idx: number) {
 		this.todoService.deleteTodo(idx);
 		this.todoSynchro();
+	}
+
+	updateTodo(idx: number) {
+		this.updateRequest.emit(idx);
 	}
 
 	todoSynchro() {

@@ -13,6 +13,7 @@ export class TodoService {
 	private tsSelectSQL: any = 'select T.ID, U.ID, identity, task, status, date_format(targetDate, "%Y-%m-%d"), date_format(doneDate,"%Y-%m-%d") from todos T left join users U on T.userID = U.ID';
 	private tsInsertSQL: string = 'insert into todos (UserID, task, status, targetDate, doneDate) values(';
 	private tsDeleteSQL: string = 'delete from todos where ID=';
+	private tsUpdateSQL: string = 'update todos set ';
 	private tsSelectSub: Subscription;
 	private tsSubject: Subject<any>;
 
@@ -36,6 +37,7 @@ export class TodoService {
 
 	public createTodo(todo: Todo) {
 		console.log("Creating todo: ", todo);
+		this.isReady$.next(false);
 		var sql = this.tsInsertSQL.concat(
 			String(todo.userID),',"',
 			todo.label,'",false,"',
@@ -44,6 +46,9 @@ export class TodoService {
 		console.log("SQL: ", sql);
 
 		this.tsSubject = this.webSocketService.wsSubject();
+		this.tsSelectSub = this.tsSubject.subscribe((value) => {
+			this.tsParse(value);
+		});
 
 		let message1 = this.webSocketService
 			.wsPrepareMessage(0,'SQL','REQ_INSERT',[sql]);
@@ -52,6 +57,7 @@ export class TodoService {
 
 	public deleteTodo(idx: number) {
 		console.log("Deleting todo: ", idx);
+		this.isReady$.next(false);
 		var sql = this.tsDeleteSQL.concat(String(idx));
 
 		this.tsSubject = this.webSocketService.wsSubject();
@@ -63,6 +69,26 @@ export class TodoService {
 		let message1 = this.webSocketService
 			.wsPrepareMessage(0,'SQL','REQ_DELETE',[sql]);
 		this.tsSubject.next(message1);
+	}
+
+	public updateTodo(todo: Todo) {
+		console.log("updating todo: ", todo);
+		this.isReady$.next(false);
+		var sql = this.tsUpdateSQL.concat(
+			'userID=',String(todo.userID),', ',
+			'task="',todo.label,'", ',
+			'targetDate="',todo.targetDate,'", ',
+			'doneDate="',todo.doneDate,'", ',
+			'status=',String(todo.completed),
+			' WHERE ID=',String(todo.idx));
+		this.tsSubject = this.webSocketService.wsSubject();
+		this.tsSelectSub = this.tsSubject.subscribe((value) => {
+			this.tsParse(value);
+		});
+		let message1 = this.webSocketService
+			.wsPrepareMessage(0,'SQL','REQ_UPDATE',[sql]);
+		this.tsSubject.next(message1);
+
 	}
 
 	public SQLSynchro() {

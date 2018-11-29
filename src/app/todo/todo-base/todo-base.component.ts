@@ -1,22 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 
 import { ListTodoComponent } from '../list-todo/list-todo.component';
 import { CreateTodoComponent } from '../create-todo/create-todo.component';
 import { UpdateTodoComponent } from '../update-todo/update-todo.component';
 
+import {TodoService} from '../../shared/services/todo.service';
 
 @Component({
   selector: 'app-todo-base',
   templateUrl: './todo-base.component.html',
-  styleUrls: ['./todo-base.component.css']
+  styleUrls: ['./todo-base.component.css'],
+	providers: [ TodoService ],
 })
 export class TodoBaseComponent implements OnInit {
+
+	//@Output() updateRequest = new EventEmitter<number>();
 
 	public isListMode: boolean;
 	public isCreateMode: boolean;
 	public isUpdateMode: boolean;
+	public updateIdx: number;
 
-  constructor() { }
+  constructor(private todoService: TodoService) { }
 
   ngOnInit() {
 		this.activateList();
@@ -30,13 +35,19 @@ export class TodoBaseComponent implements OnInit {
 
 	activateCreate() {
 		this.isUpdateMode =  false;
-		this.isCreateMode =  true;
 		this.isListMode = false;
+		this.isCreateMode =  true;
 	}
 
 	activateUpdate(idx: number) {
-		this.isUpdateMode =  true;
+		this.updateIdx = idx;
 		this.isCreateMode =  false;
 		this.isListMode = false;
+		this.isUpdateMode =  true;
 	}
+
+	updateRequest(idx: number) {
+		this.activateUpdate(idx);
+	}
+
 }

@@ -229,7 +229,12 @@ func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 			message.Payload.Data = append(message.Payload.Data, fmt.Sprintf("%d",lastInsert))
 			err = sendMessage(wsContext, &message.Payload)
 			CheckErr(err)
+			message.Payload.Command = "EOF"
+			message.Payload.Data = nil
+			err = sendMessage(wsContext, &message.Payload)
+			CheckErr(err)
 		}
+
 		if message.Payload.Command == "REQ_DELETE" {
 			resultSQL, err := processReqDeleteSQL(&message.Payload.Data[0])
 			CheckErr(err)
@@ -241,6 +246,27 @@ func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 			message.Payload.Command = "RESP_DELETE_DATA"
 			message.Payload.Data[0] = fmt.Sprintf("%d",rows)
 			message.Payload.Data = append(message.Payload.Data, fmt.Sprintf("%d",lastInsert))
+			err = sendMessage(wsContext, &message.Payload)
+			CheckErr(err)
+			message.Payload.Command = "EOF"
+			message.Payload.Data = nil
+			err = sendMessage(wsContext, &message.Payload)
+			CheckErr(err)
+		}
+
+		if message.Payload.Command == "REQ_UPDATE" {
+			resultSQL, err := processReqUpdateSQL(&message.Payload.Data[0])
+			CheckErr(err)
+			if err != nil {
+				return err
+			}
+			rows, err := resultSQL.RowsAffected()
+			message.Payload.Command = "RESP_UPDATE_DATA"
+			message.Payload.Data[0] = fmt.Sprintf("%d",rows)
+			err = sendMessage(wsContext, &message.Payload)
+			CheckErr(err)
+			message.Payload.Command = "EOF"
+			message.Payload.Data = nil
 			err = sendMessage(wsContext, &message.Payload)
 			CheckErr(err)
 		}
@@ -289,6 +315,15 @@ func ConnectSQL(user string, password string, host string, port int, database st
 }
 
 func processReqInsertSQL(sqlText *string) (result sql.Result, err error) {
+	db, err := ConnectSQL(user, password, host, port, database)
+	CheckErr(err)
+	defer db.Close()
+	result, err = db.Exec(*sqlText)
+	CheckErr(err)
+	return result, err
+}
+
+func processReqUpdateSQL(sqlText *string) (result sql.Result, err error) {
 	db, err := ConnectSQL(user, password, host, port, database)
 	CheckErr(err)
 	defer db.Close()

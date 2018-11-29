@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -12,10 +12,11 @@ import { Todo } from '../../shared/model/todo';
   selector: 'app-update-todo',
   templateUrl: './update-todo.component.html',
   styleUrls: ['./update-todo.component.css'],
-	providers: [ TodoService, SqlListService ],
+	providers: [ SqlListService ],
 })
 export class UpdateTodoComponent implements OnInit {
 
+	@Input() idx: number;
 	public todo: Todo;
 	private userList: sqlList[]=[];
 	
@@ -30,7 +31,6 @@ export class UpdateTodoComponent implements OnInit {
 		todoDoneDateControl: new FormControl(null),
 		todoCompletedControl: new FormControl(null)
 	});
-	
 
   constructor(
 		private todoService: TodoService, 
@@ -38,9 +38,9 @@ export class UpdateTodoComponent implements OnInit {
 		private route: ActivatedRoute,
 	) {}
 
-
   ngOnInit() {
 		this.userList = this.userListService.getUsers();
+/*
 		this.todoService.SQLSynchro();
 		this.isReadySub = this.todoService.isReady$.subscribe(x => {
 			this.isReady = x;
@@ -48,10 +48,12 @@ export class UpdateTodoComponent implements OnInit {
 				this.populate();
 			}
 		});
+*/
+		this.populate();
   }
 
 	populate() {
-		this.todo = this.todoService.getTodo(+this.route.snapshot.paramMap.get('idx'));
+		this.todo = this.todoService.getTodo(this.idx);
 		this.todoForm.patchValue({
 			todoIDControl: this.todo.idx,
 			todoUserControl: this.todo.userID,
@@ -70,10 +72,11 @@ export class UpdateTodoComponent implements OnInit {
 		this.todoService.SQLSynchro();
 	}
 	onSubmit() {
-		console.log("Submitting form");
+		this.todo.userID = this.todoForm.value["todoUserControl"];
+		this.todo.label = this.todoForm.value["todoLabelControl"];
+		this.todo.targetDate = this.todoForm.value["todoTargetDateControl"];
+		this.todo.doneDate = this.todoForm.value["todoDoneDateControl"];
+		this.todo.completed = this.todoForm.value["todoCompletedControl"];
+		this.todoService.updateTodo(this.todo);
 	}
-	emitTodo(todo: Todo) {
-		//this.todoService.updateTodo(todo);
-	}
-
 }
