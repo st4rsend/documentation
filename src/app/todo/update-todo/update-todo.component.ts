@@ -1,6 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 
@@ -12,17 +11,16 @@ import { Todo } from '../../shared/model/todo';
   selector: 'app-update-todo',
   templateUrl: './update-todo.component.html',
   styleUrls: ['./update-todo.component.css'],
-	providers: [ SqlListService ],
 })
 export class UpdateTodoComponent implements OnInit {
 
 	@Input() idx: number;
+	@Output() 
+	activateList = new EventEmitter();
+
 	public todo: Todo;
 	private userList: sqlList[]=[];
 	
-	public isReadySub: Subscription;
-	public isReady: boolean;
-
 	public todoForm: FormGroup = new FormGroup({
 		todoIDControl: new FormControl(null),
 		todoUserControl: new FormControl(null),
@@ -35,20 +33,10 @@ export class UpdateTodoComponent implements OnInit {
   constructor(
 		private todoService: TodoService, 
 		private userListService: SqlListService,
-		private route: ActivatedRoute,
 	) {}
 
   ngOnInit() {
 		this.userList = this.userListService.getUsers();
-/*
-		this.todoService.SQLSynchro();
-		this.isReadySub = this.todoService.isReady$.subscribe(x => {
-			this.isReady = x;
-			if (this.isReady) {
-				this.populate();
-			}
-		});
-*/
 		this.populate();
   }
 
@@ -71,12 +59,13 @@ export class UpdateTodoComponent implements OnInit {
 	onRefresh() {
 		this.todoService.SQLSynchro();
 	}
-	onSubmit() {
+	validate() {
 		this.todo.userID = this.todoForm.value["todoUserControl"];
 		this.todo.label = this.todoForm.value["todoLabelControl"];
 		this.todo.targetDate = this.todoForm.value["todoTargetDateControl"];
 		this.todo.doneDate = this.todoForm.value["todoDoneDateControl"];
 		this.todo.completed = this.todoForm.value["todoCompletedControl"];
 		this.todoService.updateTodo(this.todo);
+		this.activateList.emit();
 	}
 }

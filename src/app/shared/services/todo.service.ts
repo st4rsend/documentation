@@ -27,24 +27,20 @@ export class TodoService {
 
 	public getTodo(idx: number): Todo {
 		return this.todos.find(k => k.idx === idx);
-		
 	}
 
-	//public getTodos() : Todo[] {
 	public getTodos() : Array<Todo> {
 		return this.todos;
 	}
 
 	public createTodo(todo: Todo) {
-		console.log("Creating todo: ", todo);
+		//console.log("Creating todo: ", todo);
 		this.isReady$.next(false);
 		var sql = this.tsInsertSQL.concat(
 			String(todo.userID),',"',
 			todo.label,'",false,"',
 			todo.targetDate,'","',
 			todo.doneDate,'")');
-		console.log("SQL: ", sql);
-
 		this.tsSubject = this.webSocketService.wsSubject();
 		this.tsSelectSub = this.tsSubject.subscribe((value) => {
 			this.tsParse(value);
@@ -56,7 +52,7 @@ export class TodoService {
 	}
 
 	public deleteTodo(idx: number) {
-		console.log("Deleting todo: ", idx);
+		//console.log("Deleting todo: ", idx);
 		this.isReady$.next(false);
 		var sql = this.tsDeleteSQL.concat(String(idx));
 
@@ -72,7 +68,7 @@ export class TodoService {
 	}
 
 	public updateTodo(todo: Todo) {
-		console.log("updating todo: ", todo);
+		//console.log("updating todo: ", todo);
 		this.isReady$.next(false);
 		var sql = this.tsUpdateSQL.concat(
 			'userID=',String(todo.userID),', ',
@@ -96,7 +92,6 @@ export class TodoService {
 		this.isReady$.next(false);
 		this.todos = [];
 
-		//this.todos = [];
 		this.tsSubject = this.webSocketService.wsSubject();
 
 		if ((this.tsSelectSub === undefined) || (this.tsSelectSub.closed === true)) {

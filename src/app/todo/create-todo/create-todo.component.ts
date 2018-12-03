@@ -24,9 +24,7 @@ export class CreateTodoComponent implements OnInit {
 		private todoService: TodoService, 
 		private userListService: SqlListService,
 		private webSocket: WebSocketService ) { 
-
-		this.todo = new Todo(null,null,null,'label',null,null,false);
-		
+			this.todo = new Todo(null,null,null,'label',null,null,false);
 	}
 
   ngOnInit() {
