@@ -1,12 +1,27 @@
-<form class="form-container">
+<table><tr><td width='150px' >
 	<button arial-label="Connect to server"	(click)="scConnect()"
 		 mat-icon-button color="primary">Connect</button>
+	</td><td>
 	<button arial-label="Disconnect" (click)="scDisconnect()"
 		mat-icon-button color="warn">Disconnect</button>
+	</td></tr>
+	<tr><td>
+	Server verbosity <input [(ngModel)]="scVerbosityFlag" type="checkbox" arial-label="Verbosity" (change)="scVerbosity()">
+		<BR>Debug mode <input [(ngModel)]="scDebugFlag" type="checkbox" arial-label="Debug" >
+	</td><td>	
+		Websocket Connected: {{scIsConnected}}
+		<BR>heartbeat sanity: {{heartbeat}}
+	</td></tr>
+</table>
+<BR>
+<BR>
+<div *ngIf="scDebugFlag">
+<form class="form-container">
 	<mat-form-field>
 		<input name="scAddress" placeholder="scAddress" [(ngModel)]="scAddress" matInput>
 	</mat-form-field>
-
+</form>
+<form class="form-container">
 	<mat-form-field>
 		<input name="scDomain" placeholder="scDomain" [(ngModel)]="scDomain"
 			[disabled]="!scIsConnected" matInput>
@@ -22,14 +37,11 @@
 			[disabled]="!scIsConnected" matSuffix>Send</button>
 	</mat-form-field>
 </form>
-<p>
-	Server verbosity <input [(ngModel)]="scVerbosityFlag" type="checkbox" arial-label="Verbosity" (change)="scVerbosity()">
-<BR>Status scIsConnected: {{scIsConnected}}</p>
-<button (click)="toggleConsole($event)">Show/hide console</button>
-<div *ngIf="consoleVisible">
-	<div class="websocket-console" #scSt4rsend_console>
-		<ng-template ngFor let-message [ngForOf]="scMessageLog | async" let-i="index">
-			<pre>{{message}}</pre>
-		</ng-template>
-	</div>
+<div class="websocket-console" #scSt4rsend_console>
+	<table>
+		<tr *ngFor="let msg of scMessages ; let index = index">
+			<td>{{index}}</td><td>{{msg}}</td>
+		</tr>
+	</table>
+</div>
 </div>

@@ -11,7 +11,6 @@ interface comEncap {
   channelid : number;
   domain : string;
   command : string;
-  //data : [string]
   data : string[]
 }
 
