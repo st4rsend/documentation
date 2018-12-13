@@ -15,13 +15,17 @@ export class ListTodoComponent implements OnInit {
 
 	@Output() private toggleCompletion: EventEmitter<Todo>;
 	@Output() updateRequest = new EventEmitter<number>();
+	@Input() channelID: number;
 
 	public todos: Array<Todo>;
 //	public userList: sqlList[];
 
-	constructor(private todoService: TodoService) {}
+	constructor(private todoService: TodoService) {
+	}
+
 
 	ngOnInit() {
+		this.todoService.setChannelID(this.channelID);
 		this.todoSynchro();
 	}
 

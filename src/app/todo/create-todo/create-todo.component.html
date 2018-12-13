@@ -1,4 +1,4 @@
-	<form (ngSubmit)="createTodo()">
+	<form (ngSubmit)="createTodo(todo)">
 		<table><tr><td>
 		<div class="todo-user">User __________: 
 			<select 
@@ -11,7 +11,6 @@
 		<div class="todo-label"> Label__________: 
 			<input #todoInput 
 				type="text"
-				[placeholder]="TodoLabel"
 				name="todoLabel"
 				[(ngModel)]="todo.label">
 		</div>
@@ -19,7 +18,6 @@
 		<div class="todo-target-date">Target date______:
 			<input
 				type="date"
-				[placeholder]="TodoTargetDate"
 				name="todoTargetDate"
 				[(ngModel)]="todo.targetDate">
 		</div>
@@ -27,7 +25,6 @@
 		<div class="todo-done-date">Done date_______:
 			<input
 				type="date"
-				[placeholder]="TodoDoneDate"
 				name="todoDoneDate"
 				[(ngModel)]="todo.doneDate">
 		</div>
@@ -35,14 +32,13 @@
 		<div class="todo-completed">Completed______:
 			<input
 				type="checkbox"
-				[placeholder]="Todocompleted"
 				name="todoCompleted"
 				[(ngModel)]="todo.completed">
 		</div>
 		</td><td>
 		<div class="todo-confirm">
 			<input type="checkbox"
-				name="todoConfirm"
+				name="confirmed"
 				[(ngModel)]="confirmed">
 				Confirming the above!
 		</div>

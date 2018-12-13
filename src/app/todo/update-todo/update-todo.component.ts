@@ -14,12 +14,19 @@ import { Todo } from '../../shared/model/todo';
 })
 export class UpdateTodoComponent implements OnInit {
 
+	@Input() channelID: number;
 	@Input() idx: number;
 	@Output() 
 	activateList = new EventEmitter();
 
 	public todo: Todo;
-	private userList: sqlList[]=[];
+	public userList: sqlList[]=[];
+
+	public user: string;
+	public label: string;
+	public targetDate: string;
+	public doneDate: string;
+	public completed: string;
 	
 	public todoForm: FormGroup = new FormGroup({
 		todoIDControl: new FormControl(null),
@@ -36,6 +43,7 @@ export class UpdateTodoComponent implements OnInit {
 	) {}
 
   ngOnInit() {
+		this.todoService.setChannelID(this.channelID);
 		this.userList = this.userListService.getUsers();
 		this.populate();
   }

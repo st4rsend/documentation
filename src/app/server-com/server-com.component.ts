@@ -19,7 +19,7 @@ export class ServerComComponent {
 
 	private scSubConnected: Subscription;
 	private scSubMessages: Subscription;
-	private scIsConnected = false;
+	public scIsConnected = false;
 
 	private scAddress: any = 'wss://dev.st4rsend.net/ws';
 
@@ -29,14 +29,16 @@ export class ServerComComponent {
 
 	private scSubject: Subject<any>;
 	private scMessages: Array<string>;
-	private scVerbosityFlag: boolean = false;
-	private scDebugFlag: boolean = false;
+	public scVerbosityFlag: boolean = false;
+	public scDebugFlag: boolean = false;
+
+	public heartbeat: number;
 
 	constructor(private scWebsocket: WebSocketService) {
 		this.scMessages = [];
 	}
 
-	private scConnect() {
+	public scConnect() {
 		this.scSubConnected = this.scWebsocket.connected().subscribe(status => {
 			this.scIsConnected = status;
 		});
@@ -45,7 +47,7 @@ export class ServerComComponent {
 		this.toAppComponent("Message from ServerCom component");
 	}
 
-	private scDisconnect() {
+	public scDisconnect() {
 		this.scWebsocket.wsDisconnect();
 	}
 
@@ -66,7 +68,7 @@ export class ServerComComponent {
 	}
 
 
-	private scVerbosity() {
+	public scVerbosity() {
 		let data: string;	
 		if (this.scVerbosityFlag) {
 			data = "VERBOSE ON";

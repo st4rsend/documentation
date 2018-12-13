@@ -15,8 +15,11 @@ import { Subscription } from 'rxjs';
 })
 export class CreateTodoComponent implements OnInit {
 
+	@Input() channelID: number;
+
 	public todo: Todo;
-	private userList: sqlList[]=[];
+	public confirmed: boolean = false;
+	public userList: sqlList[]=[];
 	private isConnected: boolean = false;
 	private isConnectedSub: Subscription;
 
@@ -28,6 +31,7 @@ export class CreateTodoComponent implements OnInit {
 	}
 
   ngOnInit() {
+		this.todoService.setChannelID(this.channelID);
 		this.userList = this.userListService.getUsers();
   }
 

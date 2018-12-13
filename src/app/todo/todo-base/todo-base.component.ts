@@ -17,6 +17,7 @@ import { SqlListService } from '../../shared/services/sql-list.service';
 export class TodoBaseComponent implements OnInit {
 
 	//@Output() updateRequest = new EventEmitter<number>();
+	public channelID: number = 25;
 
 	public isListMode: boolean;
 	public isCreateMode: boolean;

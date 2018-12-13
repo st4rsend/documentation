@@ -16,14 +16,17 @@ export class TodoService {
 	private tsUpdateSQL: string = 'update todos set ';
 	private tsSelectSub: Subscription;
 	private tsSubject: Subject<any>;
+	public channelID: number = 1;
 
 	public isReady$ = new Subject<any>();
 
 	constructor ( private webSocketService: WebSocketService ) {
-		console.log("Constructor TodoService");
 		this.todos = [];
 	}
 
+	public setChannelID(channelID: number){
+		this.channelID = channelID;
+	}
 
 	public getTodo(idx: number): Todo {
 		return this.todos.find(k => k.idx === idx);
@@ -47,7 +50,7 @@ export class TodoService {
 		});
 
 		let message1 = this.webSocketService
-			.wsPrepareMessage(0,'SQL','REQ_INSERT',[sql]);
+			.wsPrepareMessage(this.channelID,'SQL','REQ_INSERT',[sql]);
 		this.tsSubject.next(message1);
 	}
 
@@ -63,7 +66,7 @@ export class TodoService {
 		});
 
 		let message1 = this.webSocketService
-			.wsPrepareMessage(0,'SQL','REQ_DELETE',[sql]);
+			.wsPrepareMessage(this.channelID,'SQL','REQ_DELETE',[sql]);
 		this.tsSubject.next(message1);
 	}
 
@@ -82,7 +85,7 @@ export class TodoService {
 			this.tsParse(value);
 		});
 		let message1 = this.webSocketService
-			.wsPrepareMessage(0,'SQL','REQ_UPDATE',[sql]);
+			.wsPrepareMessage(this.channelID,'SQL','REQ_UPDATE',[sql]);
 		this.tsSubject.next(message1);
 
 	}
@@ -99,13 +102,13 @@ export class TodoService {
 		}
 
 		let message = this.webSocketService
-			.wsPrepareMessage(0,'SQL','REQ_SELECT',[this.tsSelectSQL]);
+			.wsPrepareMessage(this.channelID,'SQL','REQ_SELECT',[this.tsSelectSQL]);
 		this.tsSubject.next(message);
 	}
 
 	private tsParse(scMsg: wsMessage) {
 		var todo: Todo;
-		if ((+scMsg.payload.channelid === 0) && (scMsg.payload.domain === "SQL")) {
+		if ((+scMsg.payload.channelid === this.channelID) && (scMsg.payload.domain === "SQL")) {
 			if (scMsg.payload.command === "RESP_SELECT_DATA") {
 				if (+scMsg.payload.data[4] > 0) {
 					this.todos.push(new Todo(
@@ -129,7 +132,7 @@ export class TodoService {
 					));
 				}
 			}
-			if ((+scMsg.payload.channelid === 0) && (scMsg.payload.command === "EOF")) {
+			if ((+scMsg.payload.channelid === this.channelID) && (scMsg.payload.command === "EOF")) {
 				console.log('EOF');
 				this.isReady$.next(true);
 				this.tsSelectSub.unsubscribe();
