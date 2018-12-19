@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject ,  Observable } from 'rxjs';
+import { Subject, Subscription, Observable } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 interface timeStamp {
@@ -33,8 +33,9 @@ export class WebSocketService {
 	private currentSeq: number = 1;
 
 	private socket: WebSocketSubject<any>;
+	private genericSubscription: Subscription;
 
-	public wsPrepareMessage(channelid: number, domain: string, command: string, data: [string]): wsMessage {
+	public wsPrepareMessage(channelid: number, domain: string, command: string, data: string[]): wsMessage {
 		let message: wsMessage = {
 			sequence: this.currentSeq,
 			time: {
@@ -53,8 +54,10 @@ export class WebSocketService {
 	}
 
 	public wsConnect(url: string){
-
-		this.socket = webSocket(url); 
+		this.socket = webSocket(url);
+		this.genericSubscription = this.socket.subscribe((msg) => {
+			this.genericParse(msg);
+		});
 		this.wsConnected$.next(true);
 	}
 
@@ -70,5 +73,10 @@ export class WebSocketService {
 	public wsSubject() : Subject<any> {
 		return this.socket;	
 		
+	}
+
+	public genericParse(msg: wsMessage){
+		if  ((+msg.payload.channelid === 0) && (msg.payload.domain === "HBT")) {
+		console.log("received heartbeat");
 	}
 }

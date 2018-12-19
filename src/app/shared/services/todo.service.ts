@@ -104,6 +104,7 @@ export class TodoService {
 		let message = this.webSocketService
 			.wsPrepareMessage(this.channelID,'SQL','REQ_SELECT',[this.tsSelectSQL]);
 		this.tsSubject.next(message);
+		this.tsSubject.next(message);
 	}
 
 	private tsParse(scMsg: wsMessage) {
