@@ -73,6 +73,7 @@ type ComEncap struct {
 // WsContext definition (adding sequencing functionalities)
 type WsContext struct {
 	Conn *websocket.Conn
+	handlerIndex int64
 	Sequence int64
 	Verbose int64
 }
@@ -81,6 +82,7 @@ type WsSQLSelect struct{
 	Headers []string
 	Data [][]string
 }
+
 // Services
 //// HeartBeat
 func StartHeartBeatSvc(wsContext *WsContext, interval int, holdTime int) (ticker *time.Ticker, err error){
@@ -91,7 +93,7 @@ func StartHeartBeatSvc(wsContext *WsContext, interval int, holdTime int) (ticker
 		for range ticker.C {
 			message.Payload.ChannelID = 0
 			message.Payload.Domain = "HBT"
-			message.Payload.Command = "HBTCMD"
+			message.Payload.Command = "HBTINF"
 			message.Payload.Data = nil
 			err = sendMessage(wsContext, &message.Payload)
 			CheckErr(err)
@@ -107,25 +109,28 @@ func StopHeartBeatSvc(ticker *time.Ticker) (err error){
 }
 
 // WebSocket Handler
+var handlerIndex int64 = 0
 func WsHandler(ws *websocket.Conn) {
+	handlerIndex++
 	var wsContext WsContext
 	var hbtTicker *time.Ticker
-	var errorCounter int = 0
 	wsContext.Conn = ws
 	wsContext.Sequence = 0
 	wsContext.Verbose = 1
+	wsContext.handlerIndex = handlerIndex
 
-	hbtTicker,_ = StartHeartBeatSvc(&wsContext, 5, 15)
-	defer StopHeartBeatSvc(hbtTicker)
+	hbtTicker,_ = StartHeartBeatSvc(&wsContext, 3, 9)
 
 	if wsContext.Verbose ==1 {
-		fmt.Printf("Handler activated\n")
+		fmt.Printf("Handler %d activated\n", wsContext.handlerIndex)
 	}
 	defer	func() {
 		if wsContext.Verbose ==1 {
-			fmt.Printf("Handler closed\n");
+			fmt.Printf("Handler %d closed\n", wsContext.handlerIndex);
 		}
 	}()
+
+	defer StopHeartBeatSvc(hbtTicker)
 
 	for {
 		var receivedMessage WsMessage
@@ -142,14 +147,8 @@ func WsHandler(ws *websocket.Conn) {
 		}
 		err = CheckErr(err)
 		if err != nil && err.Error() == "EOF" {
-			errorCounter++
-			if wsContext.Verbose == 1 {
-				fmt.Println("EOF received", errorCounter)
-			}
-			if errorCounter > 1 {
-				fmt.Println("EOF counter reached 2, closing", errorCounter)
-				break
-			}
+			fmt.Println("EOF received")
+			break
 		}
 	}
 }
@@ -188,6 +187,9 @@ func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 }
 
 func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
+	if message.Payload.Command == "HBTINF" {
+		fmt.Println("Received HBTINF")
+	}
 	err = nil
 	return err
 }

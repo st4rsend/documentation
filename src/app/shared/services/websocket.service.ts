@@ -35,6 +35,10 @@ export class WebSocketService {
 	private socket: WebSocketSubject<any>;
 	private genericSubscription: Subscription;
 
+	private hbtInterval: number = 3000;
+	private hbtHoldTime: number = 9000;
+	private hbtTicker: number;
+
 	public wsPrepareMessage(channelid: number, domain: string, command: string, data: string[]): wsMessage {
 		let message: wsMessage = {
 			sequence: this.currentSeq,
@@ -59,10 +63,16 @@ export class WebSocketService {
 			this.genericParse(msg);
 		});
 		this.wsConnected$.next(true);
+		this.hbtTicker = setInterval(() => {
+			this.wsSubject().next(this.wsPrepareMessage(0,"HBT","HBTINF",[]));
+		},this.hbtInterval);
 	}
 
 	public wsDisconnect(){
 		this.currentSeq = 1;
+		clearInterval(this.hbtTicker);
+		this.genericSubscription.unsubscribe();
+		this.socket.complete();
 		this.wsConnected$.next(false);
 	}
 
