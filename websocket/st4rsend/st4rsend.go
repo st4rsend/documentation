@@ -74,6 +74,11 @@ type ComEncap struct {
 type WsContext struct {
 	Conn *websocket.Conn
 	handlerIndex int64
+	hbtTicker *time.Ticker
+	hbtHoldTimeOK bool
+	hbtHoldDownTimer *time.Timer
+	hbtHoldDownTime int64
+	hbtInterval int64
 	Sequence int64
 	Verbose int64
 }
@@ -84,13 +89,14 @@ type WsSQLSelect struct{
 }
 
 // Services
-//// HeartBeat
-func StartHeartBeatSvc(wsContext *WsContext, interval int, holdTime int) (ticker *time.Ticker, err error){
-	ticker = time.NewTicker(time.Duration(interval) * time.Second)
+//// HeartBeat(wsContext *WsContext, interval int) (ticker *time.Ticker, e    rr error){
+
+func StartHBTSvc(wsContext *WsContext) (err error){
+	wsContext.hbtTicker = time.NewTicker(time.Duration(wsContext.hbtInterval) * time.Second)
 	go func() {
 		var message WsMessage
 		//for t := range ticker.C {
-		for range ticker.C {
+		for range wsContext.hbtTicker.C {
 			message.Payload.ChannelID = 0
 			message.Payload.Domain = "HBT"
 			message.Payload.Command = "HBTINF"
@@ -99,27 +105,48 @@ func StartHeartBeatSvc(wsContext *WsContext, interval int, holdTime int) (ticker
 			CheckErr(err)
 		}
 	}()
-	return ticker, nil
+	return err
 }
 
-func StopHeartBeatSvc(ticker *time.Ticker) (err error){
+func StopHBTSvc(wsContext *WsContext) (err error){
 	fmt.Println("Stopping heartbeat")
-	ticker.Stop()
+	wsContext.hbtTicker.Stop()
+	return nil
+}
+func StartHBTHoldDownTimer(wsContext *WsContext) (err error){
+	wsContext.hbtHoldDownTimer = time.NewTimer(time.Second * time.Duration(wsContext.hbtHoldDownTime))
+	go func() {
+		<-wsContext.hbtHoldDownTimer.C
+		wsContext.hbtHoldTimeOK = false
+	}()
+	return err
+}
+
+func StopHBTHoldDownTimer(wsContext *WsContext) (err error){
+	wsContext.hbtHoldDownTimer.Stop()
 	return nil
 }
 
 // WebSocket Handler
 var handlerIndex int64 = 0
 func WsHandler(ws *websocket.Conn) {
-	handlerIndex++
 	var wsContext WsContext
-	var hbtTicker *time.Ticker
+	var err error
+
+	handlerIndex++
+
 	wsContext.Conn = ws
 	wsContext.Sequence = 0
 	wsContext.Verbose = 1
 	wsContext.handlerIndex = handlerIndex
+	wsContext.hbtHoldTimeOK = true
+	wsContext.hbtInterval = 3
+	wsContext.hbtHoldDownTime = 9
 
-	hbtTicker,_ = StartHeartBeatSvc(&wsContext, 3, 9)
+	err = StartHBTSvc(&wsContext)
+	CheckErr(err)
+	err = StartHBTHoldDownTimer(&wsContext)
+	CheckErr(err)
 
 	if wsContext.Verbose ==1 {
 		fmt.Printf("Handler %d activated\n", wsContext.handlerIndex)
@@ -130,7 +157,8 @@ func WsHandler(ws *websocket.Conn) {
 		}
 	}()
 
-	defer StopHeartBeatSvc(hbtTicker)
+	defer StopHBTSvc(&wsContext)
+	defer StopHBTHoldDownTimer(&wsContext)
 
 	for {
 		var receivedMessage WsMessage
@@ -148,6 +176,10 @@ func WsHandler(ws *websocket.Conn) {
 		err = CheckErr(err)
 		if err != nil && err.Error() == "EOF" {
 			fmt.Println("EOF received")
+			break
+		}
+		if wsContext.hbtHoldTimeOK == false {
+			fmt.Println("Heartbeat receive failure")
 			break
 		}
 	}
@@ -188,7 +220,10 @@ func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 
 func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "HBTINF" {
-		fmt.Println("Received HBTINF")
+		//fmt.Println("Received HBTINF")
+		StopHBTHoldDownTimer(wsContext)
+		StartHBTHoldDownTimer(wsContext)
+
 	}
 	err = nil
 	return err

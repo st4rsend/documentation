@@ -20,6 +20,7 @@ import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
 import { UpdateTodoComponent } from './todo/update-todo/update-todo.component';
 import { ServerComComponent } from './server-com/server-com.component';
 import { AppRoutesModule } from './app-routes.module';
+import { SvgSampleComponent } from './doc/doc-base/svg-sample/svg-sample.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { AppRoutesModule } from './app-routes.module';
     CreateTodoComponent,
 		UpdateTodoComponent,
     ServerComComponent,
+		SvgSampleComponent,
   ],
   imports: [
     BrowserModule,
