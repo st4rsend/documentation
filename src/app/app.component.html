@@ -4,7 +4,7 @@
 
 <div class="links">
 	<span><a routerLink="/" routerLinkActive="">Home</a></span>
-	<span><a routerLink="/doc/base" routerLinkActive="">Doc</a></span>
+	<span *ngIf="isConnected"><a routerLink="/doc/base" routerLinkActive="">Doc</a></span>
 	<span *ngIf="isConnected"><a routerLink="/todo/base" routerLinkActive="active">Todos</a></span>
 </div>
 

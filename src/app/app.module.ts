@@ -14,6 +14,10 @@ import {
 
 import { AppComponent } from './app.component';
 import { DocBaseComponent } from './doc/doc-base/doc-base.component';
+import { MenuDocComponent } from './doc/menu-doc/menu-doc.component';
+import { DynDocComponent } from './doc/dyn-doc/dyn-doc.component';
+import { TextItemDocComponent } from './doc/text-item-doc/text-item-doc.component';
+import { SvgItemDocComponent } from './doc/svg-item-doc/svg-item-doc.component';
 import { TodoBaseComponent } from './todo/todo-base/todo-base.component';
 import { ListTodoComponent } from './todo/list-todo/list-todo.component';
 import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
@@ -26,6 +30,10 @@ import { SvgSampleComponent } from './doc/doc-base/svg-sample/svg-sample.compone
   declarations: [
     AppComponent,
 		DocBaseComponent,
+		MenuDocComponent,
+		DynDocComponent,
+		TextItemDocComponent,
+		SvgItemDocComponent,
 		TodoBaseComponent,
     ListTodoComponent,
     CreateTodoComponent,

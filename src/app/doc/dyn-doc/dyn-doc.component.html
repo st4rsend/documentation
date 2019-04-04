@@ -1,0 +1,13 @@
+<p>
+  dyn-doc works!
+</p>
+<ng-container *ngFor="let item of dynTable">
+	<app-text-item-doc  *ngIf="item.typeValue=='TEXT'"
+		[text]=item.value>
+	</app-text-item-doc>
+	<app-svg-item-doc  *ngIf="item.typeValue=='SVG'"
+		[text]=item.value>
+
+	</app-svg-item-doc>
+</ng-container>
+
