@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-svg-item-doc',
@@ -8,10 +9,12 @@ import { Component, OnInit, Input } from '@angular/core';
 export class SvgItemDocComponent implements OnInit {
 
 	@Input() text: string;
+	svg:SafeHtml;
 
-  constructor() { }
+  constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+		this.svg = this.sanitizer.bypassSecurityTrustHtml(this.text);
   }
 
 }

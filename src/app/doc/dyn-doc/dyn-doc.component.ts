@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DocService } from '../../shared/services/doc.service';
 import {Doc} from '../../shared/model/doc';
 
 @Component({
@@ -11,7 +12,9 @@ export class DynDocComponent implements OnInit {
 	private testTexte="Hello World";
 	private dynTable: Array<Doc>;
 
-  constructor() {
+	public docs: Array<Doc>;
+
+  constructor(private docService: DocService) {
 	}
 
   ngOnInit() {
@@ -21,6 +24,12 @@ export class DynDocComponent implements OnInit {
 			{idx:3,typeID:1,typeValue:'TEXT',position:3,value:'TEXTE 3'},
 			{idx:4,typeID:2,typeValue:'SVG',position:4,value:'SVG 1'},
 		];
+		//this.docService.setChannelID(this.channelID);
+		this.docSynchro();
   }
 
+	docSynchro() {
+		this.docService.SQLSynchro();
+		this.docs = this.docService.getDocs();
+	}
 }
