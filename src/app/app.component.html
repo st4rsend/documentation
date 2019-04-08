@@ -1,18 +1,21 @@
 <header>
+<table class="header" width="800px">
+<tr><td width="auto">
 <mat-toolbar color="primary">St4rsend</mat-toolbar>
+</td><td width="350px" align="right">
+<app-server-com (st4rsendMsg)="toAppComponent($event);"> </app-server-com>
+</td></tr>
+</table>
 </header>
-
+<body>
 <div class="links">
 	<span><a routerLink="/" routerLinkActive="">Home</a></span>
-	<span *ngIf="isConnected"><a routerLink="/doc/base" routerLinkActive="">Doc</a></span>
+	<span *ngIf="isConnected"><a routerLink="/doc/base" routerLinkActive="active">Doc</a></span>
 	<span *ngIf="isConnected"><a routerLink="/todo/base" routerLinkActive="active">Todos</a></span>
 </div>
 
 <router-outlet></router-outlet>
 
-<div class="container">
-<app-server-com (st4rsendMsg)="toAppComponent($event);"> </app-server-com>
-</div>
-
+</body>
 <footer>
 </footer>

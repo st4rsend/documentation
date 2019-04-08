@@ -1,18 +1,22 @@
-<table><tr><td width='150px' >
+<table class="serverCom" ><tr>
+	<td width='80px' >
 	<button arial-label="Connect to server"	(click)="scConnect()"
 		 mat-icon-button color="primary">Connect</button>
 	</td><td>
+	Server verbosity <input [(ngModel)]="scVerbosityFlag" type="checkbox" arial-label="Verbosity" (change)="scVerbosity()">
+	</td><td>
+		Connected: {{scIsConnected}}
+	</td>
+</tr><tr>
+	<td>
 	<button arial-label="Disconnect" (click)="scDisconnect()"
 		mat-icon-button color="warn">Disconnect</button>
-	</td></tr>
-	<tr><td>
-	Server verbosity <input [(ngModel)]="scVerbosityFlag" type="checkbox" arial-label="Verbosity" (change)="scVerbosity()">
-		<BR>Debug mode <input [(ngModel)]="scDebugFlag" type="checkbox" arial-label="Debug" >
 	</td><td>	
-		Websocket Connected: {{scIsConnected}}
-		<BR>heartbeat sanity: {{heartbeat}}
-	</td></tr>
-</table>
+		Debug mode <input [(ngModel)]="scDebugFlag" type="checkbox" arial-label="Debug" >
+	</td><td>
+		heartbeat: {{heartbeat}}
+	</td>
+</tr></table>
 <BR>
 <BR>
 <div *ngIf="scDebugFlag">

@@ -1,17 +1,5 @@
 <div class="container">
-<app-menu-doc></app-menu-doc>
-<app-dyn-doc></app-dyn-doc>
-<H1>---------------------------------------------------------------------</H1>
-<H1>Angular</H1>
-<H2>ng memo</H2>
-	ng generate component foo/foo-fooPurpose --skip-import
-<H2> memo router angular</H2>
- path: 'todo/update/:idx', component: UpdateTodoComponent<BR>
- //this.todo = this.todoService.getTodo(+this.route.snapshot.paramMap.get('    idx'));
-<H1>Debian</H1>
-<H2>Update system</H2>
- apt-get update
-<BR>
-apt-get dist-upgrade
-<app-svg-sample></app-svg-sample> 
+	<app-menu-doc (editModeEvent)='docEditModeSet($event);'></app-menu-doc>
+	<app-dyn-doc [editMode]='editMode'></app-dyn-doc>
+	<app-svg-sample></app-svg-sample> 
 </div>

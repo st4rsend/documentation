@@ -1,8 +1,8 @@
 <ng-container *ngFor="let item of docs">
-	<app-text-item-doc  *ngIf="item.typeValue=='TEXT'"
-		[text]=item.value>
+	<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
+		[htmlValue]=item.value [editMode]=editMode>
 	</app-text-item-doc>
-	<app-svg-item-doc  *ngIf="item.typeValue=='SVG'"
-		[text]=item.value>
+	<app-svg-item-doc *ngIf="item.typeValue=='SVG'"
+		[svgValue]=item.value [editMode]=editMode>
 	</app-svg-item-doc>
 </ng-container>

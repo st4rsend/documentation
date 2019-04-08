@@ -1,2 +1,7 @@
-<div [innerHTML]="text">
+<div *ngIf='editMode else normal'>
+<div style='border: thin solid blue' [innerHTML]="htmlValue"></div>
 </div>
+
+<ng-template #normal>
+<div [innerHTML]="htmlValue"></div>
+</ng-template>

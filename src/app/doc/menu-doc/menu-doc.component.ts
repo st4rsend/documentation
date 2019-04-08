@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-menu-doc',
@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuDocComponent implements OnInit {
 
+	@Output() editModeEvent = new EventEmitter<boolean>();
+	private docEditMode: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
   }
+
+	editModeChange() {
+		this.editModeEvent.emit(this.docEditMode);
+	}
 
 }

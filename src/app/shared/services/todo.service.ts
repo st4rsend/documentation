@@ -17,6 +17,7 @@ export class TodoService {
 	private tsSelectSub: Subscription;
 	private tsSubject: Subject<any>;
 	public channelID: number = 1;
+	public baseChannelID: number = 64;
 
 	public isReady$ = new Subject<any>();
 
@@ -25,7 +26,7 @@ export class TodoService {
 	}
 
 	public setChannelID(channelID: number){
-		this.channelID = channelID;
+		this.channelID = this.baseChannelID + channelID;
 	}
 
 	public getTodo(idx: number): Todo {

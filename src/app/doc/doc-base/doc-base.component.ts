@@ -11,6 +11,8 @@ import { SqlListService } from '../../shared/services/sql-list.service';
 })
 export class DocBaseComponent implements OnInit {
 
+	private editMode: boolean = false;
+
   constructor(
 		private DocService: DocService,
 		private DocListService: SqlListService
@@ -18,5 +20,9 @@ export class DocBaseComponent implements OnInit {
 
   ngOnInit() {
   }
+
+	docEditModeSet(editMode: boolean) {
+		this.editMode = editMode;
+	}
 
 }

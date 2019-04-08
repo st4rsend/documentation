@@ -10,10 +10,12 @@ export class DocService {
 
 	private docs: Array<Doc>;
 
-	private dsSelectSQL: any = 'select D.ID, T.ID, type, position, D.info from documentations D left join documentation_type T on D.typeID=T.ID order by position';
+	//private dsSelectSQL: any = 'select D.ID, T.ID, type, position, D.info from documentations D left join documentation_type T on D.typeID=T.ID order by position';
+	private dsSelectSQL: any = 'select S.ID, T.ID as typeID, T.type, S.position, D.info from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID left join documentation_type T on D.typeID=T.ID where L.ID=1 order by S.position;';
 	private dsSelectSub: Subscription;
 	private dsSubject: Subject<any>;
-	public channelID: number = 2;
+	public channelID: number = 1;
+	public baseChannelID: number = 256;
 
 	public isReady$ = new Subject<any>();
 
@@ -22,7 +24,7 @@ export class DocService {
 	}
 
 	public setChannelID(channelID: number){
-		this.channelID = channelID;
+		this.channelID = this.baseChannelID + channelID;
 	}
 
 	public getDoc(idx: number): Doc {

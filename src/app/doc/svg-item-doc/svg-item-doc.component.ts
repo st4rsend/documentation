@@ -8,13 +8,15 @@ import {DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class SvgItemDocComponent implements OnInit {
 
-	@Input() text: string;
+	@Input() svgValue: string;
+	@Input() editMode: boolean;
+
 	svg:SafeHtml;
 
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-		this.svg = this.sanitizer.bypassSecurityTrustHtml(this.text);
+		this.svg = this.sanitizer.bypassSecurityTrustHtml(this.svgValue);
   }
 
 }

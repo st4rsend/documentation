@@ -7,7 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TextItemDocComponent implements OnInit {
 
-	@Input() text: string;
+	@Input() htmlValue: string;
+	@Input() editMode: boolean;
 
   constructor() { }
 
