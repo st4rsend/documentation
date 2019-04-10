@@ -10,8 +10,7 @@ export class DocService {
 
 	private docs: Array<Doc>;
 
-	//private dsSelectSQL: any = 'select D.ID, T.ID, type, position, D.info from documentations D left join documentation_type T on D.typeID=T.ID order by position';
-	private dsSelectSQL: any = 'select S.ID, T.ID as typeID, T.type, S.position, D.info from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID left join documentation_type T on D.typeID=T.ID where L.ID=1 order by S.position;';
+	//private dsSelectSQL: any = 'select S.ID, T.ID as typeID, T.type, S.position, D.info from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID left join documentation_type T on D.typeID=T.ID where L.ID=1 order by S.position;';
 	private dsSelectSub: Subscription;
 	private dsSubject: Subject<any>;
 	public channelID: number = 1;
@@ -47,14 +46,14 @@ export class DocService {
 		}
 
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'SQL','REQ_SELECT',[this.dsSelectSQL]);
+			.wsPrepareMessage(this.channelID,'DOC','GET_DOC_BY_ID',['1']);
 		this.dsSubject.next(message);
 	}
 
 	private dsParse(scMsg: wsMessage) {
 		var doc: Doc;
-		if ((+scMsg.payload.channelid === this.channelID) && (scMsg.payload.domain === "SQL")) {
-			if (scMsg.payload.command === "RESP_SELECT_DATA") {
+		if ((+scMsg.payload.channelid === this.channelID) && (scMsg.payload.domain === "DOC")) {
+			if (scMsg.payload.command === "RESP_DOC_BY_ID") {
 				this.docs.push(new Doc(
 					+scMsg.payload.data[0],
 					+scMsg.payload.data[1],
