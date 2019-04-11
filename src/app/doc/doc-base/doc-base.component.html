@@ -1,5 +1,11 @@
 <div class="container">
-	<app-menu-doc (editModeEvent)='docEditModeSet($event);'></app-menu-doc>
-	<app-dyn-doc [editMode]='editMode'></app-dyn-doc>
+	<app-menu-doc 
+		(editModeEvent)='docEditModeSet($event);' 
+		(docListIDEvent)='docListIDSet($event)'>
+	</app-menu-doc>
+	<app-dyn-doc 
+		[editMode]='editMode' 
+		[docListID]='docListID'>
+	</app-dyn-doc>
 	<app-svg-sample></app-svg-sample> 
 </div>

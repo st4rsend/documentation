@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { DocService } from '../../shared/services/doc.service';
+import { DocList } from  '../../shared/model/doc';
 
 @Component({
   selector: 'app-menu-doc',
@@ -9,10 +11,21 @@ export class MenuDocComponent implements OnInit {
 
 	@Output() editModeEvent = new EventEmitter<boolean>();
 	private docEditMode: boolean = false;
+	@Output() docListIDEvent = new EventEmitter<string>();
+	private docListID: string = '1';
+	private channelID: number = 2;
 
-  constructor() { }
+	private docLists: Array<DocList>;
+
+  constructor(private docService: DocService) { }
 
   ngOnInit() {
+
+		this.docService.setChannelID(this.channelID);
+		//this.docService.dsSQLQueryDocLists();
+		//this.docLists = this.docService.dsGetDocLists();
+		console.log("DOC LIST: ", this.docLists);
+		this.docListIDEvent.emit(this.docListID);
   }
 
 	editModeChange() {

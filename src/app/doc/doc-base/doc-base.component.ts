@@ -12,6 +12,7 @@ import { SqlListService } from '../../shared/services/sql-list.service';
 export class DocBaseComponent implements OnInit {
 
 	private editMode: boolean = false;
+	private docListID: string;
 
   constructor(
 		private DocService: DocService,
@@ -23,6 +24,10 @@ export class DocBaseComponent implements OnInit {
 
 	docEditModeSet(editMode: boolean) {
 		this.editMode = editMode;
+	}
+
+	docListIDSet(listID: string) {
+		this.docListID = listID;
 	}
 
 }

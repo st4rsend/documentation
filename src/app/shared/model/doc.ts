@@ -15,3 +15,15 @@ export class Doc implements IDoc {
 		public value: string
 	){}
 }
+
+export interface IDocList {
+	id: string;
+	description: string;
+}
+
+export class DocList implements IDocList {
+	constructor (
+		public id: string,
+		public description: string
+	){}
+}
