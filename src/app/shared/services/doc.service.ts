@@ -14,7 +14,10 @@ export class DocService {
 
 	private dsSelectSub: Subscription;
 	private dsSubject: Subject<any>;
+	private dsListSelectSub: Subscription;
+	private dsListSubject: Subject<any>;
 	public channelID: number = 1;
+	public listChannelID: number = 258;
 	public baseChannelID: number = 256;
 
 	public isReady$ = new Subject<any>();
@@ -74,15 +77,15 @@ export class DocService {
 		this.dsSubject.next(message);
 	}
 
-	public dsSQLQueryDocLists() {
+	public dsSQLQueryDocsList() {
 		this.docLists = [];
-		this.dsSubject = this.webSocketService.wsSubject();
+		this.dsListSubject = this.webSocketService.wsSubject();
 
 		this.isReady$.next(false);
 
-		if ((this.dsSelectSub === undefined) || (this.dsSelectSub.closed === true)) {
-			this.dsSelectSub = this.dsSubject.subscribe((scMsg) => {
-				if ((+scMsg.payload.channelid === this.channelID)
+		if ((this.dsListSelectSub === undefined) || (this.dsListSelectSub.closed === true)) {
+			this.dsListSelectSub = this.dsListSubject.subscribe((scMsg) => {
+				if ((+scMsg.payload.channelid === this.listChannelID)
 						&& (scMsg.payload.domain === "DOC")) {
 					if (scMsg.payload.command === "RESP_DOC_LIST") {
 						this.docLists.push(new DocList(
@@ -91,16 +94,16 @@ export class DocService {
 						));
 					}
 				}
-				if ((+scMsg.payload.channelid === this.channelID)
+				if ((+scMsg.payload.channelid === this.listChannelID)
 						&& (scMsg.payload.command === "EOF")) {
-					console.log('Docs EOF');
+					console.log('Docs LIST EOF');
 					this.isReady$.next(true);
 				}		
 			});
 		}
 
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'DOC','GET_DOC_LIST',['1']);
-		this.dsSubject.next(message);
+			.wsPrepareMessage(this.listChannelID,'DOC','GET_DOC_LIST',['1']);
+		this.dsListSubject.next(message);
 	}
 }

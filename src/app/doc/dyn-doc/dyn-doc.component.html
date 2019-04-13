@@ -1,3 +1,5 @@
+<button (click)="docListIDChange()">UPDATE</button>
+
 <ng-container *ngFor="let item of docs">
 	<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
 		[htmlValue]=item.value [editMode]=editMode>

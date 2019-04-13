@@ -30,4 +30,7 @@ export class DynDocComponent implements OnInit {
 		this.docService.dsSQLQueryDocs(this.docListID);
 		this.docs = this.docService.dsGetDocs();
 	}
+	docListIDChange() {
+		this.docSynchro();
+	}
 }

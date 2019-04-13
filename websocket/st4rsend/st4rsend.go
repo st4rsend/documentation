@@ -137,7 +137,7 @@ func WsHandler(ws *websocket.Conn) {
 
 	wsContext.Conn = ws
 	wsContext.Sequence = 0
-	wsContext.Verbose = 1
+	wsContext.Verbose = 0
 	wsContext.handlerIndex = handlerIndex
 	wsContext.hbtHoldTimeOK = true
 	wsContext.hbtInterval = 3

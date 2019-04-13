@@ -1,7 +1,7 @@
 package st4rsend
 
 import (
-	//"fmt"
+//	"fmt"
 )
 
 func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
@@ -10,7 +10,7 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 		err = WsSrvGetDocByID(wsContext, message)
 	}
 	if message.Payload.Command == "GET_DOC_LIST" {
-		err = WsSrvGetDocByID(wsContext, message)
+		err = WsSrvGetDocList(wsContext, message)
 	}
 	CheckErr(err)
 	return err
@@ -41,7 +41,7 @@ func WsSrvGetDocList(wsContext *WsContext, message *WsMessage) (err error){
 	var response *WsSQLSelect
 	err = nil
 	var sql string
-	sql = "select L.ID, L.description from documentation_list"
+	sql = "select L.ID, L.description from documentation_list L"
 	response, err = processReqSelectSQL(&sql)
 	CheckErr(err)
 

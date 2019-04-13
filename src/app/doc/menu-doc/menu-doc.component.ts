@@ -22,11 +22,14 @@ export class MenuDocComponent implements OnInit {
   ngOnInit() {
 
 		this.docService.setChannelID(this.channelID);
-		//this.docService.dsSQLQueryDocLists();
-		//this.docLists = this.docService.dsGetDocLists();
-		console.log("DOC LIST: ", this.docLists);
+		this.docService.dsSQLQueryDocsList();
+		this.docLists = this.docService.dsGetDocLists();
 		this.docListIDEvent.emit(this.docListID);
   }
+
+	docListChange() {
+		this.docListIDEvent.emit(this.docListID);
+	}
 
 	editModeChange() {
 		this.editModeEvent.emit(this.docEditMode);
