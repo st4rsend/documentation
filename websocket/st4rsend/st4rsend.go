@@ -2,22 +2,21 @@ package st4rsend
 
 import (
 	// io needed for EOF error generation
-	"io"
+	//"io"
 	"fmt"
 	"log"
 	"time"
 	"golang.org/x/net/websocket"
-	"crypto/tls"
+	//"crypto/tls"
 	"github.com/go-sql-driver/mysql"
 )
 
 // st4rsend reserved variables:
-// ErrorLevel
-
+// ErrorLevel the higher the more verbose (syslog based ; 0 -> silent ; 7 -> debug)
+var ErrorLevel int64 = 4
 // Global error management
 // Purpose is defining global error verbosity for non managed errors
 // Hence standard error handling to be performed before call to CheckErr
-var ErrorLevel string = "log"
 func CheckErr(err error) (ret error){
 	if err != nil {
 		if err.Error() == "EOF" {
@@ -33,11 +32,11 @@ func CheckErr(err error) (ret error){
 				return err
 			}
 		}
-		if ErrorLevel == "panic" {
-			panic(err)
-		}
-		if ErrorLevel == "log" {
+		if ErrorLevel > 5 {
 			log.Fatal(err)
+		}
+		if ErrorLevel > 3  {
+			panic(err)
 		}
 	}
 	return err
@@ -89,46 +88,9 @@ type WsSQLSelect struct{
 }
 
 // Services
-//// HeartBeat(wsContext *WsContext, interval int) (ticker *time.Ticker, e    rr error){
-
-func StartHBTSvc(wsContext *WsContext) (err error){
-	wsContext.hbtTicker = time.NewTicker(time.Duration(wsContext.hbtInterval) * time.Second)
-	go func() {
-		var message WsMessage
-		//for t := range ticker.C {
-		for range wsContext.hbtTicker.C {
-			message.Payload.ChannelID = 0
-			message.Payload.Domain = "HBT"
-			message.Payload.Command = "HBTINF"
-			message.Payload.Data = nil
-			err = sendMessage(wsContext, &message.Payload)
-			CheckErr(err)
-		}
-	}()
-	return err
-}
-
-func StopHBTSvc(wsContext *WsContext) (err error){
-	fmt.Println("Stopping heartbeat")
-	wsContext.hbtTicker.Stop()
-	return nil
-}
-func StartHBTHoldDownTimer(wsContext *WsContext) (err error){
-	wsContext.hbtHoldDownTimer = time.NewTimer(time.Second * time.Duration(wsContext.hbtHoldDownTime))
-	go func() {
-		<-wsContext.hbtHoldDownTimer.C
-		wsContext.hbtHoldTimeOK = false
-	}()
-	return err
-}
-
-func StopHBTHoldDownTimer(wsContext *WsContext) (err error){
-	wsContext.hbtHoldDownTimer.Stop()
-	return nil
-}
-
 // WebSocket Handler
 var handlerIndex int64 = 0
+
 func WsHandler(ws *websocket.Conn) {
 	var wsContext WsContext
 	var err error
@@ -137,7 +99,7 @@ func WsHandler(ws *websocket.Conn) {
 
 	wsContext.Conn = ws
 	wsContext.Sequence = 0
-	wsContext.Verbose = 0
+	wsContext.Verbose = ErrorLevel
 	wsContext.handlerIndex = handlerIndex
 	wsContext.hbtHoldTimeOK = true
 	wsContext.hbtInterval = 3
@@ -148,11 +110,11 @@ func WsHandler(ws *websocket.Conn) {
 	err = StartHBTHoldDownTimer(&wsContext)
 	CheckErr(err)
 
-	if wsContext.Verbose ==1 {
+	if wsContext.Verbose > 4 {
 		fmt.Printf("Handler %d activated\n", wsContext.handlerIndex)
 	}
 	defer	func() {
-		if wsContext.Verbose ==1 {
+		if wsContext.Verbose > 4 {
 			fmt.Printf("Handler %d closed\n", wsContext.handlerIndex);
 		}
 	}()
@@ -167,19 +129,23 @@ func WsHandler(ws *websocket.Conn) {
 			err = WsSrvParseMsg(&wsContext, &receivedMessage)
 			CheckErr(err)
 			if err != nil {
-				log.Println(err)
+				log.Printf("Handler level error: %s",err)
 			}
-			if wsContext.Verbose ==1 {
+			if wsContext.Verbose > 6 {
 				fmt.Printf("Received: %v\n", receivedMessage)
 			}
 		}
 		err = CheckErr(err)
 		if err != nil && err.Error() == "EOF" {
-			fmt.Println("EOF received")
+			if wsContext.Verbose > 5 {
+				fmt.Printf("EOF received handler %d\n", wsContext.handlerIndex)
+			}
 			break
 		}
 		if wsContext.hbtHoldTimeOK == false {
-			fmt.Println("Heartbeat receive failure")
+			if wsContext.Verbose > 3 {
+				fmt.Printf("Heartbeat receive failure %d\n", wsContext.handlerIndex)
+			}
 			break
 		}
 	}
@@ -225,17 +191,6 @@ func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	return err
 }
 
-func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
-	if message.Payload.Command == "HBTINF" {
-		//fmt.Println("Received HBTINF")
-		StopHBTHoldDownTimer(wsContext)
-		StartHBTHoldDownTimer(wsContext)
-
-	}
-	err = nil
-	return err
-}
-
 func WsSrvINFParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
 	return err
@@ -273,57 +228,3 @@ func sendMessage(wsContext *WsContext, payload *ComEncap) (err error){
 	return err
 }
 
-// Client helper
-func WsDial(origin string, url string) (wsContext WsContext, err error){
-	config, _ := websocket.NewConfig(url, origin)
-	config.TlsConfig = &tls.Config{
-		InsecureSkipVerify: true,
-		ServerName: "localhost.localdomain",
-	}
-
-	wsContext.Conn, err = websocket.DialConfig(config)
-	CheckErr(err)
-
-	wsContext.Sequence = 0
-	wsContext.Verbose = 1
-	return wsContext, nil
-}
-
-// Client helper
-func WsClose(wsContext WsContext) (err error){
-	err = wsContext.Conn.Close()
-	CheckErr(err)
-	return err
-}
-// Client helper
-func WsCltParseMsg(wsContext *WsContext) (str []string, err error) {
-	var receivedMessage WsMessage
-	err = websocket.JSON.Receive(wsContext.Conn, &receivedMessage)
-	CheckErr(err)
-	if receivedMessage.Payload.Domain == "SQL" {
-		if receivedMessage.Payload.Command == "RESP_SELECT_HEADER" {
-			return receivedMessage.Payload.Data, nil
-		}
-		if receivedMessage.Payload.Command == "RESP_SELECT_DATA" {
-			return receivedMessage.Payload.Data, nil
-		}
-	}
-	if receivedMessage.Payload.Domain == "SQL" {
-		if receivedMessage.Payload.Command == "EOF" {
-			return nil, io.EOF
-		}
-	}
-	return nil, err
-}
-
-// Client helper
-func WsSendCMD(wsContext *WsContext, cmd *string) (err error){
-	comEncap := &ComEncap{
-		ChannelID: int64(0),
-		Domain: "CMD",
-		Command: "VERBOSITY",
-		Data: []string{*cmd}}
-	err = sendMessage(wsContext, comEncap)
-	CheckErr(err)
-	return err
-}

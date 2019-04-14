@@ -8,7 +8,7 @@ import (
 
 
 func main() {
-	st4rsend.ErrorLevel ="log"
+	st4rsend.ErrorLevel = 5
 
 	var wsContext st4rsend.WsContext
 	var err error

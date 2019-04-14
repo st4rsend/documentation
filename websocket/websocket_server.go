@@ -16,4 +16,3 @@ func main() {
 	err := http.ListenAndServe(wsPortAscii, nil)
 	st4rsend.CheckErr(err)
 }
-
