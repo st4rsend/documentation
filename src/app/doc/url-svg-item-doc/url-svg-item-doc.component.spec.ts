@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SvgSampleComponent } from './svg-sample.component';
+import { UrlSvgItemDocComponent } from './url-svg-item-doc.component';
 
-describe('SvgSampleComponent', () => {
-  let component: SvgSampleComponent;
-  let fixture: ComponentFixture<SvgSampleComponent>;
+describe('UrlSvgItemDocComponent', () => {
+  let component: UrlSvgItemDocComponent;
+  let fixture: ComponentFixture<UrlSvgItemDocComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SvgSampleComponent ]
+      declarations: [ UrlSvgItemDocComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SvgSampleComponent);
+    fixture = TestBed.createComponent(UrlSvgItemDocComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

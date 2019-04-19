@@ -9,11 +9,12 @@ import (
 	"golang.org/x/net/websocket"
 	//"crypto/tls"
 	"github.com/go-sql-driver/mysql"
+	"strconv"
 )
 
 // st4rsend reserved variables:
 // ErrorLevel the higher the more verbose (syslog based ; 0 -> silent ; 7 -> debug)
-var ErrorLevel int64 = 4
+var ErrorLevel int = 4
 // Global error management
 // Purpose is defining global error verbosity for non managed errors
 // Hence standard error handling to be performed before call to CheckErr
@@ -79,7 +80,7 @@ type WsContext struct {
 	hbtHoldDownTime int64
 	hbtInterval int64
 	Sequence int64
-	Verbose int64
+	Verbose int
 }
 
 type WsSQLSelect struct{
@@ -125,6 +126,9 @@ func WsHandler(ws *websocket.Conn) {
 	for {
 		var receivedMessage WsMessage
 		err := websocket.JSON.Receive(ws, &receivedMessage)
+		if wsContext.Verbose > 6 {
+			fmt.Printf("WS IN: %s\n", receivedMessage)
+		}
 		if err == nil {
 			err = WsSrvParseMsg(&wsContext, &receivedMessage)
 			CheckErr(err)
@@ -198,13 +202,9 @@ func WsSrvINFParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 
 func WsSrvCMDParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "VERBOSITY" {
-		if message.Payload.Data[0] == "VERBOSE ON" {
-			wsContext.Verbose = 1
-			fmt.Println("VERBOSE MODE ACTIVATED")
-		}
-		if message.Payload.Data[0] == "VERBOSE OFF" {
-			wsContext.Verbose = 0
-			fmt.Println("VERBOSE MODE DEACTIVATED")
+		wsContext.Verbose, err = strconv.Atoi(message.Payload.Data[0])
+		if wsContext.Verbose > 4 {
+			fmt.Printf("Vervosity set to: %d for Handler %d\n", wsContext.Verbose, wsContext.handlerIndex)
 		}
 	}
 	return err

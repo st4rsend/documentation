@@ -7,4 +7,7 @@
 	<app-svg-item-doc *ngIf="item.typeValue=='SVG'"
 		[svgValue]=item.value [editMode]=editMode>
 	</app-svg-item-doc>
+	<app-url-svg-item-doc *ngIf="item.typeValue=='SVG-URL'"
+		[svgValue]=item.value [editMode]=editMode>
+	</app-url-svg-item-doc>
 </ng-container>

@@ -29,7 +29,7 @@ export class ServerComComponent {
 
 	private scSubject: Subject<any>;
 	private scMessages: Array<string>;
-	public scVerbosityFlag: boolean = false;
+	public scVerbosityFlag: string = "4";
 	public scDebugFlag: boolean = false;
 
 	public heartbeat: number;
@@ -69,28 +69,13 @@ export class ServerComComponent {
 
 
 	public scVerbosity() {
-		let data: string;	
-		if (this.scVerbosityFlag) {
-			data = "VERBOSE ON";
-		} else {
-			data = "VERBOSE OFF";
-		}
-		let message: wsMessage = {
-			sequence: 0,
-			time: {
-				secSinceEpoch: Math.floor(Date.now()/1000),
-				nanoSec: (Date.now() % 1000) * 1000000
-			},
-			payload: {
-				channelid: 0,
-				domain: "CMD",
-				command: "VERBOSITY",
-				data: [data]
-			},
-		}
+		console.log(this.scVerbosityFlag);
+		this.scMessages = [];
+		this.scMessages.push(JSON.stringify(this.scVerbosityFlag));
+		this.scSubject = this.scWebsocket.wsSubject();
+		let message =  this.scWebsocket.wsPrepareMessage(0,"CMD","VERBOSITY",this.scMessages);
 		if (this.scSubject != null) {
 			this.scSubject.next(message);
 		}
-		console.log("Verbosity: ", this.scVerbosityFlag);
 	}
 }

@@ -3,7 +3,18 @@
 	<button arial-label="Connect to server"	(click)="scConnect()"
 		 mat-icon-button color="primary">Connect</button>
 	</td><td>
-	Server verbosity <input [(ngModel)]="scVerbosityFlag" type="checkbox" arial-label="Verbosity" (change)="scVerbosity()">
+		Server verbosity
+		<select 
+			[(ngModel)]="scVerbosityFlag" 
+			(change)="scVerbosity()">
+			<option [ngValue]="1">1</option>
+			<option [ngValue]="2">2</option>
+			<option [ngValue]="3">3</option>
+			<option [ngValue]="4">4</option>
+			<option [ngValue]="5">5</option>
+			<option [ngValue]="6">6</option>
+			<option [ngValue]="7">7</option>
+		</select>
 	</td><td>
 		Connected: {{scIsConnected}}
 	</td>
