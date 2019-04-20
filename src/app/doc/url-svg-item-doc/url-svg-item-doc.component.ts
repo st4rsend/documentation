@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
+import { Doc } from '../../shared/model/doc';
 
 @Component({
   selector: 'app-url-svg-item-doc',
@@ -9,7 +9,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class UrlSvgItemDocComponent implements OnInit {
 
-	@Input() svgValue: string;
+	@Input() itemDoc: Doc;
 	@Input() editMode: boolean;
 
 	svg: SafeHtml;
@@ -17,7 +17,7 @@ export class UrlSvgItemDocComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-		this.svg=this.sanitizer.bypassSecurityTrustResourceUrl(this.svgValue);
+		this.svg=this.sanitizer.bypassSecurityTrustResourceUrl(this.itemDoc.value);
   }
 
 }

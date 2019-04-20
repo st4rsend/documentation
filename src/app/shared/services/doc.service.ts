@@ -59,7 +59,8 @@ export class DocService {
 							+scMsg.payload.data[1],
 							scMsg.payload.data[2],
 							+scMsg.payload.data[3],
-							scMsg.payload.data[4]
+							scMsg.payload.data[4],
+							scMsg.payload.data[5]
 						));
 					}
 				}

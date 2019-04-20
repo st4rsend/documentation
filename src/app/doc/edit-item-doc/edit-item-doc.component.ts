@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Doc } from '../../shared/model/doc';
 
 @Component({
   selector: 'app-edit-item-doc',
@@ -7,7 +8,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class EditItemDocComponent implements OnInit {
 
-	@Input() htmlValue: string;
+	//@Input() htmlValue: string;
+	@Input() itemDoc: Doc;
 	@Output() itemDocCloseEvent = new EventEmitter<boolean>();
 
   constructor() { }

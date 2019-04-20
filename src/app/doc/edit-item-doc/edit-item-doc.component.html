@@ -1,26 +1,33 @@
-<div style='
+<div style="
 	width: 600px;
  	height: 600px; 
 	position: absolute; 
 	top: 150px; 
 	left: 100px;
 	border: thick solid red;
-	background-color:#CCCCCC;'>
-	<div style='height: 20px; float top'>
-		<div style='float: left'>
+	background-color:#CCCCCC;">
+	<div style="height: 20px; float top">
+		<div style="float: left">
 			<button>CONFIRM</button>
-			ID: TYPE: 
+			ID: {{itemDoc.idx}}
+			TYPEID: {{itemDoc.typeID}}
+			TYPE: {{itemDoc.typeValue}} 
 		</div>
-		<div style='float: right'>
-			<button (click)='cancel();'>CANCEL</button>
+		<div style="float: right">
+			<button (click)="cancel();">CANCEL</button>
 		</div>
 	</div>
-	<div style='float: bottom'>
+	<div style="
+		border: thin solid red;
+		background-color: #999999;">
+		<input type="text" size="30" value={{itemDoc.description}}>
+	</div>
+	<div style="float: bottom">
 		<textarea type="text" 
 			rows="37" 
 			cols="80" 
 			overflow-y="scroll"
-			value={{htmlValue}}>
+			value={{itemDoc.value}}>
 		</textarea>
 	</div>
 </div>

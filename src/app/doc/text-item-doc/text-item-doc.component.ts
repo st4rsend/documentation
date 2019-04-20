@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Doc } from '../../shared/model/doc';
 
 @Component({
   selector: 'app-text-item-doc',
@@ -7,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TextItemDocComponent implements OnInit {
 
-	@Input() htmlValue: string;
+	@Input() itemDoc: Doc;
 	@Input() editMode: boolean;
 
 	private editing: boolean = false;
