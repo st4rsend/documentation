@@ -1,0 +1,26 @@
+<div style='
+	width: 600px;
+ 	height: 600px; 
+	position: absolute; 
+	top: 150px; 
+	left: 100px;
+	border: thick solid red;
+	background-color:#CCCCCC;'>
+	<div style='height: 20px; float top'>
+		<div style='float: left'>
+			<button>CONFIRM</button>
+			ID: TYPE: 
+		</div>
+		<div style='float: right'>
+			<button (click)='cancel();'>CANCEL</button>
+		</div>
+	</div>
+	<div style='float: bottom'>
+		<textarea type="text" 
+			rows="37" 
+			cols="80" 
+			overflow-y="scroll"
+			value={{htmlValue}}>
+		</textarea>
+	</div>
+</div>

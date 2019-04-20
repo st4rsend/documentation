@@ -220,8 +220,8 @@ func sendMessage(wsContext *WsContext, payload *ComEncap) (err error){
 		Payload: *payload}
 	err = websocket.JSON.Send(wsContext.Conn, &message)
 	CheckErr(err)
-	if wsContext.Verbose == 1 {
-		//fmt.Printf("SRV Returned data: %v\n", message)
+	if wsContext.Verbose > 6 {
+		fmt.Printf("SRV Returned data: %v\n", message)
 	}
 
 	wsContext.Sequence += 1

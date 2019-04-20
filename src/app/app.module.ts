@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { DocBaseComponent } from './doc/doc-base/doc-base.component';
 import { MenuDocComponent } from './doc/menu-doc/menu-doc.component';
 import { DynDocComponent } from './doc/dyn-doc/dyn-doc.component';
+import { EditItemDocComponent } from './doc/edit-item-doc/edit-item-doc.component';
 import { TextItemDocComponent } from './doc/text-item-doc/text-item-doc.component';
 import { SvgItemDocComponent } from './doc/svg-item-doc/svg-item-doc.component';
 import { UrlSvgItemDocComponent } from './doc/url-svg-item-doc/url-svg-item-doc.component';
@@ -32,6 +33,7 @@ import { AppRoutesModule } from './app-routes.module';
 		DocBaseComponent,
 		MenuDocComponent,
 		DynDocComponent,
+		EditItemDocComponent,
 		TextItemDocComponent,
 		SvgItemDocComponent,
 		UrlSvgItemDocComponent,
