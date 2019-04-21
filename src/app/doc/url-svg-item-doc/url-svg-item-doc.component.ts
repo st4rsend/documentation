@@ -12,6 +12,8 @@ export class UrlSvgItemDocComponent implements OnInit {
 	@Input() itemDoc: Doc;
 	@Input() editMode: boolean;
 
+	private editing: boolean = false;
+
 	svg: SafeHtml;
 
   constructor(private sanitizer: DomSanitizer) { }
@@ -20,4 +22,10 @@ export class UrlSvgItemDocComponent implements OnInit {
 		this.svg=this.sanitizer.bypassSecurityTrustResourceUrl(this.itemDoc.value);
   }
 
+	edit() {
+		this.editing = !this.editing;
+	}
+	itemDocCloseEvent(value: boolean) {
+		this.editing = false;
+	}
 }

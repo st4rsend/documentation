@@ -20,7 +20,6 @@ export class TextItemDocComponent implements OnInit {
 
 	edit() {
 		this.editing = !this.editing;
-		console.log("Editing: ", this.editing);
 	}
 
 	itemDocCloseEvent(value: boolean) {

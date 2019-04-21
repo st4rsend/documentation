@@ -8,7 +8,6 @@ import { Doc } from '../../shared/model/doc';
 })
 export class EditItemDocComponent implements OnInit {
 
-	//@Input() htmlValue: string;
 	@Input() itemDoc: Doc;
 	@Output() itemDocCloseEvent = new EventEmitter<boolean>();
 

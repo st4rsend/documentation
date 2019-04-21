@@ -1,21 +1,11 @@
-<div *ngIf='editMode else normal'>
-	<div style='border: thin solid blue'>
-		<div style='
-			border-style: none none dotted;
-			background-color: #cccccc ' [innerHTML]="itemDoc.description"></div>
-		<div style='width: 30px; float:right'>
-			<button (click)='edit();'>Edit</button>
-		</div>
-		<div style='border: thin solid blue' [innerHTML]="itemDoc.value"></div>
-		<div *ngIf='editing'>
-			<app-edit-item-doc
-				[itemDoc]=itemDoc
-				(itemDocCloseEvent)='itemDocCloseEvent($event)'>
-			</app-edit-item-doc>
-		</div>
+<div *ngIf="editMode" class="editButton">
+	<button (click)='edit();'>Edit</button>
+	<div *ngIf='editing'>
+		<app-edit-item-doc
+			[itemDoc]=itemDoc
+			(itemDocCloseEvent)='itemDocCloseEvent($event)'>
+		</app-edit-item-doc>
 	</div>
 </div>
+<div [innerHTML]="itemDoc.value"></div>
 
-<ng-template #normal>
-	<div [innerHTML]='itemDoc.value'></div>
-</ng-template>

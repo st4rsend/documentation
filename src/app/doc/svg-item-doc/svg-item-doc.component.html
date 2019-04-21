@@ -1,2 +1,11 @@
+<div *ngIf="editMode" class="editButton">
+	<button (click)='edit();'>Edit</button>
+	<div *ngIf='editing'>
+		<app-edit-item-doc
+			[itemDoc]=itemDoc
+			(itemDocCloseEvent)='itemDocCloseEvent($event)'>
+		</app-edit-item-doc>
+	</div>
+</div>
 <div class="svg" [innerHTML]="svg">
 </div>

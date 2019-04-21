@@ -1,0 +1,13 @@
+.itemDocOuter {
+	border: thin solid blue;
+}
+
+.itemDocDescription {
+	border-style: none none dotted;
+	background-color: #cccccc;
+}
+
+.editButton {
+	width: 30px;
+	float: right;
+}

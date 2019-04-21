@@ -12,6 +12,8 @@ export class SvgItemDocComponent implements OnInit {
 	@Input() itemDoc: Doc;
 	@Input() editMode: boolean;
 
+	private editing: boolean = false;
+
 	svg:SafeHtml;
 
   constructor(private sanitizer: DomSanitizer) { }
@@ -20,4 +22,11 @@ export class SvgItemDocComponent implements OnInit {
 		this.svg = this.sanitizer.bypassSecurityTrustHtml(this.itemDoc.value);
   }
 
+	edit() {
+		this.editing = !this.editing;
+	}
+
+	itemDocCloseEvent(value: boolean) {
+		this.editing = false;
+	}
 }
