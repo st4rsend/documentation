@@ -1,5 +1,6 @@
-<table width='800px'><tr><td witdh='auto'>  
-		menu-doc works!
+<table width='800px'>
+	<tr><td witdh='auto'>  
+		Select doc: 
 		<select 
 			name="docListID"
 			[(ngModel)]="docListID"
@@ -7,6 +8,16 @@
 			<option *ngFor="let docList of docLists" [ngValue]="docList.id">
 				{{docList.description}}
 			</option>
+		</select>
+	</td><td>
+	View mode:
+		<select
+			name="docViewMode"
+			[(ngModel)]="viewMode"
+			(change)="viewModeChange()">
+			<option value="normal" selected>normal</option>
+			<option value="desc">Description only</option>
+			<option value="full">Desc. and item</option>
 		</select>
 	</td><td width='150px'>
 Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeChange()'>

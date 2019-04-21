@@ -1,10 +1,12 @@
 <div class="container">
 	<app-menu-doc 
 		(editModeEvent)='docEditModeSet($event);' 
-		(docListIDEvent)='docListIDSet($event)'>
+		(docListIDEvent)='docListIDSet($event)'
+		(viewModeEvent)='docViewModeSet($event)'>
 	</app-menu-doc>
 	<app-dyn-doc 
 		[editMode]='editMode' 
+		[viewMode]='viewMode' 
 		[docListID]='docListID'>
 	</app-dyn-doc>
 </div>

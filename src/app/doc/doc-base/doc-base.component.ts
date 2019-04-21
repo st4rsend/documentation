@@ -13,6 +13,7 @@ export class DocBaseComponent implements OnInit {
 
 	private editMode: boolean = false;
 	private docListID: string;
+	private viewMode: string = "normal";
 
   constructor(
 		private DocService: DocService,
@@ -28,6 +29,9 @@ export class DocBaseComponent implements OnInit {
 
 	docListIDSet(listID: string) {
 		this.docListID = listID;
+	}
+	docViewModeSet(viewMode: string){
+		this.viewMode = viewMode;
 	}
 
 }

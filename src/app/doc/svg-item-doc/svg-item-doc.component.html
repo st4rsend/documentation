@@ -7,5 +7,11 @@
 		</app-edit-item-doc>
 	</div>
 </div>
-<div class="svg" [innerHTML]="svg">
+<div *ngIf="viewMode=='desc' || viewMode=='full'"
+	class="itemDocDescription">
+	{{itemDoc.description}}
+</div>
+<div *ngIf="viewMode=='normal' || viewMode=='full'"
+	class="svg" 
+	[innerHTML]="svg">
 </div>

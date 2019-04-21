@@ -7,5 +7,11 @@
 		</app-edit-item-doc>
 	</div>
 </div>
-<div [innerHTML]="itemDoc.value"></div>
+<div *ngIf="viewMode=='desc' || viewMode=='full'"
+	class="itemDocDescription">
+	{{itemDoc.description}}
+</div>
+<div *ngIf="viewMode=='normal' || viewMode=='full'"
+	[innerHTML]="itemDoc.value">
+</div>
 

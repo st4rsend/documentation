@@ -5,12 +5,14 @@ import { Doc } from '../../shared/model/doc';
 @Component({
   selector: 'app-svg-item-doc',
   templateUrl: './svg-item-doc.component.html',
-  styleUrls: ['./svg-item-doc.component.css']
+  styleUrls: ['./svg-item-doc.component.css',
+		'../dyn-doc/dyn-doc.component.css']
 })
 export class SvgItemDocComponent implements OnInit {
 
 	@Input() itemDoc: Doc;
 	@Input() editMode: boolean;
+	@Input() viewMode: string;
 
 	private editing: boolean = false;
 

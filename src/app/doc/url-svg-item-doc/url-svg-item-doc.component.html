@@ -7,6 +7,12 @@
 		</app-edit-item-doc>
 	</div>
 </div>
-<object  type="image/svg+xml" [data]="svg">
+<div *ngIf="viewMode=='desc' || viewMode=='full'"
+	class="itemDocDescription">
+	{{itemDoc.description}}
+</div>
+<object *ngIf="viewMode=='normal' || viewMode=='full'"
+	type="image/svg+xml"
+	[data]="svg">
 	Unsupported svg type
 </object>

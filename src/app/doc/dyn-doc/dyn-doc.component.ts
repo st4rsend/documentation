@@ -14,6 +14,7 @@ export class DynDocComponent implements OnInit {
 	private channelID: number = 1;
 
 	@Input() editMode: boolean;
+	@Input() viewMode: string;
 	@Input() docListID: string;
 
 	public docs: Array<Doc>;
@@ -29,7 +30,7 @@ export class DynDocComponent implements OnInit {
 	docSynchro() {
 		this.docService.dsSQLQueryDocs(this.docListID);
 		this.docs = this.docService.dsGetDocs();
-		console.log('DOCS:',this.docs);
+		//console.log('DOCS:',this.docs);
 	}
 	docListIDChange() {
 		this.docSynchro();
