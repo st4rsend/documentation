@@ -12,6 +12,9 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "GET_DOC_LIST" {
 		err = WsSrvGetDocList(wsContext, message)
 	}
+	if message.Payload.Command == "GET_DOC_TYPE" {
+		err = WsSrvGetDocType(wsContext, message)
+	}
 	CheckErr(err)
 	return err
 }
@@ -46,6 +49,27 @@ func WsSrvGetDocList(wsContext *WsContext, message *WsMessage) (err error){
 	CheckErr(err)
 
 	message.Payload.Command ="RESP_DOC_LIST"
+	for _, line := range response.Data {
+		message.Payload.Data = line
+		err = sendMessage(wsContext, &message.Payload)
+		CheckErr(err)
+	}
+	message.Payload.Command = "EOF"
+	message.Payload.Data = nil
+	err = sendMessage(wsContext, &message.Payload)
+	CheckErr(err)
+	return err
+}
+
+func WsSrvGetDocType(wsContext *WsContext, message *WsMessage) (err error){
+	var response *WsSQLSelect
+	err = nil
+	var sql string
+	sql = "select T.ID, T.type from documentation_type T"
+	response, err = processReqSelectSQL(&sql)
+	CheckErr(err)
+
+	message.Payload.Command ="RESP_DOC_TYPE"
 	for _, line := range response.Data {
 		message.Payload.Data = line
 		err = sendMessage(wsContext, &message.Payload)

@@ -25,7 +25,7 @@ export class MenuDocComponent implements OnInit {
   ngOnInit() {
 
 		this.docService.setChannelID(this.channelID);
-		this.docService.dsSQLQueryDocsList();
+		this.docService.dsSQLQueryDocLists();
 		this.docLists = this.docService.dsGetDocLists();
 		this.docListIDEvent.emit(this.docListID);
   }

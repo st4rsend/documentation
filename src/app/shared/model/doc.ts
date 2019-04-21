@@ -19,13 +19,22 @@ export class Doc implements IDoc {
 }
 
 export interface IDocList {
-	id: string;
-	description: string;
+	idx: string;
+	value: string;
 }
-
 export class DocList implements IDocList {
 	constructor (
-		public id: string,
-		public description: string
+		public idx: string,
+		public value: string
+	){}
+}
+export interface IDocType {
+	idx: string;
+	value: string;
+}
+export class DocType implements IDocType {
+	constructor (
+		public idx: string,
+		public value: string
 	){}
 }
