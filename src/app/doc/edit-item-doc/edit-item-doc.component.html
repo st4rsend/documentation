@@ -2,24 +2,33 @@
 	<div class="header">
 		<div class="confirm">
 			<button (click)="validate();">CONFIRM</button>
-			idx: {{itemDoc.idx}}
-			TypeID: {{itemDoc.typeID}}
-			Type: {{itemDoc.typeValue}} 
-			Position: {{itemDoc.position}}
+			idx: {{doc.idx}}
+			<select 
+				name="docTypeID"
+				[(ngModel)]="docTypeID"
+				(change)="docTypeChange()">
+				<option *ngFor="let docType of docTypes" 
+					[value]="docType.idx">
+					{{docType.value}}
+				</option>
+			</select>
+			Position: 
+			<input type="text" size="5" [(ngModel)]="doc.position">
 		</div>
 		<div class="cancel">
-			<button (click)="cancel();">CANCEL</button>
+			<button (click)="reset();">Reset</button>
+			<button (click)="cancel();">Cancel</button>
 		</div>
 	</div>
 	<div class="description">
-		<input type="text" size="30" value={{itemDoc.description}}>
+		<input type="text" size="30" [(ngModel)]="doc.description">
 	</div>
 	<div class="text">
 		<textarea type="text" 
 			rows="35" 
 			cols="80" 
 			overflow-y="scroll"
-			value={{itemDoc.value}}>
+			[(ngModel)]="doc.value">
 		</textarea>
 	</div>
 </div>

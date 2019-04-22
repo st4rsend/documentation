@@ -5,7 +5,7 @@
 			name="docListID"
 			[(ngModel)]="docListID"
 			(change)="docListChange()">
-			<option *ngFor="let docList of docLists" [ngValue]="docList.idx">
+			<option *ngFor="let docList of docLists" [value]="docList.idx">
 				{{docList.value}}
 			</option>
 		</select>

@@ -14,19 +14,33 @@ export class EditItemDocComponent implements OnInit {
 
 	private docTypes: Array<DocType>;
 
+	public doc: Doc;
+	public docTypeID: number;
+
   constructor(private docService: DocService) { }
 
   ngOnInit() {
 		this.docService.dsSQLQueryDocTypes();
 		this.docTypes = this.docService.dsGetDocTypes();
+		this.docTypeID = this.itemDoc.typeID;
+		this.doc = { ...this.itemDoc};
   }
 
 	cancel() {
 		this.itemDocCloseEvent.emit(false);
 	}
-
 	validate() {
-		console.log("Doc Types:", this.docTypes);
+		console.log("doc: ", this.doc);
 	} 
+	docTypeChange() {
+		this.doc.typeID = this.docTypeID;
+		console.log("docTypeID: ", this.doc.typeID);
+	}
+	reset() {
+		//console.log("itemDoc: ", this.itemDoc);
+		//console.log("doc: ", this.doc);
+		this.doc = { ...this.itemDoc};
+		this.docTypeID = this.itemDoc.typeID;
+	}
 
 }
