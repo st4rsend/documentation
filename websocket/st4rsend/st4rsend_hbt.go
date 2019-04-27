@@ -6,7 +6,7 @@ import(
 
 func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "HBTINF" {
-		if wsContext.Verbose > 5 {
+		if wsContext.Verbose > 6 {
 			fmt.Printf("Received HeartBeat handler %d\n", wsContext.handlerIndex)
 		}
 		StopHBTHoldDownTimer(wsContext)

@@ -44,6 +44,25 @@ export class DocService {
 		return this.docTypes;
 	}
 
+	dsUpdateDoc(doc: Doc) {
+		this.dsSubject = this.webSocketService.wsSubject();
+		let message = this.webSocketService
+			.wsPrepareMessage(this.channelID,'DOC','UPDATE_DOC',[doc.idx.toString(), doc.typeID.toString(), doc.description, doc.value]);
+		this.dsSubject.next(message);
+		
+	}
+	dsInsertDoc(doc: Doc, docListID: string ) {
+		this.dsSubject = this.webSocketService.wsSubject();
+		let message = this.webSocketService
+			.wsPrepareMessage(this.channelID,'DOC','INSERT_DOC',[
+				doc.typeID.toString(),
+				doc.description,
+				doc.value,
+				docListID,
+				doc.position.toString()]); 
+		this.dsSubject.next(message);
+	}
+
 	dsSQLQueryDocs(docListID: string) {
 		this.docs = [];
 		this.dsSubject = this.webSocketService.wsSubject();
@@ -95,7 +114,6 @@ export class DocService {
 				}
 				if ((+scMsg.payload.channelid === this.listChannelID)
 						&& (scMsg.payload.command === "EOF")) {
-					console.log('Docs LIST EOF');
 					this.isReady$.next(true);
 				}		
 			});
@@ -125,7 +143,6 @@ export class DocService {
 				}
 				if ((+scMsg.payload.channelid === this.typeChannelID)
 						&& (scMsg.payload.command === "EOF")) {
-					console.log('Docs TYPE EOF');
 					this.isReady$.next(true);
 				}		
 			});

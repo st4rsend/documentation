@@ -12,6 +12,7 @@ export class DynDocComponent implements OnInit {
 	private testTexte="Hello World";
 	private dynTable: Array<Doc>;
 	private channelID: number = 1;
+	public creating: boolean = false;
 
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
@@ -30,9 +31,14 @@ export class DynDocComponent implements OnInit {
 	docSynchro() {
 		this.docService.dsSQLQueryDocs(this.docListID);
 		this.docs = this.docService.dsGetDocs();
-		//console.log('DOCS:',this.docs);
 	}
 	docListIDChange() {
 		this.docSynchro();
+	}
+	docCreateItem() {
+		this.creating = ! this.creating;
+	}
+	itemDocCloseEvent(value: boolean) {
+		this.creating = false;
 	}
 }

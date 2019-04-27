@@ -1,5 +1,5 @@
-<div class="outerBorder">
-	<div class="header">
+<div class="outerBorder" cdkDrag>
+	<div class="header" cdkDragHandle>
 		<div class="confirm">
 			<button (click)="validate();">CONFIRM</button>
 			idx: {{doc.idx}}
@@ -25,10 +25,15 @@
 	</div>
 	<div class="text">
 		<textarea type="text" 
-			rows="35" 
+			rows="21" 
 			cols="80" 
 			overflow-y="scroll"
 			[(ngModel)]="doc.value">
 		</textarea>
+	</div>
+	<div class="bottom">
+		<input 
+			type="file"
+			(change)="fromFile($event)">
 	</div>
 </div>

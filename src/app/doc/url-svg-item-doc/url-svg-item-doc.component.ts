@@ -13,6 +13,7 @@ export class UrlSvgItemDocComponent implements OnInit {
 	@Input() itemDoc: Doc;
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
+	@Input() docListID: string;
 
 	private editing: boolean = false;
 

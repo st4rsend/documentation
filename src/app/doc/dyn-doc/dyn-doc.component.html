@@ -1,20 +1,32 @@
 <button (click)="docListIDChange()">UPDATE</button>
 
 <div *ngIf="editMode else normal">
+	<div *ngIf='!creating'>
+		<button (click)="docCreateItem()">New</button>
+	</div>
+	<div *ngIf='creating'>
+		<app-edit-item-doc
+			[docListID]=docListID
+			(itemDocCloseEvent)='itemDocCloseEvent($event)'>
+		</app-edit-item-doc>
+	</div>
 	<ng-container *ngFor="let item of docs">
 		<div class="itemDocOuter">
 			<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
 				[itemDoc]=item
+				[docListID]=docListID
 				[editMode]=editMode
 				[viewMode]=viewMode>
 			</app-text-item-doc>
 			<app-svg-item-doc *ngIf="item.typeValue=='SVG'"
 				[itemDoc]=item
+				[docListID]=docListID
 				[editMode]=editMode
 				[viewMode]=viewMode>
 			</app-svg-item-doc>
 			<app-url-svg-item-doc *ngIf="item.typeValue=='SVG-URL'"
 				[itemDoc]=item
+				[docListID]=docListID
 				[editMode]=editMode
 				[viewMode]=viewMode>
 			</app-url-svg-item-doc>
@@ -25,16 +37,19 @@
 	<ng-container *ngFor="let item of docs">
 		<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
 			[itemDoc]=item
+			[docListID]=docListID
 			[editMode]=editMode
 			[viewMode]=viewMode>
 		</app-text-item-doc>
 		<app-svg-item-doc *ngIf="item.typeValue=='SVG'"
 			[itemDoc]=item
+			[docListID]=docListID
 			[editMode]=editMode
 			[viewMode]=viewMode>
 		</app-svg-item-doc>
 		<app-url-svg-item-doc *ngIf="item.typeValue=='SVG-URL'"
 			[itemDoc]=item
+			[docListID]=docListID
 			[editMode]=editMode
 			[viewMode]=viewMode>
 		</app-url-svg-item-doc>

@@ -12,13 +12,14 @@ export class TextItemDocComponent implements OnInit {
 	@Input() itemDoc: Doc;
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
+	@Input() docListID: string;
+
 
 	private editing: boolean = false;
 
   constructor() { }
 
   ngOnInit() {
-		console.log("View Mode: ",this.viewMode);
   }
 
 	edit() {
