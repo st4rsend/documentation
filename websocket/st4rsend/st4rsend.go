@@ -8,6 +8,7 @@ import (
 	"time"
 	"golang.org/x/net/websocket"
 	//"crypto/tls"
+	"database/sql"
 	"github.com/go-sql-driver/mysql"
 	"strconv"
 )
@@ -70,15 +71,16 @@ type ComEncap struct {
 	Command	string `json:"command, string, omitempty"`
 	Data []string `json:"data, string, omitempty"`
 }
-// WsContext definition (adding sequencing functionalities)
+// WsContext definition 
 type WsContext struct {
 	Conn *websocket.Conn
-	handlerIndex int64
-	hbtTicker *time.Ticker
-	hbtHoldTimeOK bool
-	hbtHoldDownTimer *time.Timer
-	hbtHoldDownTime int64
-	hbtInterval int64
+	Db *sql.DB
+	HandlerIndex int64
+	HbtTicker *time.Ticker
+	HbtHoldTimeOK bool
+	HbtHoldDownTimer *time.Timer
+	HbtHoldDownTime int64
+	HbtInterval int64
 	Sequence int64
 	Verbose int
 }
@@ -101,10 +103,14 @@ func WsHandler(ws *websocket.Conn) {
 	wsContext.Conn = ws
 	wsContext.Sequence = 0
 	wsContext.Verbose = ErrorLevel
-	wsContext.handlerIndex = handlerIndex
-	wsContext.hbtHoldTimeOK = true
-	wsContext.hbtInterval = 3
-	wsContext.hbtHoldDownTime = 9
+	wsContext.HandlerIndex = handlerIndex
+	wsContext.HbtHoldTimeOK = true
+	wsContext.HbtInterval = 3
+	wsContext.HbtHoldDownTime = 9
+
+	wsContext.Db, err = ConnectSQL(user, password, host, port, database)
+	CheckErr(err)
+	defer wsContext.Db.Close()
 
 	err = StartHBTSvc(&wsContext)
 	CheckErr(err)
@@ -112,11 +118,11 @@ func WsHandler(ws *websocket.Conn) {
 	CheckErr(err)
 
 	if wsContext.Verbose > 4 {
-		fmt.Printf("Handler %d activated\n", wsContext.handlerIndex)
+		fmt.Printf("Handler %d activated\n", wsContext.HandlerIndex)
 	}
 	defer	func() {
 		if wsContext.Verbose > 4 {
-			fmt.Printf("Handler %d closed\n", wsContext.handlerIndex);
+			fmt.Printf("Handler %d closed\n", wsContext.HandlerIndex);
 		}
 	}()
 
@@ -126,9 +132,6 @@ func WsHandler(ws *websocket.Conn) {
 	for {
 		var receivedMessage WsMessage
 		err := websocket.JSON.Receive(ws, &receivedMessage)
-		if wsContext.Verbose > 6 {
-			fmt.Printf("WS IN: %s\n", receivedMessage)
-		}
 		if err == nil {
 			err = WsSrvParseMsg(&wsContext, &receivedMessage)
 			CheckErr(err)
@@ -139,16 +142,16 @@ func WsHandler(ws *websocket.Conn) {
 				fmt.Printf("Received: %v\n", receivedMessage)
 			}
 		}
-		err = CheckErr(err)
 		if err != nil && err.Error() == "EOF" {
-			if wsContext.Verbose > 5 {
-				fmt.Printf("EOF received handler %d\n", wsContext.handlerIndex)
+			if wsContext.Verbose > 4 {
+				fmt.Printf("EOF received handler %d\n", wsContext.HandlerIndex)
 			}
 			break
 		}
-		if wsContext.hbtHoldTimeOK == false {
+		CheckErr(err)
+		if wsContext.HbtHoldTimeOK == false {
 			if wsContext.Verbose > 3 {
-				fmt.Printf("Heartbeat receive failure %d\n", wsContext.handlerIndex)
+				fmt.Printf("Heartbeat receive failure %d\n", wsContext.HandlerIndex)
 			}
 			break
 		}
@@ -204,7 +207,7 @@ func WsSrvCMDParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "VERBOSITY" {
 		wsContext.Verbose, err = strconv.Atoi(message.Payload.Data[0])
 		if wsContext.Verbose > 4 {
-			fmt.Printf("Vervosity set to: %d for Handler %d\n", wsContext.Verbose, wsContext.handlerIndex)
+			fmt.Printf("Vervosity set to: %d for Handler %d\n", wsContext.Verbose, wsContext.HandlerIndex)
 		}
 	}
 	return err

@@ -87,7 +87,12 @@ func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	return err
 }
 
+func processExecSQL(db *sql.DB, sqlText *string, sqlArgs *[]string)	(result sql.Result, err error) {
+	result, err = db.Exec(*sqlText)
+	CheckErr(err)
+	return result, err
 
+}
 func processReqInsertSQL(sqlText *string) (result sql.Result, err error) {
 	db, err := ConnectSQL(user, password, host, port, database)
 	CheckErr(err)

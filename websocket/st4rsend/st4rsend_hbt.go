@@ -7,7 +7,7 @@ import(
 func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "HBTINF" {
 		if wsContext.Verbose > 6 {
-			fmt.Printf("Received HeartBeat handler %d\n", wsContext.handlerIndex)
+			fmt.Printf("Received HeartBeat handler %d\n", wsContext.HandlerIndex)
 		}
 		StopHBTHoldDownTimer(wsContext)
 		StartHBTHoldDownTimer(wsContext)
@@ -19,14 +19,14 @@ func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 //// HeartBeat(wsContext *WsContext, interval int) (ticker *time.Ticker, err error){
 
 func StartHBTSvc(wsContext *WsContext) (err error){
-	wsContext.hbtTicker = time.NewTicker(time.Duration(wsContext.hbtInterval) * time.Second)
+	wsContext.HbtTicker = time.NewTicker(time.Duration(wsContext.HbtInterval) * time.Second)
 	if wsContext.Verbose > 5 {
-		fmt.Printf("Starting HeartBeat handler %d\n", wsContext.handlerIndex)
+		fmt.Printf("Starting HeartBeat handler %d\n", wsContext.HandlerIndex)
 	}
 	go func() {
 		var message WsMessage
 		//for t := range ticker.C {
-		for range wsContext.hbtTicker.C {
+		for range wsContext.HbtTicker.C {
 			message.Payload.ChannelID = 0
 			message.Payload.Domain = "HBT"
 			message.Payload.Command = "HBTINF"
@@ -40,22 +40,22 @@ func StartHBTSvc(wsContext *WsContext) (err error){
 
 func StopHBTSvc(wsContext *WsContext) (err error){
 	if wsContext.Verbose > 5 {
-		fmt.Printf("Stopping HeartBeat handler %d\n", wsContext.handlerIndex)
+		fmt.Printf("Stopping HeartBeat handler %d\n", wsContext.HandlerIndex)
 	}
-	wsContext.hbtTicker.Stop()
+	wsContext.HbtTicker.Stop()
 	return nil
 }
 
 func StartHBTHoldDownTimer(wsContext *WsContext) (err error){
-	wsContext.hbtHoldDownTimer = time.NewTimer(time.Second * time.Duration(wsContext.hbtHoldDownTime))
+	wsContext.HbtHoldDownTimer = time.NewTimer(time.Second * time.Duration(wsContext.HbtHoldDownTime))
 	go func() {
-		<-wsContext.hbtHoldDownTimer.C
-		wsContext.hbtHoldTimeOK = false
+		<-wsContext.HbtHoldDownTimer.C
+		wsContext.HbtHoldTimeOK = false
 	}()
 	return err
 }
 
 func StopHBTHoldDownTimer(wsContext *WsContext) (err error){
-	wsContext.hbtHoldDownTimer.Stop()
+	wsContext.HbtHoldDownTimer.Stop()
 	return nil
 }
