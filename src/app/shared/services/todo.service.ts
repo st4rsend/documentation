@@ -10,10 +10,6 @@ export class TodoService {
 
 	private todos: Array<Todo>;
 
-	private tsSelectSQL: any = 'select T.ID, U.ID, identity, task, status, date_format(targetDate, "%Y-%m-%d"), date_format(doneDate,"%Y-%m-%d") from todos T left join users U on T.userID = U.ID';
-	private tsInsertSQL: string = 'insert into todos (UserID, task, status, targetDate, doneDate) values(';
-	private tsDeleteSQL: string = 'delete from todos where ID=';
-	private tsUpdateSQL: string = 'update todos set ';
 	private tsSelectSub: Subscription;
 	private tsSubject: Subject<any>;
 	public channelID: number = 1;
@@ -38,79 +34,75 @@ export class TodoService {
 	}
 
 	public createTodo(todo: Todo) {
-		//console.log("Creating todo: ", todo);
 		this.isReady$.next(false);
-		var sql = this.tsInsertSQL.concat(
-			String(todo.userID),',"',
-			todo.label,'",false,"',
-			todo.targetDate,'","',
-			todo.doneDate,'")');
 		this.tsSubject = this.webSocketService.wsSubject();
 		this.tsSelectSub = this.tsSubject.subscribe((value) => {
 			this.tsParse(value);
 		});
 
 		let message1 = this.webSocketService
-			.wsPrepareMessage(this.channelID,'SQL','REQ_INSERT',[sql]);
+			.wsPrepareMessage(this.channelID,'TODO','INSERT_TODO',[
+				todo.userID.toString(),
+				todo.label,
+				todo.completed.toString(),
+				todo.targetDate,
+				todo.doneDate]);
 		this.tsSubject.next(message1);
 	}
 
 	public deleteTodo(idx: number) {
-		//console.log("Deleting todo: ", idx);
 		this.isReady$.next(false);
-		var sql = this.tsDeleteSQL.concat(String(idx));
-
 		this.tsSubject = this.webSocketService.wsSubject();
-
 		this.tsSelectSub = this.tsSubject.subscribe((value) => {
 			this.tsParse(value);
 		});
-
 		let message1 = this.webSocketService
-			.wsPrepareMessage(this.channelID,'SQL','REQ_DELETE',[sql]);
+			.wsPrepareMessage(this.channelID,'TODO','DELETE_TODO',[idx.toString()]);
 		this.tsSubject.next(message1);
 	}
 
 	public updateTodo(todo: Todo) {
-		//console.log("updating todo: ", todo);
 		this.isReady$.next(false);
-		var sql = this.tsUpdateSQL.concat(
-			'userID=',String(todo.userID),', ',
-			'task="',todo.label,'", ',
-			'targetDate="',todo.targetDate,'", ',
-			'doneDate="',todo.doneDate,'", ',
-			'status=',String(todo.completed),
-			' WHERE ID=',String(todo.idx));
 		this.tsSubject = this.webSocketService.wsSubject();
 		this.tsSelectSub = this.tsSubject.subscribe((value) => {
 			this.tsParse(value);
 		});
 		let message1 = this.webSocketService
-			.wsPrepareMessage(this.channelID,'SQL','REQ_UPDATE',[sql]);
+			.wsPrepareMessage(this.channelID,'TODO','UPDATE_TODO',[
+				todo.userID.toString(),
+				todo.label,
+				todo.targetDate,
+				todo.doneDate,
+				todo.completed.toString(),
+				todo.idx.toString()]);
 		this.tsSubject.next(message1);
-
 	}
 
 	public SQLSynchro() {
-
 		this.isReady$.next(false);
 		this.todos = [];
-
 		this.tsSubject = this.webSocketService.wsSubject();
-
 		if ((this.tsSelectSub === undefined) || (this.tsSelectSub.closed === true)) {
 			this.tsSelectSub = this.tsSubject.subscribe((value) => { this.tsParse(value); });
 		}
-
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'SQL','REQ_SELECT',[this.tsSelectSQL]);
+			.wsPrepareMessage(this.channelID,'TODO','GET_TODOS',[]);
 		this.tsSubject.next(message);
 	}
 
+/*
+	public getTodoUsers() {
+		this.isReady$.next(false);
+		this.users = [];
+		
+
+		this.isReady$.next(true);
+}
+*/
 	private tsParse(scMsg: wsMessage) {
 		var todo: Todo;
-		if ((+scMsg.payload.channelid === this.channelID) && (scMsg.payload.domain === "SQL")) {
-			if (scMsg.payload.command === "RESP_SELECT_DATA") {
+		if ((+scMsg.payload.channelid === this.channelID) && (scMsg.payload.domain === "TODO")) {
+			if (scMsg.payload.command === "RESP_TODOS") {
 				if (+scMsg.payload.data[4] > 0) {
 					this.todos.push(new Todo(
 						+scMsg.payload.data[0],

@@ -1,167 +1,11 @@
 package st4rsend
 
 import (
-	"fmt"
+//	"fmt"
 	"strconv"
 	"database/sql"
+	"context"
 )
-
-func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
-	var response *WsSQLSelect
-	err = nil
-	if message.Payload.Command == "REQ_SELECT" {
-		response, err = processReqSelectSQL(&message.Payload.Data[0])
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
-		message.Payload.Command = "RESP_SELECT_HEADER"
-		message.Payload.Data = response.Headers
-		err = sendMessage(wsContext, &message.Payload)
-		CheckErr(err)
-		message.Payload.Command = "RESP_SELECT_DATA"
-		for _, line := range response.Data {
-			message.Payload.Data = line
-			err = sendMessage(wsContext, &message.Payload)
-			CheckErr(err)
-		}
-		message.Payload.Command = "EOF"
-		message.Payload.Data = nil
-		err = sendMessage(wsContext, &message.Payload)
-		CheckErr(err)
-	}
-	if message.Payload.Command == "REQ_INSERT" {
-		resultSQL, err := processReqInsertSQL(&message.Payload.Data[0])
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
-		rows, err := resultSQL.RowsAffected()
-		lastInsert, err := resultSQL.LastInsertId()
-		message.Payload.Command = "RESP_INSERT_DATA"
-		message.Payload.Data[0] = fmt.Sprintf("%d",rows)
-		message.Payload.Data = append(message.Payload.Data, fmt.Sprintf("%d",lastInsert))
-		err = sendMessage(wsContext, &message.Payload)
-		CheckErr(err)
-		message.Payload.Command = "EOF"
-		message.Payload.Data = nil
-		err = sendMessage(wsContext, &message.Payload)
-		CheckErr(err)
-	}
-
-	if message.Payload.Command == "REQ_DELETE" {
-		resultSQL, err := processReqDeleteSQL(&message.Payload.Data[0])
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
-		rows, err := resultSQL.RowsAffected()
-		lastInsert, err := resultSQL.LastInsertId()
-		message.Payload.Command = "RESP_DELETE_DATA"
-		message.Payload.Data[0] = fmt.Sprintf("%d",rows)
-		message.Payload.Data = append(message.Payload.Data, fmt.Sprintf("%d",lastInsert))
-		err = sendMessage(wsContext, &message.Payload)
-		CheckErr(err)
-		message.Payload.Command = "EOF"
-		message.Payload.Data = nil
-		err = sendMessage(wsContext, &message.Payload)
-		CheckErr(err)
-	}
-
-	if message.Payload.Command == "REQ_UPDATE" {
-		resultSQL, err := processReqUpdateSQL(&message.Payload.Data[0])
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
-		rows, err := resultSQL.RowsAffected()
-		message.Payload.Command = "RESP_UPDATE_DATA"
-		message.Payload.Data[0] = fmt.Sprintf("%d",rows)
-		err = sendMessage(wsContext, &message.Payload)
-		CheckErr(err)
-		message.Payload.Command = "EOF"
-		message.Payload.Data = nil
-		err = sendMessage(wsContext, &message.Payload)
-		CheckErr(err)
-	}
-	return err
-}
-
-func processExecSQL(db *sql.DB, sqlText *string, sqlArgs *[]string)	(result sql.Result, err error) {
-	result, err = db.Exec(*sqlText)
-	CheckErr(err)
-	return result, err
-
-}
-func processReqInsertSQL(sqlText *string) (result sql.Result, err error) {
-	db, err := ConnectSQL(user, password, host, port, database)
-	CheckErr(err)
-	defer db.Close()
-	result, err = db.Exec(*sqlText)
-	CheckErr(err)
-	return result, err
-}
-
-func processReqUpdateSQL(sqlText *string) (result sql.Result, err error) {
-	db, err := ConnectSQL(user, password, host, port, database)
-	CheckErr(err)
-	defer db.Close()
-	result, err = db.Exec(*sqlText)
-	CheckErr(err)
-	return result, err
-}
-
-func processReqDeleteSQL(sqlText *string) (result sql.Result, err error) {
-	db, err := ConnectSQL(user, password, host, port, database)
-	CheckErr(err)
-	defer db.Close()
-	result, err = db.Exec(*sqlText)
-	CheckErr(err)
-	return result, err
-}
-
-func processReqSelectSQL(sqlText *string) (*WsSQLSelect, error) {
-	var sqlData WsSQLSelect
-	db, err := ConnectSQL(user, password, host, port, database)
-	CheckErr(err)
-	defer db.Close()
-
-	rows, err := db.Query(*sqlText)
-	CheckErr(err)
-	if err != nil {
-		return nil, err
-	}
-
-	defer rows.Close()
-
-	sqlData.Headers, err = rows.Columns()
-	CheckErr(err)
-	for rows.Next() {
-		scanArgs := make([]interface{}, len(sqlData.Headers))
-		rowValues := make([]string, len(sqlData.Headers))
-		rowSQLValues := make([]sql.NullString, len(sqlData.Headers))
-
-		for i := range rowValues {
-			scanArgs[i] = &rowSQLValues[i]
-		}
-
-		err = rows.Scan(scanArgs...)
-		CheckErr(err)
-		for i := range rowSQLValues {
-			if rowSQLValues[i].Valid {
-				rowValues[i] = rowSQLValues[i].String
-			} else {
-				rowValues[i] = ""
-			}
-		}
-
-		sqlData.Data = append(sqlData.Data, rowValues)
-		//fmt.Printf("selectData TMP: %s\n",sqlData.Data)
-	}
-
-	//fmt.Printf("selectData: %s\n",sqlData)
-	return &sqlData, nil
-}
 
 func ConnectSQL(user string, password string, host string, port int, database string) (db *sql.DB, err error) {
 	var dataSource string
@@ -171,7 +15,69 @@ func ConnectSQL(user string, password string, host string, port int, database st
 	return db, err
 }
 
-// Client helper
+func rowsToWsSQLSelect(rows *sql.Rows ) (*WsSQLSelect, error) {
+	var sqlData WsSQLSelect
+	var err error
+	sqlData.Headers, err = rows.Columns()
+	CheckErr(err)
+	for rows.Next() {
+		scanArgs := make([]interface{}, len(sqlData.Headers))
+		rowValues := make([]string, len(sqlData.Headers))
+		rowSQLValues := make([]sql.NullString, len(sqlData.Headers))
+		for i := range rowValues {
+			scanArgs[i] = &rowSQLValues[i]
+		}
+		err = rows.Scan(scanArgs...)
+		CheckErr(err)
+		for i := range rowSQLValues {
+			if rowSQLValues[i].Valid {
+				rowValues[i] = rowSQLValues[i].String
+			} else {
+				rowValues[i] = ""
+			}
+		}
+		sqlData.Data = append(sqlData.Data, rowValues)
+		//fmt.Printf("selectData TMP: %s\n",sqlData.Data)
+	}
+	return &sqlData, err
+}
+
+func WsSrvGetSQLList(wsContext *WsContext, message *WsMessage) (err error){
+	var response *WsSQLSelect
+	err = nil
+	var sqlText string
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	sqlText = "select " + message.Payload.Data[1] + "," + message.Payload.Data[2] + " from " + message.Payload.Data[0] + " order by "	+ message.Payload.Data[2]
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText)
+	CheckErr(err)
+	defer rows.Close()
+
+	response, err = rowsToWsSQLSelect(rows)
+
+	message.Payload.Command = "RESP_SQL_LIST"
+	for _, line := range response.Data {
+		message.Payload.Data = line
+		err = sendMessage(wsContext, &message.Payload)
+		CheckErr(err)
+	}
+	message.Payload.Command = "EOF"
+	message.Payload.Data = nil
+	err = sendMessage(wsContext, &message.Payload)
+	CheckErr(err)
+	return err
+}
+
+func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
+	err = nil
+	if message.Payload.Command == "GET_LIST" {
+		err = WsSrvGetSQLList(wsContext, message)
+	}
+	CheckErr(err)
+	return err
+}
+
 func WsSendRawSQL(wsContext *WsContext, sqlText *string) (err error){
 	comEncap := &ComEncap{
 		ChannelID: int64(1),

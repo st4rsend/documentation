@@ -167,6 +167,14 @@ func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 			return err
 		}
 	}
+	if message.Payload.Domain == "TODO" {
+		err = WsSrvTodoWrapper(wsContext, message)
+		CheckErr(err)
+		if err != nil {
+			return err
+		}
+	}
+
 	if message.Payload.Domain == "DOC" {
 		err = WsSrvDocWrapper(wsContext, message)
 		CheckErr(err)

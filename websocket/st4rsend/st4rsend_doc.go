@@ -3,6 +3,7 @@ package st4rsend
 import (
 	"fmt"
 	"strconv"
+	"context"
 	"database/sql"
 )
 
@@ -37,21 +38,24 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 
 func WsSrvDocUpdate(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
-	//var response *WsSQLSelect
 	var doc Doc
 	var sqlText string
 	doc.idx = message.Payload.Data[0]
 	doc.typeID = message.Payload.Data[1]
 	doc.description = message.Payload.Data[2]
 	doc.value = message.Payload.Data[3]
-	CheckErr(err)
-	sqlText = "update documentations set typeID='" + doc.typeID + "', description='" + doc.description + "', info='" + doc.value + "' where ID='" + doc.idx + "'"
+	sqlText = "update documentations set typeID=?, description=?, info=? where ID=?"
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("\nProcessing SQL: %+v\n",sqlText)
+		fmt.Printf("\nProcessing SQL Doc update: %+v\n",sqlText)
 	}
-	//response, err = processReqSelectSQL(&sql)
-	// TODO: Handle sql result ; inform client
-	_, err = processReqSelectSQL(&sqlText)
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	_, err = wsContext.Db.ExecContext(localContext,sqlText,
+		doc.typeID,
+		doc.description,
+		doc.value,
+		doc.idx)
 	CheckErr(err)
 	return err
 }
@@ -68,18 +72,28 @@ func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 	doc.value = message.Payload.Data[2]
 	listID = message.Payload.Data[3]
 	position = message.Payload.Data[4]
-	sqlText = "insert into documentations (typeID, description, info) values ('" + doc.typeID + "','" + doc.description + "','" + doc.value +"')"
+
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	sqlText = "insert into documentations (typeID, description, info) values (?,?,?)"
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Processing SQL: %+v\n",sqlText)
+		fmt.Printf("Processing SQL documentations Insert\n")
 	}
-	sqlResult, err = processReqInsertSQL(&sqlText)
+	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
+		doc.typeID,
+		doc.description,
+		doc.value)
 	CheckErr(err)
 	lastID, err := sqlResult.LastInsertId()
-	sqlText = "insert into documentation_set (listID, docID, position) values ('" + listID + "','" + strconv.FormatInt(lastID, 10) + "','" + position + "')"
+	sqlText = "insert into documentation_set (listID, docID, position) values (?,?,?)"
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Processing SQL: %+v\n",sqlText)
+		fmt.Printf("Processing SQL documentation_set\n")
 	}
-	sqlResult, err = processReqInsertSQL(&sqlText)
+	_, err = wsContext.Db.ExecContext(localContext,sqlText,
+		listID,
+		strconv.FormatInt(lastID, 10),
+		position)
 	CheckErr(err)
 	return err
 
@@ -88,10 +102,17 @@ func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 func WsSrvGetDocByID(wsContext *WsContext, message *WsMessage) (err error){
 	var response *WsSQLSelect
 	err = nil
-	var sql string
-	sql = "select D.ID, T.ID as typeID, T.type, S.position, D.info, D.description from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID left join documentation_type T on D.typeID=T.ID where L.ID="+ message.Payload.Data[0] +" order by S.position;"
-	response, err = processReqSelectSQL(&sql)
+	var sqlText string
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
+	sqlText = "select D.ID, T.ID as typeID, T.type, S.position, D.info, D.description from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID left join documentation_type T on D.typeID=T.ID where L.ID=? order by S.position;"
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText,
+		message.Payload.Data[0])
+	CheckErr(err)
+	defer rows.Close()
+
+	response, err = rowsToWsSQLSelect(rows)
 
 	message.Payload.Command = "RESP_DOC_BY_ID"
 	for _, line := range response.Data {
@@ -109,10 +130,16 @@ func WsSrvGetDocByID(wsContext *WsContext, message *WsMessage) (err error){
 func WsSrvGetDocList(wsContext *WsContext, message *WsMessage) (err error){
 	var response *WsSQLSelect
 	err = nil
-	var sql string
-	sql = "select L.ID, L.description from documentation_list L"
-	response, err = processReqSelectSQL(&sql)
+	var sqlText string
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
+	sqlText = "select L.ID, L.description from documentation_list L"
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText)
+	CheckErr(err)
+	defer rows.Close()
+
+	response, err = rowsToWsSQLSelect(rows)
 
 	message.Payload.Command ="RESP_DOC_LIST"
 	for _, line := range response.Data {
@@ -130,10 +157,16 @@ func WsSrvGetDocList(wsContext *WsContext, message *WsMessage) (err error){
 func WsSrvGetDocType(wsContext *WsContext, message *WsMessage) (err error){
 	var response *WsSQLSelect
 	err = nil
-	var sql string
-	sql = "select T.ID, T.type from documentation_type T"
-	response, err = processReqSelectSQL(&sql)
+	var sqlText string
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
+	sqlText = "select T.ID, T.type from documentation_type T"
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText)
+	CheckErr(err)
+	defer rows.Close()
+
+	response, err = rowsToWsSQLSelect(rows)
 
 	message.Payload.Command ="RESP_DOC_TYPE"
 	for _, line := range response.Data {

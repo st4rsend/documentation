@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import {TodoService} from '../../shared/services/todo.service';
-import {sqlList, SqlListService} from '../../shared/services/sql-list.service';
-import {Todo} from '../../shared/model/todo';
+import { TodoService } from '../../shared/services/todo.service';
+import { SqlListService } from '../../shared/services/sql-list.service';
+import { Todo } from '../../shared/model/todo';
 
 @Component({
   selector: 'app-list-todo',
@@ -18,7 +18,6 @@ export class ListTodoComponent implements OnInit {
 	@Input() channelID: number;
 
 	public todos: Array<Todo>;
-//	public userList: sqlList[];
 
 	constructor(private todoService: TodoService) {
 	}

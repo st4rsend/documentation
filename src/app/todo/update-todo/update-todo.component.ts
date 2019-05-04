@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 
 
 import { TodoService } from '../../shared/services/todo.service';
-import { SqlListService, sqlList } from '../../shared/services/sql-list.service';
+import { SqlListService, SqlList } from '../../shared/services/sql-list.service';
 import { Todo } from '../../shared/model/todo';
 
 @Component({
@@ -20,7 +20,7 @@ export class UpdateTodoComponent implements OnInit {
 	activateList = new EventEmitter();
 
 	public todo: Todo;
-	public userList: sqlList[]=[];
+	public userList: SqlList[]=[];
 
 	public user: string;
 	public label: string;
@@ -44,7 +44,7 @@ export class UpdateTodoComponent implements OnInit {
 
   ngOnInit() {
 		this.todoService.setChannelID(this.channelID);
-		this.userList = this.userListService.getUsers();
+		this.userList = this.userListService.getList("users","ID","identity");
 		this.populate();
   }
 
