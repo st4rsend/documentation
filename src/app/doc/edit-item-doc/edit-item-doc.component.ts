@@ -13,7 +13,7 @@ export class EditItemDocComponent implements OnInit {
 	@Input() docListID: string;
 	@Output() itemDocCloseEvent = new EventEmitter<boolean>();
 
-	private docTypes: Array<DocType>;
+	public docTypes: Array<DocType>;
 
 	private creation: boolean;
 	public doc: Doc;

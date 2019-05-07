@@ -63,7 +63,7 @@ export class DocService {
 		this.dsSubject.next(message);
 	}
 
-	dsSQLQueryDocs(docListID: string) {
+	dsSQLQueryDocs(docListID: number) {
 		this.docs = [];
 		this.dsSubject = this.webSocketService.wsSubject();
 		this.isReady$.next(false);
@@ -91,7 +91,7 @@ export class DocService {
 			});
 		}
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'DOC','GET_DOC_BY_ID',[docListID]);
+			.wsPrepareMessage(this.channelID,'DOC','GET_DOC_BY_ID',[docListID.toString()]);
 		this.dsSubject.next(message);
 	}
 

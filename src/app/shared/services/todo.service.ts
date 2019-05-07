@@ -18,6 +18,7 @@ export class TodoService {
 	public isReady$ = new Subject<any>();
 
 	constructor ( private webSocketService: WebSocketService ) {
+		console.log("Constructing TodoService");
 		this.todos = [];
 	}
 
@@ -126,7 +127,7 @@ export class TodoService {
 				}
 			}
 			if ((+scMsg.payload.channelid === this.channelID) && (scMsg.payload.command === "EOF")) {
-				console.log('EOF');
+				//console.log('EOF');
 				this.isReady$.next(true);
 				this.tsSelectSub.unsubscribe();
 			}

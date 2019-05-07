@@ -7,9 +7,6 @@ import { Todo } from '../../shared/model/todo';
   selector: 'app-list-todo',
   templateUrl: './list-todo.component.html',
   styleUrls: ['./list-todo.component.scss'],
-	providers: [
-		SqlListService,
-	],
 })
 export class ListTodoComponent implements OnInit {
 
@@ -21,7 +18,6 @@ export class ListTodoComponent implements OnInit {
 
 	constructor(private todoService: TodoService) {
 	}
-
 
 	ngOnInit() {
 		this.todoService.setChannelID(this.channelID);

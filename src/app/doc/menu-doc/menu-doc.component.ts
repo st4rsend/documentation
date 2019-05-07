@@ -1,32 +1,35 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { DocService } from '../../shared/services/doc.service';
 import { DocList } from  '../../shared/model/doc';
+import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
 
 @Component({
   selector: 'app-menu-doc',
   templateUrl: './menu-doc.component.html',
-  styleUrls: ['./menu-doc.component.css']
+  styleUrls: ['./menu-doc.component.css'],
+	providers: [ SqlListService ],
 })
 export class MenuDocComponent implements OnInit {
 
 	@Output() editModeEvent = new EventEmitter<boolean>();
-	private docEditMode: boolean = false;
-	@Output() docListIDEvent = new EventEmitter<string>();
-	private docListID: string = '1';
+	public docEditMode: boolean = false;
+	@Output() docListIDEvent = new EventEmitter<number>();
+	public docListID: number = 1;
 	@Output() viewModeEvent = new EventEmitter<string>();
-	private viewMode: string = 'normal';
+	public viewMode: string = 'normal';
 
 	private channelID: number = 2;
+	public docLists: Array<ISqlList>;
 
-	private docLists: Array<DocList>;
-
-  constructor(private docService: DocService) { }
+  constructor(
+		private docService: DocService,
+		private docListService: SqlListService
+	) { }
 
   ngOnInit() {
-
 		this.docService.setChannelID(this.channelID);
-		this.docService.dsSQLQueryDocLists();
-		this.docLists = this.docService.dsGetDocLists();
+		this.docListService.InitList("documentation_list", "ID", "description");
+		this.docLists = this.docListService.GetList();
 		this.docListIDEvent.emit(this.docListID);
   }
 	docListChange() {
@@ -38,5 +41,4 @@ export class MenuDocComponent implements OnInit {
 	viewModeChange() {
 		this.viewModeEvent.emit(this.viewMode);
 	}
-	
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject ,  Subscription } from 'rxjs';
 import { WebSocketService, wsMessage } from './websocket.service';
 
-export interface SqlList {
+export interface ISqlList {
 	id: number;
 	value: string;
 }
@@ -12,20 +12,21 @@ export interface SqlList {
 
 export class SqlListService {
 
-	private sqlList: SqlList[];
+	private sqlList: Array<ISqlList>;
 
 	private selectSub: Subscription;
 	private subject: Subject<any>;
 
-  constructor(private webSocketService: WebSocketService) { }
+  constructor(private webSocketService: WebSocketService) { 
+		console.log("Contructing SqlListService");
+	}
 
 
-	public getList(table: string, id: string, column: string): SqlList[] {
-		this.SQLGetList(table, id, column);
+	public GetList(): Array<ISqlList> {
 		return this.sqlList;
 	}
 
-	public SQLGetList(table: string, id: string, column: string){
+	public InitList(table: string, id: string, column: string){
 		this.sqlList  = [];
 		this.subject = this.webSocketService.wsSubject();
 
@@ -37,13 +38,12 @@ export class SqlListService {
 		this.subject.next(message);
 	}
 
-	public parse (msg: wsMessage) {
+	private parse (msg: wsMessage) {
 		if ( (+msg.payload.channelid === 1) && (msg.payload.domain === "SQL")) {
 			if (msg.payload.command === "RESP_SQL_LIST") {
 				this.sqlList.push({id: +msg.payload.data[0], value: msg.payload.data[1]});
 			}
 			if ((+msg.payload.channelid === 1) && ( msg.payload.command === "EOF")) {
-				console.log('SQL-LIST: EOF');
 				this.selectSub.unsubscribe();
 			}
 		}

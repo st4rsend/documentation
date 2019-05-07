@@ -27,6 +27,6 @@ export class AppComponent implements OnInit {
 		this.router.navigate(['']);
 	}
 	toAppComponent(msg: string) {
-		console.log("AppComponent received msg: ",msg);
+//		console.log("AppComponent received msg: ",msg);
 	}
 }

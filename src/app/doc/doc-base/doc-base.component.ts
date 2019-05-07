@@ -1,37 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 
 import { DocService } from '../../shared/services/doc.service';
-import { SqlListService } from '../../shared/services/sql-list.service';
 
 @Component({
   selector: 'app-doc-base',
   templateUrl: './doc-base.component.html',
   styleUrls: ['./doc-base.component.css'],
-	providers: [ DocService, SqlListService ],
+	providers: [ DocService ],
 })
 export class DocBaseComponent implements OnInit {
 
-	private editMode: boolean = false;
-	private docListID: string;
-	private viewMode: string = "normal";
+	public editMode: boolean = false;
+	public docListID: string;
+	public viewMode: string = "normal";
 
   constructor(
 		private DocService: DocService,
-		private DocListService: SqlListService
 	) { }
-
   ngOnInit() {
   }
-
 	docEditModeSet(editMode: boolean) {
 		this.editMode = editMode;
 	}
-
 	docListIDSet(listID: string) {
 		this.docListID = listID;
 	}
 	docViewModeSet(viewMode: string){
 		this.viewMode = viewMode;
 	}
-
 }

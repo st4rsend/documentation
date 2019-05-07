@@ -16,7 +16,7 @@ export class DynDocComponent implements OnInit {
 
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
-	@Input() docListID: string;
+	@Input() docListID: number;
 
 	public docs: Array<Doc>;
 

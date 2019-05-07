@@ -87,7 +87,7 @@ export class WebSocketService {
 
 	public genericParse(msg: wsMessage){
 		if  ((+msg.payload.channelid === 0) && (msg.payload.domain === "HBT")) {
-			console.log("received heartbeat");
+//			console.log("received heartbeat");
 		}
 	}
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TodoService } from '../../shared/services/todo.service';
-import { SqlListService, SqlList } from '../../shared/services/sql-list.service';
+import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
 import { Todo } from '../../shared/model/todo';
 
 import { WebSocketService } from '../../shared/services/websocket.service';
@@ -19,20 +19,22 @@ export class CreateTodoComponent implements OnInit {
 
 	public todo: Todo;
 	public confirmed: boolean = false;
-	public userList: SqlList[]=[];
+	public userList: Array<ISqlList> = [];
+	//public userList: SqlList[]=[];
 	private isConnected: boolean = false;
 	private isConnectedSub: Subscription;
 
   constructor( 
 		private todoService: TodoService, 
 		private userListService: SqlListService,
-		private webSocket: WebSocketService ) { 
+	) { 
 			this.todo = new Todo(null,null,null,'label',null,null,false);
 	}
 
   ngOnInit() {
 		this.todoService.setChannelID(this.channelID);
-		this.userList = this.userListService.getList("users","ID","identity");
+		this.userListService.InitList("users","ID","identity");
+		this.userList = this.userListService.GetList();
   }
 
 	createTodo(todo: Todo) {
