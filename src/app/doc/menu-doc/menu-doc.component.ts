@@ -18,6 +18,8 @@ export class MenuDocComponent implements OnInit {
 	@Output() viewModeEvent = new EventEmitter<string>();
 	public viewMode: string = 'normal';
 
+	public docListEditMode: boolean = false;
+
 	private channelID: number = 2;
 	public docLists: Array<ISqlList>;
 
@@ -40,5 +42,13 @@ export class MenuDocComponent implements OnInit {
 	}
 	viewModeChange() {
 		this.viewModeEvent.emit(this.viewMode);
+	}
+	docListEdit() {
+		this.docListEditMode = !this.docListEditMode;
+		if (this.docListEditMode) {
+			console.log("launch doc list edit mode");
+		} else {
+			console.log("close doc list edit mode");
+		}
 	}
 }

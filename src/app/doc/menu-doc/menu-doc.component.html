@@ -21,4 +21,19 @@
 		</select>
 	</td><td width='150px'>
 Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeChange()'>
-</td></tr></table>
+	</td></tr>
+	<ng-container *ngIf="docEditMode">
+	<tr><td>
+<button (click)="docListEdit()">Edit doc list</button>
+	</td><td>
+	</td><td>
+	</tr>
+	</ng-container>
+</table>
+<div *ngIf="docListEditMode">
+	<app-list-mgmt
+		[table]="documentation_list"
+		[index]="ID"
+		[column]="description">
+	</app-list-mgmt>
+</div>
