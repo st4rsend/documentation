@@ -19,6 +19,9 @@ export class MenuDocComponent implements OnInit {
 	public viewMode: string = 'normal';
 
 	public docListEditMode: boolean = false;
+	public docListTable: string = 'documentation_list';
+	public docListIDName: string = 'ID';
+	public docListColumn = 'description';
 
 	private channelID: number = 2;
 	public docLists: Array<ISqlList>;
@@ -50,5 +53,8 @@ export class MenuDocComponent implements OnInit {
 		} else {
 			console.log("close doc list edit mode");
 		}
+	}
+	listCloseEvent(value: boolean) {
+		this.docListEditMode = value;
 	}
 }

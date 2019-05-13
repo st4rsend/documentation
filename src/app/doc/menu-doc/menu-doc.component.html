@@ -32,8 +32,9 @@ Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeCha
 </table>
 <div *ngIf="docListEditMode">
 	<app-list-mgmt
-		[table]="documentation_list"
-		[index]="ID"
-		[column]="description">
+		[table]="docListTable"
+		[index]="docListIDName"
+		[column]="docListColumn"
+		(listCloseEvent)='listCloseEvent($event)'>
 	</app-list-mgmt>
 </div>

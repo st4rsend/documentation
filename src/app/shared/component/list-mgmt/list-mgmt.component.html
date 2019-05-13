@@ -1,3 +1,23 @@
-<p>
-  list-mgmt works!
-</p>
+<div class="outerBorder" cdkDrag>
+	<div class="header" cdkDragHandle>
+		<button (click)="validate();">CONFIRM</button>
+		<div class="cancel">
+			<button (click)="reset();">Reset</button>
+			<button (click)="cancel();">Cancel</button>
+		</div>
+	</div>
+	<div>
+		<H3> Editing TABLE<BR> {{table}}</H3>
+	</div>
+	<div cdkDropList class="item-list" (cdkDropListDropped)="drop($event)">
+		<div *ngFor="let item of newList" class="item-box" cdkDrag>
+				<input type="text" size="25" value=	{{item.value}}>
+			<div class="item-handle" cdkDragHandle>
+			H
+			</div>
+		</div>
+	</div>
+	<div class="bottom">
+		<button (click)="newItem()">New</button>
+	</div>
+</div>
