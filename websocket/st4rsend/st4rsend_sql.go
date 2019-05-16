@@ -1,11 +1,26 @@
 package st4rsend
 
 import (
-//	"fmt"
+	//"fmt"
 	"strconv"
 	"database/sql"
 	"context"
 )
+
+type SqlList struct {
+	idx string
+	position string
+	value string
+}
+
+func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
+	err = nil
+	if message.Payload.Command == "GET_LIST" {
+		err = WsSrvGetSQLList(wsContext, message)
+	}
+	CheckErr(err)
+	return err
+}
 
 func ConnectSQL(user string, password string, host string, port int, database string) (db *sql.DB, err error) {
 	var dataSource string
@@ -13,6 +28,43 @@ func ConnectSQL(user string, password string, host string, port int, database st
 	db, err = sql.Open("mysql",dataSource)
 	CheckErr(err)
 	return db, err
+}
+
+func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){
+	return err
+}
+
+func WsSrvGetSQLList(wsContext *WsContext, message *WsMessage) (err error){
+	var response *WsSQLSelect
+	err = nil
+	var sqlText string
+	var table_name = message.Payload.Data[0]
+	var idx = message.Payload.Data[1]
+	var column = message.Payload.Data[2]
+	var sort = message.Payload.Data[3]
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	sqlText = "select " + idx + "," + column + "," + sort + " from " + table_name + " order by "	+ sort
+
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText)
+	//rows, err := wsContext.Db.QueryContext(localContext, sqlText, idx, column, sort, sort)
+	CheckErr(err)
+	defer rows.Close()
+
+	response, err = rowsToWsSQLSelect(rows)
+
+	message.Payload.Command = "RESP_SQL_LIST"
+	for _, line := range response.Data {
+		message.Payload.Data = line
+		err = sendMessage(wsContext, &message.Payload)
+		CheckErr(err)
+	}
+	message.Payload.Command = "EOF"
+	message.Payload.Data = nil
+	err = sendMessage(wsContext, &message.Payload)
+	CheckErr(err)
+	return err
 }
 
 func rowsToWsSQLSelect(rows *sql.Rows ) (*WsSQLSelect, error) {
@@ -42,42 +94,7 @@ func rowsToWsSQLSelect(rows *sql.Rows ) (*WsSQLSelect, error) {
 	return &sqlData, err
 }
 
-func WsSrvGetSQLList(wsContext *WsContext, message *WsMessage) (err error){
-	var response *WsSQLSelect
-	err = nil
-	var sqlText string
-	localContext := context.Background()
-	err = wsContext.Db.PingContext(localContext)
-	CheckErr(err)
-	sqlText = "select " + message.Payload.Data[1] + "," + message.Payload.Data[2] + " from " + message.Payload.Data[0] + " order by "	+ message.Payload.Data[2]
-	rows, err := wsContext.Db.QueryContext(localContext, sqlText)
-	CheckErr(err)
-	defer rows.Close()
-
-	response, err = rowsToWsSQLSelect(rows)
-
-	message.Payload.Command = "RESP_SQL_LIST"
-	for _, line := range response.Data {
-		message.Payload.Data = line
-		err = sendMessage(wsContext, &message.Payload)
-		CheckErr(err)
-	}
-	message.Payload.Command = "EOF"
-	message.Payload.Data = nil
-	err = sendMessage(wsContext, &message.Payload)
-	CheckErr(err)
-	return err
-}
-
-func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
-	err = nil
-	if message.Payload.Command == "GET_LIST" {
-		err = WsSrvGetSQLList(wsContext, message)
-	}
-	CheckErr(err)
-	return err
-}
-
+/* SQL SECURITY WARNING: DANGEROUS 
 func WsSendRawSQL(wsContext *WsContext, sqlText *string) (err error){
 	comEncap := &ComEncap{
 		ChannelID: int64(1),
@@ -88,3 +105,4 @@ func WsSendRawSQL(wsContext *WsContext, sqlText *string) (err error){
 	CheckErr(err)
 	return err
 }
+*/

@@ -1,0 +1,9 @@
+<button (click)="docListEdit()">Edit doc list</button>
+<div *ngIf="docListEditMode">
+	<app-list-mgmt
+		[table]="docListTable"
+		[index]="docListIDName"
+		[column]="docListColumn"
+		(listCloseEvent)='listCloseEvent($event)'>
+	</app-list-mgmt>
+</div>

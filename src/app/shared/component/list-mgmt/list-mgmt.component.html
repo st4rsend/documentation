@@ -11,7 +11,7 @@
 	</div>
 	<div cdkDropList class="item-list" (cdkDropListDropped)="drop($event)">
 		<div *ngFor="let item of newList" class="item-box" cdkDrag>
-				<input type="text" size="25" value=	{{item.value}}>
+				<input type="text" size="25" [(ngModel)] = "item.value">
 			<div class="item-handle" cdkDragHandle>
 			H
 			</div>
