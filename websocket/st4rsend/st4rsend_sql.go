@@ -2,6 +2,7 @@ package st4rsend
 
 import (
 	//"fmt"
+	"regexp"
 	"strconv"
 	"database/sql"
 	"context"
@@ -38,10 +39,10 @@ func WsSrvGetSQLList(wsContext *WsContext, message *WsMessage) (err error){
 	var response *WsSQLSelect
 	err = nil
 	var sqlText string
-	var table_name = message.Payload.Data[0]
-	var idx = message.Payload.Data[1]
-	var column = message.Payload.Data[2]
-	var sort = message.Payload.Data[3]
+	var table_name = protectSQL(message.Payload.Data[0])
+	var idx = protectSQL(message.Payload.Data[1])
+	var column = protectSQL(message.Payload.Data[2])
+	var sort = protectSQL(message.Payload.Data[3])
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
@@ -92,6 +93,13 @@ func rowsToWsSQLSelect(rows *sql.Rows ) (*WsSQLSelect, error) {
 		//fmt.Printf("selectData TMP: %s\n",sqlData.Data)
 	}
 	return &sqlData, err
+}
+
+func protectSQL (str string) (string) {
+	reg, err := regexp.Compile("[^a-zA-Z0-9_]+")
+	CheckErr(err)
+	result := reg.ReplaceAllString(str, "")
+	return result
 }
 
 /* SQL SECURITY WARNING: DANGEROUS 
