@@ -3,7 +3,7 @@ import { Subject ,  Subscription } from 'rxjs';
 import { WebSocketService, wsMessage } from './websocket.service';
 
 export interface ISqlList {
-	id: number;
+	idx: number;
 	value: string;
 	position: number;
 }
@@ -13,12 +13,19 @@ export interface ISqlList {
 
 export class SqlListService {
 
-	public sqlList: Array<ISqlList>;
+	sqlList: Array<ISqlList>;
 
-	private selectSub: Subscription;
-	private subject: Subject<any>;
+	selectSub: Subscription;
+	subject: Subject<any>;
 
-	public isReady$ = new Subject<boolean>();
+	isReady$ = new Subject<boolean>();
+
+	channelID: 512;
+
+	table_name: string;
+	idx_name: string;
+	column_name: string;
+	position_name: string;
 
   constructor(private webSocketService: WebSocketService) { 
 //		console.log("Contructing SqlListService");
@@ -29,7 +36,29 @@ export class SqlListService {
 		return this.sqlList as Array<ISqlList>;
 	}
 
-	public InitList(table: string, id: string, column: string){
+	public UpdateList(newList: Array<ISqlList>) {
+		for ( let item in newList ) {
+// TODO Handle correctly things
+			if ( newList[item].idx == 0 ) {
+				// added item
+				newList[item].position = +item + 1;
+				this.InsertItem(newList[item]);
+				continue;
+			}
+			if ((newList[item].idx != this.sqlList[item].idx) 
+			|| (newList[item].value != this.sqlList[item].value)) {
+				newList[item].position = +item + 1;
+				this.UpdateItem(newList[item]);
+				continue;
+			}
+		}
+	}
+
+	public InitList(table: string, idx: string, column: string, position: string){
+		this.table_name = table;
+		this.idx_name = idx;
+		this.column_name = column;
+		this.position_name = position;
 		this.isReady$.next(false);
 		this.sqlList  = [];
 		this.subject = this.webSocketService.wsSubject();
@@ -39,9 +68,47 @@ export class SqlListService {
 				this.parse(value);
 			 });
 		}
-		let sorting ='position';
 		let message = this.webSocketService
-			.wsPrepareMessage(1,'SQL','GET_LIST',[table, id, column, sorting] );
+			.wsPrepareMessage(1,'SQL','GET_LIST',[this.table_name, this.idx_name, this.column_name, this.position_name] );
+		this.subject.next(message);
+	}
+
+	public UpdateItem(item: ISqlList) {
+		this.subject = this.webSocketService.wsSubject();
+		let message = this.webSocketService
+			.wsPrepareMessage(this.channelID,'SQL','UPDATE_LIST',[
+				this.table_name,
+				this.idx_name,
+				this.column_name,
+				this.position_name,
+				item.idx.toString(),
+				item.value,
+				item.position.toString()
+			]);
+		this.subject.next(message);
+	}
+
+	public InsertItem(item: ISqlList) {
+		this.subject = this.webSocketService.wsSubject();
+		let message = this.webSocketService
+			.wsPrepareMessage(this.channelID,'SQL','INSERT_LIST',[
+				this.table_name,
+				this.column_name,
+				this.position_name,
+				item.value,
+				item.position.toString()
+			]);
+		this.subject.next(message);
+	}
+
+	public DeleteItem(idx: number) {
+		this.subject = this.webSocketService.wsSubject();
+		let message = this.webSocketService
+			.wsPrepareMessage(this.channelID,'SQL','DELETE_LIST',[
+				this.table_name,
+				this.idx_name,
+				idx.toString(),
+			]);
 		this.subject.next(message);
 	}
 
@@ -49,7 +116,7 @@ export class SqlListService {
 		if ( (+msg.payload.channelid === 1) && (msg.payload.domain === "SQL")) {
 			if (msg.payload.command === "RESP_SQL_LIST") {
 				this.sqlList.push({
-					id: +msg.payload.data[0], 
+					idx: +msg.payload.data[0], 
 					value: msg.payload.data[1],
 					position: +msg.payload.data[2],
 				});

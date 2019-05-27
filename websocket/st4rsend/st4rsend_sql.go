@@ -37,12 +37,12 @@ func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	var sqlText string
 	var sqlResult sql.Result
 	var table_name = protectSQL(message.Payload.Data[0])
-	var column = protectSQL(message.Payload.Data[1])
-	var sort = protectSQL(message.Payload.Data[2])
+	var column_name = protectSQL(message.Payload.Data[1])
+	var position_name = protectSQL(message.Payload.Data[2])
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "insert into " + table_name + " (" + column + "," + sort + ") values (?,?) "
+	sqlText = "insert into " + table_name + " (" + column_name + "," + position_name + ") values (?,?) "
 	if (wsContext.Verbose > 4) {
 		fmt.Printf("Processing SQL list Insert\n")
 	}
@@ -84,19 +84,20 @@ func WsSrvUpdateSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	var sqlText string
 	var sqlResult sql.Result
 	var table_name = protectSQL(message.Payload.Data[0])
-	var idx = protectSQL(message.Payload.Data[1])
-	var column = protectSQL(message.Payload.Data[2])
-	var sort = protectSQL(message.Payload.Data[3])
+	var idx_name = protectSQL(message.Payload.Data[1])
+	var column_name = protectSQL(message.Payload.Data[2])
+	var position_name = protectSQL(message.Payload.Data[3])
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "update " + table_name + " set " + column + "=?, " + sort + "=? where " + idx + "=?"
+	sqlText = "update " + table_name + " set " + column_name + "=?, " + position_name + "=? where " + idx_name + "=?"
 	if (wsContext.Verbose > 4) {
 		fmt.Printf("Processing SQL LIST update\n")
 	}
 	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
-		message.Payload.Data[4],
-		message.Payload.Data[5])
+		message.Payload.Data[5],
+		message.Payload.Data[6],
+		message.Payload.Data[4])
 	CheckErr(err)
 	if (wsContext.Verbose > 4) {
 		fmt.Printf("SQL LIST update result: %v\n", sqlResult)
@@ -109,13 +110,13 @@ func WsSrvGetSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
 	var sqlText string
 	var table_name = protectSQL(message.Payload.Data[0])
-	var idx = protectSQL(message.Payload.Data[1])
-	var column = protectSQL(message.Payload.Data[2])
-	var sort = protectSQL(message.Payload.Data[3])
+	var idx_name = protectSQL(message.Payload.Data[1])
+	var column_name = protectSQL(message.Payload.Data[2])
+	var position_name = protectSQL(message.Payload.Data[3])
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "select " + idx + "," + column + "," + sort + " from " + table_name + " order by "	+ sort
+	sqlText = "select " + idx_name + "," + column_name + "," + position_name + " from " + table_name + " order by "	+ position_name
 
 	rows, err := wsContext.Db.QueryContext(localContext, sqlText)
 	//rows, err := wsContext.Db.QueryContext(localContext, sqlText, idx, column, sort, sort)

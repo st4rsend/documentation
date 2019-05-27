@@ -22,6 +22,7 @@ export class MenuDocComponent implements OnInit {
 	public docListTable: string = 'documentation_list';
 	public docListIDName: string = 'ID';
 	public docListColumn = 'description';
+	public docListPosition = 'position';
 
 	private channelID: number = 2;
 	public docLists: Array<ISqlList>;
@@ -33,7 +34,11 @@ export class MenuDocComponent implements OnInit {
 
   ngOnInit() {
 		this.docService.setChannelID(this.channelID);
-		this.docListService.InitList("documentation_list", "ID", "description");
+		this.docListService.InitList(
+			this.docListTable,
+			this.docListIDName,
+			this.docListColumn,
+			this.docListPosition);
 		this.docLists = this.docListService.GetList();
 		this.docListIDEvent.emit(this.docListID);
   }

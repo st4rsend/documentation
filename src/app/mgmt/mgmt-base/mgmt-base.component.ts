@@ -13,6 +13,7 @@ export class MgmtBaseComponent implements OnInit {
 	public docListTable: string = 'documentation_list';
 	public docListIDName: string = 'ID';
 	public docListColumn = 'description';
+	public docListPosition = 'position';
 
   constructor() { }
 

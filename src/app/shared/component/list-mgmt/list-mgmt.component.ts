@@ -13,6 +13,7 @@ export class ListMgmtComponent implements OnInit {
 	@Input() table: string;
 	@Input() index: string;
 	@Input() column: string;
+	@Input() position: string;
 	@Output() listCloseEvent = new EventEmitter<boolean>();
 
 	public newList: Array<ISqlList>;
@@ -26,7 +27,7 @@ export class ListMgmtComponent implements OnInit {
 
   ngOnInit() {
 		this.isReady = this.listService.isReady$.subscribe( (value) => { this.listReady( value); });
-		this.listService.InitList(this.table, this.index, this.column);
+		this.listService.InitList(this.table, this.index, this.column, this.position);
   }
 	listReady(value: boolean) {
 		if ( value == true ) {
@@ -39,25 +40,15 @@ export class ListMgmtComponent implements OnInit {
 	}
 
 	newItem() {
-		this.newList.push({id: 0, value: "", position: 0});
+		this.newList.push({idx: 0, value: "", position: 0});
 	}
 
 	validate() {
-		console.log("list: ", this.list);
-		console.log("newList: ", this.newList);
-		for ( let item in this.newList ) {
-			if ( this.newList[item].id != this.list[item].id ) {
-				console.log("Update position lnd value ist id ", this.newList[item].id, " to position", this.list[item].position," and value", this.newList[item].value); 
-			} else {
-				if (  this.newList[item].value != this.list[item].value ) {
-					console.log ("Update value of ", this.newList[item].id, " to ", this.newList[item].value);
-				}
-			}
-		}
+		this.listService.UpdateList(this.newList);
 	}
 
 	reset() {
-		this.listService.InitList(this.table, this.index, this.column);
+		this.listService.InitList(this.table, this.index, this.column, this.position);
 	}
 	cancel() {
 		this.listCloseEvent.emit(false);

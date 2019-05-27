@@ -46,7 +46,7 @@ export class UpdateTodoComponent implements OnInit {
 
   ngOnInit() {
 		this.todoService.setChannelID(this.channelID);
-		this.userListService.InitList("users","ID","identity");
+		this.userListService.InitList("users","ID","identity","position");
 		this.userList = this.userListService.GetList();
 		this.populate();
   }
