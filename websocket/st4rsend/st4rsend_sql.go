@@ -1,7 +1,7 @@
 package st4rsend
 
 import (
-	//"fmt"
+	"fmt"
 	"regexp"
 	"strconv"
 	"database/sql"
@@ -17,25 +17,94 @@ type SqlList struct {
 func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
 	if message.Payload.Command == "GET_LIST" {
-		err = WsSrvGetSQLList(wsContext, message)
+		err = WsSrvGetSqlList(wsContext, message)
+	}
+	if message.Payload.Command == "INSERT_LIST" {
+		err = WsSrvInsertSqlList(wsContext, message)
+	}
+	if message.Payload.Command == "UPDATE_LIST" {
+		err = WsSrvUpdateSqlList(wsContext, message)
+	}
+	if message.Payload.Command == "DELETE_LIST" {
+		err = WsSrvDeleteSqlList(wsContext, message)
 	}
 	CheckErr(err)
 	return err
 }
 
-func ConnectSQL(user string, password string, host string, port int, database string) (db *sql.DB, err error) {
-	var dataSource string
-	dataSource = user + ":" + password + "@tcp(" + host + ":" + strconv.Itoa(port) + ")/" + database + "?charset=utf8mb4"
-	db, err = sql.Open("mysql",dataSource)
-	CheckErr(err)
-	return db, err
-}
-
 func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){
+	err = nil
+	var sqlText string
+	var sqlResult sql.Result
+	var table_name = protectSQL(message.Payload.Data[0])
+	var column = protectSQL(message.Payload.Data[1])
+	var sort = protectSQL(message.Payload.Data[2])
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	sqlText = "insert into " + table_name + " (" + column + "," + sort + ") values (?,?) "
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("Processing SQL list Insert\n")
+	}
+	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
+		message.Payload.Data[3],
+		message.Payload.Data[4])
+	CheckErr(err)
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("Processing SQL LIST result: %v\n", sqlResult)
+	}
 	return err
 }
 
-func WsSrvGetSQLList(wsContext *WsContext, message *WsMessage) (err error){
+func WsSrvDeleteSqlList(wsContext *WsContext, message *WsMessage) (err error){
+	err = nil
+	var sqlText string
+	var sqlResult sql.Result
+	var table_name = protectSQL(message.Payload.Data[0])
+	var idx_name = protectSQL(message.Payload.Data[1])
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	sqlText = "delete from " + table_name + " where " + idx_name + "=?"
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("Processing SQL LIST delete\n")
+	}
+	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
+		message.Payload.Data[2])
+	CheckErr(err)
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("SQL LIST delete result: %v\n", sqlResult)
+	}
+
+	return err
+}
+
+func WsSrvUpdateSqlList(wsContext *WsContext, message *WsMessage) (err error){
+	err = nil
+	var sqlText string
+	var sqlResult sql.Result
+	var table_name = protectSQL(message.Payload.Data[0])
+	var idx = protectSQL(message.Payload.Data[1])
+	var column = protectSQL(message.Payload.Data[2])
+	var sort = protectSQL(message.Payload.Data[3])
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	sqlText = "update " + table_name + " set " + column + "=?, " + sort + "=? where " + idx + "=?"
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("Processing SQL LIST update\n")
+	}
+	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
+		message.Payload.Data[4],
+		message.Payload.Data[5])
+	CheckErr(err)
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("SQL LIST update result: %v\n", sqlResult)
+	}
+	return err
+}
+
+func WsSrvGetSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	var response *WsSQLSelect
 	err = nil
 	var sqlText string
@@ -93,6 +162,14 @@ func rowsToWsSQLSelect(rows *sql.Rows ) (*WsSQLSelect, error) {
 		//fmt.Printf("selectData TMP: %s\n",sqlData.Data)
 	}
 	return &sqlData, err
+}
+
+func ConnectSQL(user string, password string, host string, port int, database string) (db *sql.DB, err error) {
+	var dataSource string
+	dataSource = user + ":" + password + "@tcp(" + host + ":" + strconv.Itoa(port) + ")/" + database + "?charset=utf8mb4"
+	db, err = sql.Open("mysql",dataSource)
+	CheckErr(err)
+	return db, err
 }
 
 func protectSQL (str string) (string) {

@@ -29,10 +29,9 @@ export class ListMgmtComponent implements OnInit {
 		this.listService.InitList(this.table, this.index, this.column);
   }
 	listReady(value: boolean) {
-		console.log("isReady: ", value);
 		if ( value == true ) {
 			this.list = this.listService.GetList();
-			this.newList = this.list.slice();
+			this.newList = this.list.map(e => ({ ... e }));
 		}
 		else {
 			this.list = [];
@@ -42,20 +41,30 @@ export class ListMgmtComponent implements OnInit {
 	newItem() {
 		this.newList.push({id: 0, value: "", position: 0});
 	}
+
 	validate() {
 		console.log("list: ", this.list);
 		console.log("newList: ", this.newList);
+		for ( let item in this.newList ) {
+			if ( this.newList[item].id != this.list[item].id ) {
+				console.log("Update position lnd value ist id ", this.newList[item].id, " to position", this.list[item].position," and value", this.newList[item].value); 
+			} else {
+				if (  this.newList[item].value != this.list[item].value ) {
+					console.log ("Update value of ", this.newList[item].id, " to ", this.newList[item].value);
+				}
+			}
+		}
 	}
+
 	reset() {
-		// WARNING: newList failure to empty while InitList working...
-		//this.listService.InitList(this.table, this.index, this.column);
-		this.list = this.listService.GetList();
-		this.newList = this.list.slice();
+		this.listService.InitList(this.table, this.index, this.column);
 	}
 	cancel() {
 		this.listCloseEvent.emit(false);
 	}
 	drop(event: CdkDragDrop<string[]>) {
+		console.log("previousIndex: ", event.previousIndex);
+		console.log("currentIndex: ", event.currentIndex);
 		moveItemInArray(this.newList, event.previousIndex, event.currentIndex);
 	}
 }
