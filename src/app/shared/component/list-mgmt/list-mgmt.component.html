@@ -2,16 +2,20 @@
 	<div class="header" cdkDragHandle>
 		<button (click)="validate();">CONFIRM</button>
 		<div class="cancel">
+			<button (click)="allowDelete();">Deletion</button>
 			<button (click)="reset();">Reset</button>
 			<button (click)="cancel();">Cancel</button>
 		</div>
 	</div>
 	<div>
-		<H3> Editing TABLE<BR> {{table}}</H3>
+		<H3> {{table}}</H3>
 	</div>
 	<div cdkDropList class="item-list" (cdkDropListDropped)="drop($event)">
 		<div *ngFor="let item of newList" class="item-box" cdkDrag>
 				<input type="text" size="25" [(ngModel)] = "item.value">
+			<ng-container *ngIf="deleteMode">
+				<button (click)="deleteItem(item.idx);">Del</button>
+			</ng-container>
 			<div class="item-handle" cdkDragHandle>
 			H
 			</div>

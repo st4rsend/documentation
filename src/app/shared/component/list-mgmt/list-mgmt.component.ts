@@ -16,6 +16,8 @@ export class ListMgmtComponent implements OnInit {
 	@Input() position: string;
 	@Output() listCloseEvent = new EventEmitter<boolean>();
 
+	public deleteMode: boolean = false;
+
 	public newList: Array<ISqlList>;
 	public list: Array<ISqlList>;
 
@@ -23,6 +25,10 @@ export class ListMgmtComponent implements OnInit {
 
   constructor( private listService: SqlListService ) { 
 
+	}
+
+	allowDelete() {
+		this.deleteMode = !this.deleteMode;
 	}
 
   ngOnInit() {
@@ -43,8 +49,15 @@ export class ListMgmtComponent implements OnInit {
 		this.newList.push({idx: 0, value: "", position: 0});
 	}
 
+	deleteItem(idx: number) {
+		this.listService.DeleteItem(idx);
+		this.listService.InitList(this.table, this.index, this.column, this.position);
+	}
+
+
 	validate() {
 		this.listService.UpdateList(this.newList);
+		this.listService.InitList(this.table, this.index, this.column, this.position);
 	}
 
 	reset() {

@@ -37,8 +37,9 @@ export class SqlListService {
 	}
 
 	public UpdateList(newList: Array<ISqlList>) {
-		for ( let item in newList ) {
 // TODO Handle correctly things
+		// Add or update members
+		for ( let item in newList ) {
 			if ( newList[item].idx == 0 ) {
 				// added item
 				newList[item].position = +item + 1;

@@ -16,8 +16,7 @@ export class DynDocComponent implements OnInit {
 
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
-	@Input() docListID: number;
-
+	public docListID: number;
 	public docs: Array<Doc>;
 
   constructor(private docService: DocService) {
@@ -29,7 +28,8 @@ export class DynDocComponent implements OnInit {
   }
 
 	docSynchro() {
-		this.docService.dsSQLQueryDocs(this.docListID);
+		//this.docService.dsSQLQueryDocs(this.docListID);
+		this.docService.dsSQLQueryDocs();
 		this.docs = this.docService.dsGetDocs();
 	}
 	docListIDChange() {

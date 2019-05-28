@@ -4,7 +4,7 @@
 			<select 
 				name="todoUser"
 				[(ngModel)]="todo.userID">
-				<option *ngFor="let user of userList" [ngValue]="user.id">{{user.value}}</option>
+				<option *ngFor="let user of userList" [ngValue]="user.idx">{{user.value}}</option>
 			</select>
 		</div>
 		</td><td>

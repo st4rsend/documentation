@@ -15,7 +15,7 @@
 			formControlName="todoUserControl"
 			[compareWith]="compare">
 				<option *ngFor="let user of userList" 
-					[ngValue]="user.id">{{user.value}}
+					[ngValue]="user.idx">{{user.value}}
 				</option>	
 		</select>
 	</td></tr>

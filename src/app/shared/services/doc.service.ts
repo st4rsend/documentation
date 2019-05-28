@@ -10,6 +10,7 @@ export class DocService {
 	docs: Array<Doc>;
 	docLists: Array<DocList>;
 	docTypes: Array<DocType>;
+	docListID: number;
 
 	dsSelectSub: Subscription;
 	dsSubject: Subject<any>;
@@ -17,6 +18,9 @@ export class DocService {
 	dsListSubject: Subject<any>;
 	dsTypeSelectSub: Subscription;
 	dsTypeSubject: Subject<any>;
+
+	private dsListIDSource = new Subject<number>();
+	dsListIDChanged$ = this.dsListIDSource.asObservable();
 
 	channelID: number = 1;
 	listChannelID: number = 258;
@@ -27,10 +31,22 @@ export class DocService {
 
   constructor( private webSocketService: WebSocketService ) {
 		this.docs = [];
+		this.dsListIDChanged$.subscribe(
+			idx => {
+				console.log("RECEIVED MESSAGE: ", idx);
+				this.docListID = idx;
+				//this.dsSQLQueryDocs(this.docListID);
+				this.dsSQLQueryDocs();
+			});
 	}
 	setChannelID(channelID: number){
 		this.channelID = this.baseChannelID + channelID;
 	}
+
+	dsSetDocListID(idx: number) {
+		this.dsListIDSource.next(idx);
+	}
+
 	dsGetDocByID(idx: number): Doc {
 		return this.docs.find(k => k.idx === idx);
 	}
@@ -63,7 +79,7 @@ export class DocService {
 		this.dsSubject.next(message);
 	}
 
-	dsSQLQueryDocs(docListID: number) {
+	dsSQLQueryDocs() {
 		this.docs = [];
 		this.dsSubject = this.webSocketService.wsSubject();
 		this.isReady$.next(false);
@@ -91,7 +107,8 @@ export class DocService {
 			});
 		}
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'DOC','GET_DOC_BY_ID',[docListID.toString()]);
+			//.wsPrepareMessage(this.channelID,'DOC','GET_DOC_BY_ID',[docListID.toString()]);
+			.wsPrepareMessage(this.channelID,'DOC','GET_DOC_BY_ID',[this.docListID.toString()]);
 		this.dsSubject.next(message);
 	}
 

@@ -13,7 +13,6 @@ export class MenuDocComponent implements OnInit {
 
 	@Output() editModeEvent = new EventEmitter<boolean>();
 	public docEditMode: boolean = false;
-	@Output() docListIDEvent = new EventEmitter<number>();
 	public docListID: number = 1;
 	@Output() viewModeEvent = new EventEmitter<string>();
 	public viewMode: string = 'normal';
@@ -40,17 +39,21 @@ export class MenuDocComponent implements OnInit {
 			this.docListColumn,
 			this.docListPosition);
 		this.docLists = this.docListService.GetList();
-		this.docListIDEvent.emit(this.docListID);
+		this.docService.dsSetDocListID(this.docListID);
   }
+
 	docListChange() {
-		this.docListIDEvent.emit(this.docListID);
+		this.docService.dsSetDocListID(this.docListID);
 	}
+
 	editModeChange() {
 		this.editModeEvent.emit(this.docEditMode);
 	}
+
 	viewModeChange() {
 		this.viewModeEvent.emit(this.viewMode);
 	}
+
 	docListEdit() {
 		this.docListEditMode = !this.docListEditMode;
 		if (this.docListEditMode) {
@@ -59,6 +62,7 @@ export class MenuDocComponent implements OnInit {
 			console.log("close doc list edit mode");
 		}
 	}
+
 	listCloseEvent(value: boolean) {
 		this.docListEditMode = value;
 	}
