@@ -1,29 +1,40 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DocService } from '../../shared/services/doc.service';
 import { Doc, DocType } from '../../shared/model/doc';
+import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
 
 @Component({
   selector: 'app-edit-item-doc',
   templateUrl: './edit-item-doc.component.html',
-  styleUrls: ['./edit-item-doc.component.css']
+  styleUrls: ['./edit-item-doc.component.css'],
+	providers: [ SqlListService ]
 })
 export class EditItemDocComponent implements OnInit {
 
 	@Input() itemDoc: Doc;
-	@Input() docListID: string;
 	@Output() itemDocCloseEvent = new EventEmitter<boolean>();
 
-	public docTypes: Array<DocType>;
+	public docTypes: Array<ISqlList>;
+	public doctypeTable: string = 'documentation_type';
+	public docTypeIDName: string = 'ID';
+	public docTypeColumn: string = 'type';
+	public docTypePosition: string = 'position';
 
 	private creation: boolean;
 	public doc: Doc;
 	public docTypeID: number;
 
-  constructor(private docService: DocService) { }
+  constructor(
+		private docService: DocService,
+		private docTypeListService: SqlListService) { }
 
   ngOnInit() {
-		this.docService.dsSQLQueryDocTypes();
-		this.docTypes = this.docService.dsGetDocTypes();
+		this.docTypeListService.InitList(
+			this.doctypeTable,
+			this.docTypeIDName,
+			this.docTypeColumn,
+			this.docTypePosition);
+		this.docTypes = this.docTypeListService.GetList();
 		this.reset();
   }
 
@@ -32,7 +43,7 @@ export class EditItemDocComponent implements OnInit {
 	}
 	validate() {
 		if (this.doc.idx == 0){
-			this.docService.dsInsertDoc(this.doc, this.docListID);
+			this.docService.dsInsertDoc(this.doc);
 		} else {
 			this.docService.dsUpdateDoc(this.doc);
 		}
@@ -59,5 +70,4 @@ export class EditItemDocComponent implements OnInit {
 			this.doc.value = loader.result as string;
 		}
 	}
-
 }

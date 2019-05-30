@@ -23,7 +23,6 @@ export class MenuDocComponent implements OnInit {
 	public docListColumn = 'description';
 	public docListPosition = 'position';
 
-	private channelID: number = 2;
 	public docLists: Array<ISqlList>;
 
   constructor(
@@ -32,7 +31,6 @@ export class MenuDocComponent implements OnInit {
 	) { }
 
   ngOnInit() {
-		this.docService.setChannelID(this.channelID);
 		this.docListService.InitList(
 			this.docListTable,
 			this.docListIDName,
@@ -40,6 +38,7 @@ export class MenuDocComponent implements OnInit {
 			this.docListPosition);
 		this.docLists = this.docListService.GetList();
 		this.docService.dsSetDocListID(this.docListID);
+		//this.docService.dsSetDocListID(this.docLists[0].idx);
   }
 
 	docListChange() {
@@ -56,11 +55,6 @@ export class MenuDocComponent implements OnInit {
 
 	docListEdit() {
 		this.docListEditMode = !this.docListEditMode;
-		if (this.docListEditMode) {
-			console.log("launch doc list edit mode");
-		} else {
-			console.log("close doc list edit mode");
-		}
 	}
 
 	listCloseEvent(value: boolean) {

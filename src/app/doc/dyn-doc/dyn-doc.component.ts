@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DocService } from '../../shared/services/doc.service';
+import { Subscription } from 'rxjs';
 import {Doc} from '../../shared/model/doc';
 
 @Component({
@@ -9,36 +10,31 @@ import {Doc} from '../../shared/model/doc';
 })
 export class DynDocComponent implements OnInit {
 
-	private testTexte="Hello World";
-	private dynTable: Array<Doc>;
-	private channelID: number = 1;
-	public creating: boolean = false;
-
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
+
+	private dynTable: Array<Doc>;
+	public creating: boolean = false;
+
 	public docListID: number;
 	public docs: Array<Doc>;
 
   constructor(private docService: DocService) {
+		this.docService.isReady$.subscribe(
+			ready => {
+				if ( ready ) {
+					this.docs = this.docService.dsGetDocs();
+				}
+			});
 	}
 
   ngOnInit() {
-		this.docService.setChannelID(this.channelID);
-		this.docSynchro();
   }
 
-	docSynchro() {
-		//this.docService.dsSQLQueryDocs(this.docListID);
-		this.docService.dsSQLQueryDocs();
-		this.docs = this.docService.dsGetDocs();
-	}
-	docListIDChange() {
-		this.docSynchro();
-	}
-	docCreateItem() {
+	public docCreateItem() {
 		this.creating = ! this.creating;
 	}
-	itemDocCloseEvent(value: boolean) {
+	private itemDocCloseEvent(value: boolean) {
 		this.creating = false;
 	}
 }
