@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject ,  Subscription } from 'rxjs';
 import { WebSocketService, wsMessage } from './websocket.service';
+import { GlobalService } from './global.service';
 
 export interface ISqlList {
 	idx: number;
@@ -20,15 +21,17 @@ export class SqlListService {
 
 	isReady$ = new Subject<boolean>();
 
-	channelID: 512;
+	channelID: number;
 
 	table_name: string;
 	idx_name: string;
 	column_name: string;
 	position_name: string;
 
-  constructor(private webSocketService: WebSocketService) { 
-//		console.log("Contructing SqlListService");
+  constructor(
+		private webSocketService: WebSocketService,
+		private globalService: GlobalService) { 
+		this.channelID = this.globalService.GetSqlListChannel();
 	}
 
 
@@ -70,7 +73,7 @@ export class SqlListService {
 			 });
 		}
 		let message = this.webSocketService
-			.wsPrepareMessage(1,'SQL','GET_LIST',[this.table_name, this.idx_name, this.column_name, this.position_name] );
+			.wsPrepareMessage(this.channelID,'SQL','GET_LIST',[this.table_name, this.idx_name, this.column_name, this.position_name] );
 		this.subject.next(message);
 	}
 
@@ -114,7 +117,7 @@ export class SqlListService {
 	}
 
 	private parse (msg: wsMessage) {
-		if ( (+msg.payload.channelid === 1) && (msg.payload.domain === "SQL")) {
+		if ( (+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SQL")) {
 			if (msg.payload.command === "RESP_SQL_LIST") {
 				this.sqlList.push({
 					idx: +msg.payload.data[0], 
@@ -122,7 +125,7 @@ export class SqlListService {
 					position: +msg.payload.data[2],
 				});
 			}
-			if ((+msg.payload.channelid === 1) && ( msg.payload.command === "EOF")) {
+			if ((+msg.payload.channelid === this.channelID) && ( msg.payload.command === "EOF")) {
 				this.isReady$.next(true);
 				this.selectSub.unsubscribe();
 			}

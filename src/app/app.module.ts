@@ -25,6 +25,7 @@ import { ListTodoComponent } from './todo/list-todo/list-todo.component';
 import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
 import { UpdateTodoComponent } from './todo/update-todo/update-todo.component';
 import { ListMgmtComponent } from './shared/component/list-mgmt/list-mgmt.component';
+import { ListSelectComponent } from './shared/component/list-select/list-select.component';
 import { ServerComComponent } from './server-com/server-com.component';
 import { MgmtBaseComponent } from './mgmt/mgmt-base/mgmt-base.component';
 import { AppRoutesModule } from './app-routes.module';
@@ -46,6 +47,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     CreateTodoComponent,
 		UpdateTodoComponent,
 		ListMgmtComponent,
+		ListSelectComponent,
 		MgmtBaseComponent,
     ServerComComponent,
   ],

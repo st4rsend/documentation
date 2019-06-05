@@ -5,7 +5,6 @@ import { SqlListService } from '../../shared/services/sql-list.service';
   selector: 'app-mgmt-base',
   templateUrl: './mgmt-base.component.html',
   styleUrls: ['./mgmt-base.component.css'],
-	providers: [ SqlListService ],
 })
 export class MgmtBaseComponent implements OnInit {
 
@@ -15,6 +14,12 @@ export class MgmtBaseComponent implements OnInit {
 	public docListColumn = 'description';
 	public docListPosition = 'position';
 
+	public docThemeListEditMode: boolean = false;
+	public docThemeListTable: string = 'documentation_theme';
+	public docThemeListIDName: string = 'ID';
+	public docThemeListColumn = 'description';
+	public docThemeListPosition = 'position';
+
   constructor() { }
 
   ngOnInit() {
@@ -22,7 +27,13 @@ export class MgmtBaseComponent implements OnInit {
 	docListEdit(){
 		this.docListEditMode = !this.docListEditMode;
 	}
-	listCloseEvent(value: boolean) {
+	docListCloseEvent(value: boolean) {
 		this.docListEditMode = value;
+	}
+	docThemeListEdit(){
+		this.docThemeListEditMode = !this.docThemeListEditMode;
+	}
+	docThemeListCloseEvent(value: boolean) {
+		this.docThemeListEditMode = value;
 	}
 }

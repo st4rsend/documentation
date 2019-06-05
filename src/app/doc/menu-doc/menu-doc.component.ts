@@ -1,13 +1,12 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { DocService } from '../../shared/services/doc.service';
 import { DocList } from  '../../shared/model/doc';
-import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
+//import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
 
 @Component({
   selector: 'app-menu-doc',
   templateUrl: './menu-doc.component.html',
   styleUrls: ['./menu-doc.component.css'],
-	providers: [ SqlListService ],
 })
 export class MenuDocComponent implements OnInit {
 
@@ -22,27 +21,30 @@ export class MenuDocComponent implements OnInit {
 	public docListIDName: string = 'ID';
 	public docListColumn = 'description';
 	public docListPosition = 'position';
+//	public docLists: Array<ISqlList>;
 
-	public docLists: Array<ISqlList>;
+	public docThemeEditMode: boolean = false;
+	public docThemeTable: string = 'documentation_theme';
+	public docThemeIDName: string = 'ID';
+	public docThemeColumn = 'description';
+	public docThemePosition = 'position';
+//	public docThemes: Array<ISqlList>;
 
   constructor(
 		private docService: DocService,
-		private docListService: SqlListService
 	) { }
 
   ngOnInit() {
-		this.docListService.InitList(
-			this.docListTable,
-			this.docListIDName,
-			this.docListColumn,
-			this.docListPosition);
-		this.docLists = this.docListService.GetList();
 		this.docService.dsSetDocListID(this.docListID);
-		//this.docService.dsSetDocListID(this.docLists[0].idx);
   }
 
-	docListChange() {
-		this.docService.dsSetDocListID(this.docListID);
+	docThemeChange(themeID: number) {
+		console.log("DOC THEME CHANGE: ", themeID );
+	}
+
+	docListChange(listID: number) {
+		//this.docService.dsSetDocListID(this.docListID);
+		this.docService.dsSetDocListID(listID);
 	}
 
 	editModeChange() {

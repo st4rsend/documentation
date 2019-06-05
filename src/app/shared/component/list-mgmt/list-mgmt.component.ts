@@ -6,7 +6,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-list-mgmt',
   templateUrl: './list-mgmt.component.html',
-  styleUrls: ['./list-mgmt.component.scss']
+  styleUrls: ['./list-mgmt.component.scss'],
+	providers: [ SqlListService ],
 })
 export class ListMgmtComponent implements OnInit {
 

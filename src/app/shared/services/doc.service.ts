@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject ,  Subscription } from 'rxjs';
 import { WebSocketService, wsMessage } from './websocket.service';
-import { Doc, DocList, DocType } from '../model/doc';
+import { Doc } from '../model/doc';
 
 @Injectable()
 

@@ -1,14 +1,22 @@
 <table width='800px'>
 	<tr><td witdh='auto'>  
-		Select doc: 
-		<select 
-			name="docListID"
-			[(ngModel)]="docListID"
-			(change)="docListChange()">
-			<option *ngFor="let docList of docLists" [value]="docList.idx">
-				{{docList.value}}
-			</option>
-		</select>
+		Select Theme: 
+		<app-list-select
+			[listTable]="docThemeTable"
+			[listIDName]="docThemeIDName"
+			[listColumn]="docThemeColumn"
+			[listPosition]="docThemePosition"
+			(listChangeEvent)='docThemeChange($event)'>
+		</app-list-select>
+
+		<BR>Select doc: 
+		<app-list-select
+			[listTable]="docListTable"
+			[listIDName]="docListIDName"
+			[listColumn]="docListColumn"
+			[listPosition]="docListPosition"
+			(listChangeEvent)='docListChange($event)'>
+		</app-list-select>
 	</td><td>
 	View mode:
 		<select

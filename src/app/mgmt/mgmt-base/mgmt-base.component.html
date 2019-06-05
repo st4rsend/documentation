@@ -5,6 +5,16 @@
 		[index]="docListIDName"
 		[column]="docListColumn"
 		[position]="docListPosition"
-		(listCloseEvent)='listCloseEvent($event)'>
+		(listCloseEvent)='docListCloseEvent($event)'>
+	</app-list-mgmt>
+</div>
+<button (click)="docThemeListEdit()">Edit doc Theme list</button>
+<div *ngIf="docThemeListEditMode">
+	<app-list-mgmt
+		[table]="docThemeListTable"
+		[index]="docThemeListIDName"
+		[column]="docThemeListColumn"
+		[position]="docThemeListPosition"
+		(listCloseEvent)='docThemeListCloseEvent($event)'>
 	</app-list-mgmt>
 </div>

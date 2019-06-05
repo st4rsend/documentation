@@ -1,0 +1,8 @@
+<select
+	name="listID"
+	[(ngModel)]="listID"
+	(change)="listChange()">
+	<option *ngFor="let item of list" [value]="item.idx">
+		{{item.value}}
+	</option>
+</select>
