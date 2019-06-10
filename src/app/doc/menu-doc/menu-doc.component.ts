@@ -1,7 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { DocService } from '../../shared/services/doc.service';
-import { DocList } from  '../../shared/model/doc';
-//import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
 
 @Component({
   selector: 'app-menu-doc',
@@ -21,14 +19,12 @@ export class MenuDocComponent implements OnInit {
 	public docListIDName: string = 'ID';
 	public docListColumn = 'description';
 	public docListPosition = 'position';
-//	public docLists: Array<ISqlList>;
 
 	public docThemeEditMode: boolean = false;
 	public docThemeTable: string = 'documentation_theme';
 	public docThemeIDName: string = 'ID';
 	public docThemeColumn = 'description';
 	public docThemePosition = 'position';
-//	public docThemes: Array<ISqlList>;
 
   constructor(
 		private docService: DocService,
@@ -43,7 +39,6 @@ export class MenuDocComponent implements OnInit {
 	}
 
 	docListChange(listID: number) {
-		//this.docService.dsSetDocListID(this.docListID);
 		this.docService.dsSetDocListID(listID);
 	}
 
