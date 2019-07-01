@@ -1,12 +1,17 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DocService } from '../../shared/services/doc.service';
+
+import { ListSelectComponent } from '../../shared/component/list-select/list-select.component';
 
 @Component({
   selector: 'app-menu-doc',
   templateUrl: './menu-doc.component.html',
   styleUrls: ['./menu-doc.component.css'],
+	//directives: [ListSelect]
 })
 export class MenuDocComponent implements OnInit {
+
+	@ViewChild('docList', {static: true}) docList: ListSelectComponent;
 
 	@Output() editModeEvent = new EventEmitter<boolean>();
 	public docEditMode: boolean = false;
@@ -19,6 +24,7 @@ export class MenuDocComponent implements OnInit {
 	public docListIDName: string = 'ID';
 	public docListColumn = 'description';
 	public docListPosition = 'position';
+	public docListFilter = 'themeID';
 
 	public docThemeEditMode: boolean = false;
 	public docThemeTable: string = 'documentation_theme';
@@ -35,7 +41,7 @@ export class MenuDocComponent implements OnInit {
   }
 
 	docThemeChange(themeID: number) {
-		console.log("DOC THEME CHANGE: ", themeID );
+		this.docList.SetFilter(this.docListFilter, themeID.toString());
 	}
 
 	docListChange(listID: number) {

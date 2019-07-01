@@ -30,6 +30,7 @@ export class DocService {
 				this.dsSQLQueryDocs();
 			});
 	}
+
 	public setChannelID(channelID: number){
 		console.log("Set channelID: ", channelID);
 		this.channelID = this.baseChannelID + channelID;

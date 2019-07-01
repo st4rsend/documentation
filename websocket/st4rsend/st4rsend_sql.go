@@ -19,6 +19,9 @@ func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "GET_LIST" {
 		err = WsSrvGetSqlList(wsContext, message)
 	}
+	if message.Payload.Command == "GET_LIST_FLT" {
+		err = WsSrvGetSqlListFlt(wsContext, message)
+	}
 	if message.Payload.Command == "INSERT_LIST" {
 		err = WsSrvInsertSqlList(wsContext, message)
 	}
@@ -119,7 +122,44 @@ func WsSrvGetSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	sqlText = "select " + idx_name + "," + column_name + "," + position_name + " from " + table_name + " order by "	+ position_name
 
 	rows, err := wsContext.Db.QueryContext(localContext, sqlText)
-	//rows, err := wsContext.Db.QueryContext(localContext, sqlText, idx, column, sort, sort)
+	CheckErr(err)
+	defer rows.Close()
+
+	response, err = rowsToWsSQLSelect(rows)
+
+	message.Payload.Command = "RESP_SQL_LIST"
+	for _, line := range response.Data {
+		message.Payload.Data = line
+		err = sendMessage(wsContext, &message.Payload)
+		CheckErr(err)
+	}
+	message.Payload.Command = "EOF"
+	message.Payload.Data = nil
+	err = sendMessage(wsContext, &message.Payload)
+	CheckErr(err)
+	return err
+}
+
+func WsSrvGetSqlListFlt(wsContext *WsContext, message *WsMessage) (err error){
+	var response *WsSQLSelect
+	err = nil
+	var sqlText string
+	var table_name = protectSQL(message.Payload.Data[0])
+	var idx_name = protectSQL(message.Payload.Data[1])
+	var column_name = protectSQL(message.Payload.Data[2])
+	var position_name = protectSQL(message.Payload.Data[3])
+	var flt_idx_name = protectSQL(message.Payload.Data[4])
+	var flt_idx_value = protectSQL(message.Payload.Data[5])
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	sqlText = "select " + idx_name + "," + column_name + "," + position_name +
+		" from " + table_name + " where " + flt_idx_name + "=" + flt_idx_value +
+		" order by "	+ position_name
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("ListFK SQLTEXT: %v\n", sqlText)
+	}
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText)
 	CheckErr(err)
 	defer rows.Close()
 

@@ -27,6 +27,20 @@ export class ListSelectComponent implements OnInit {
 		this.list = this.sqlListService.GetList();
   }
 
+	SetFilter(column: string, value: string){
+		this.sqlListService.SetFilter(column, value);
+		this.sqlListService.InitList(
+			this.listTable,
+			this.listIDName,
+			this.listColumn,
+			this.listPosition);
+		this.list = this.sqlListService.GetList();
+		
+	}
+	RemoveFilter(){
+		this.sqlListService.RemoveFilter();
+	}
+
 	listChange() {
 		this.listChangeEvent.emit(this.listID);
 	}
