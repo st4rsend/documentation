@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Subject ,  Subscription } from 'rxjs';
 import { SqlListService, ISqlList } from '../../services/sql-list.service';
 
 @Component({
@@ -14,27 +15,25 @@ export class ListSelectComponent implements OnInit {
 	@Input() listColumn: string;
 	@Input() listPosition: string;
 	public list: Array<ISqlList>;
-	public listID: number = 1;
+	public listID: number;
+	public isReady$ = new Subject<boolean>();
 
   constructor( private sqlListService: SqlListService) { }
 
   ngOnInit() {
-		this.sqlListService.InitList(
-			this.listTable,
-			this.listIDName,
-			this.listColumn,
-			this.listPosition);
-		this.list = this.sqlListService.GetList();
+		this.sqlListService.isReady$.subscribe(
+			ready => {
+				if (ready && (this.list[0] != undefined)) {
+					this.listID = this.list[0].idx;
+				}
+				this.isReady$.next(ready);
+		});
+		this.initList();
   }
 
 	SetFilter(column: string, value: string){
 		this.sqlListService.SetFilter(column, value);
-		this.sqlListService.InitList(
-			this.listTable,
-			this.listIDName,
-			this.listColumn,
-			this.listPosition);
-		this.list = this.sqlListService.GetList();
+		this.initList();
 		
 	}
 	RemoveFilter(){
@@ -45,4 +44,12 @@ export class ListSelectComponent implements OnInit {
 		this.listChangeEvent.emit(this.listID);
 	}
 
+	initList() {
+		this.sqlListService.InitList(
+			this.listTable,
+			this.listIDName,
+			this.listColumn,
+			this.listPosition);
+		this.list = this.sqlListService.GetList();
+	}
 }

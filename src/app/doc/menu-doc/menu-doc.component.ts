@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DocService } from '../../shared/services/doc.service';
+import { Subscription } from 'rxjs';
 
 import { ListSelectComponent } from '../../shared/component/list-select/list-select.component';
 
@@ -7,7 +8,6 @@ import { ListSelectComponent } from '../../shared/component/list-select/list-sel
   selector: 'app-menu-doc',
   templateUrl: './menu-doc.component.html',
   styleUrls: ['./menu-doc.component.css'],
-	//directives: [ListSelect]
 })
 export class MenuDocComponent implements OnInit {
 
@@ -15,7 +15,6 @@ export class MenuDocComponent implements OnInit {
 
 	@Output() editModeEvent = new EventEmitter<boolean>();
 	public docEditMode: boolean = false;
-	public docListID: number = 1;
 	@Output() viewModeEvent = new EventEmitter<string>();
 	public viewMode: string = 'normal';
 
@@ -37,7 +36,13 @@ export class MenuDocComponent implements OnInit {
 	) { }
 
   ngOnInit() {
-		this.docService.dsSetDocListID(this.docListID);
+		this.docList.isReady$.subscribe(
+			ready => {
+				if ( ready ) {
+					this.docList.listID = this.docList.list[0].idx;
+					this.docService.dsSetDocListID(this.docList.listID);
+				}
+			});
   }
 
 	docThemeChange(themeID: number) {
