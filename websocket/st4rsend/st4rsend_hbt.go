@@ -35,6 +35,13 @@ func StartHBTSvc(wsContext *WsContext) (err error){
 			CheckErr(err)
 		}
 	}()
+	var message WsMessage
+	message.Payload.ChannelID = 0
+	message.Payload.Domain = "HBT"
+	message.Payload.Command = "HBTINF"
+	message.Payload.Data = nil
+	err = sendMessage(wsContext, &message.Payload)
+	CheckErr(err)
 	return err
 }
 

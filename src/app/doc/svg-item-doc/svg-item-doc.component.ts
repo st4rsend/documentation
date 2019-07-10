@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Doc } from '../../shared/model/doc';
 
@@ -13,6 +13,7 @@ export class SvgItemDocComponent implements OnInit {
 	@Input() itemDoc: Doc;
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
+	@Output() changedEvent = new EventEmitter<boolean>();
 
 	private editing: boolean = false;
 
@@ -30,5 +31,6 @@ export class SvgItemDocComponent implements OnInit {
 
 	itemDocCloseEvent(value: boolean) {
 		this.editing = false;
+		this.changedEvent.emit(true);
 	}
 }

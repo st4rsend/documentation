@@ -37,4 +37,7 @@ export class DynDocComponent implements OnInit {
 	private itemDocCloseEvent(value: boolean) {
 		this.creating = false;
 	}
+	toBeRefreshed(evt: boolean) {
+		this.docService.dsSQLQueryDocs();
+	}
 }

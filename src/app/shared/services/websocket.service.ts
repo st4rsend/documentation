@@ -28,16 +28,17 @@ export class WebSocketService {
 
   constructor() { }
 
-	private wsConnected$ = new Subject<any>();
-	public webSocket: WebSocket;
+	private isConnected: boolean = false;
+	private wsConnected$ = new Subject<boolean>();
 	private currentSeq: number = 1;
 
-	private socket: WebSocketSubject<any>;
+	private webSocketSubject: WebSocketSubject<wsMessage>;
 	private genericSubscription: Subscription;
 
 	private hbtInterval: number = 3000;
-	private hbtHoldTime: number = 9000;
 	private hbtTicker: number;
+	private hbtHoldTime: number = 9000;
+	private hbtHoldTicker: number;
 
 	public wsPrepareMessage(channelid: number, domain: string, command: string, data: string[]): wsMessage {
 		let message: wsMessage = {
@@ -58,21 +59,31 @@ export class WebSocketService {
 	}
 
 	public wsConnect(url: string){
-		this.socket = webSocket(url);
-		this.genericSubscription = this.socket.subscribe((msg) => {
-			this.genericParse(msg);
-		});
-		this.wsConnected$.next(true);
-		this.hbtTicker = setInterval(() => {
-			this.wsSubject().next(this.wsPrepareMessage(0,"HBT","HBTINF",[]));
-		},this.hbtInterval);
+		this.webSocketSubject = webSocket(url);
+		this.genericSubscription = this.webSocketSubject.subscribe(
+			(msg) => this.genericParse(msg),
+			(err) => this.socketError(err),
+			() => this.wsConnected$.next(false)
+		);
+		this.hbtTicker = setInterval(
+			() => {
+				this.wsSubject().next(this.wsPrepareMessage(0,"HBT","HBTINF",[]));
+			},this.hbtInterval
+		);
+		this.hbtHoldTicker = setTimeout(
+			() => {
+				this.hbtHoldFail();
+			}, this.hbtHoldTime
+		);
 	}
 
 	public wsDisconnect(){
 		this.currentSeq = 1;
 		clearInterval(this.hbtTicker);
+		clearTimeout(this.hbtHoldTicker);
 		this.genericSubscription.unsubscribe();
-		this.socket.complete();
+		this.webSocketSubject.complete();
+		this.isConnected = false;
 		this.wsConnected$.next(false);
 	}
 
@@ -81,13 +92,33 @@ export class WebSocketService {
 	}
 
 	public wsSubject() : Subject<any> {
-		return this.socket;	
+		return this.webSocketSubject;	
 		
 	}
 
 	public genericParse(msg: wsMessage){
-		if  ((+msg.payload.channelid === 0) && (msg.payload.domain === "HBT")) {
-//			console.log("received heartbeat");
+		if(!this.isConnected) {
+			this.isConnected =  true;
+			this.wsConnected$.next(true);
 		}
+		if  ((+msg.payload.channelid === 0) && (msg.payload.domain === "HBT")) {
+			clearTimeout(this.hbtHoldTicker);	
+			this.hbtHoldTicker = setTimeout(() => {
+				this.hbtHoldFail();
+			}, this.hbtHoldTime);
+		}
+	}
+
+	private socketError(err) {
+		console.log("Socket Error: ", err);
+		clearTimeout(this.hbtHoldTicker);	
+		this.isConnected = false;
+		this.wsConnected$.next(false);
+	}
+
+	private hbtHoldFail() {
+		console.log("ALERT HBT HOLDTIME EXPIRED !!!");
+		clearTimeout(this.hbtHoldTicker);	
+		this.wsDisconnect();
 	}
 }

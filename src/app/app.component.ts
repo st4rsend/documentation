@@ -23,10 +23,16 @@ export class AppComponent implements OnInit {
 
 	ngOnInit() {
 		this.isConnectedSub = this.webSocket.connected()
-			.subscribe( x => { this.isConnected = x });
+			.subscribe( value => { this.connectStatusChange(value) });
 		this.router.navigate(['']);
 	}
-	toAppComponent(msg: string) {
-//		console.log("AppComponent received msg: ",msg);
+	connectStatusChange(flag: boolean) {
+		this.isConnected = flag;
+		if (this.isConnected == false) {
+			this.router.navigate(['']);
+		}
+	}
+	fromServerComEvent(msg: string) {
+		console.log("AppComponent received msg: ",msg);
 	}
 }

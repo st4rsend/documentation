@@ -44,7 +44,7 @@ export class ServerComComponent {
 		});
 
 		this.scWebsocket.wsConnect(this.scAddress);
-		this.toAppComponent("Message from ServerCom component");
+		//this.toAppComponent("Message from ServerCom component");
 	}
 
 	public scDisconnect() {
@@ -69,7 +69,6 @@ export class ServerComComponent {
 
 
 	public scVerbosity() {
-		console.log(this.scVerbosityFlag);
 		this.scMessages = [];
 		this.scMessages.push(JSON.stringify(this.scVerbosityFlag));
 		this.scSubject = this.scWebsocket.wsSubject();

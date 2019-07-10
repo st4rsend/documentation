@@ -52,6 +52,10 @@ export class MenuDocComponent implements OnInit {
 	docListChange(listID: number) {
 		this.docService.dsSetDocListID(listID);
 	}
+	docRefresh() {
+		this.docService.dsSetDocListID(this.docList.listID);
+	}	
+
 
 	editModeChange() {
 		this.editModeEvent.emit(this.docEditMode);

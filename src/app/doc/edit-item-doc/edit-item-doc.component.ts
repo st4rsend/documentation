@@ -47,6 +47,7 @@ export class EditItemDocComponent implements OnInit {
 		} else {
 			this.docService.dsUpdateDoc(this.doc);
 		}
+		this.cancel();
 	} 
 	docTypeChange() {
 		this.doc.typeID = this.docTypeID;

@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// We don't intend to declare any component as part of the routing module so:
-//import { CommonModule } from '@angular/common';
 import { DocBaseComponent } from './doc/doc-base/doc-base.component';
 import { TodoBaseComponent } from './todo/todo-base/todo-base.component';
 import { MgmtBaseComponent } from './mgmt/mgmt-base/mgmt-base.component';
