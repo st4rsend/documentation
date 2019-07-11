@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
 
-import { WebSocketService, wsMessage } from '../shared/services/websocket.service';
+import { WebSocketService, wsMessage } from '../../shared/services/websocket.service';
 
 @Component({
 	selector: 'app-server-com',

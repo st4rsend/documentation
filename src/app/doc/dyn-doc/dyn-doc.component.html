@@ -27,6 +27,12 @@
 				[viewMode]=viewMode
 				(changedEvent)='toBeRefreshed($event)'>
 			</app-url-svg-item-doc>
+			<app-list-item-doc *ngIf="item.typeValue=='LIST'"
+				[itemDoc]=item
+				[editMode]=editMode
+				[viewMode]=viewMode
+				(changedEvent)='toBeRefreshed($event)'>
+			</app-list-item-doc>
 		</div>
 	</ng-container>
 </div>
@@ -47,5 +53,11 @@
 			[editMode]=editMode
 			[viewMode]=viewMode>
 		</app-url-svg-item-doc>
+		<app-list-item-doc *ngIf="item.typeValue=='LIST'"
+			[itemDoc]=item
+			[editMode]=editMode
+			[viewMode]=viewMode
+			(activateListEvent)='activateList($event)'>
+		</app-list-item-doc>
 	</ng-container>
 </ng-template>

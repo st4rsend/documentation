@@ -18,7 +18,6 @@ export class MenuDocComponent implements OnInit {
 	@Output() viewModeEvent = new EventEmitter<string>();
 	public viewMode: string = 'normal';
 
-	public docListEditMode: boolean = false;
 	public docListTable: string = 'documentation_list';
 	public docListIDName: string = 'ID';
 	public docListColumn = 'description';
@@ -57,10 +56,10 @@ export class MenuDocComponent implements OnInit {
 	docListChange(listID: number) {
 		this.docService.dsSetDocListID(listID);
 	}
+
 	docRefresh() {
 		this.docService.dsSetDocListID(this.docList.listID);
 	}	
-
 
 	editModeChange() {
 		this.editModeEvent.emit(this.docEditMode);
@@ -68,13 +67,5 @@ export class MenuDocComponent implements OnInit {
 
 	viewModeChange() {
 		this.viewModeEvent.emit(this.viewMode);
-	}
-
-	docListEdit() {
-		this.docListEditMode = !this.docListEditMode;
-	}
-
-	listCloseEvent(value: boolean) {
-		this.docListEditMode = value;
 	}
 }

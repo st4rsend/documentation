@@ -40,4 +40,7 @@ export class DynDocComponent implements OnInit {
 	toBeRefreshed(evt: boolean) {
 		this.docService.dsSQLQueryDocs();
 	}
+	activateList(evt: number) {
+		this.docService.dsSetDocListID(evt);
+	}
 }

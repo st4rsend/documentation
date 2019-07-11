@@ -9,12 +9,7 @@
 			[hasVoid]="true"
 			(listChangeEvent)='docThemeChange($event)'>
 		</app-list-select>
-
-	</td><td width='auto'>
-	</td><td width='250px'>
-Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeChange()'>
-	</td></tr>
-	<tr><td>
+	</td><td align='center' width='auto'>
 		Select Doc
 		<app-list-select #docList
 			[listTable]="docListTable"
@@ -23,7 +18,13 @@ Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeCha
 			[listPosition]="docListPosition"
 			(listChangeEvent)='docListChange($event)'>
 		</app-list-select>
-	</td><td></td><td>
+	</td><td align='right' width='250px'>
+Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeChange()'>
+	</td></tr>
+	<tr><td>
+		<button (click)="docRefresh()">Refresh</button>
+	</td><td>
+	</td><td align='right'>
 	View mode:
 		<select
 			name="docViewMode"
@@ -34,22 +35,4 @@ Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeCha
 			<option value="full">Desc. and item</option>
 		</select>
 	</td></tr>
-	<ng-container *ngIf="docEditMode">
-	<tr><td>
-<button (click)="docListEdit()">Edit doc list</button>
-	</td><td>
-	</td><td>
-			<button (click)="docRefresh()">Refresh</button>
-		</td>
-	</tr>
-	</ng-container>
 </table>
-<div *ngIf="docListEditMode">
-	<app-list-mgmt
-		[table]="docListTable"
-		[index]="docListIDName"
-		[column]="docListColumn"
-		[position]="docListPosition"
-		(listCloseEvent)='listCloseEvent($event)'>
-	</app-list-mgmt>
-</div>
