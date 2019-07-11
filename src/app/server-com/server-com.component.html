@@ -1,31 +1,34 @@
 <table class="serverCom" ><tr>
 	<td width='80px' >
-	<button arial-label="Connect to server"	(click)="scConnect()"
-		 mat-icon-button color="primary">Connect</button>
+	<ng-container *ngIf="!scIsConnected">
+		<button arial-label="Connect to server"	(click)="scConnect()"
+			 mat-icon-button color="primary">Connect</button>
+	</ng-container>
+	<ng-container *ngIf="scIsConnected">
+		<button arial-label="Disconnect" (click)="scDisconnect()"
+			mat-icon-button color="warn">Disconnect</button>
+	</ng-container>
 	</td><td>
 		Server verbosity
 		<select 
 			[(ngModel)]="scVerbosityFlag" 
 			(change)="scVerbosity()">
-			<option [ngValue]="1">1</option>
-			<option [ngValue]="2">2</option>
-			<option [ngValue]="3">3</option>
-			<option [ngValue]="4" selected>4</option>
-			<option [ngValue]="5">5</option>
-			<option [ngValue]="6">6</option>
-			<option [ngValue]="7">7</option>
+			<option [value]="1">1</option>
+			<option [value]="2">2</option>
+			<option [value]="3">3</option>
+			<option [value]="4">4</option>
+			<option [value]="5">5</option>
+			<option [value]="6">6</option>
+			<option [value]="7">7</option>
 		</select>
 	</td><td>
 		Connected: {{scIsConnected}}
 	</td>
 </tr><tr>
 	<td>
-	<button arial-label="Disconnect" (click)="scDisconnect()"
-		mat-icon-button color="warn">Disconnect</button>
 	</td><td>	
-		Debug mode <input [(ngModel)]="scDebugFlag" type="checkbox" arial-label="Debug" >
 	</td><td>
-		heartbeat: {{heartbeat}}
+		Debug mode <input [(ngModel)]="scDebugFlag" type="checkbox" arial-label="Debug" >
 	</td>
 </tr></table>
 <BR>

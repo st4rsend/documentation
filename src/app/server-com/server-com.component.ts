@@ -29,13 +29,14 @@ export class ServerComComponent {
 
 	private scSubject: Subject<any>;
 	private scMessages: Array<string>;
-	public scVerbosityFlag: string = "4";
+	public scVerbosityFlag: string;
 	public scDebugFlag: boolean = false;
 
 	public heartbeat: number;
 
 	constructor(private scWebsocket: WebSocketService) {
 		this.scMessages = [];
+		this.scVerbosityFlag = "4";
 	}
 
 	public scConnect() {
@@ -70,7 +71,7 @@ export class ServerComComponent {
 
 	public scVerbosity() {
 		this.scMessages = [];
-		this.scMessages.push(JSON.stringify(this.scVerbosityFlag));
+		this.scMessages.push(JSON.stringify(parseInt(this.scVerbosityFlag)));
 		this.scSubject = this.scWebsocket.wsSubject();
 		let message =  this.scWebsocket.wsPrepareMessage(0,"CMD","VERBOSITY",this.scMessages);
 		if (this.scSubject != null) {

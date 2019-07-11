@@ -14,6 +14,7 @@ export class ListSelectComponent implements OnInit {
 	@Input() listIDName: string;
 	@Input() listColumn: string;
 	@Input() listPosition: string;
+	@Input() hasVoid: boolean;
 	public list: Array<ISqlList>;
 	public listID: number;
 	public isReady$ = new Subject<boolean>();
@@ -38,6 +39,7 @@ export class ListSelectComponent implements OnInit {
 	}
 	RemoveFilter(){
 		this.sqlListService.RemoveFilter();
+		this.initList();
 	}
 
 	listChange() {
@@ -51,5 +53,12 @@ export class ListSelectComponent implements OnInit {
 			this.listColumn,
 			this.listPosition);
 		this.list = this.sqlListService.GetList();
+		if (this.hasVoid) {
+			this.list.unshift({
+				idx: 0,
+				value: "--- select ---",
+				position: 0,
+			});
+		}
 	}
 }

@@ -1,15 +1,21 @@
-<table width='800px'>
-	<tr><td witdh='auto'>  
+<table width='100%' border='1px'>
+	<tr><td width='200px'>  
 		Select Theme: 
 		<app-list-select
 			[listTable]="docThemeTable"
 			[listIDName]="docThemeIDName"
 			[listColumn]="docThemeColumn"
 			[listPosition]="docThemePosition"
+			[hasVoid]="true"
 			(listChangeEvent)='docThemeChange($event)'>
 		</app-list-select>
 
-		<BR>Select doc: 
+	</td><td width='auto'>
+	</td><td width='250px'>
+Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeChange()'>
+	</td></tr>
+	<tr><td>
+		Select Doc
 		<app-list-select #docList
 			[listTable]="docListTable"
 			[listIDName]="docListIDName"
@@ -17,7 +23,7 @@
 			[listPosition]="docListPosition"
 			(listChangeEvent)='docListChange($event)'>
 		</app-list-select>
-	</td><td>
+	</td><td></td><td>
 	View mode:
 		<select
 			name="docViewMode"
@@ -27,8 +33,6 @@
 			<option value="desc">Description only</option>
 			<option value="full">Desc. and item</option>
 		</select>
-	</td><td width='150px'>
-Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeChange()'>
 	</td></tr>
 	<ng-container *ngIf="docEditMode">
 	<tr><td>
