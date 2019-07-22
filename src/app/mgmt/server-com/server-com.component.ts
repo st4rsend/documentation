@@ -1,4 +1,4 @@
-import {scan} from 'rxjs/operators';
+//import {scan} from 'rxjs/operators';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
@@ -20,6 +20,8 @@ export class ServerComComponent {
 	private scSubConnected: Subscription;
 	private scSubMessages: Subscription;
 	public scIsConnected = false;
+	public scIsLogged = false;
+	public scDisplayLogin = false;
 
 	private scAddress: any = 'wss://dev.st4rsend.net/ws';
 
@@ -77,5 +79,12 @@ export class ServerComComponent {
 		if (this.scSubject != null) {
 			this.scSubject.next(message);
 		}
+	}
+
+	scLogin() {
+		this.scDisplayLogin = !this.scDisplayLogin;
+	}
+	scLogout() {
+		console.log("LOGOUT");
 	}
 }
