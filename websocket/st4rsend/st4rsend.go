@@ -83,12 +83,8 @@ type WsContext struct {
 	HbtInterval int64
 	Sequence int64
 	Verbose int
-	SecSessionID int64
-	SecToken int64
 	SecUserID int64
-	SecGroupID int64
-	SecUser string
-	SecGroup string
+	SecToken int64
 }
 
 type WsSQLSelect struct{
