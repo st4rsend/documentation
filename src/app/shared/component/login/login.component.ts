@@ -3,10 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
+import { AuthenticationService } from '../../services/authentication.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
 
@@ -16,13 +18,19 @@ export class LoginComponent implements OnInit {
 	returnUrl: string;
 
   constructor(
-		private formBuilder: FormBuilder
+		private formBuilder: FormBuilder,
+		private authService: AuthenticationService
 	) { }
 
   ngOnInit() {
  		this.loginForm = this.formBuilder.group({
 			username: ['', Validators.required],
 			password: ['', Validators.required]
+		});
+		this.authService.connected().pipe(first()).subscribe(x => {
+			console.log("Connected value: ", x);
+			
+			this.loading = false;
 		});
 	}
 
@@ -38,19 +46,8 @@ export class LoginComponent implements OnInit {
 
 		this.loading = true;
 		console.log("Access auth service");
-/*
-		this.authService.login(
+		this.authService.loginChallenge(
 			this.formControls.username.value,
-			this.formControls.password.value)
-		.pipe(first())
-		.subscribe(
-			data => {
-				this.router.navigate([this.returnUrl]);
-			},
-			error => {
-				console.log("ERROR: ", error);
-			}
-		);
-*/
+			this.formControls.password.value);
 	}
 }

@@ -83,6 +83,12 @@ type WsContext struct {
 	HbtInterval int64
 	Sequence int64
 	Verbose int
+	SecSessionID int64
+	SecToken int64
+	SecUserID int64
+	SecGroupID int64
+	SecUser string
+	SecGroup string
 }
 
 type WsSQLSelect struct{
@@ -198,6 +204,13 @@ func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	}
 	if message.Payload.Domain == "INF" {
 		err = WsSrvCMDParseMsg(wsContext, message)
+		CheckErr(err)
+		if err != nil {
+			return err
+		}
+	}
+	if message.Payload.Domain == "SEC" {
+		err = WsSrvSecParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
 			return err
