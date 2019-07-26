@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { WebSocketService, wsMessage } from './websocket.service';
+import { GlobalService } from './global.service';
 
 @Injectable({
   providedIn: 'root'

@@ -5,6 +5,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	//"database/sql"
 	"context"
+	"strconv"
 )
 
 func HashPassword(password string) (string, error) {
@@ -26,6 +27,9 @@ func WsSrvSecParseMsg(wsContext *WsContext, message *WsMessage) (err error) {
 	}
 	if message.Payload.Command == "GET_TOKEN" {
 		err = WsSrvSecGetToken(wsContext, message)
+	}
+	if message.Payload.Command == "USR_INFO" {
+		err = WsSrvSecGetUserInfo(wsContext, message)
 	}
 	CheckErr(err)
 	return err
@@ -114,7 +118,45 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 		CheckErr(err)
 	}
 	fmt.Printf("GetSecInfo\n")
-	fmt.Print("User ID: %d, name: %s %s\n", UID, firstName, lastName)
+	fmt.Printf("User ID: %s, name: %s %s\n", UID, firstName, lastName)
+
+	message.Payload.Command = "RESP_USER_INFO"
+	message.Payload.Data = nil
+	message.Payload.Data = make([]string,3)
+	message.Payload.Data[0] = UID
+	message.Payload.Data[1] = firstName
+	message.Payload.Data[2] = lastName
+	err = sendMessage(wsContext, &message.Payload)
+	CheckErr(err)
+
+
+	sqlText = "select G.ID, G.description, G.position from users U left join usergroup UG on U.ID=UG.userID left join groups G on UG.groupID=G.ID where U.ID=?"
+	localContext = context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	rowsGroup, err := wsContext.Db.QueryContext(localContext, sqlText, UID)
+	CheckErr(err)
+	defer rowsGroup.Close()
+	var groupID int64
+	var groupDescription string
+	var groupPosition int64
+	for rowsGroup.Next() {
+		err = rowsGroup.Scan(&groupID, &groupDescription, &groupPosition)
+		CheckErr(err)
+		fmt.Printf("Member of group ID: %d, groupName: %s, position %d\n", groupID, groupDescription, groupPosition)
+		message.Payload.Command = "RESP_USER_INFO"
+		message.Payload.Data[0] = strconv.FormatInt(groupID,10)
+		message.Payload.Data[1] = groupDescription
+		message.Payload.Data[2] = strconv.FormatInt(groupPosition,10)
+		err = sendMessage(wsContext, &message.Payload)
+		CheckErr(err)
 	//return userinfo then group user is part of 
+	}
+
+	message.Payload.Command = "EOF"
+	message.Payload.Data = nil
+	err = sendMessage(wsContext, &message.Payload)
 	return err
 }
+
+

@@ -87,4 +87,15 @@ export class ServerComComponent {
 	scLogout() {
 		console.log("LOGOUT");
 	}
+
+	public scGetUserInfo() {
+		this.scMessages = [];
+		this.scMessages.push(JSON.stringify(parseInt("5")));
+		this.scSubject = this.scWebsocket.wsSubject();
+		let message =  this.scWebsocket.wsPrepareMessage(0,"SEC","USR_INFO",this.scMessages);
+		if (this.scSubject != null) {
+			this.scSubject.next(message);
+		}
+
+	}
 }
