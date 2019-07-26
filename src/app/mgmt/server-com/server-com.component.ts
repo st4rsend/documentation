@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
 
 import { WebSocketService, wsMessage } from '../../shared/services/websocket.service';
+import { AuthenticationService } from '../../shared/services/authentication.service';
 
 @Component({
 	selector: 'app-server-com',
@@ -23,7 +24,7 @@ export class ServerComComponent {
 	public scIsLogged = false;
 	public scDisplayLogin = false;
 
-	private scAddress: any = 'wss://dev.st4rsend.net/ws';
+	private scAddress: any = 'wss://st4rsend.net/ws';
 
 	private scDomain: string = 'SQL';
 	private scCommand: string = 'REQ_SELECT';
@@ -36,7 +37,9 @@ export class ServerComComponent {
 
 	public heartbeat: number;
 
-	constructor(private scWebsocket: WebSocketService) {
+	constructor(
+		private scWebsocket: WebSocketService,
+		private authService: AuthenticationService) {
 		this.scMessages = [];
 		this.scVerbosityFlag = "4";
 	}
@@ -89,13 +92,6 @@ export class ServerComComponent {
 	}
 
 	public scGetUserInfo() {
-		this.scMessages = [];
-		this.scMessages.push(JSON.stringify(parseInt("5")));
-		this.scSubject = this.scWebsocket.wsSubject();
-		let message =  this.scWebsocket.wsPrepareMessage(0,"SEC","USR_INFO",this.scMessages);
-		if (this.scSubject != null) {
-			this.scSubject.next(message);
-		}
-
+		this.authService.getUserInfo(5);
 	}
 }

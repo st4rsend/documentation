@@ -67,6 +67,7 @@ func WsSrvSecSetUserPassword(wsContext *WsContext, message *WsMessage) (err erro
 
 func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
+	wsContext.SecUserID = 0
 	var user = message.Payload.Data[0]
 	var password = message.Payload.Data[1]
 	var hash string
@@ -84,14 +85,27 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 		err = rows.Scan(&UID, &firstName, &lastName, &hash)
 		CheckErr(err)
 	}
+	message.Payload.Command = "RESP_LOGIN"
+	message.Payload.Data = nil
+	message.Payload.Data = make([]string,1)
 	if CheckPasswordHash(password, hash) {
-		fmt.Printf("LOGIN SUCCESS UID: %d, firstname: %s, lastname: %s\n",
-		 UID, firstName, lastName)
+		if ( wsContext.Verbose > 5 ) {
+			fmt.Printf("LOGIN SUCCESS UID: %d, firstname: %s, lastname: %s\n",
+				UID, firstName, lastName)
+		}
 		wsContext.SecUserID = UID
+		message.Payload.Data[0] = strconv.FormatInt(UID, 10)
 	} else {
 		wsContext.SecUserID = 0
-		fmt.Printf("LOGIN FAILED\n")
+		if ( wsContext.Verbose > 5 ) {
+			fmt.Printf("LOGIN FAILED\n")
+		}
+		message.Payload.Data[0] = "0"
 	}
+	err = sendMessage(wsContext, &message.Payload)
+	message.Payload.Command = "EOF"
+	message.Payload.Data = nil
+	err = sendMessage(wsContext, &message.Payload)
 	return err
 }
 
@@ -103,6 +117,9 @@ func WsSrvSecGetToken(wsContext *WsContext, message *WsMessage) (err error) {
 }
 func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
+	if wsContext.SecUserID == 0 {
+		return err
+	}
 	var UID = message.Payload.Data[0]
 	var firstName string
 	var lastName string
@@ -117,10 +134,11 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 		err = rows.Scan(&UID, &firstName, &lastName)
 		CheckErr(err)
 	}
-	fmt.Printf("GetSecInfo\n")
-	fmt.Printf("User ID: %s, name: %s %s\n", UID, firstName, lastName)
-
-	message.Payload.Command = "RESP_USER_INFO"
+	if ( wsContext.Verbose > 5 ) {
+		fmt.Printf("GetSecInfo\n")
+		fmt.Printf("User ID: %s, name: %s %s\n", UID, firstName, lastName)
+	}
+	message.Payload.Command = "RESP_USR_INF"
 	message.Payload.Data = nil
 	message.Payload.Data = make([]string,3)
 	message.Payload.Data[0] = UID
@@ -140,11 +158,13 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 	var groupID int64
 	var groupDescription string
 	var groupPosition int64
+	message.Payload.Command = "RESP_UG_INF"
 	for rowsGroup.Next() {
 		err = rowsGroup.Scan(&groupID, &groupDescription, &groupPosition)
 		CheckErr(err)
-		fmt.Printf("Member of group ID: %d, groupName: %s, position %d\n", groupID, groupDescription, groupPosition)
-		message.Payload.Command = "RESP_USER_INFO"
+		if ( wsContext.Verbose > 5 ) {
+			fmt.Printf("Member of group ID: %d, groupName: %s, position %d\n", groupID, groupDescription, groupPosition)
+		}
 		message.Payload.Data[0] = strconv.FormatInt(groupID,10)
 		message.Payload.Data[1] = groupDescription
 		message.Payload.Data[2] = strconv.FormatInt(groupPosition,10)
