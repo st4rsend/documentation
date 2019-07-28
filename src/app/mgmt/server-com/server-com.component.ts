@@ -18,55 +18,58 @@ export class ServerComComponent {
 	@Output() st4rsendMsg = new EventEmitter<string>();
 
 
-	private scSubConnected: Subscription;
-	private scSubMessages: Subscription;
-	public scIsConnected = false;
-	public scIsLogged = false;
-	public scDisplayLogin = false;
+	private subConnected: Subscription;
+	private subMessages: Subscription;
+	public isConnected = false;
+	public isLogged = false;
+	public displayLogin = false;
 
-	private scAddress: any = 'wss://st4rsend.net/ws';
+	private address: any = 'wss://st4rsend.net/ws';
 
-	private scDomain: string = 'SQL';
-	private scCommand: string = 'REQ_SELECT';
-	public scMessage: any = 'select T.ID, identity, U.ID, task, status from todos T left join users U on T.userID = U.ID where U.ID=3';
+	private domain: string = 'SQL';
+	private command: string = 'REQ_SELECT';
+	public message: any = 'select T.ID, identity, U.ID, task, status from todos T left join users U on T.userID = U.ID where U.ID=3';
 
-	private scSubject: Subject<any>;
-	private scMessages: Array<string>;
-	public scVerbosityFlag: string;
-	public scDebugFlag: boolean = false;
+	private subject: Subject<any>;
+	private messages: Array<string>;
+	public verbosityFlag: string;
+	public debugFlag: boolean = false;
 
 	public heartbeat: number;
 
 	constructor(
-		private scWebsocket: WebSocketService,
+		private websocket: WebSocketService,
 		private authService: AuthenticationService) {
-		this.scMessages = [];
-		this.scVerbosityFlag = "4";
+		this.messages = [];
+		this.verbosityFlag = "4";
 	}
 
-	public scConnect() {
-		this.scSubConnected = this.scWebsocket.connected().subscribe(status => {
-			this.scIsConnected = status;
+	public connect() {
+		this.subConnected = this.websocket.connected().subscribe(status => {
+			this.isConnected = status;
 		});
 
-		this.scWebsocket.wsConnect(this.scAddress);
+		this.websocket.wsConnect(this.address);
 		//this.toAppComponent("Message from ServerCom component");
 	}
 
-	public scDisconnect() {
-		this.scWebsocket.wsDisconnect();
+	public disconnect() {
+		if (this.isConnected) {
+			this.logout();
+		}
+		this.websocket.wsDisconnect();
 	}
 
-	public scSend() {
-		this.scMessages = [];
-		this.scSubject = this.scWebsocket.wsSubject();
-		this.scSubject.subscribe(
+	public send() {
+		this.messages = [];
+		this.subject = this.websocket.wsSubject();
+		this.subject.subscribe(
 			(x: wsMessage) => {
-				this.scMessages.push(JSON.stringify(x));
+				this.messages.push(JSON.stringify(x));
 			},
 		);
-		let message1 = this.scWebsocket.wsPrepareMessage(0,this.scDomain,this.scCommand,[this.scMessage]);
-		this.scSubject.next(message1);
+		let message1 = this.websocket.wsPrepareMessage(0,this.domain,this.command,[this.message]);
+		this.subject.next(message1);
 	}
 
 	private toAppComponent(msg: string) {
@@ -74,24 +77,30 @@ export class ServerComComponent {
 	}
 
 
-	public scVerbosity() {
-		this.scMessages = [];
-		this.scMessages.push(JSON.stringify(parseInt(this.scVerbosityFlag)));
-		this.scSubject = this.scWebsocket.wsSubject();
-		let message =  this.scWebsocket.wsPrepareMessage(0,"CMD","VERBOSITY",this.scMessages);
-		if (this.scSubject != null) {
-			this.scSubject.next(message);
+	public verbosity() {
+		this.messages = [];
+		this.messages.push(JSON.stringify(parseInt(this.verbosityFlag)));
+		this.subject = this.websocket.wsSubject();
+		let message =  this.websocket.wsPrepareMessage(0,"CMD","VERBOSITY",this.messages);
+		if (this.subject != null) {
+			this.subject.next(message);
 		}
 	}
 
-	scLogin() {
-		this.scDisplayLogin = !this.scDisplayLogin;
+	public login() {
+		this.displayLogin = !this.displayLogin;
 	}
-	scLogout() {
-		console.log("LOGOUT");
+	public logout() {
+		this.authService.logout();
+		this.isLogged = false;
 	}
 
-	public scGetUserInfo() {
+	public getUserInfo() {
 		this.authService.getUserInfo(5);
+	}
+
+	public loginCloseEvent(value: boolean) {
+		this.displayLogin = false;
+		this.isLogged = value;
 	}
 }

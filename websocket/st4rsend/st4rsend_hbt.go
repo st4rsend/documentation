@@ -31,6 +31,9 @@ func StartHBTSvc(wsContext *WsContext) (err error){
 			message.Payload.Domain = "HBT"
 			message.Payload.Command = "HBTINF"
 			message.Payload.Data = nil
+			if wsContext.Verbose > 6 {
+				fmt.Printf("Send HeartBeat handler %d\n", wsContext.HandlerIndex)
+			}
 			err = sendMessage(wsContext, &message.Payload)
 			CheckErr(err)
 		}
@@ -40,6 +43,9 @@ func StartHBTSvc(wsContext *WsContext) (err error){
 	message.Payload.Domain = "HBT"
 	message.Payload.Command = "HBTINF"
 	message.Payload.Data = nil
+	if wsContext.Verbose > 6 {
+		fmt.Printf("Send HeartBeat handler %d\n", wsContext.HandlerIndex)
+	}
 	err = sendMessage(wsContext, &message.Payload)
 	CheckErr(err)
 	return err

@@ -50,7 +50,7 @@ export class DocService {
 	public dsUpdateDoc(doc: Doc) {
 		this.dsSubject = this.webSocketService.wsSubject();
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'DOC','UPDATE_DOC',[doc.idx.toString(), doc.typeID.toString(), doc.description, doc.value]);
+			.wsPrepareMessage(this.channelID,'DOC','UPDATE_DOC',[doc.idx.toString(), doc.typeID.toString(), doc.description, doc.value, doc.childListID.toString()]);
 		this.dsSubject.next(message);
 		
 	}
@@ -61,6 +61,7 @@ export class DocService {
 				doc.typeID.toString(),
 				doc.description,
 				doc.value,
+				doc.childListID.toString(),
 				this.docListID.toString(),
 				doc.position.toString()]); 
 		this.dsSubject.next(message);
@@ -81,7 +82,8 @@ export class DocService {
 							scMsg.payload.data[2],
 							+scMsg.payload.data[3],
 							scMsg.payload.data[4],
-							scMsg.payload.data[5]
+							scMsg.payload.data[5],
+							+scMsg.payload.data[6]
 						));
 					}
 				}

@@ -53,6 +53,9 @@ func WsSrvGetTodos(wsContext *WsContext, message *WsMessage) (err error){
 }
 func WsSrvInsertTodo(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
+	if CheckSec(wsContext, "TODO", "WRITE") {
+		return err
+	}
 	var sqlText string
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
@@ -75,6 +78,9 @@ func WsSrvInsertTodo(wsContext *WsContext, message *WsMessage) (err error){
 }
 func WsSrvUpdateTodo(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
+	if CheckSec(wsContext, "TODO", "WRITE") {
+		return err
+	}
 	var sqlText string
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
@@ -98,6 +104,9 @@ func WsSrvUpdateTodo(wsContext *WsContext, message *WsMessage) (err error){
 }
 func WsSrvDeleteTodo(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
+	if CheckSec(wsContext, "TODO", "WRITE") {
+		return err
+	}
 	var sqlText string
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)

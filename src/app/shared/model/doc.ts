@@ -5,6 +5,7 @@ export interface IDoc {
 	position: number;
 	value: string;
 	description: string;
+	childListID: number;
 }
 
 export class Doc implements IDoc {
@@ -14,7 +15,8 @@ export class Doc implements IDoc {
 		public typeValue: string,
 		public position: number,
 		public value: string,
-		public description: string
+		public description: string,
+		public childListID: number
 	){}
 }
 

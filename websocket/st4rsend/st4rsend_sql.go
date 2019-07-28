@@ -37,6 +37,9 @@ func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 
 func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
+	if CheckSec(wsContext, "LISTE", "WRITE") {
+		return err
+	}
 	var sqlText string
 	var sqlResult sql.Result
 	var table_name = protectSQL(message.Payload.Data[0])
@@ -61,6 +64,9 @@ func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){
 
 func WsSrvDeleteSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
+	if CheckSec(wsContext, "LISTE", "WRITE") {
+		return err
+	}
 	var sqlText string
 	var sqlResult sql.Result
 	var table_name = protectSQL(message.Payload.Data[0])
@@ -84,6 +90,9 @@ func WsSrvDeleteSqlList(wsContext *WsContext, message *WsMessage) (err error){
 
 func WsSrvUpdateSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
+	if CheckSec(wsContext, "LISTE", "WRITE") {
+		return err
+	}
 	var sqlText string
 	var sqlResult sql.Result
 	var table_name = protectSQL(message.Payload.Data[0])

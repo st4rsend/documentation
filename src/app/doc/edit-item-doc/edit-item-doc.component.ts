@@ -59,7 +59,7 @@ export class EditItemDocComponent implements OnInit {
 			this.doc = { ...this.itemDoc};
 		} else {
 			this.creation = true;
-			this.doc = new Doc(0,1,"TEXT",0,"","");
+			this.doc = new Doc(0, 1, "TEXT", 0, "", "", 0);
 			this.docTypeID = 1;
 		}
 	}

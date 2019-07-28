@@ -8,6 +8,31 @@ import (
 	"strconv"
 )
 
+func CheckSec(wsContext *WsContext, domain string, action string) bool {
+	if domain == "LISTE" {
+		if action == "WRITE" {
+			if wsContext.SecUserID > 0 {
+				return false
+			}
+		}
+	}
+	if domain == "DOC" {
+		if action == "WRITE" {
+			if wsContext.SecUserID > 0 {
+				return false
+			}
+		}
+	}
+	if domain == "TODO" {
+		if action == "WRITE" {
+			if wsContext.SecUserID > 0 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password),10)
 	return string(bytes), err
@@ -19,6 +44,9 @@ func CheckPasswordHash(password, hash string) bool {
 
 func WsSrvSecParseMsg(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
+	if message.Payload.Command == "LOGOUT" {
+		err = WsSrvSecLogout(wsContext, message)
+	}
 	if message.Payload.Command == "LOGIN" {
 		err = WsSrvSecLogin(wsContext, message)
 	}
@@ -65,6 +93,14 @@ func WsSrvSecSetUserPassword(wsContext *WsContext, message *WsMessage) (err erro
 	return err
 }
 
+func WsSrvSecLogout(wsContext *WsContext, message *WsMessage) (err error) {
+	err = nil
+	wsContext.SecUserID = 0
+	if ( wsContext.Verbose > 5 ) {
+		fmt.Printf("USER LOGOUT\n")
+	}
+	return err
+}
 func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
 	wsContext.SecUserID = 0
@@ -121,9 +157,10 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 		return err
 	}
 	var UID = message.Payload.Data[0]
+	var identity string
 	var firstName string
 	var lastName string
-	var sqlText string = "select ID, firstname, lastname from users where ID=?"
+	var sqlText string = "select ID, identity, firstname, lastname from users where ID=?"
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
@@ -131,7 +168,7 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 	CheckErr(err)
 	defer rows.Close()
 	for rows.Next() {
-		err = rows.Scan(&UID, &firstName, &lastName)
+		err = rows.Scan(&UID, &identity, &firstName, &lastName)
 		CheckErr(err)
 	}
 	if ( wsContext.Verbose > 5 ) {
@@ -140,10 +177,11 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 	}
 	message.Payload.Command = "RESP_USR_INF"
 	message.Payload.Data = nil
-	message.Payload.Data = make([]string,3)
+	message.Payload.Data = make([]string, 4)
 	message.Payload.Data[0] = UID
-	message.Payload.Data[1] = firstName
-	message.Payload.Data[2] = lastName
+	message.Payload.Data[1] = identity
+	message.Payload.Data[2] = firstName
+	message.Payload.Data[3] = lastName
 	err = sendMessage(wsContext, &message.Payload)
 	CheckErr(err)
 
@@ -170,7 +208,6 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 		message.Payload.Data[2] = strconv.FormatInt(groupPosition,10)
 		err = sendMessage(wsContext, &message.Payload)
 		CheckErr(err)
-	//return userinfo then group user is part of 
 	}
 
 	message.Payload.Command = "EOF"

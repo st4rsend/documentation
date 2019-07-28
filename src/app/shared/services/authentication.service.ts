@@ -12,20 +12,32 @@ export class AuthenticationService {
 	private connectID: number = 0;
 	private isConnectedSubject$ = new Subject<number>();
 
-	private scDomain: string = 'SEC';
-	private scCommand: string;
-	private scSubject: Subject<any>;
-	private scMessage: Array<string>;
+	private domain: string = 'SEC';
+	private command: string;
+	private subject: Subject<any>;
+	private message: Array<string>;
 
 	isReady$ = new Subject<boolean>();
 	authSub: Subscription;
 
-  constructor( private webSocket: WebSocketService ) {
+  constructor( 
+		private webSocket: WebSocketService,
+		private globalSvc: GlobalService ) {
 		console.log("creating authentication service");
 	 }
 
 	public connected() {
 		return this.isConnectedSubject$.asObservable();
+	}
+
+	public logout() {
+		this.connectID = 0;
+		this.isReady$.next(false);
+		this.command = "LOGOUT";
+		this.message = [];
+		let message1 = this.webSocket.wsPrepareMessage(this.channelID, this.domain,this.command,this.message);
+		this.webSocket.wsSubject().next(message1);
+		
 	}
 
 	public loginChallenge(user: string, password: string) {
@@ -36,19 +48,10 @@ export class AuthenticationService {
 				this.parseAuth(msg);
 			});
 		}
-		this.scCommand = "LOGIN";
-		this.scMessage = [user, password];
-		this.scSubject = this.webSocket.wsSubject();
-		let message1 = this.webSocket.wsPrepareMessage(this.channelID, this.scDomain,this.scCommand,[user, password]);
-		this.scSubject.next(message1);
-
-
-		if (user == "vince" && password == "aaa") {
-			this.connectID = 1;
-			console.log("setting connected");
-		}	
-		this.isConnectedSubject$.next(this.connectID);
-		
+		this.command = "LOGIN";
+		this.message = [user, password];
+		let message1 = this.webSocket.wsPrepareMessage(this.channelID, this.domain,this.command,this.message);
+		this.webSocket.wsSubject().next(message1);
 	}
 
 	public getUserInfo(UID: number) {
@@ -58,9 +61,9 @@ export class AuthenticationService {
 				this.parseAuth(msg);
 			});
 		}
-		this.scMessage = [];
-		this.scMessage.push(JSON.stringify(UID));
-		let message = this.webSocket.wsPrepareMessage(1,"SEC","USR_INFO",this.scMessage);
+		this.message = [];
+		this.message.push(JSON.stringify(UID));
+		let message = this.webSocket.wsPrepareMessage(1,"SEC","USR_INFO",this.message);
 		this.webSocket.wsSubject().next(message);
 	}
 
@@ -68,20 +71,35 @@ export class AuthenticationService {
 
 		if ((+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SEC")) {
 			if (msg.payload.command === "RESP_LOGIN") {
-				console.log("RESP_LOGIN", msg);
+				this.connectID = +msg.payload.data[0];
+				if (this.connectID == 0) {
+					this.globalSvc.ResetUser();
+				} 
+				this.isConnectedSubject$.next(this.connectID);
 			}
 		}
 		if ((+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SEC")) {
 			if (msg.payload.command === "RESP_USR_INF") {
+				this.globalSvc.SetUserInfo(
+					+msg.payload.data[0],
+					msg.payload.data[1],
+					msg.payload.data[2],
+					msg.payload.data[3]
+				);
 				console.log ("RESP_AUTH_USER: ",msg);
 			}
 			if (msg.payload.command === "RESP_UG_INF") {
+				this.globalSvc.AddUserGroup(
+					+msg.payload.data[0],
+					msg.payload.data[1],
+					+msg.payload.data[2]
+				);
 				console.log ("RESP_AUTH_GROUP: ",msg);
 			}
 		
 		}
 		if ((+msg.payload.channelid == this.channelID) && (msg.payload.command === "EOF"))	{
-			console.log ("EOF");
+			console.log ("parseAuth EOF");
 			this.isReady$.next(true);
 			this.authSub.unsubscribe();
 		}

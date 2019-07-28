@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -17,6 +17,8 @@ export class LoginComponent implements OnInit {
 	submitted = false;
 	returnUrl: string;
 
+	@Output() loginCloseEvent = new EventEmitter<boolean>();
+
   constructor(
 		private formBuilder: FormBuilder,
 		private authService: AuthenticationService
@@ -29,8 +31,10 @@ export class LoginComponent implements OnInit {
 		});
 		this.authService.connected().pipe(first()).subscribe(x => {
 			console.log("Connected value: ", x);
-			
 			this.loading = false;
+			if (x > 0) {
+				this.loginCloseEvent.emit(true);
+			}
 		});
 	}
 

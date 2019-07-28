@@ -1,18 +1,18 @@
 <table class="serverCom" ><tr>
 	<td width='80px' >
-	<div *ngIf="!scIsConnected">
-		<button arial-label="Connect to server"	(click)="scConnect()"
+	<div *ngIf="!isConnected">
+		<button arial-label="Connect to server"	(click)="connect()"
 			 mat-icon-button color="primary">Connect</button>
 	</div>
-	<div *ngIf="scIsConnected">
-		<button arial-label="Disconnect" (click)="scDisconnect()"
+	<div *ngIf="isConnected">
+		<button arial-label="Disconnect" (click)="disconnect()"
 			mat-icon-button color="warn">Disconnect</button>
 	</div>
 	</td><td>
 		Server verbosity
 		<select 
-			[(ngModel)]="scVerbosityFlag" 
-			(change)="scVerbosity()">
+			[(ngModel)]="verbosityFlag" 
+			(change)="verbosity()">
 			<option [value]="1">1</option>
 			<option [value]="2">2</option>
 			<option [value]="3">3</option>
@@ -22,60 +22,61 @@
 			<option [value]="7">7</option>
 		</select>
 	</td><td>
-		Connected: {{scIsConnected}}
+		Connected: {{isConnected}}
 	</td>
 </tr><tr>
 	<td>
-		<div *ngIf="scIsConnected">
-			<div *ngIf="!scIsLogged">
-				<button arial-label="Login"	(click)="scLogin()"
+		<div *ngIf="isConnected">
+			<div *ngIf="!isLogged">
+				<button arial-label="Login"	(click)="login()"
 			 		mat-icon-button color="primary">Login</button>
 			</div>
-			<div *ngIf="scIsLogged">
-				<button arial-label="Logout" (click)="scLogout()"
+			<div *ngIf="isLogged">
+				<button arial-label="Logout" (click)="logout()"
 					mat-icon-button color="warn">Logout</button>
 			</div>
 		</div>
-		<div *ngIf="scDisplayLogin">
-			<app-login>
+		<div *ngIf="displayLogin">
+			<app-login 
+				(loginCloseEvent)='loginCloseEvent($event)'>
 			</app-login>
 		</div>
 	</td><td>	
 		<div>
-			<button arial-label="GetUserINfo" (click)="scGetUserInfo()"
+			<button arial-label="GetUserINfo" (click)="getUserInfo()"
 				mat-icon-button color="primary">Info</button>
 		</div>
 	</td><td>
-		Debug mode <input [(ngModel)]="scDebugFlag" type="checkbox" arial-label="Debug" >
+		Debug mode <input [(ngModel)]="debugFlag" type="checkbox" arial-label="Debug" >
 	</td>
 </tr></table>
 <BR>
 <BR>
-<div *ngIf="scDebugFlag">
+<div *ngIf="debugFlag">
 <form class="form-container">
 	<mat-form-field>
-		<input name="scAddress" placeholder="scAddress" [(ngModel)]="scAddress" matInput>
+		<input name="address" placeholder="address" [(ngModel)]="address" matInput>
 	</mat-form-field>
 </form>
 <form class="form-container">
 	<mat-form-field>
-		<input name="scDomain" placeholder="scDomain" [(ngModel)]="scDomain"
-			[disabled]="!scIsConnected" matInput>
+		<input name="domain" placeholder="domain" [(ngModel)]="domain"
+			[disabled]="!isConnected" matInput>
 	</mat-form-field>
 	<mat-form-field>
-		<input name="scCommand" placeholder="scCommand" [(ngModel)]="scCommand"
-			[disabled]="!scIsConnected" matInput>
+		<input name="command" placeholder="command" [(ngModel)]="command"
+			[disabled]="!isConnected" matInput>
 	</mat-form-field>
 	<mat-form-field>
-		<input name="scMessage" placeholder="scMessage" [(ngModel)]="scMessage"
-			[disabled]="!scIsConnected" matInput>
-		<button arial-label="Send message" (click)="scSend($event)"
-			[disabled]="!scIsConnected" matSuffix>Send</button>
+		<input name="message" placeholder="message" [(ngModel)]="message"
+			[disabled]="!isConnected" matInput>
+		<button arial-label="Send message" (click)="send($event)"
+			[disabled]="!isConnected" matSuffix>Send</button>
 	</mat-form-field>
 </form>
-<div class="websocket-console" #scSt4rsend_console>
+<div class="websocket-console" #st4rsend_console>
 	<table>
-		<tr *ngFor="let msg of scMessages ; let index = index">
+		<tr *ngFor="let msg of messages ; let index = index">
 			<td>{{index}}</td><td>{{msg}}</td>
 		</tr>
 	</table>

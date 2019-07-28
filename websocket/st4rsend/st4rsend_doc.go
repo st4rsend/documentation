@@ -13,6 +13,7 @@ type Doc struct {
 	position string
 	value string
 	description string
+	childListID sql.NullString
 }
 
 func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
@@ -38,15 +39,24 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 
 func WsSrvDocUpdate(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
+	if CheckSec(wsContext, "DOC", "WRITE") {
+		return err
+	}
 	var doc Doc
 	var sqlText string
 	doc.idx = message.Payload.Data[0]
 	doc.typeID = message.Payload.Data[1]
 	doc.description = message.Payload.Data[2]
 	doc.value = message.Payload.Data[3]
-	sqlText = "update documentations set typeID=?, description=?, info=? where ID=?"
+	doc.childListID.String = message.Payload.Data[4]
+	sqlText = "update documentations set typeID=?, description=?, info=?, childListID=? where ID=?"
+	if doc.childListID.String  == "0" {
+		doc.childListID.Valid = false
+	} else {
+		doc.childListID.Valid = true
+	}
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("\nProcessing SQL Doc update: %+v\n",sqlText)
+		fmt.Printf("\nProcessing SQL Doc update: %+v\n",doc)
 	}
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
@@ -55,6 +65,7 @@ func WsSrvDocUpdate(wsContext *WsContext, message *WsMessage) (err error){
 		doc.typeID,
 		doc.description,
 		doc.value,
+		doc.childListID,
 		doc.idx)
 	CheckErr(err)
 	return err
@@ -62,6 +73,9 @@ func WsSrvDocUpdate(wsContext *WsContext, message *WsMessage) (err error){
 
 func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
+	if CheckSec(wsContext, "DOC", "WRITE") {
+		return err
+	}
 	var doc Doc
 	var listID string
 	var position string
@@ -70,20 +84,27 @@ func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 	doc.typeID = message.Payload.Data[0]
 	doc.description = message.Payload.Data[1]
 	doc.value = message.Payload.Data[2]
-	listID = message.Payload.Data[3]
-	position = message.Payload.Data[4]
+	doc.childListID.String = message.Payload.Data[3]
+	listID = message.Payload.Data[4]
+	position = message.Payload.Data[5]
 
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "insert into documentations (typeID, description, info) values (?,?,?)"
+	sqlText = "insert into documentations (typeID, description, info, childListID) values (?,?,?,?)"
+	if doc.childListID.String  == "0" {
+		doc.childListID.Valid = false
+	} else {
+		doc.childListID.Valid = true
+	}
 	if (wsContext.Verbose > 4) {
 		fmt.Printf("Processing SQL documentations Insert\n")
 	}
 	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
 		doc.typeID,
 		doc.description,
-		doc.value)
+		doc.value,
+		doc.childListID)
 	CheckErr(err)
 	lastID, err := sqlResult.LastInsertId()
 	sqlText = "insert into documentation_set (listID, docID, position) values (?,?,?)"
@@ -106,7 +127,7 @@ func WsSrvGetDocByID(wsContext *WsContext, message *WsMessage) (err error){
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "select D.ID, T.ID as typeID, T.type, S.position, D.info, D.description from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID left join documentation_type T on D.typeID=T.ID where L.ID=? order by S.position;"
+	sqlText = "select D.ID, T.ID as typeID, T.type, S.position, D.info, D.description, D.childListID from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID left join documentation_type T on D.typeID=T.ID where L.ID=? order by S.position;"
 	rows, err := wsContext.Db.QueryContext(localContext, sqlText,
 		message.Payload.Data[0])
 	CheckErr(err)
