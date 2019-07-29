@@ -9,10 +9,10 @@
 			mat-icon-button color="warn">Disconnect</button>
 	</div>
 	</td><td>
-		Server verbosity
+		Verbosity client:
 		<select 
-			[(ngModel)]="verbosityFlag" 
-			(change)="verbosity()">
+			[(ngModel)]="verbosityClientFlag" 
+			(change)="verbosityClient()">
 			<option [value]="1">1</option>
 			<option [value]="2">2</option>
 			<option [value]="3">3</option>
@@ -22,7 +22,20 @@
 			<option [value]="7">7</option>
 		</select>
 	</td><td>
-		Connected: {{isConnected}}
+		<div *ngIf="isConnected">
+		server:
+		<select 
+			[(ngModel)]="verbosityServerFlag" 
+			(change)="verbosityServer()">
+			<option [value]="1">1</option>
+			<option [value]="2">2</option>
+			<option [value]="3">3</option>
+			<option [value]="4">4</option>
+			<option [value]="5">5</option>
+			<option [value]="6">6</option>
+			<option [value]="7">7</option>
+		</select>
+		</div>
 	</td>
 </tr><tr>
 	<td>

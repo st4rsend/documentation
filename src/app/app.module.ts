@@ -25,7 +25,7 @@ import { TodoBaseComponent } from './todo/todo-base/todo-base.component';
 import { ListTodoComponent } from './todo/list-todo/list-todo.component';
 import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
 import { UpdateTodoComponent } from './todo/update-todo/update-todo.component';
-import { LoginComponent } from './shared/component/login/login.component';
+import { LoginComponent } from './mgmt/login/login.component';
 import { ListMgmtComponent } from './shared/component/list-mgmt/list-mgmt.component';
 import { ListSelectComponent } from './shared/component/list-select/list-select.component';
 import { ServerComComponent } from './mgmt/server-com/server-com.component';
@@ -71,4 +71,5 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 	],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+}

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { WebSocketService, wsMessage } from '../../shared/services/websocket.service';
 import { AuthenticationService } from '../../shared/services/authentication.service';
+import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
 	selector: 'app-server-com',
@@ -32,24 +33,27 @@ export class ServerComComponent {
 
 	private subject: Subject<any>;
 	private messages: Array<string>;
-	public verbosityFlag: string;
+	public verbosityServerFlag: string;
+	public verbosityClientFlag: string;
 	public debugFlag: boolean = false;
 
 	public heartbeat: number;
 
 	constructor(
-		private websocket: WebSocketService,
-		private authService: AuthenticationService) {
+		private websocketS: WebSocketService,
+		private globalS: GlobalService,
+		private authS: AuthenticationService) {
 		this.messages = [];
-		this.verbosityFlag = "4";
+		this.verbosityClientFlag = "4";
+		this.verbosityServerFlag = "4";
 	}
 
 	public connect() {
-		this.subConnected = this.websocket.connected().subscribe(status => {
+		this.subConnected = this.websocketS.connected().subscribe(status => {
 			this.isConnected = status;
 		});
 
-		this.websocket.wsConnect(this.address);
+		this.websocketS.wsConnect(this.address);
 		//this.toAppComponent("Message from ServerCom component");
 	}
 
@@ -57,19 +61,18 @@ export class ServerComComponent {
 		if (this.isConnected) {
 			this.logout();
 		}
-		this.websocket.wsDisconnect();
+		this.websocketS.wsDisconnect();
 	}
 
 	public send() {
 		this.messages = [];
-		this.subject = this.websocket.wsSubject();
-		this.subject.subscribe(
+		this.websocketS.wsSubject().subscribe(
 			(x: wsMessage) => {
 				this.messages.push(JSON.stringify(x));
 			},
 		);
-		let message1 = this.websocket.wsPrepareMessage(0,this.domain,this.command,[this.message]);
-		this.subject.next(message1);
+		let message1 = this.websocketS.wsPrepareMessage(0,this.domain,this.command,[this.message]);
+		this.websocketS.wsSubject().next(message1);
 	}
 
 	private toAppComponent(msg: string) {
@@ -77,26 +80,29 @@ export class ServerComComponent {
 	}
 
 
-	public verbosity() {
+	public verbosityServer() {
 		this.messages = [];
-		this.messages.push(JSON.stringify(parseInt(this.verbosityFlag)));
-		this.subject = this.websocket.wsSubject();
-		let message =  this.websocket.wsPrepareMessage(0,"CMD","VERBOSITY",this.messages);
-		if (this.subject != null) {
-			this.subject.next(message);
+		this.messages.push(JSON.stringify(parseInt(this.verbosityServerFlag)));
+		let message =  this.websocketS.wsPrepareMessage(0,"CMD","VERBOSITY",this.messages);
+		if (this.websocketS.wsSubject() != null) {
+			this.websocketS.wsSubject().next(message);
 		}
+		this.globalS.log(6,"Verbosity server msg: ", message);
+	}
+	public verbosityClient() {
+		this.globalS.setVerbosity(this.verbosityClientFlag);
 	}
 
 	public login() {
 		this.displayLogin = !this.displayLogin;
 	}
 	public logout() {
-		this.authService.logout();
+		this.authS.logout();
 		this.isLogged = false;
 	}
 
 	public getUserInfo() {
-		this.authService.getUserInfo(5);
+		this.authS.getUserInfo(5);
 	}
 
 	public loginCloseEvent(value: boolean) {

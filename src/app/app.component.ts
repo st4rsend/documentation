@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { WebSocketService } from './shared/services/websocket.service';
+import { GlobalService } from './shared/services/global.service';
 
 
 @Component({

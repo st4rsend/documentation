@@ -23,7 +23,7 @@ export class AuthenticationService {
   constructor( 
 		private webSocket: WebSocketService,
 		private globalSvc: GlobalService ) {
-		console.log("creating authentication service");
+//		console.log("creating authentication service");
 	 }
 
 	public connected() {

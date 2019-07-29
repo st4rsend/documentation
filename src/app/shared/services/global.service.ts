@@ -19,6 +19,7 @@ interface UserInfo {
 })
 export class GlobalService {
 
+	public verbosity: number;
 	public userInfo: UserInfo;
 	private sqlListChanCntr: number;
 	private sqlListChanBase: number = 512;
@@ -33,7 +34,8 @@ export class GlobalService {
 			FirstName: "firstName",
 			LastName: "lastName",
 			Groups: []};
-		console.log("creating GlobalService");
+//		console.log("creating GlobalService");
+
 	}
 
 	public GetSqlListChannel() {
@@ -63,5 +65,16 @@ export class GlobalService {
 		this.userInfo.FirstName = "Firstname";
 		this.userInfo.LastName = "Lastname";
 		this.userInfo.Groups = [];
+	}
+
+	public setVerbosity(value: string) {
+		this.verbosity = +value;
+		console.log("Set client verbosity to: ", this.verbosity);
+	}
+
+	log(level: number, ...args: any[]) {
+		if (level <= this.verbosity) {
+			console.log("Msg: ", args);
+		}
 	}
 }
