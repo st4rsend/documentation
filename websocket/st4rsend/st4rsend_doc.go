@@ -33,6 +33,35 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "UPDATE_DOC" {
 		err = WsSrvDocUpdate(wsContext, message)
 	}
+	if message.Payload.Command == "UPDATE_DOC_POS" {
+		err = WsSrvDocUpdatePos(wsContext, message)
+	}
+	CheckErr(err)
+	return err
+}
+
+func WsSrvDocUpdatePos(wsContext *WsContext, message *WsMessage) (err error){
+	err = nil
+	if CheckSec(wsContext, "DOC", "WRITE") {
+		return err
+	}
+	var listID string
+	var docID string
+	var position string
+	listID = message.Payload.Data[0]
+	docID = message.Payload.Data[1]
+	position= message.Payload.Data[2]
+	sqlText := "update documentation_set D set position=? where D.listID=? and D.docID=?"
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("Updating documentation_set\n")
+	}
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	_, err = wsContext.Db.ExecContext(localContext,sqlText,
+		position,
+		listID,
+		docID)
 	CheckErr(err)
 	return err
 }

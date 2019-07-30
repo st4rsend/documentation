@@ -20,6 +20,12 @@
 			<button (click)="cancel();">Cancel</button>
 		</div>
 	</div>
+	<div *ngIf="listTypeSelected">
+		LIST TYPE SELECTED
+		<app-list-select-doc 
+			(selectedListEvent)='selectedListEvent($event)'>
+		</app-list-select-doc>
+	</div>
 	<div class="description">
 		<input type="text" size="30" [(ngModel)]="doc.description">
 		Child List ID: 

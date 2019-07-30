@@ -23,10 +23,13 @@ export class EditItemDocComponent implements OnInit {
 	private creation: boolean;
 	public doc: Doc;
 	public docTypeID: number;
+	public listTypeSelected: boolean;
 
   constructor(
 		private docService: DocService,
-		private docTypeListService: SqlListService) { }
+		private docTypeListService: SqlListService) {
+			console.log("CREATING edit-item-doc");
+		}
 
   ngOnInit() {
 		this.docTypeListService.InitList(
@@ -36,11 +39,18 @@ export class EditItemDocComponent implements OnInit {
 			this.docTypePosition);
 		this.docTypes = this.docTypeListService.GetList();
 		this.reset();
+		
+		if (this.doc.typeID == 4) {
+			this.listTypeSelected = true;
+		} else {
+			this.listTypeSelected = false;
+		}
   }
 
 	cancel() {
 		this.itemDocCloseEvent.emit(false);
 	}
+
 	validate() {
 		if (this.doc.idx == 0){
 			this.docService.dsInsertDoc(this.doc);
@@ -49,9 +59,20 @@ export class EditItemDocComponent implements OnInit {
 		}
 		this.cancel();
 	} 
+
 	docTypeChange() {
 		this.doc.typeID = this.docTypeID;
+		if (this.docTypeID == 4) {
+			this.listTypeSelected = true;
+		} else {
+			this.listTypeSelected = false;
+		}
 	}
+
+	selectedListEvent(listID: number) {
+		this.doc.childListID = listID;
+	}
+
 	reset() {
 		if (this.itemDoc !=null){
 			this.creation = false;
@@ -63,6 +84,7 @@ export class EditItemDocComponent implements OnInit {
 			this.docTypeID = 1;
 		}
 	}
+
 	fromFile(file) {
 		var loader = new FileReader();
 		console.log("FILE: ", file);

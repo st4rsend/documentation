@@ -11,3 +11,14 @@
 	width: 30px;
 	float: right;
 }
+
+.dyn-doc-viewport {
+  height: calc(90vh - 260px);
+  min-height: 150px;
+  width: auto;
+}
+
+.dyn-doc-item {
+  //height: 50px;
+}
+

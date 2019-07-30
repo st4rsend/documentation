@@ -1,22 +1,15 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { DocService } from '../../shared/services/doc.service';
-//import { Subscription } from 'rxjs';
-
 import { ListSelectComponent } from '../../shared/component/list-select/list-select.component';
 
 @Component({
-  selector: 'app-menu-doc',
-  templateUrl: './menu-doc.component.html',
-  styleUrls: ['./menu-doc.component.css'],
+  selector: 'app-list-select-doc',
+  templateUrl: './list-select-doc.component.html',
+  styleUrls: ['./list-select-doc.component.css']
 })
-export class MenuDocComponent implements OnInit {
+export class ListSelectDocComponent implements OnInit {
 
 	@ViewChild('docList', {static: true}) docList: ListSelectComponent;
-
-	@Output() editModeEvent = new EventEmitter<boolean>();
-	public docEditMode: boolean = false;
-	@Output() viewModeEvent = new EventEmitter<string>();
-	public viewMode: string = 'normal';
+	@Output() selectedListEvent = new EventEmitter<number>();
 
 	public docListTable: string = 'documentation_list';
 	public docListIDName: string = 'ID';
@@ -30,16 +23,16 @@ export class MenuDocComponent implements OnInit {
 	public docThemeColumn = 'description';
 	public docThemePosition = 'position';
 
-  constructor(
-		private docService: DocService,
-	) { }
+	public newListID: number;
+
+
+  constructor() { }
 
   ngOnInit() {
 		this.docList.isReady$.subscribe(
 			ready => {
 				if ( ready ) {
-					this.docList.listID = this.docList.list[0].idx;
-					this.docService.dsSetDocListID(this.docList.listID);
+					this.newListID = this.docList.list[0].idx;;
 				}
 			});
   }
@@ -54,18 +47,10 @@ export class MenuDocComponent implements OnInit {
 	}
 
 	docListChange(listID: number) {
-		this.docService.dsSetDocListID(listID);
+		this.newListID = listID;
 	}
 
-	docRefresh() {
-		this.docService.dsSetDocListID(this.docList.listID);
-	}	
-
-	editModeChange() {
-		this.editModeEvent.emit(this.docEditMode);
-	}
-
-	viewModeChange() {
-		this.viewModeEvent.emit(this.viewMode);
+	confirmListID() {
+		this.selectedListEvent.emit(this.newListID);
 	}
 }

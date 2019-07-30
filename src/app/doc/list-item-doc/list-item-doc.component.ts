@@ -8,7 +8,7 @@ import { Doc } from '../../shared/model/doc';
   selector: 'app-list-item-doc',
   templateUrl: './list-item-doc.component.html',
   styleUrls: ['./list-item-doc.component.css',
-		'../dyn-doc/dyn-doc.component.css']
+		'../dyn-doc/dyn-doc.component.scss']
 })
 export class ListItemDocComponent implements OnInit {
 

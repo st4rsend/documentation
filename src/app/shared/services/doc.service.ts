@@ -32,12 +32,15 @@ export class DocService {
 	}
 
 	public setChannelID(channelID: number){
-		console.log("Set channelID: ", channelID);
 		this.channelID = this.baseChannelID + channelID;
 	}
 
 	public dsSetDocListID(idx: number) {
 		this.dsListIDSource.next(idx);
+	}
+
+	public getDocListID() {
+		return this.docListID;
 	}
 
 	public dsGetDocByID(idx: number): Doc {
@@ -52,8 +55,18 @@ export class DocService {
 		let message = this.webSocketService
 			.wsPrepareMessage(this.channelID,'DOC','UPDATE_DOC',[doc.idx.toString(), doc.typeID.toString(), doc.description, doc.value, doc.childListID.toString()]);
 		this.dsSubject.next(message);
-		
 	}
+
+	public updateDocPosition(listID: number, docID: number, position: number) {
+		this.dsSubject = this.webSocketService.wsSubject();
+		let message = this.webSocketService
+			.wsPrepareMessage(this.channelID,'DOC','UPDATE_DOC_POS',[
+				listID.toString(),
+				docID.toString(),
+				position.toString()]);
+		this.dsSubject.next(message);
+	}
+
 	public dsInsertDoc(doc: Doc) {
 		this.dsSubject = this.webSocketService.wsSubject();
 		let message = this.webSocketService

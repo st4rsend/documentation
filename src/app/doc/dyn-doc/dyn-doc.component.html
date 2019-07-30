@@ -7,7 +7,8 @@
 			(itemDocCloseEvent)='itemDocCloseEvent($event)'>
 		</app-edit-item-doc>
 	</div>
-	<ng-container *ngFor="let item of docs">
+	<cdk-virtual-scroll-viewport itemSize="30" class="dyn-doc-viewport" cdkDropList (cdkDropListDropped)="drop($event)">
+	<div *cdkVirtualFor="let item of docs" class="dyn-doc-item" cdkDrag>
 		<div class="itemDocOuter">
 			<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
 				[itemDoc]=item
@@ -34,10 +35,12 @@
 				(changedEvent)='toBeRefreshed($event)'>
 			</app-list-item-doc>
 		</div>
-	</ng-container>
+	</div>
+	</cdk-virtual-scroll-viewport>
 </div>
 <ng-template #normal>
-	<ng-container *ngFor="let item of docs">
+	<cdk-virtual-scroll-viewport itemSize="30" class="dyn-doc-viewport">
+	<div *cdkVirtualFor="let item of docs" class="dyn-doc-item">
 		<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
 			[itemDoc]=item
 			[editMode]=editMode
@@ -59,5 +62,6 @@
 			[viewMode]=viewMode
 			(activateListEvent)='activateList($event)'>
 		</app-list-item-doc>
-	</ng-container>
+	</div>
+	</cdk-virtual-scroll-viewport>
 </ng-template>

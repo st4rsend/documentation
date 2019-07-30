@@ -21,6 +21,7 @@ import { TextItemDocComponent } from './doc/text-item-doc/text-item-doc.componen
 import { SvgItemDocComponent } from './doc/svg-item-doc/svg-item-doc.component';
 import { UrlSvgItemDocComponent } from './doc/url-svg-item-doc/url-svg-item-doc.component';
 import { ListItemDocComponent } from './doc/list-item-doc/list-item-doc.component';
+import { ListSelectDocComponent } from './doc/list-select-doc/list-select-doc.component';
 import { TodoBaseComponent } from './todo/todo-base/todo-base.component';
 import { ListTodoComponent } from './todo/list-todo/list-todo.component';
 import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
@@ -33,6 +34,7 @@ import { MgmtBaseComponent } from './mgmt/mgmt-base/mgmt-base.component';
 import { AppRoutesModule } from './app-routes.module';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 		SvgItemDocComponent,
 		UrlSvgItemDocComponent,
 		ListItemDocComponent,
+		ListSelectDocComponent,
 		TodoBaseComponent,
     ListTodoComponent,
     CreateTodoComponent,
@@ -65,7 +68,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 		MatIconModule,
 		MatButtonModule,
 		AppRoutesModule,
-		DragDropModule
+		DragDropModule,
+		ScrollDispatchModule
   ],
   providers: [
 	],

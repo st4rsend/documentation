@@ -99,7 +99,7 @@ export class AuthenticationService {
 		
 		}
 		if ((+msg.payload.channelid == this.channelID) && (msg.payload.command === "EOF"))	{
-			console.log ("parseAuth EOF");
+//			console.log ("parseAuth EOF");
 			this.isReady$.next(true);
 			this.authSub.unsubscribe();
 		}

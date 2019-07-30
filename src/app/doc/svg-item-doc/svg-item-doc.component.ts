@@ -6,7 +6,7 @@ import { Doc } from '../../shared/model/doc';
   selector: 'app-svg-item-doc',
   templateUrl: './svg-item-doc.component.html',
   styleUrls: ['./svg-item-doc.component.css',
-		'../dyn-doc/dyn-doc.component.css']
+		'../dyn-doc/dyn-doc.component.scss']
 })
 export class SvgItemDocComponent implements OnInit {
 

@@ -1,12 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { DocService } from '../../shared/services/doc.service';
-import { Subscription } from 'rxjs';
 import {Doc} from '../../shared/model/doc';
 
 @Component({
   selector: 'app-dyn-doc',
   templateUrl: './dyn-doc.component.html',
-  styleUrls: ['./dyn-doc.component.css']
+  styleUrls: ['./dyn-doc.component.scss']
 })
 export class DynDocComponent implements OnInit {
 
@@ -24,6 +24,7 @@ export class DynDocComponent implements OnInit {
 			ready => {
 				if ( ready ) {
 					this.docs = this.docService.dsGetDocs();
+					this.docListID = this.docService.getDocListID();
 				}
 			});
 	}
@@ -42,5 +43,16 @@ export class DynDocComponent implements OnInit {
 	}
 	activateList(evt: number) {
 		this.docService.dsSetDocListID(evt);
+	}
+	drop(event: CdkDragDrop<string[]>) {
+		this.docService.updateDocPosition(
+			this.docListID,
+			this.docs[event.previousIndex].idx,
+			event.currentIndex);
+		this.docService.updateDocPosition(
+			this.docListID,
+			this.docs[event.currentIndex].idx,
+			event.previousIndex);
+		this.toBeRefreshed(true);
 	}
 }
