@@ -18,6 +18,7 @@ export class DynDocComponent implements OnInit {
 
 	public docListID: number;
 	public docs: Array<Doc>;
+	public selectedIndex: number;
 
   constructor(private docService: DocService) {
 		this.docService.isReady$.subscribe(
@@ -54,5 +55,8 @@ export class DynDocComponent implements OnInit {
 			this.docs[event.currentIndex].idx,
 			event.previousIndex);
 		this.toBeRefreshed(true);
+	}
+	itemFocus(i: number) {
+		this.selectedIndex = i;
 	}
 }

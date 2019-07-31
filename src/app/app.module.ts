@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+//import { FlexLayoutModule } from '@angular/flex-layout';
 import { 
 	MatButtonModule, 
 	MatToolbarModule, 
@@ -69,7 +70,8 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 		MatButtonModule,
 		AppRoutesModule,
 		DragDropModule,
-		ScrollDispatchModule
+		ScrollDispatchModule,
+//		FlexLayoutModule
   ],
   providers: [
 	],

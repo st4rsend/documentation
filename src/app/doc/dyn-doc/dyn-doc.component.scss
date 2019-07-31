@@ -1,6 +1,3 @@
-.itemDocOuter {
-	border: thin solid blue;
-}
 
 .itemDocDescription {
 	border-style: none none dotted;
@@ -12,13 +9,28 @@
 	float: right;
 }
 
-.dyn-doc-viewport {
-  height: calc(90vh - 260px);
+.viewport {
+  height: calc(100vh - 330px);
   min-height: 150px;
   width: auto;
 }
 
-.dyn-doc-item {
+.item {
+	background-color: #e8e8e8;
+	border: thin solid #eaeaea;
   //height: 50px;
 }
 
+.item-edit {
+	background-color: #e8e8e8;
+	border: thin solid red;
+	display: flex;
+	flex-direction: column;
+}
+
+.item-highlight {
+	background-color: #cccccc;
+}
+.item-edit-highlight {
+	background-color: #aaccaa;
+}

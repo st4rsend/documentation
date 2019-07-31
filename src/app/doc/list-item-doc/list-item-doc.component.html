@@ -12,6 +12,8 @@
 	{{itemDoc.description}}
 </div>
 <div *ngIf="viewMode=='normal' || viewMode=='full'" align='center'>
+	<p>
 	<button mat-raised-button	(click)="activateChildList([itemDoc.childListID])"
 		 color="primary">{{itemDoc.value}}</button>
+	</p>
 </div>

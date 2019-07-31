@@ -7,9 +7,15 @@
 			(itemDocCloseEvent)='itemDocCloseEvent($event)'>
 		</app-edit-item-doc>
 	</div>
-	<cdk-virtual-scroll-viewport itemSize="30" class="dyn-doc-viewport" cdkDropList (cdkDropListDropped)="drop($event)">
-	<div *cdkVirtualFor="let item of docs" class="dyn-doc-item" cdkDrag>
-		<div class="itemDocOuter">
+	<cdk-virtual-scroll-viewport itemSize="30" 
+		class="viewport" cdkDropList 
+		(cdkDropListDropped)="drop($event)">
+	<div *cdkVirtualFor="let item of docs; let i = index;" 
+		class="item-edit"
+		(click)="itemFocus(i)"
+		[ngClass]="{'item-edit-highlight': selectedIndex === i}"
+		cdkDrag>
+		<div>
 			<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
 				[itemDoc]=item
 				[editMode]=editMode
@@ -35,12 +41,18 @@
 				(changedEvent)='toBeRefreshed($event)'>
 			</app-list-item-doc>
 		</div>
+		<div>
+			<button (click)='removeFromList();'>del</button>
+		</div>
 	</div>
 	</cdk-virtual-scroll-viewport>
 </div>
 <ng-template #normal>
-	<cdk-virtual-scroll-viewport itemSize="30" class="dyn-doc-viewport">
-	<div *cdkVirtualFor="let item of docs" class="dyn-doc-item">
+	<cdk-virtual-scroll-viewport itemSize="30" class="viewport">
+	<div *cdkVirtualFor="let item of docs; let i = index;"
+		class="item"
+		(click)="itemFocus(i)"
+		[ngClass]="{'item-highlight': selectedIndex === i}">
 		<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
 			[itemDoc]=item
 			[editMode]=editMode
