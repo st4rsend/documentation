@@ -2,28 +2,6 @@
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 
 html, body {
-  margin: 30;
-  //height: 100%;
-	width: 800px
+  margin: 0;
 }
 
-my-app {
-  display: block;
-  height: 100vh;
-}
-
-.container {
-	border: 1px solid blue;
-  padding: 15px;
-	margin: 15px 15px 15px 15px;
-  box-sizing: border-box;
-}
-
-.form-container {
-	display: flex;
-	flex-direction: column;
-}
-
-.mat-checkbox-label {
-  text-transform: capitalize;
-}

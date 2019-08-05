@@ -1,20 +1,22 @@
-<button (click)="docListEdit()">Edit doc list</button>
-<div *ngIf="docListEditMode">
-	<app-list-mgmt
-		[table]="docListTable"
-		[index]="docListIDName"
-		[column]="docListColumn"
-		[position]="docListPosition"
-		(listCloseEvent)='docListCloseEvent($event)'>
-	</app-list-mgmt>
-</div>
-<button (click)="docThemeListEdit()">Edit doc Theme list</button>
-<div *ngIf="docThemeListEditMode">
-	<app-list-mgmt
-		[table]="docThemeListTable"
-		[index]="docThemeListIDName"
-		[column]="docThemeListColumn"
-		[position]="docThemeListPosition"
-		(listCloseEvent)='docThemeListCloseEvent($event)'>
-	</app-list-mgmt>
+<div class="constainer">
+	<button (click)="docListEdit()">Edit doc list</button>
+	<div *ngIf="docListEditMode">
+		<app-list-mgmt
+			[table]="docListTable"
+			[index]="docListIDName"
+			[column]="docListColumn"
+			[position]="docListPosition"
+			(listCloseEvent)='docListCloseEvent($event)'>
+		</app-list-mgmt>
+	</div>
+	<button (click)="docThemeListEdit()">Edit doc Theme list</button>
+	<div *ngIf="docThemeListEditMode">
+		<app-list-mgmt
+			[table]="docThemeListTable"
+			[index]="docThemeListIDName"
+			[column]="docThemeListColumn"
+			[position]="docThemeListPosition"
+			(listCloseEvent)='docThemeListCloseEvent($event)'>
+		</app-list-mgmt>
+	</div>
 </div>

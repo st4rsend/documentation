@@ -15,7 +15,6 @@ import { GlobalService } from './shared/services/global.service';
 export class AppComponent implements OnInit {
 
   title = 'St4rsend';
-  name: string = 'John';
 
 	public isConnected: boolean = false;
 	private isConnectedSub: Subscription;

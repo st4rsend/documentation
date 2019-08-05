@@ -4,7 +4,7 @@ import { SqlListService } from '../../shared/services/sql-list.service';
 @Component({
   selector: 'app-mgmt-base',
   templateUrl: './mgmt-base.component.html',
-  styleUrls: ['./mgmt-base.component.css'],
+  styleUrls: ['./mgmt-base.component.scss'],
 })
 export class MgmtBaseComponent implements OnInit {
 

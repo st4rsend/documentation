@@ -1,31 +1,39 @@
-
-.itemDocDescription {
-	border-style: none none dotted;
-	background-color: #cccccc;
-}
-
-.editButton {
-	width: 30px;
-	float: right;
-}
-
 .viewport {
   height: calc(100vh - 330px);
   min-height: 150px;
   width: auto;
+	border: thick dashed lightgreen;
+	margin: 5px;
+}
+
+.edit-util {
+	width: 30px;
+	float: right;
+}
+
+.item-doc-description {
+	float: top;
+	width: 100%;
+	border-style: none none dotted;
+	background-color: #cccccc;
+}
+
+::ng-deep .item-left {
+//	border: thin solid green;
+	border: none none none;
 }
 
 .item {
 	background-color: #e8e8e8;
 	border: thin solid #eaeaea;
+	overflow: auto;
   //height: 50px;
 }
 
 .item-edit {
 	background-color: #e8e8e8;
 	border: thin solid red;
-	display: flex;
-	flex-direction: column;
+	overflow: auto;
 }
 
 .item-highlight {
@@ -33,4 +41,13 @@
 }
 .item-edit-highlight {
 	background-color: #aaccaa;
+}
+
+.edit-left {
+	float: left;
+	width: auto
+}
+.edit-right {
+	float: right;
+	width: 50px;
 }

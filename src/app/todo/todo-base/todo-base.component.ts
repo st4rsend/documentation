@@ -9,7 +9,7 @@ import {TodoService} from '../../shared/services/todo.service';
 @Component({
   selector: 'app-todo-base',
   templateUrl: './todo-base.component.html',
-  styleUrls: ['./todo-base.component.css'],
+  styleUrls: ['./todo-base.component.scss'],
 	providers: [ TodoService ],
 })
 export class TodoBaseComponent implements OnInit {

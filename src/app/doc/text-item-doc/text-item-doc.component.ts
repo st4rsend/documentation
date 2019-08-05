@@ -4,8 +4,7 @@ import { Doc } from '../../shared/model/doc';
 @Component({
   selector: 'app-text-item-doc',
   templateUrl: './text-item-doc.component.html',
-  styleUrls: ['./text-item-doc.component.css',
-		'../dyn-doc/dyn-doc.component.scss']
+  styleUrls: ['./text-item-doc.component.scss']
 })
 export class TextItemDocComponent implements OnInit {
 

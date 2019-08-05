@@ -15,7 +15,7 @@
 		(click)="itemFocus(i)"
 		[ngClass]="{'item-edit-highlight': selectedIndex === i}"
 		cdkDrag>
-		<div>
+		<div class="edit-left">
 			<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
 				[itemDoc]=item
 				[editMode]=editMode
@@ -41,8 +41,10 @@
 				(changedEvent)='toBeRefreshed($event)'>
 			</app-list-item-doc>
 		</div>
-		<div>
-			<button (click)='removeFromList();'>del</button>
+		<div class="edit-right">
+			<button (click)='moveUp(i);'>Up</button>
+			<button (click)='removeFromList(i);'>Del</button>
+			<button (click)='moveDown(i);'>Down</button>
 		</div>
 	</div>
 	</cdk-virtual-scroll-viewport>

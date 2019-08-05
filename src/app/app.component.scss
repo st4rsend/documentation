@@ -1,31 +1,17 @@
-table.header {
-	border: 1;
+header {
+	border: thick dashed lightgreen;
+	margin: 0;
+	padding: 1px;
 }
 
-p {
-  font-family: Lato;
-}
-
-.websocket-console {
-  overflow-y: scroll;
-  height: 200px;
-  width: 100%;
-  box-shadow: border-box;
-  pre {
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    font-family: monospace, serif;
-    font-size: small;
-    margin: 0;
-    padding: 1px;
-    &:nth-child(even) {
-      background-color: #d8d8d8;
-    }
-  }
+body {
+	border: thick dashed lightblue;
+	margin: 0;
+	padding: 1px;
 }
 
 .links, .links a {
-	padding: 10px;
+	padding: 2px 10px 2px 10px;
 }
 
 .links a.active {

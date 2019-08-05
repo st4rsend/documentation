@@ -5,7 +5,7 @@ import { DocService } from '../../shared/services/doc.service';
 @Component({
   selector: 'app-doc-base',
   templateUrl: './doc-base.component.html',
-  styleUrls: ['./doc-base.component.css'],
+  styleUrls: ['./doc-base.component.scss'],
 	providers: [ DocService ],
 })
 export class DocBaseComponent implements OnInit {

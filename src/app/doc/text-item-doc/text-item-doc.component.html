@@ -1,4 +1,11 @@
-<div *ngIf="editMode" class="editButton">
+<div *ngIf="viewMode=='desc' || viewMode=='full'"
+	class="item-doc-description">
+	{{itemDoc.description}}
+</div>
+	<div *ngIf="viewMode=='normal' || viewMode=='full'"
+		[innerHTML]="itemDoc.value" class="item-left">
+	</div>
+<div *ngIf="editMode" class="edit-util">
 	<button (click)='edit();'>Edit</button>
 	<div *ngIf='editing'>
 		<app-edit-item-doc
@@ -7,11 +14,3 @@
 		</app-edit-item-doc>
 	</div>
 </div>
-<div *ngIf="viewMode=='desc' || viewMode=='full'"
-	class="itemDocDescription">
-	{{itemDoc.description}}
-</div>
-<div *ngIf="viewMode=='normal' || viewMode=='full'"
-	[innerHTML]="itemDoc.value">
-</div>
-
