@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SqlListService } from '../../shared/services/sql-list.service';
 
 @Component({
   selector: 'app-mgmt-base',

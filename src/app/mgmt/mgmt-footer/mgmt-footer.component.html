@@ -1,3 +1,7 @@
-<p>maa 
-:w
-gmt-footer works!</p>
+<div class="websocket-console" #st4rsend_console>
+	<table>
+		<tr *ngFor="let msg of messages ; let index = index">
+			<td>{{index}}</td><td>{{msg}}</td>
+		</tr>
+	</table>
+</div>

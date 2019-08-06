@@ -1,14 +1,14 @@
-<table class="serverCom"><tr>
-	<td width='80px' >
-	<div *ngIf="!isConnected">
+<span>St4rsend</span>
+<div class="serverCom">
+	<div *ngIf="!isConnected" class="item">
 		<button arial-label="Connect to server"	(click)="connect()"
 			 mat-icon-button color="primary">Connect</button>
 	</div>
-	<div *ngIf="isConnected">
+	<div *ngIf="isConnected" class="item">
 		<button arial-label="Disconnect" (click)="disconnect()"
 			mat-icon-button color="warn">Disconnect</button>
 	</div>
-	</td><td>
+	<div class="item">
 		Verbosity client:
 		<select 
 			[(ngModel)]="verbosityClientFlag" 
@@ -21,8 +21,8 @@
 			<option [value]="6">6</option>
 			<option [value]="7">7</option>
 		</select>
-	</td><td>
-		<div *ngIf="isConnected">
+	</div>
+	<div *ngIf="isConnected" class="item">
 		server:
 		<select 
 			[(ngModel)]="verbosityServerFlag" 
@@ -35,63 +35,50 @@
 			<option [value]="6">6</option>
 			<option [value]="7">7</option>
 		</select>
+	</div>
+	<div *ngIf="isConnected" class="item">
+		<div *ngIf="!isLogged">
+			<button arial-label="Login"	(click)="login()"
+		 		mat-icon-button color="primary">Login</button>
 		</div>
-	</td>
-</tr><tr>
-	<td>
-		<div *ngIf="isConnected">
-			<div *ngIf="!isLogged">
-				<button arial-label="Login"	(click)="login()"
-			 		mat-icon-button color="primary">Login</button>
-			</div>
-			<div *ngIf="isLogged">
-				<button arial-label="Logout" (click)="logout()"
-					mat-icon-button color="warn">Logout</button>
-			</div>
+		<div *ngIf="isLogged">
+			<button arial-label="Logout" (click)="logout()"
+				mat-icon-button color="warn">Logout</button>
 		</div>
-		<div *ngIf="displayLogin">
-			<app-login 
-				(loginCloseEvent)='loginCloseEvent($event)'>
-			</app-login>
-		</div>
-	</td><td>	
-		<div>
-			<button arial-label="GetUserINfo" (click)="getUserInfo()"
-				mat-icon-button color="primary">Info</button>
-		</div>
-	</td><td>
+	</div>
+	<div *ngIf="displayLogin" class="item">
+		<app-login 
+			(loginCloseEvent)='loginCloseEvent($event)'>
+		</app-login>
+	</div>
+	<div class="item">
+		<button arial-label="GetUserINfo" (click)="getUserInfo()"
+			mat-icon-button color="primary">Info</button>
+	</div>
+	<div class="item">
 		Debug mode <input [(ngModel)]="debugFlag" type="checkbox" arial-label="Debug" >
-	</td>
-</tr></table>
-<BR>
-<BR>
-<div *ngIf="debugFlag">
-<form class="form-container">
-	<mat-form-field>
-		<input name="address" placeholder="address" [(ngModel)]="address" matInput>
-	</mat-form-field>
-</form>
-<form class="form-container">
-	<mat-form-field>
-		<input name="domain" placeholder="domain" [(ngModel)]="domain"
-			[disabled]="!isConnected" matInput>
-	</mat-form-field>
-	<mat-form-field>
-		<input name="command" placeholder="command" [(ngModel)]="command"
-			[disabled]="!isConnected" matInput>
-	</mat-form-field>
-	<mat-form-field>
-		<input name="message" placeholder="message" [(ngModel)]="message"
-			[disabled]="!isConnected" matInput>
-		<button arial-label="Send message" (click)="send($event)"
-			[disabled]="!isConnected" matSuffix>Send</button>
-	</mat-form-field>
-</form>
-<div class="websocket-console" #st4rsend_console>
-	<table>
-		<tr *ngFor="let msg of messages ; let index = index">
-			<td>{{index}}</td><td>{{msg}}</td>
-		</tr>
-	</table>
+	</div>
 </div>
+<div *ngIf="debugFlag">
+	<form class="form-container">
+		<mat-form-field>
+			<input name="address" placeholder="address" [(ngModel)]="address" matInput>
+		</mat-form-field>
+	</form>
+	<form class="form-container">
+		<mat-form-field>
+			<input name="domain" placeholder="domain" [(ngModel)]="domain"
+				[disabled]="!isConnected" matInput>
+		</mat-form-field>
+		<mat-form-field>
+			<input name="command" placeholder="command" [(ngModel)]="command"
+				[disabled]="!isConnected" matInput>
+		</mat-form-field>
+		<mat-form-field>
+			<input name="message" placeholder="message" [(ngModel)]="message"
+				[disabled]="!isConnected" matInput>
+			<button arial-label="Send message" (click)="send($event)"
+				[disabled]="!isConnected" matSuffix>Send</button>
+		</mat-form-field>
+	</form>
 </div>

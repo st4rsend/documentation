@@ -1,9 +1,6 @@
 <body>
 <header>
-<mat-toolbar color="primary">
-<span>St4rsend</span>
-<app-server-com (st4rsendMsg)="fromServerComEvent($event);"> </app-server-com>
-</mat-toolbar>
+	<app-server-com (st4rsendMsg)="fromServerComEvent($event);"> </app-server-com>
 <div class="links">
 	<span><a routerLink="/" routerLinkActive="">Home</a></span>
 	<span *ngIf="isConnected"><a routerLink="/doc/base" routerLinkActive="active">Doc</a></span>

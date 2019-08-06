@@ -1,27 +1,8 @@
-table.serverCom {
-	display: inline-table;
-	border:1px solid black;
-}
-td.serverCom {
+.serverCom {
+	width: 600px;
 	border:1px solid black;
 }
 
-
-
-.websocket-console {
-	overflow-y: scroll;
-	height: 200px;
-	width: 100%;
-	box-shadow: border-box;
-	pre {
-		word-wrap: break-word;
-		white-space: pre-wrap;
-		font-family: monospace, serif;
-		font-size: small;
-		margin: 0;
-		padding: 1px;
-		&:nth-child(even) {
-			background-color: #d8d8d8;
-		}
-	}
+.item {
+	border:1px solid black;
 }
