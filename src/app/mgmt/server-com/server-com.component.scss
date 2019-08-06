@@ -1,14 +1,12 @@
 table.serverCom {
+	display: inline-table;
 	border:1px solid black;
 }
 td.serverCom {
 	border:1px solid black;
 }
 
-.form-container {
-	display: flex;
-	flex-direction: column;
-}
+
 
 .websocket-console {
 	overflow-y: scroll;

@@ -32,6 +32,7 @@ import { LoginComponent } from './mgmt/login/login.component';
 import { ListMgmtComponent } from './shared/component/list-mgmt/list-mgmt.component';
 import { ListSelectComponent } from './shared/component/list-select/list-select.component';
 import { ServerComComponent } from './mgmt/server-com/server-com.component';
+import { MgmtFooterComponent } from './mgmt/mgmt-footer/mgmt-footer.component';
 import { MgmtBaseComponent } from './mgmt/mgmt-base/mgmt-base.component';
 import { AppRoutesModule } from './app-routes.module';
 
@@ -58,6 +59,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 		ListMgmtComponent,
 		ListSelectComponent,
 		MgmtBaseComponent,
+		MgmtFooterComponent,
     ServerComComponent,
   ],
   imports: [

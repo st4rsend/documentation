@@ -1,12 +1,9 @@
 <body>
 <header>
-<table >
-<tr><td>
-<mat-toolbar color="primary">St4rsend</mat-toolbar>
-</td><td>
+<mat-toolbar color="primary">
+<span>St4rsend</span>
 <app-server-com (st4rsendMsg)="fromServerComEvent($event);"> </app-server-com>
-</td></tr>
-</table>
+</mat-toolbar>
 <div class="links">
 	<span><a routerLink="/" routerLinkActive="">Home</a></span>
 	<span *ngIf="isConnected"><a routerLink="/doc/base" routerLinkActive="active">Doc</a></span>
@@ -16,7 +13,13 @@
 </header>
 
 <router-outlet></router-outlet>
+<div style="{resize: horizontal; overflow: auto}">
+HEllo
+<hr>
+</div>
 </body>
 
 <footer>
+<app-mgmt-footer>
+</app-mgmt-footer>
 </footer>
