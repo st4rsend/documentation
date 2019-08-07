@@ -1,8 +1,26 @@
-.serverCom {
-	width: 600px;
-	border:1px solid black;
+.toolbar {
+	display: flex;
+	margin: 5px 0 0 0;
+	padding: 0;
 }
 
-.item {
-	border:1px solid black;
+.toolbar-title {
+	margin-left: 10px;
+//	margin-right: 20px;
+	font-size: 26px;
+}
+.toolbar-item {
+	margin-left: 10px;
+	margin-right: 10px;
+	font-size: 14px;
+}
+
+.toolbar-button {
+	//flex: 1 1 auto;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+.toolbar-menu-item {
+
 }

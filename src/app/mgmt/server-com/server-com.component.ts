@@ -22,6 +22,7 @@ export class ServerComComponent {
 
 	private subConnected: Subscription;
 	private subMessages: Subscription;
+	private subDebugFlag: Subscription;
 	public isConnected = false;
 	public isLogged = false;
 	public displayLogin = false;
@@ -47,6 +48,11 @@ export class ServerComComponent {
 		this.messages = [];
 		this.verbosityClientFlag = "4";
 		this.verbosityServerFlag = "4";
+		this.subDebugFlag = this.globalS.debugFlag$.subscribe( flag => { 
+				this.debugFlag = flag; 
+				console.log ("received debug flag: ", flag);
+		});
+		this.debug(false);
 	}
 
 	public connect() {
@@ -63,6 +69,10 @@ export class ServerComComponent {
 			this.logout();
 		}
 		this.websocketS.wsDisconnect();
+	}
+
+	public debug(flag: boolean) {
+		this.globalS.setDebugFlag(flag);
 	}
 
 	public send() {

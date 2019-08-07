@@ -1,14 +1,40 @@
-<span>St4rsend</span>
-<div class="serverCom">
-	<div *ngIf="!isConnected" class="item">
-		<button arial-label="Connect to server"	(click)="connect()"
-			 mat-icon-button color="primary">Connect</button>
-	</div>
-	<div *ngIf="isConnected" class="item">
-		<button arial-label="Disconnect" (click)="disconnect()"
-			mat-icon-button color="warn">Disconnect</button>
-	</div>
-	<div class="item">
+<div fxFlex  fxLayout="row" fxLayoutAlign="flex-left" class="toolbar">
+	<div class="toolbar-title">St4rsend</div>
+	<mat-menu #appMenu="matMenu">
+		<div *ngIf="!isConnected" class="toolbar-menu-item">
+			<button mat-menu-item	(click)="connect()"
+				 color="primary">Connect</button>
+		</div>
+		<div *ngIf="isConnected" class="toolbar-menu-item">
+			<button mat-menu-item (click)="disconnect()"
+				 color="warn">Disconnect
+			</button>
+			<div *ngIf="!isLogged" class="toolbar-menu-item">
+				<button (click)="login()"
+		 		mat-menu-item color="primary">Login</button>
+			</div>
+			<div *ngIf="isLogged" class="toolbar-menu-item">
+				<button (click)="logout()"
+					mat-menu-item color="warn">Logout</button>
+			</div>
+			<div *ngIf="isConnected && isLogged" class="toolbar-menu-item">
+				<button (click)="getUserInfo()"
+					mat-menu-item color="primary">Info</button>
+			</div>
+		</div>
+		<div *ngIf="debugFlag" class="toolbar-menu-item">
+			<button (click)="debug(false)"
+				mat-menu-item color="primary">UnDebug</button>
+		</div>
+		<div *ngIf="!debugFlag" class="toolbar-menu-item">
+			<button (click)="debug(true)"
+				mat-menu-item color="warn">Debug</button>
+		</div>
+	</mat-menu>
+	<button mat-icon-button [matMenuTriggerFor]="appMenu" class="toolbar-button">
+		<mat-icon>Action</mat-icon>
+	</button>
+	<div class="toolbar-item">
 		Verbosity client:
 		<select 
 			[(ngModel)]="verbosityClientFlag" 
@@ -22,7 +48,7 @@
 			<option [value]="7">7</option>
 		</select>
 	</div>
-	<div *ngIf="isConnected" class="item">
+	<div *ngIf="isConnected" class="toolbar-item">
 		server:
 		<select 
 			[(ngModel)]="verbosityServerFlag" 
@@ -36,49 +62,11 @@
 			<option [value]="7">7</option>
 		</select>
 	</div>
-	<div *ngIf="isConnected" class="item">
-		<div *ngIf="!isLogged">
-			<button arial-label="Login"	(click)="login()"
-		 		mat-icon-button color="primary">Login</button>
-		</div>
-		<div *ngIf="isLogged">
-			<button arial-label="Logout" (click)="logout()"
-				mat-icon-button color="warn">Logout</button>
-		</div>
 	</div>
-	<div *ngIf="displayLogin" class="item">
+	<div class="toolbar">
+	<div *ngIf="displayLogin">
 		<app-login 
 			(loginCloseEvent)='loginCloseEvent($event)'>
 		</app-login>
 	</div>
-	<div class="item">
-		<button arial-label="GetUserINfo" (click)="getUserInfo()"
-			mat-icon-button color="primary">Info</button>
-	</div>
-	<div class="item">
-		Debug mode <input [(ngModel)]="debugFlag" type="checkbox" arial-label="Debug" >
-	</div>
-</div>
-<div *ngIf="debugFlag">
-	<form class="form-container">
-		<mat-form-field>
-			<input name="address" placeholder="address" [(ngModel)]="address" matInput>
-		</mat-form-field>
-	</form>
-	<form class="form-container">
-		<mat-form-field>
-			<input name="domain" placeholder="domain" [(ngModel)]="domain"
-				[disabled]="!isConnected" matInput>
-		</mat-form-field>
-		<mat-form-field>
-			<input name="command" placeholder="command" [(ngModel)]="command"
-				[disabled]="!isConnected" matInput>
-		</mat-form-field>
-		<mat-form-field>
-			<input name="message" placeholder="message" [(ngModel)]="message"
-				[disabled]="!isConnected" matInput>
-			<button arial-label="Send message" (click)="send($event)"
-				[disabled]="!isConnected" matSuffix>Send</button>
-		</mat-form-field>
-	</form>
 </div>

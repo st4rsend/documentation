@@ -4,6 +4,9 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { DocService } from '../../shared/services/doc.service';
 import {Doc} from '../../shared/model/doc';
 
+
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 @Component({
   selector: 'app-dyn-doc',
   templateUrl: './dyn-doc.component.html',

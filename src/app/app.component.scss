@@ -1,13 +1,22 @@
 header {
-	border: thick dashed lightgreen;
+	border: none;
 	margin: 0;
-	padding: 1px;
+	padding: 0;
+}
+
+mat-toolbar {
+	padding: 0;
+}
+mat-toolbar-row {
+	margin: 0;
+	padding: 0;
+	height: 28px;
 }
 
 body {
-	border: thick dashed lightblue;
+	border: none;
 	margin: 0;
-	padding: 1px;
+	padding: 0;
 }
 
 .links, .links a {

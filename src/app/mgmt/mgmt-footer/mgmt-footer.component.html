@@ -1,7 +1,31 @@
-<div class="websocket-console" #st4rsend_console>
-	<table>
-		<tr *ngFor="let msg of messages ; let index = index">
-			<td>{{index}}</td><td>{{msg}}</td>
-		</tr>
-	</table>
+<div *ngIf="debugFlag" class="debugPanel">
+  <form class="form-container">
+    <mat-form-field>
+      <input name="address" placeholder="address" [(ngModel)]="address" matInput>
+    </mat-form-field>
+  </form>
+  <form class="form-container">
+    <mat-form-field>
+      <input name="domain" placeholder="domain" [(ngModel)]="domain"
+        [disabled]="!isConnected" matInput>
+    </mat-form-field>
+    <mat-form-field>
+      <input name="command" placeholder="command" [(ngModel)]="command"
+        [disabled]="!isConnected" matInput>
+    </mat-form-field>
+    <mat-form-field>
+      <input name="message" placeholder="message" [(ngModel)]="message"
+        [disabled]="!isConnected" matInput>
+      <button arial-label="Send message" (click)="send($event)"
+        [disabled]="!isConnected" matSuffix>Send</button>
+    </mat-form-field>
+  </form>
+
+	<div class="websocket-console" #st4rsend_console>
+		<table>
+			<tr *ngFor="let msg of messages ; let index = index">
+				<td>{{index}}</td><td>{{msg}}</td>
+			</tr>
+		</table>
+	</div>
 </div>

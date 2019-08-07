@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject, Observable } from 'rxjs';
 
 interface UserGroup {
 	GID: number;
@@ -25,6 +26,8 @@ export class GlobalService {
 	private sqlListChanBase: number = 512;
 	private sqlListChanMax: number = 511;
 
+	private debugFlag = new Subject<boolean>();
+	public debugFlag$ = this.debugFlag.asObservable();
 
   constructor() { 
 		this.sqlListChanCntr= 0;
@@ -34,7 +37,6 @@ export class GlobalService {
 			FirstName: "firstName",
 			LastName: "lastName",
 			Groups: []};
-//		console.log("creating GlobalService");
 
 	}
 
@@ -76,5 +78,9 @@ export class GlobalService {
 		if (level <= this.verbosity) {
 			console.log("Msg: ", args);
 		}
+	}
+
+	public setDebugFlag(flag: boolean) {
+		this.debugFlag.next(flag);
 	}
 }

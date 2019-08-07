@@ -6,7 +6,10 @@ td.serverCom {
 	border:1px solid black;
 }
 
-
+.debugPanel {
+	margin: 10px;
+	border: thick solid orange;
+}
 
 .websocket-console {
 	overflow-y: scroll;
