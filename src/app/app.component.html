@@ -1,9 +1,10 @@
 <body>
 <header>
 <mat-toolbar color="primary">
-<mat-toolbar-row>
+<!--<mat-toolbar-row>-->
 	<app-server-com (st4rsendMsg)="fromServerComEvent($event);"> </app-server-com>
-</mat-toolbar-row>
+<!--</mat-toolbar-row>-->
+<!-- 
 <mat-toolbar-row>
 <div class="links">
 	<span><a routerLink="/" routerLinkActive="">Home</a></span>
@@ -12,6 +13,7 @@
 	<span *ngIf="isConnected"><a routerLink="/mgmt/base" routerLinkActive="active">Mgmt</a></span>
 </div>
 </mat-toolbar-row>
+-->
 </mat-toolbar>
 </header>
 

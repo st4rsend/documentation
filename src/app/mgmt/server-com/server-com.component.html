@@ -1,14 +1,20 @@
 <div fxFlex  fxLayout="row" fxLayoutAlign="flex-left" class="toolbar">
-	<div class="toolbar-title">St4rsend</div>
+	<button mat-icon-button [matMenuTriggerFor]="appMenu" aria-label="icon">
+		<mat-icon>menu</mat-icon>
+	</button>
 	<mat-menu #appMenu="matMenu">
-		<div *ngIf="!isConnected" class="toolbar-menu-item">
-			<button mat-menu-item	(click)="connect()"
-				 color="primary">Connect</button>
-		</div>
 		<div *ngIf="isConnected" class="toolbar-menu-item">
-			<button mat-menu-item (click)="disconnect()"
-				 color="warn">Disconnect
+			<mat-menu #subMenu="matMenu">
+				<a routerLink="doc/base"><button mat-menu-item>Doc</button></a>
+				<a routerLink="todo/base"><button mat-menu-item>Todo</button></a>
+				<div *ngIf="isLogged">
+					<a routerLink="mgmt/base"><button mat-menu-item>Mgmt</button></a>
+				</div>
+			</mat-menu>
+			<button mat-menu-item [matMenuTriggerFor]='subMenu'>
+				Applications
 			</button>
+			<div>----</div>
 			<div *ngIf="!isLogged" class="toolbar-menu-item">
 				<button (click)="login()"
 		 		mat-menu-item color="primary">Login</button>
@@ -17,10 +23,18 @@
 				<button (click)="logout()"
 					mat-menu-item color="warn">Logout</button>
 			</div>
-			<div *ngIf="isConnected && isLogged" class="toolbar-menu-item">
-				<button (click)="getUserInfo()"
-					mat-menu-item color="primary">Info</button>
-			</div>
+			<button mat-menu-item (click)="disconnect()"
+				 color="warn">Disconnect
+			</button>
+		</div>
+		<div *ngIf="!isConnected" class="toolbar-menu-item">
+			<button mat-menu-item	(click)="connect()"
+				 color="primary">Connect</button>
+		</div>
+		<div>----</div>
+		<div *ngIf="isConnected && isLogged" class="toolbar-menu-item">
+			<button (click)="getUserInfo()"
+				mat-menu-item color="primary">Info</button>
 		</div>
 		<div *ngIf="debugFlag" class="toolbar-menu-item">
 			<button (click)="debug(false)"
@@ -31,9 +45,7 @@
 				mat-menu-item color="warn">Debug</button>
 		</div>
 	</mat-menu>
-	<button mat-icon-button [matMenuTriggerFor]="appMenu" class="toolbar-button">
-		<mat-icon>Action</mat-icon>
-	</button>
+	<div class="toolbar-title">St4rsend</div>
 	<div class="toolbar-item">
 		Verbosity client:
 		<select 

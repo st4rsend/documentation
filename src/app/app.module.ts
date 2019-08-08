@@ -76,7 +76,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 		AppRoutesModule,
 		DragDropModule,
 		ScrollDispatchModule,
-		FlexLayoutModule
+		FlexLayoutModule,
   ],
   providers: [
 	],
