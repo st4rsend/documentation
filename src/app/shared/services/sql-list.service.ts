@@ -80,7 +80,7 @@ export class SqlListService {
 		this.position_name = position;
 		this.isReady$.next(false);
 		this.sqlList  = [];
-		this.subject = this.webSocketService.wsSubject();
+		this.subject = this.webSocketService.webSocketSubject;
 
 		if ((this.selectSub === undefined) || (this.selectSub.closed === true)) {
 			this.selectSub = this.subject.subscribe((value) => {
@@ -89,21 +89,21 @@ export class SqlListService {
 		}
 		if (this.asFilter) {
 			let message = this.webSocketService
-				.wsPrepareMessage(this.channelID,'SQL','GET_LIST_FLT',[this.table_name, this.idx_name, this.column_name, this.position_name, this.filter_column_name, this.filter_value] );
+				.prepareMessage(this.channelID,'SQL','GET_LIST_FLT',[this.table_name, this.idx_name, this.column_name, this.position_name, this.filter_column_name, this.filter_value] );
 			this.subject.next(message);
 
 		} else {
 			let message = this.webSocketService
-				.wsPrepareMessage(this.channelID,'SQL','GET_LIST',[this.table_name, this.idx_name, this.column_name, this.position_name] );
+				.prepareMessage(this.channelID,'SQL','GET_LIST',[this.table_name, this.idx_name, this.column_name, this.position_name] );
 			this.subject.next(message);
 		}
 	}
 
 	public UpdateItem(item: ISqlList) {
-		this.subject = this.webSocketService.wsSubject();
+		this.subject = this.webSocketService.webSocketSubject;
 		if (this.asFilter){
 			let message = this.webSocketService
-				.wsPrepareMessage(this.channelID,'SQL','UPDATE_LIST_FLT',[
+				.prepareMessage(this.channelID,'SQL','UPDATE_LIST_FLT',[
 					this.table_name,
 					this.idx_name,
 					this.column_name,
@@ -117,7 +117,7 @@ export class SqlListService {
 			this.subject.next(message);
 		} else {
 			let message = this.webSocketService
-				.wsPrepareMessage(this.channelID,'SQL','UPDATE_LIST',[
+				.prepareMessage(this.channelID,'SQL','UPDATE_LIST',[
 					this.table_name,
 					this.idx_name,
 					this.column_name,
@@ -131,10 +131,10 @@ export class SqlListService {
 	}
 
 	public InsertItem(item: ISqlList) {
-		this.subject = this.webSocketService.wsSubject();
+		this.subject = this.webSocketService.webSocketSubject;
 		if (this.asFilter) {
 			let message = this.webSocketService
-				.wsPrepareMessage(this.channelID,'SQL','INSERT_LIST_FLT',[
+				.prepareMessage(this.channelID,'SQL','INSERT_LIST_FLT',[
 					this.table_name,
 					this.column_name,
 					this.position_name,
@@ -146,7 +146,7 @@ export class SqlListService {
 			this.subject.next(message);
 		} else {
 			let message = this.webSocketService
-				.wsPrepareMessage(this.channelID,'SQL','INSERT_LIST',[
+				.prepareMessage(this.channelID,'SQL','INSERT_LIST',[
 					this.table_name,
 					this.column_name,
 					this.position_name,
@@ -158,9 +158,9 @@ export class SqlListService {
 	}
 
 	public DeleteItem(idx: number) {
-		this.subject = this.webSocketService.wsSubject();
+		this.subject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'SQL','DELETE_LIST',[
+			.prepareMessage(this.channelID,'SQL','DELETE_LIST',[
 				this.table_name,
 				this.idx_name,
 				idx.toString(),

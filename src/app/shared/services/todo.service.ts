@@ -17,7 +17,7 @@ export class TodoService {
 
 	public isReady$ = new Subject<any>();
 
-	constructor ( private webSocketService: WebSocketService ) {
+	constructor ( private webSocketSvc: WebSocketService ) {
 		console.log("Constructing TodoService");
 		this.todos = [];
 	}
@@ -36,13 +36,13 @@ export class TodoService {
 
 	public createTodo(todo: Todo) {
 		this.isReady$.next(false);
-		this.tsSubject = this.webSocketService.wsSubject();
+		this.tsSubject = this.webSocketSvc.webSocketSubject;
 		this.tsSelectSub = this.tsSubject.subscribe((value) => {
 			this.tsParse(value);
 		});
 
-		let message1 = this.webSocketService
-			.wsPrepareMessage(this.channelID,'TODO','INSERT_TODO',[
+		let message1 = this.webSocketSvc
+			.prepareMessage(this.channelID,'TODO','INSERT_TODO',[
 				todo.userID.toString(),
 				todo.label,
 				todo.completed.toString(),
@@ -53,23 +53,23 @@ export class TodoService {
 
 	public deleteTodo(idx: number) {
 		this.isReady$.next(false);
-		this.tsSubject = this.webSocketService.wsSubject();
+		this.tsSubject = this.webSocketSvc.webSocketSubject;
 		this.tsSelectSub = this.tsSubject.subscribe((value) => {
 			this.tsParse(value);
 		});
-		let message1 = this.webSocketService
-			.wsPrepareMessage(this.channelID,'TODO','DELETE_TODO',[idx.toString()]);
+		let message1 = this.webSocketSvc
+			.prepareMessage(this.channelID,'TODO','DELETE_TODO',[idx.toString()]);
 		this.tsSubject.next(message1);
 	}
 
 	public updateTodo(todo: Todo) {
 		this.isReady$.next(false);
-		this.tsSubject = this.webSocketService.wsSubject();
+		this.tsSubject = this.webSocketSvc.webSocketSubject;
 		this.tsSelectSub = this.tsSubject.subscribe((value) => {
 			this.tsParse(value);
 		});
-		let message1 = this.webSocketService
-			.wsPrepareMessage(this.channelID,'TODO','UPDATE_TODO',[
+		let message1 = this.webSocketSvc
+			.prepareMessage(this.channelID,'TODO','UPDATE_TODO',[
 				todo.userID.toString(),
 				todo.label,
 				todo.targetDate,
@@ -82,12 +82,12 @@ export class TodoService {
 	public SQLSynchro() {
 		this.isReady$.next(false);
 		this.todos = [];
-		this.tsSubject = this.webSocketService.wsSubject();
+		this.tsSubject = this.webSocketSvc.webSocketSubject;
 		if ((this.tsSelectSub === undefined) || (this.tsSelectSub.closed === true)) {
 			this.tsSelectSub = this.tsSubject.subscribe((value) => { this.tsParse(value); });
 		}
-		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'TODO','GET_TODOS',[]);
+		let message = this.webSocketSvc
+			.prepareMessage(this.channelID,'TODO','GET_TODOS',[]);
 		this.tsSubject.next(message);
 	}
 

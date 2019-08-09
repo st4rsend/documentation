@@ -1,14 +1,8 @@
-table.serverCom {
-	display: inline-table;
-	border:1px solid black;
-}
-td.serverCom {
-	border:1px solid black;
-}
-
 .debugPanel {
-	margin: 10px;
-	border: thick solid orange;
+	display: flex;
+	border: thin solid orange;
+	flex-wrap: wrap;
+	margin-right: 5px;
 }
 
 .websocket-console {

@@ -6,17 +6,7 @@ header {
 
 mat-toolbar {
 	padding: 0;
-}
-mat-toolbar-row {
 	margin: 0;
-	padding: 0;
-	height: 28px;
-}
-
-body {
-	border: none;
-	margin: 0;
-	padding: 0;
 }
 
 .links, .links a {
@@ -25,4 +15,8 @@ body {
 
 .links a.active {
 	background-color: grey;
+}
+
+.toolbar {
+	width: 100%;
 }

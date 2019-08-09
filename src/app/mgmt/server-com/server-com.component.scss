@@ -1,26 +1,27 @@
 .toolbar {
 	display: flex;
+	justify-content: space-between;
 	margin: 5px 0 0 0;
 	padding: 0;
+	width: 100%;
 }
 
 .toolbar-title {
+	flex-grow: 1;
+	text-align: center;
 	margin-left: 10px;
-//	margin-right: 20px;
 	font-size: 26px;
 }
-.toolbar-item {
+
+.toolbar-button {
+	display: flex;
+	width: 50px;
+	margin-right: 10px;
+}
+
+.toolbar-menu-item {
 	margin-left: 10px;
 	margin-right: 10px;
 	font-size: 14px;
 }
 
-.toolbar-button {
-	//flex: 1 1 auto;
-	margin-left: 20px;
-	margin-right: 20px;
-}
-
-.toolbar-menu-item {
-
-}

@@ -21,7 +21,7 @@ export class AuthenticationService {
 	authSub: Subscription;
 
   constructor( 
-		private webSocket: WebSocketService,
+		private webSocketSvc: WebSocketService,
 		private globalSvc: GlobalService ) {
 //		console.log("creating authentication service");
 	 }
@@ -35,8 +35,8 @@ export class AuthenticationService {
 		this.isReady$.next(false);
 		this.command = "LOGOUT";
 		this.message = [];
-		let message1 = this.webSocket.wsPrepareMessage(this.channelID, this.domain,this.command,this.message);
-		this.webSocket.wsSubject().next(message1);
+		let message1 = this.webSocketSvc.prepareMessage(this.channelID, this.domain,this.command,this.message);
+		this.webSocketSvc.webSocketSubject.next(message1);
 		
 	}
 
@@ -44,27 +44,27 @@ export class AuthenticationService {
 		this.connectID = 0;
 		this.isReady$.next(false);
 		if ((this.authSub === undefined) || (this.authSub.closed === true)) {
-			this.authSub = this.webSocket.wsSubject().subscribe((msg) => {
+			this.authSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
 				this.parseAuth(msg);
 			});
 		}
 		this.command = "LOGIN";
 		this.message = [user, password];
-		let message1 = this.webSocket.wsPrepareMessage(this.channelID, this.domain,this.command,this.message);
-		this.webSocket.wsSubject().next(message1);
+		let message1 = this.webSocketSvc.prepareMessage(this.channelID, this.domain,this.command,this.message);
+		this.webSocketSvc.webSocketSubject.next(message1);
 	}
 
 	public getUserInfo(UID: number) {
 		this.isReady$.next(false);
 		if ((this.authSub === undefined) || (this.authSub.closed === true)) {
-			this.authSub = this.webSocket.wsSubject().subscribe((msg) => {
+			this.authSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
 				this.parseAuth(msg);
 			});
 		}
 		this.message = [];
 		this.message.push(JSON.stringify(UID));
-		let message = this.webSocket.wsPrepareMessage(1,"SEC","USR_INFO",this.message);
-		this.webSocket.wsSubject().next(message);
+		let message = this.webSocketSvc.prepareMessage(1,"SEC","USR_INFO",this.message);
+		this.webSocketSvc.webSocketSubject.next(message);
 	}
 
 	private parseAuth(msg: wsMessage) {

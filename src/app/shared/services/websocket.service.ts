@@ -26,21 +26,31 @@ export interface wsMessage {
 
 export class WebSocketService {
 
-  constructor() { }
 
 	private isConnected: boolean = false;
 	private wsConnected$ = new Subject<boolean>();
 	private currentSeq: number = 1;
 
-	private webSocketSubject: WebSocketSubject<wsMessage>;
+	public webSocketSubject: WebSocketSubject<wsMessage>;
 	private genericSubscription: Subscription;
+	private messages: Array<string>;
+
+	private trackDebug: Subscription;
 
 	private hbtInterval: number = 3000;
 	private hbtTicker: number;
 	private hbtHoldTime: number = 9000;
 	private hbtHoldTicker: number;
 
-	public wsPrepareMessage(channelid: number, domain: string, command: string, data: string[]): wsMessage {
+  constructor() { 
+		this.messages = [];
+	}
+
+	public connected(): Observable<any> {
+		return this.wsConnected$.asObservable();
+	}
+
+	public prepareMessage(channelid: number, domain: string, command: string, data: string[]): wsMessage {
 		let message: wsMessage = {
 			sequence: this.currentSeq,
 			time: {
@@ -58,7 +68,7 @@ export class WebSocketService {
 		return message;
 	}
 
-	public wsConnect(url: string){
+	public connect(url: string){
 		this.webSocketSubject = webSocket(url);
 		this.genericSubscription = this.webSocketSubject.subscribe(
 			(msg) => this.genericParse(msg),
@@ -67,7 +77,7 @@ export class WebSocketService {
 		);
 		this.hbtTicker = setInterval(
 			() => {
-				this.wsSubject().next(this.wsPrepareMessage(0,"HBT","HBTINF",[]));
+				this.webSocketSubject.next(this.prepareMessage(0,"HBT","HBTINF",[]));
 			},this.hbtInterval
 		);
 		this.hbtHoldTicker = setTimeout(
@@ -77,7 +87,26 @@ export class WebSocketService {
 		);
 	}
 
-	public wsDisconnect(){
+	public sendDebugMessage(
+			channel: number,
+			domain: string,
+			command: string,
+			messages: string[],
+			parser,
+			context
+		) {
+		this.trackDebug = this.webSocketSubject.subscribe(
+			(x: wsMessage) => {
+				if(parser(x, context)) {
+					this.trackDebug.unsubscribe();
+				};
+			}
+		);
+		let message1 = this.prepareMessage(channel, domain, command, messages);
+		this.webSocketSubject.next(message1);
+	}
+
+	public disconnect(){
 		this.currentSeq = 1;
 		clearInterval(this.hbtTicker);
 		clearTimeout(this.hbtHoldTicker);
@@ -87,13 +116,13 @@ export class WebSocketService {
 		this.wsConnected$.next(false);
 	}
 
-	public connected(): Observable<any> {
-		return this.wsConnected$.asObservable();
-	}
-
-	public wsSubject() : Subject<any> {
-		return this.webSocketSubject;	
-		
+	public setServerVerbosity(value: string) {
+		this.messages = [];
+		this.messages.push(JSON.stringify(parseInt(value)));
+		let message =  this.prepareMessage(0,"CMD","VERBOSITY",this.messages);
+		if (this.webSocketSubject != null) {
+			this.webSocketSubject.next(message);
+		}
 	}
 
 	public genericParse(msg: wsMessage){
@@ -119,6 +148,6 @@ export class WebSocketService {
 	private hbtHoldFail() {
 		console.log("ALERT HBT HOLDTIME EXPIRED !!!");
 		clearTimeout(this.hbtHoldTicker);	
-		this.wsDisconnect();
+		this.disconnect();
 	}
 }

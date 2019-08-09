@@ -29,6 +29,8 @@ export class GlobalService {
 	private debugFlag = new Subject<boolean>();
 	public debugFlag$ = this.debugFlag.asObservable();
 
+	private webSocketUrl: string = 'wss://st4rsend.net/ws';
+
   constructor() { 
 		this.sqlListChanCntr= 0;
 		this.userInfo = {
@@ -38,6 +40,13 @@ export class GlobalService {
 			LastName: "lastName",
 			Groups: []};
 
+	}
+	public setWebSocketUrl(url: string) {
+		this.webSocketUrl = url;
+	}
+
+	public getWebSocketUrl(): string {
+		return this.webSocketUrl
 	}
 
 	public GetSqlListChannel() {

@@ -2,7 +2,11 @@
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'material-design-icons/iconfont/material-icons.css';
 
-html, body {
-  margin: 0;
+html {
+	box-sizing: border-box;
 }
 
+body {
+	margin: 0;
+	padding: 0;
+}

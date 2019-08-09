@@ -1,9 +1,9 @@
-<div fxFlex  fxLayout="row" fxLayoutAlign="flex-left" class="toolbar">
+<div fxFlex fxLayout="row" fxLayoutAlign="space-between center" class="toolbar">
 	<button mat-icon-button [matMenuTriggerFor]="appMenu" aria-label="icon">
 		<mat-icon>menu</mat-icon>
 	</button>
 	<mat-menu #appMenu="matMenu">
-		<div *ngIf="isConnected" class="toolbar-menu-item">
+		<div *ngIf="connectFlag" class="toolbar-menu-item">
 			<mat-menu #subMenu="matMenu">
 				<a routerLink="doc/base"><button mat-menu-item>Doc</button></a>
 				<a routerLink="todo/base"><button mat-menu-item>Todo</button></a>
@@ -15,11 +15,11 @@
 				Applications
 			</button>
 			<div>----</div>
-			<div *ngIf="!isLogged" class="toolbar-menu-item">
+			<div *ngIf="!loginFlag" class="toolbar-menu-item">
 				<button (click)="login()"
 		 		mat-menu-item color="primary">Login</button>
 			</div>
-			<div *ngIf="isLogged" class="toolbar-menu-item">
+			<div *ngIf="loginFlag" class="toolbar-menu-item">
 				<button (click)="logout()"
 					mat-menu-item color="warn">Logout</button>
 			</div>
@@ -27,12 +27,12 @@
 				 color="warn">Disconnect
 			</button>
 		</div>
-		<div *ngIf="!isConnected" class="toolbar-menu-item">
+		<div *ngIf="!connectFlag" class="toolbar-menu-item">
 			<button mat-menu-item	(click)="connect()"
 				 color="primary">Connect</button>
 		</div>
 		<div>----</div>
-		<div *ngIf="isConnected && isLogged" class="toolbar-menu-item">
+		<div *ngIf="connectFlag && loginFlag" class="toolbar-menu-item">
 			<button (click)="getUserInfo()"
 				mat-menu-item color="primary">Info</button>
 		</div>
@@ -45,40 +45,20 @@
 				mat-menu-item color="warn">Debug</button>
 		</div>
 	</mat-menu>
-	<div class="toolbar-title">St4rsend</div>
-	<div class="toolbar-item">
-		Verbosity client:
-		<select 
-			[(ngModel)]="verbosityClientFlag" 
-			(change)="verbosityClient()">
-			<option [value]="1">1</option>
-			<option [value]="2">2</option>
-			<option [value]="3">3</option>
-			<option [value]="4">4</option>
-			<option [value]="5">5</option>
-			<option [value]="6">6</option>
-			<option [value]="7">7</option>
-		</select>
+	<div class="toolbar-title">
+		St4rsend
 	</div>
-	<div *ngIf="isConnected" class="toolbar-item">
-		server:
-		<select 
-			[(ngModel)]="verbosityServerFlag" 
-			(change)="verbosityServer()">
-			<option [value]="1">1</option>
-			<option [value]="2">2</option>
-			<option [value]="3">3</option>
-			<option [value]="4">4</option>
-			<option [value]="5">5</option>
-			<option [value]="6">6</option>
-			<option [value]="7">7</option>
-		</select>
+	<div class="toolbar-button">
+		<div *ngIf="connectFlag" >
+			<mat-icon>settings_remote</mat-icon>
+		</div>
+		<div *ngIf="loginFlag" >
+			<mat-icon>perm_identity</mat-icon>
+		</div>
 	</div>
-	</div>
-	<div class="toolbar">
-	<div *ngIf="displayLogin">
-		<app-login 
-			(loginCloseEvent)='loginCloseEvent($event)'>
-		</app-login>
-	</div>
+</div>
+<div *ngIf="loginDisplayFlag">
+	<app-login 
+		(loginCloseEvent)='loginCloseEvent($event)'>
+	</app-login>
 </div>

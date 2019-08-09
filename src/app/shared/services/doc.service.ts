@@ -7,7 +7,7 @@ import { Doc } from '../model/doc';
 
 export class DocService {
 
-	docs: Array<Doc>;
+	public docs: Array<Doc>;
 	private docListID: number;
 
 	dsSelectSub: Subscription;
@@ -51,16 +51,16 @@ export class DocService {
 	}
 
 	public dsUpdateDoc(doc: Doc) {
-		this.dsSubject = this.webSocketService.wsSubject();
+		this.dsSubject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'DOC','UPDATE_DOC',[doc.idx.toString(), doc.typeID.toString(), doc.description, doc.value, doc.childListID.toString()]);
+			.prepareMessage(this.channelID,'DOC','UPDATE_DOC',[doc.idx.toString(), doc.typeID.toString(), doc.description, doc.value, doc.childListID.toString()]);
 		this.dsSubject.next(message);
 	}
 
 	public updateDocPosition(listID: number, docID: number, position: number) {
-		this.dsSubject = this.webSocketService.wsSubject();
+		this.dsSubject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'DOC','UPDATE_DOC_POS',[
+			.prepareMessage(this.channelID,'DOC','UPDATE_DOC_POS',[
 				listID.toString(),
 				docID.toString(),
 				position.toString()]);
@@ -68,9 +68,9 @@ export class DocService {
 	}
 
 	public dsInsertDoc(doc: Doc) {
-		this.dsSubject = this.webSocketService.wsSubject();
+		this.dsSubject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'DOC','INSERT_DOC',[
+			.prepareMessage(this.channelID,'DOC','INSERT_DOC',[
 				doc.typeID.toString(),
 				doc.description,
 				doc.value,
@@ -82,7 +82,7 @@ export class DocService {
 
 	public dsSQLQueryDocs() {
 		this.docs = [];
-		this.dsSubject = this.webSocketService.wsSubject();
+		this.dsSubject = this.webSocketService.webSocketSubject;
 		this.isReady$.next(false);
 		if (this.docListID != undefined) {	
 			this.dsSelectSub = this.dsSubject.subscribe((scMsg) => {
@@ -108,7 +108,7 @@ export class DocService {
 			});
 		}
 		let message = this.webSocketService
-			.wsPrepareMessage(this.channelID,'DOC','GET_DOC_BY_ID',[this.docListID.toString()]);
+			.prepareMessage(this.channelID,'DOC','GET_DOC_BY_ID',[this.docListID.toString()]);
 		this.dsSubject.next(message);
 	}
 }

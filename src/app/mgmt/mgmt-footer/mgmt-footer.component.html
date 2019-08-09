@@ -1,26 +1,62 @@
-<div *ngIf="debugFlag" class="debugPanel">
-  <form class="form-container">
-    <mat-form-field>
-      <input name="address" placeholder="address" [(ngModel)]="address" matInput>
-    </mat-form-field>
-  </form>
-  <form class="form-container">
-    <mat-form-field>
-      <input name="domain" placeholder="domain" [(ngModel)]="domain"
-        [disabled]="!isConnected" matInput>
-    </mat-form-field>
-    <mat-form-field>
-      <input name="command" placeholder="command" [(ngModel)]="command"
-        [disabled]="!isConnected" matInput>
-    </mat-form-field>
-    <mat-form-field>
-      <input name="message" placeholder="message" [(ngModel)]="message"
-        [disabled]="!isConnected" matInput>
-      <button arial-label="Send message" (click)="send($event)"
-        [disabled]="!isConnected" matSuffix>Send</button>
-    </mat-form-field>
-  </form>
-
+<div *ngIf="debugFlag" fxFlex fxLayout="column">
+<div class="debugPanel" fxFlex fxLayout="row">	
+	<div>
+		Verbosity client:
+		<select 
+			[(ngModel)]="clientVerbosity" 
+			(change)="setClientVerbosit()">
+			<option [value]="1">1</option>
+			<option [value]="2">2</option>
+			<option [value]="3">3</option>
+			<option [value]="4">4</option>
+			<option [value]="5">5</option>
+			<option [value]="6">6</option>
+			<option [value]="7">7</option>
+		</select>
+	</div>
+	<div *ngIf="isConnected">
+		Verbosity Server:
+		<select 
+			[(ngModel)]="serverVerbosity" 
+			(change)="setServerVerbosity()">
+			<option [value]="1">1</option>
+			<option [value]="2">2</option>
+			<option [value]="3">3</option>
+			<option [value]="4">4</option>
+			<option [value]="5">5</option>
+			<option [value]="6">6</option>
+			<option [value]="7">7</option>
+		</select>
+	</div>
+	<div>
+      <input name="address" placeholder="address" [(ngModel)]="webSocketUrl" matInput>
+		<button (click)="setWebSocketUrl()"
+        matSuffix>Change</button>
+	</div>
+</div>
+<div class="debugPanel" fxFlex fxLayout="row">	
+	<div>
+    <textarea name="message" 
+			placeholder="message" [(ngModel)]="msgToServer"
+      [disabled]="!isConnected"
+			matInput rows="5" cols="25"
+			ngList="&#10;" ngTrim="false"
+			>
+		</textarea>
+	</div>
+</div>
+<div  fxFlex fxLayout="row" class="debugPanel">
+	Domain:
+	<input name="domain" placeholder="domain" [(ngModel)]="domain"
+		[disabled]="!isConnected" matInput>
+	Command:
+	<input name="command" placeholder="command" [(ngModel)]="command"
+		[disabled]="!isConnected" matInput>
+	<button arial-label="Send message" (click)="sendDebugMsg()"
+		[disabled]="!isConnected" matSuffix>Send</button>
+</div>
+<div>
+<div class="debugPanel" fxFlex fxLayout="row">	
 	<div class="websocket-console" #st4rsend_console>
 		<table>
 			<tr *ngFor="let msg of messages ; let index = index">
@@ -28,4 +64,5 @@
 			</tr>
 		</table>
 	</div>
+</div>
 </div>
