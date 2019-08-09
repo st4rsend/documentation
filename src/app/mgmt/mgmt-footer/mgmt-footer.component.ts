@@ -22,8 +22,8 @@ export class MgmtFooterComponent implements OnInit {
 	private webSocketUrl: string;
 
 	private debugChannel: number = 3;
-	private domain: string = 'SQL';
-	private command: string = 'GET_LIST';
+	private debugDomain: string = 'SQL';
+	private debugCommand: string = 'GET_LIST';
 	public msgToServer: string = "documentation_list\nID\ndescription\nposition";
 
 	messages: string[];
@@ -63,21 +63,13 @@ export class MgmtFooterComponent implements OnInit {
 
 	public sendDebugMsg() {
 		let msgArray: string[] = this.msgToServer.split('\n');
-		var debugContext = this;
-		this.webSocketSvc.sendDebugMessage(
+		this.webSocketSvc.sendMessage(
 			this.debugChannel,
-			this.domain,
-			this.command,
-			msgArray, this.parseDebugMessage, debugContext);
+			this.debugDomain,
+			this.debugCommand,
+			msgArray, (x: wsMessage) => {
+				this.messages.push(JSON.stringify(x));
+			}
+		);
 	}
-
-	public parseDebugMessage(x: wsMessage, context) {
-		context.messages.push(JSON.stringify(x));
-		if (x.payload.channelid == context.debugChannel
-			&& x.payload.command == "EOF") {
-				return true;
-		}
-		return false;
-	}
-
 }

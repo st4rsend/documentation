@@ -35,8 +35,6 @@ export class WebSocketService {
 	private genericSubscription: Subscription;
 	private messages: Array<string>;
 
-	private trackDebug: Subscription;
-
 	private hbtInterval: number = 3000;
 	private hbtTicker: number;
 	private hbtHoldTime: number = 9000;
@@ -87,23 +85,25 @@ export class WebSocketService {
 		);
 	}
 
-	public sendDebugMessage(
+	public sendMessage(
 			channel: number,
 			domain: string,
 			command: string,
-			messages: string[],
-			parser,
-			context
-		) {
-		this.trackDebug = this.webSocketSubject.subscribe(
-			(x: wsMessage) => {
-				if(parser(x, context)) {
-					this.trackDebug.unsubscribe();
-				};
-			}
-		);
-		let message1 = this.prepareMessage(channel, domain, command, messages);
-		this.webSocketSubject.next(message1);
+			data: string[],
+			parserFct: Function) {
+		let trackSub = this.webSocketSubject.subscribe(
+			(msg: wsMessage) => {
+				if ((msg.payload.channelid == channel)
+				&& (msg.payload.domain == domain)) {
+					if (msg.payload.command == "EOF") {
+						trackSub.unsubscribe();
+					}
+					else {
+						parserFct(msg)
+					};
+				}
+			});
+		this.webSocketSubject.next(this.prepareMessage(channel, domain, command, data));
 	}
 
 	public disconnect(){
