@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit {
 			password: ['', Validators.required]
 		});
 		this.authService.connected().pipe(first()).subscribe(x => {
-			console.log("Connected value: ", x);
 			this.loading = false;
 			if (x > 0) {
 				this.loginCloseEvent.emit(true);
@@ -43,14 +42,16 @@ export class LoginComponent implements OnInit {
 		this.submitted = true;
 
 		if (this.loginForm.invalid) {
-			console.log("loginForm INVALID");
 			return;
 		}
 
 		this.loading = true;
-		console.log("Access auth service");
 		this.authService.loginChallenge(
 			this.formControls.username.value,
 			this.formControls.password.value);
+	}
+
+	close() {
+		this.loginCloseEvent.emit(false);
 	}
 }

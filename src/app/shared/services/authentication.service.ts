@@ -9,8 +9,8 @@ import { GlobalService } from './global.service';
 export class AuthenticationService {
 
 	private	channelID: number = 1;
-	private connectID: number = 0;
-	private isConnectedSubject$ = new Subject<number>();
+	private userID: number = 0;
+	private userIDSubject$ = new Subject<number>();
 
 	private domain: string = 'SEC';
 	private command: string;
@@ -27,11 +27,11 @@ export class AuthenticationService {
 	 }
 
 	public connected() {
-		return this.isConnectedSubject$.asObservable();
+		return this.userIDSubject$.asObservable();
 	}
 
 	public logout() {
-		this.connectID = 0;
+		this.userID = 0;
 		this.isReady$.next(false);
 		this.command = "LOGOUT";
 		this.message = [];
@@ -41,7 +41,7 @@ export class AuthenticationService {
 	}
 
 	public loginChallenge(user: string, password: string) {
-		this.connectID = 0;
+		this.userID = 0;
 		this.isReady$.next(false);
 		if ((this.authSub === undefined) || (this.authSub.closed === true)) {
 			this.authSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
@@ -71,11 +71,11 @@ export class AuthenticationService {
 
 		if ((+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SEC")) {
 			if (msg.payload.command === "RESP_LOGIN") {
-				this.connectID = +msg.payload.data[0];
-				if (this.connectID == 0) {
+				this.userID = +msg.payload.data[0];
+				if (this.userID == 0) {
 					this.globalSvc.ResetUser();
 				} 
-				this.isConnectedSubject$.next(this.connectID);
+				this.userIDSubject$.next(this.userID);
 			}
 		}
 		if ((+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SEC")) {

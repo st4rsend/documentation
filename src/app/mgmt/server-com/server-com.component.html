@@ -3,6 +3,10 @@
 		<mat-icon>menu</mat-icon>
 	</button>
 	<mat-menu #appMenu="matMenu">
+			<a routerLink="/home">
+				<mat-icon>home</mat-icon>
+			</a>
+		<div>----</div>
 		<div *ngIf="connectFlag" class="toolbar-menu-item">
 			<mat-menu #subMenu="matMenu">
 				<a routerLink="doc/base"><button mat-menu-item>Doc</button></a>
@@ -45,7 +49,7 @@
 				mat-menu-item color="warn">Debug</button>
 		</div>
 	</mat-menu>
-	<div class="toolbar-title">
+	<div #title (click)="titleClick()" class="toolbar-title cursor-notco">
 		St4rsend
 	</div>
 	<div class="toolbar-button">

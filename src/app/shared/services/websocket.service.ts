@@ -32,7 +32,9 @@ export class WebSocketService {
 	private currentSeq: number = 1;
 
 	public webSocketSubject: WebSocketSubject<wsMessage>;
-	private genericSubscription: Subscription;
+	private webSocketSubscription: Subscription;
+	private trackSubs: Subscription[];
+
 	private messages: Array<string>;
 
 	private hbtInterval: number = 3000;
@@ -42,6 +44,7 @@ export class WebSocketService {
 
   constructor() { 
 		this.messages = [];
+		this.trackSubs = [];
 	}
 
 	public connected(): Observable<any> {
@@ -68,8 +71,8 @@ export class WebSocketService {
 
 	public connect(url: string){
 		this.webSocketSubject = webSocket(url);
-		this.genericSubscription = this.webSocketSubject.subscribe(
-			(msg) => this.genericParse(msg),
+		this.webSocketSubscription = this.webSocketSubject.subscribe(
+			(msg) => this.webSocketParse(msg),
 			(err) => this.socketError(err),
 			() => this.wsConnected$.next(false)
 		);
@@ -91,12 +94,17 @@ export class WebSocketService {
 			command: string,
 			data: string[],
 			parserFct: Function) {
-		let trackSub = this.webSocketSubject.subscribe(
+		if((this.trackSubs[channel] != undefined) 
+		// returns false if subscription conflict, else true.
+				&& (this.trackSubs[channel].closed == false)){
+			return false;
+		}
+		this.trackSubs[channel] = this.webSocketSubject.subscribe(
 			(msg: wsMessage) => {
 				if ((msg.payload.channelid == channel)
 				&& (msg.payload.domain == domain)) {
 					if (msg.payload.command == "EOF") {
-						trackSub.unsubscribe();
+						this.trackSubs[channel].unsubscribe();
 					}
 					else {
 						parserFct(msg)
@@ -104,13 +112,14 @@ export class WebSocketService {
 				}
 			});
 		this.webSocketSubject.next(this.prepareMessage(channel, domain, command, data));
+		return true;
 	}
 
 	public disconnect(){
 		this.currentSeq = 1;
 		clearInterval(this.hbtTicker);
 		clearTimeout(this.hbtHoldTicker);
-		this.genericSubscription.unsubscribe();
+		this.webSocketSubscription.unsubscribe();
 		this.webSocketSubject.complete();
 		this.isConnected = false;
 		this.wsConnected$.next(false);
@@ -125,7 +134,7 @@ export class WebSocketService {
 		}
 	}
 
-	public genericParse(msg: wsMessage){
+	public webSocketParse(msg: wsMessage){
 		if(!this.isConnected) {
 			this.isConnected =  true;
 			this.wsConnected$.next(true);

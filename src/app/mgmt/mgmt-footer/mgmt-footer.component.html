@@ -29,6 +29,7 @@
 		</select>
 	</div>
 	<div>
+			Url: 
       <input name="address" placeholder="address" [(ngModel)]="webSocketUrl" matInput>
 		<button (click)="setWebSocketUrl()"
         matSuffix>Change</button>
@@ -36,7 +37,7 @@
 </div>
 <div class="debugPanel" fxFlex fxLayout="row">	
 	<div>
-    <textarea name="message" 
+    <textarea name="message"
 			placeholder="message" [(ngModel)]="msgToServer"
       [disabled]="!isConnected"
 			matInput rows="5" cols="25"
@@ -47,10 +48,10 @@
 </div>
 <div  fxFlex fxLayout="row" class="debugPanel">
 	Domain:
-	<input name="domain" placeholder="domain" [(ngModel)]="domain"
+	<input name="domain" placeholder="domain" [(ngModel)]="debugDomain"
 		[disabled]="!isConnected" matInput>
 	Command:
-	<input name="command" placeholder="command" [(ngModel)]="command"
+	<input name="command" placeholder="command" [(ngModel)]="debugCommand"
 		[disabled]="!isConnected" matInput>
 	<button arial-label="Send message" (click)="sendDebugMsg()"
 		[disabled]="!isConnected" matSuffix>Send</button>
@@ -60,7 +61,7 @@
 	<div class="websocket-console" #st4rsend_console>
 		<table>
 			<tr *ngFor="let msg of messages ; let index = index">
-				<td>{{index}}</td><td>{{msg}}</td>
+				<td><pre>{{index}}</pre></td><td><pre>{{msg}}</pre></td>
 			</tr>
 		</table>
 	</div>

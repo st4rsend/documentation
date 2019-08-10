@@ -16,6 +16,8 @@ import {
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
+import { AppRoutesModule } from './app-routes.module';
+import { HomeComponent } from './home/home.component';
 import { DocBaseComponent } from './doc/doc-base/doc-base.component';
 import { MenuDocComponent } from './doc/menu-doc/menu-doc.component';
 import { DynDocComponent } from './doc/dyn-doc/dyn-doc.component';
@@ -35,7 +37,6 @@ import { ListSelectComponent } from './shared/component/list-select/list-select.
 import { ServerComComponent } from './mgmt/server-com/server-com.component';
 import { MgmtFooterComponent } from './mgmt/mgmt-footer/mgmt-footer.component';
 import { MgmtBaseComponent } from './mgmt/mgmt-base/mgmt-base.component';
-import { AppRoutesModule } from './app-routes.module';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
@@ -43,6 +44,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 @NgModule({
   declarations: [
     AppComponent,
+		HomeComponent,
 		DocBaseComponent,
 		MenuDocComponent,
 		DynDocComponent,

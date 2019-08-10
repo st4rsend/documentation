@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WebSocketService } from '../../shared/services/websocket.service';
@@ -12,6 +12,8 @@ import { GlobalService } from '../../shared/services/global.service';
 })
 
 export class ServerComComponent {
+
+	@ViewChild('title', { static: true}) elTitle: ElementRef;
 
 	private subConnect: Subscription;
 	private subDebug: Subscription;
@@ -32,7 +34,6 @@ export class ServerComComponent {
 	public connect() {
 		this.subConnect = this.websocketSvc.connected().subscribe(status => {
 			this.connectFlag = status;
-	console.log("connect");
 		});
 		this.websocketSvc.connect(this.globalSvc.getWebSocketUrl());
 	}
@@ -42,6 +43,8 @@ export class ServerComComponent {
 			this.logout();
 		}
 		this.websocketSvc.disconnect();
+		this.elTitle.nativeElement.classList.remove('cursor-co');
+		this.elTitle.nativeElement.classList.add('cursor-notco');
 	}
 
 	public debug(flag: boolean) {
@@ -63,5 +66,13 @@ export class ServerComComponent {
 	public loginCloseEvent(value: boolean) {
 		this.loginDisplayFlag = false;
 		this.loginFlag = value;
+	}
+
+	public titleClick() {
+		if (!this.connectFlag) {
+			this.connect();
+		}
+		this.elTitle.nativeElement.classList.remove('cursor-notco');
+		this.elTitle.nativeElement.classList.add('cursor-co');
 	}
 }

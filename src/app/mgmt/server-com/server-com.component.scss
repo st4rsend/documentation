@@ -13,6 +13,13 @@
 	font-size: 26px;
 }
 
+.cursor-notco {
+	cursor: cell;
+}
+.cursor-co {
+	cursor: default;
+}
+
 .toolbar-button {
 	display: flex;
 	width: 50px;

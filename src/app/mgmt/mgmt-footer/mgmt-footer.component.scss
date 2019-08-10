@@ -1,6 +1,8 @@
 .debugPanel {
 	display: flex;
 	border: thin solid orange;
+	background-color: #223399;
+	color: #eeee33;
 	flex-wrap: wrap;
 	margin-right: 5px;
 }
@@ -10,6 +12,7 @@
 	height: 200px;
 	width: 100%;
 	box-shadow: border-box;
+	background-color: #dddddd;
 	pre {
 		word-wrap: break-word;
 		white-space: pre-wrap;
@@ -17,6 +20,7 @@
 		font-size: small;
 		margin: 0;
 		padding: 1px;
+		color: black;
 		&:nth-child(even) {
 			background-color: #d8d8d8;
 		}

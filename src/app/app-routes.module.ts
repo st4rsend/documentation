@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
 import { DocBaseComponent } from './doc/doc-base/doc-base.component';
 import { TodoBaseComponent } from './todo/todo-base/todo-base.component';
 import { MgmtBaseComponent } from './mgmt/mgmt-base/mgmt-base.component';
 
 const appRoutes: Routes = [
 
-	{ path: '', redirectTo: '/', pathMatch: 'full' },
+	{ path: '', redirectTo: 'home', pathMatch: 'full' },
+	{ path: 'home', component: HomeComponent },
 	{ path: 'doc/base', component: DocBaseComponent },
 	{ path: 'todo/base', component: TodoBaseComponent },
 	{ path: 'mgmt/base', component: MgmtBaseComponent },

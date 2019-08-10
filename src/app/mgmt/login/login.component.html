@@ -4,7 +4,7 @@ Login
 </div>
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 	<div class="form-group">
-		<label for="username">Username</label>
+		<label for="username">Username: </label>
 		<input autofocus type="text" formControlName="username"
 			class="form-control"
 			[ngClass]="{ 'is-invalid': submitted && formControls.username.errors }" />
@@ -13,7 +13,7 @@ Login
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="password">Password</label>
+		<label for="password">Password: </label>
 		<input type="password" formControlName="password"
 			class="form-control"
 			[ngClass]="{ 'is-invalid': submitted && formControls.password.errors }" />
@@ -21,10 +21,10 @@ Login
 			<div *ngIf="formControls.password.errors.required">Password is required</div>
 		</div>
 	</div>
-	<div class="form-goup">
-		<button [disabled]="loading" class="btn btn-primary">Login</button>
-		<div>Loading img</div>
-		<a routerLink="/register" class="btn btn-link">Register</a>
+	<div class="toolbar">
+			<button [disabled]="loading" class="btn">Login</button>
+			<a routerLink="/register" class="link">Register</a>
+			<button (click)="close()" class="btn">Cancel</button>
 	</div>
 </form>
 </div>
