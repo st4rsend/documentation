@@ -1,7 +1,9 @@
-<div *ngIf="connectFlag" class="container connected-apps"> 
-	<a routerLink="/doc/base">Doc</a>
-	<BR><a routerLink="/todo/base">Todo</a>
-</div>
-<div *ngIf="loginFlag" class="container logged-apps"> 
-	<a routerLink="/mgmt/base">Management</a>
+<div class="nav-helper" [ngClass]="{'nav-helper':connectFlag}" >
+	<div *ngIf="connectFlag" class="container connected-apps"> 
+		<p><li><a routerLink="/doc/base">Doc</a></p>
+		<p><li><a routerLink="/todo/base">Todo</a></p>
+	</div>
+	<div *ngIf="loginFlag" class="container logged-apps"> 
+		<p><li><a routerLink="/mgmt/base">Management</a></p>
+	</div>
 </div>

@@ -1,10 +1,49 @@
-.debugPanel {
+.mat-label {
+	width: 100px;
+}
+.debug-panel {
 	display: flex;
-	border: thin solid orange;
-	background-color: #223399;
-	color: #eeee33;
+	display-direction: row;
 	flex-wrap: wrap;
-	margin-right: 5px;
+	background-color: #25277d;
+	color: yellow;
+	font-height: 12px;
+	font-family: Roboto; 
+}
+
+.top-row {
+	display: flex;
+	display-direction: column;
+	flex-grow: 1;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	height: auto;
+	margin: 0;
+	padding: 2px;
+}
+.middle-row {
+	display: flex;
+	display-direction: column;
+	flex-wrap: wrap;
+	margin: 0;
+	padding: 2px;
+	height: auto;
+}
+
+.middle-row-left {
+	display: flex;
+	display-direction: row;
+	flex-wrap: wrap;
+	flex-shrink: 1;
+	margin: 0;
+	max-width: 350px;
+}
+
+.middle-row-right {
+	display: flex;
+	flex-grow: 1;
+	margin: 0;
+	padding: 2px
 }
 
 .websocket-console {
@@ -12,7 +51,8 @@
 	height: 200px;
 	width: 100%;
 	box-shadow: border-box;
-	background-color: #dddddd;
+	background-color: #eeeeee;
+	margin: 3px;
 	pre {
 		word-wrap: break-word;
 		white-space: pre-wrap;
@@ -26,3 +66,4 @@
 		}
 	}
 }
+

@@ -3,10 +3,12 @@
 		<mat-icon>menu</mat-icon>
 	</button>
 	<mat-menu #appMenu="matMenu">
+		<div class="menu-icon">
 			<a routerLink="/home">
 				<mat-icon>home</mat-icon>
 			</a>
-		<div>----</div>
+		</div>
+		<div class="menu-icon">--------</div>
 		<div *ngIf="connectFlag" class="toolbar-menu-item">
 			<mat-menu #subMenu="matMenu">
 				<a routerLink="doc/base"><button mat-menu-item>Doc</button></a>
@@ -18,11 +20,11 @@
 			<button mat-menu-item [matMenuTriggerFor]='subMenu'>
 				Applications
 			</button>
-			<div>----</div>
 			<div *ngIf="!loginFlag" class="toolbar-menu-item">
 				<button (click)="login()"
 		 		mat-menu-item color="primary">Login</button>
 			</div>
+			<div class="menu-icon">--------</div>
 			<div *ngIf="loginFlag" class="toolbar-menu-item">
 				<button (click)="logout()"
 					mat-menu-item color="warn">Logout</button>
@@ -35,7 +37,7 @@
 			<button mat-menu-item	(click)="connect()"
 				 color="primary">Connect</button>
 		</div>
-		<div>----</div>
+		<div *ngIf="!loginFlag" class="menu-icon">--------</div>
 		<div *ngIf="connectFlag && loginFlag" class="toolbar-menu-item">
 			<button (click)="getUserInfo()"
 				mat-menu-item color="primary">Info</button>

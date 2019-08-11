@@ -27,11 +27,13 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
 		this.subConnect = this.webSocketSvc.connected().subscribe(
 			flag => {
+				//console.log("Home connect flag: ", flag);
 				this.connectFlag = flag;
 			}
 		);
 		this.subLogin = this.authSvc.connected().subscribe(
 			flag => {
+				//console.log("Home login flag: ", flag);
 				this.loginFlag = flag;
 			}
 		);

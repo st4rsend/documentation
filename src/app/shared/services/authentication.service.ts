@@ -37,7 +37,7 @@ export class AuthenticationService {
 		this.message = [];
 		let message1 = this.webSocketSvc.prepareMessage(this.channelID, this.domain,this.command,this.message);
 		this.webSocketSvc.webSocketSubject.next(message1);
-		
+		this.userIDSubject$.next(this.userID);		
 	}
 
 	public loginChallenge(user: string, password: string) {

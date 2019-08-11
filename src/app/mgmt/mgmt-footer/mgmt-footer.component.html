@@ -1,63 +1,69 @@
-<div *ngIf="debugFlag" fxFlex fxLayout="column">
-<div class="debugPanel" fxFlex fxLayout="row">	
-	<div>
-		Verbosity client:
-		<select 
-			[(ngModel)]="clientVerbosity" 
-			(change)="setClientVerbosit()">
-			<option [value]="1">1</option>
-			<option [value]="2">2</option>
-			<option [value]="3">3</option>
-			<option [value]="4">4</option>
-			<option [value]="5">5</option>
-			<option [value]="6">6</option>
-			<option [value]="7">7</option>
-		</select>
+<div *ngIf="debugFlag" class="debug-panel">
+	<div class="top-row">
+		<div>
+			Verbosity client:
+			<select 
+				[(ngModel)]="clientVerbosity" 
+				(change)="setClientVerbosit()">
+				<option [value]="1">1</option>
+				<option [value]="2">2</option>
+				<option [value]="3">3</option>
+				<option [value]="4">4</option>
+				<option [value]="5">5</option>
+				<option [value]="6">6</option>
+				<option [value]="7">7</option>
+			</select>
+		</div>
+		<div *ngIf="isConnected">
+			Verbosity Server:
+			<select 
+				[(ngModel)]="serverVerbosity" 
+				(change)="setServerVerbosity()">
+				<option [value]="1">1</option>
+				<option [value]="2">2</option>
+				<option [value]="3">3</option>
+				<option [value]="4">4</option>
+				<option [value]="5">5</option>
+				<option [value]="6">6</option>
+				<option [value]="7">7</option>
+			</select>
+		</div>
+			<span>
+				<mat-label>URL: </mat-label>
+				<input [(ngModel)]="webSocketUrl" matInput>
+				<button (click)="setWebSocketUrl()"
+					mat-button>Change</button>
+			</span>
 	</div>
-	<div *ngIf="isConnected">
-		Verbosity Server:
-		<select 
-			[(ngModel)]="serverVerbosity" 
-			(change)="setServerVerbosity()">
-			<option [value]="1">1</option>
-			<option [value]="2">2</option>
-			<option [value]="3">3</option>
-			<option [value]="4">4</option>
-			<option [value]="5">5</option>
-			<option [value]="6">6</option>
-			<option [value]="7">7</option>
-		</select>
+	<div  class="middle-row">
+		<div class="middle-row-left">
+			<span>
+				<mat-label>Domain:</mat-label>
+				<input matInput [(ngModel)]="debugDomain"
+					placeholder="Placeholder"
+					[disabled]="!isConnected" >
+			</span>
+			<span>
+				<mat-label>Command:</mat-label>
+				<input matInput [(ngModel)]="debugCommand"
+					[disabled]="!isConnected">
+				<button (click)="sendDebugMsg()"
+					[disabled]="!isConnected" mat-mini-fab>Send</button>
+			</span>
+		</div>
+		<div class="middle-row-right">
+			<mat-label>data:</mat-label>
+    	<textarea matInput
+				cdkTextareaAutosize
+				cdkAutosizeMinRows="2"
+				cdkAutosizeMaxRows="5"
+				#autosize="cdkTextareaAutosize"
+				[(ngModel)]="msgToServer"
+      	[disabled]="!isConnected"
+				>
+			</textarea>
+		</div>
 	</div>
-	<div>
-			Url: 
-      <input name="address" placeholder="address" [(ngModel)]="webSocketUrl" matInput>
-		<button (click)="setWebSocketUrl()"
-        matSuffix>Change</button>
-	</div>
-</div>
-<div class="debugPanel" fxFlex fxLayout="row">	
-	<div>
-    <textarea name="message"
-			placeholder="message" [(ngModel)]="msgToServer"
-      [disabled]="!isConnected"
-			matInput rows="5" cols="25"
-			ngList="&#10;" ngTrim="false"
-			>
-		</textarea>
-	</div>
-</div>
-<div  fxFlex fxLayout="row" class="debugPanel">
-	Domain:
-	<input name="domain" placeholder="domain" [(ngModel)]="debugDomain"
-		[disabled]="!isConnected" matInput>
-	Command:
-	<input name="command" placeholder="command" [(ngModel)]="debugCommand"
-		[disabled]="!isConnected" matInput>
-	<button arial-label="Send message" (click)="sendDebugMsg()"
-		[disabled]="!isConnected" matSuffix>Send</button>
-</div>
-<div>
-<div class="debugPanel" fxFlex fxLayout="row">	
 	<div class="websocket-console" #st4rsend_console>
 		<table>
 			<tr *ngFor="let msg of messages ; let index = index">
@@ -65,5 +71,4 @@
 			</tr>
 		</table>
 	</div>
-</div>
 </div>
