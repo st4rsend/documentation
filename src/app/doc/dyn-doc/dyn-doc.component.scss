@@ -1,39 +1,45 @@
 .viewport {
-  height: calc(100vh - 330px);
-  min-height: 150px;
+  height: calc(100vh - 130px);
+  min-height: 250px;
   width: auto;
-	border: thick dashed lightgreen;
-	margin: 5px;
+	margin: 0;
 }
 
-.edit-util {
-	width: 30px;
-	float: right;
-}
-
-.item-doc-description {
+::ng-deep .item-doc-description {
 	float: top;
 	width: 100%;
 	border-style: none none dotted;
 	background-color: #cccccc;
 }
 
-::ng-deep .item-left {
-//	border: thin solid green;
-	border: none none none;
+::ng-deep .item-doc {
+	flex: 1 1 auto;
+	border: thin solid green;
+	background-color: #eceae9;
+	color: #222211;
+	padding: 0 0 3px 10px;
+	margin: 0;
+	border: thin solid #ffffff;
+	font-family: Roboto;
+	font-style: normal;
 }
 
-.item {
-	background-color: #e8e8e8;
-	border: thin solid #eaeaea;
-	overflow: auto;
-  //height: 50px;
+::ng-deep .item-doc>H1, ::ng-deep .item-doc>H2, ::ng-deep .item-doc>H3, {
+	margin: 5px 0 5px 0; 
+	padding: 5px 0 5px 25px;
+	font-family: Roboto;
+	color: #25277d;
 }
 
 .item-edit {
+	display: flex;
+	display-direction: column;
+	flex-wrap: wrap;
+	padding: 0;
+	margin: 0;
 	background-color: #e8e8e8;
 	border: thin solid red;
-	overflow: auto;
+	min-height: 54px;
 }
 
 .item-highlight {
@@ -44,10 +50,21 @@
 }
 
 .edit-left {
-	float: left;
+	flex: 1 1 auto;
 	width: auto
 }
 .edit-right {
-	float: right;
-	width: 50px;
+	flex: 0 1 50px;
+	display: flex;
+	margin: 0;
+	padding: 0;
+	display-direction: column;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	overflow-y: hidden;
+}
+
+button {
+	transform: scale(.6);
+	height: 12px;
 }

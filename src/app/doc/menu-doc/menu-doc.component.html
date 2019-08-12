@@ -1,6 +1,12 @@
-<table width='100%' border='1px'>
-	<tr><td width='200px'>  
-		Select Theme: 
+<div class="menu-container">
+	<div class="menu-item-generic menu-item-refresh">
+		<button mat-icon-button matPrefix
+			mat-mini-fab (click)="docRefresh()">
+			<mat-icon>refresh</mat-icon>
+		</button>
+	</div>
+	<div class="menu-item-generic">
+		Theme<BR> 
 		<app-list-select
 			[listTable]="docThemeTable"
 			[listIDName]="docThemeIDName"
@@ -9,8 +15,9 @@
 			[hasVoid]="true"
 			(listChangeEvent)='docThemeChange($event)'>
 		</app-list-select>
-	</td><td align='center' width='auto'>
-		Select Doc
+	</div>
+	<div class="menu-item-generic">
+		Doc<BR>
 		<app-list-select #docList
 			[listTable]="docListTable"
 			[listIDName]="docListIDName"
@@ -18,14 +25,9 @@
 			[listPosition]="docListPosition"
 			(listChangeEvent)='docListChange($event)'>
 		</app-list-select>
-	</td><td align='right' width='250px'>
-Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeChange()'>
-	</td></tr>
-	<tr><td>
-		<button (click)="docRefresh()">Refresh</button>
-	</td><td>
-	</td><td align='right'>
-	View mode:
+	</div>
+	<div class="menu-item-generic">
+	View mode<BR>
 		<select
 			name="docViewMode"
 			[(ngModel)]="viewMode"
@@ -34,5 +36,12 @@ Edit mode <input [(ngModel)]='docEditMode' type='checkbox' (change)='editModeCha
 			<option value="desc">Description only</option>
 			<option value="full">Desc. and item</option>
 		</select>
-	</td></tr>
-</table>
+	</div>
+	<div class="menu-item-generic">
+		Edit mode<BR>
+		<mat-slide-toggle 
+			[(ngModel)]='docEditMode'
+			(change)='editModeChange()'>
+		</mat-slide-toggle>
+	</div>
+</div>

@@ -42,9 +42,12 @@
 			</app-list-item-doc>
 		</div>
 		<div class="edit-right">
-			<button (click)='moveUp(i);'>Up</button>
-			<button (click)='removeFromList(i);'>Del</button>
-			<button (click)='moveDown(i);'>Down</button>
+			<button mat-icon-button (click)='moveUp(i);'>
+				<mat-icon>arrow_upward</mat-icon></button>
+			<button mat-icon-button (click)='removeFromList(i);'>
+				<mat-icon>cancel</mat-icon></button>
+			<button mat-icon-button (click)='moveDown(i);'>
+				<mat-icon>arrow_downward</mat-icon></button>
 		</div>
 	</div>
 	</cdk-virtual-scroll-viewport>

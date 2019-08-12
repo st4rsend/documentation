@@ -1,7 +1,7 @@
 <div *ngIf="debugFlag" class="debug-panel">
 	<div class="top-row">
 		<div>
-			Verbosity client:
+			<mat-label>Verbosity client:</mat-label>
 			<select 
 				[(ngModel)]="clientVerbosity" 
 				(change)="setClientVerbosit()">
@@ -15,7 +15,7 @@
 			</select>
 		</div>
 		<div *ngIf="isConnected">
-			Verbosity Server:
+			<mat-label>Verbosity Server:</mat-label>
 			<select 
 				[(ngModel)]="serverVerbosity" 
 				(change)="setServerVerbosity()">
@@ -28,40 +28,39 @@
 				<option [value]="7">7</option>
 			</select>
 		</div>
-			<span>
-				<mat-label>URL: </mat-label>
-				<input [(ngModel)]="webSocketUrl" matInput>
+			<div *ngIf="!isConnected">
+				<mat-form-field appearance="outline">
+					<mat-label>WebSocket URL </mat-label>
+					<input  [(ngModel)]="webSocketUrl" matInput>
+				</mat-form-field>
 				<button (click)="setWebSocketUrl()"
 					mat-button>Change</button>
-			</span>
+			</div>
 	</div>
-	<div  class="middle-row">
+	<div *ngIf="isConnected" class="middle-row">
 		<div class="middle-row-left">
-			<span>
-				<mat-label>Domain:</mat-label>
-				<input matInput [(ngModel)]="debugDomain"
-					placeholder="Placeholder"
-					[disabled]="!isConnected" >
-			</span>
-			<span>
-				<mat-label>Command:</mat-label>
-				<input matInput [(ngModel)]="debugCommand"
-					[disabled]="!isConnected">
-				<button (click)="sendDebugMsg()"
-					[disabled]="!isConnected" mat-mini-fab>Send</button>
-			</span>
+			<mat-form-field appearance="outline">
+				<mat-label>Domain</mat-label>
+				<input placeholder="Domain" matInput [(ngModel)]="debugDomain">
+			</mat-form-field>
+			<mat-form-field appearance="outline">
+				<mat-label>Command</mat-label>
+				<input placeholder="Command" matInput [(ngModel)]="debugCommand">
+			</mat-form-field>
 		</div>
 		<div class="middle-row-right">
-			<mat-label>data:</mat-label>
-    	<textarea matInput
-				cdkTextareaAutosize
-				cdkAutosizeMinRows="2"
-				cdkAutosizeMaxRows="5"
-				#autosize="cdkTextareaAutosize"
-				[(ngModel)]="msgToServer"
-      	[disabled]="!isConnected"
-				>
-			</textarea>
+			<mat-form-field appearance="outline">
+				<mat-label>data</mat-label>
+    		<textarea placeholder="data" matInput
+					cdkTextareaAutosize
+					cdkAutosizeMinRows="2"
+					cdkAutosizeMaxRows="5"
+					#autosize="cdkTextareaAutosize"
+					[(ngModel)]="msgToServer">
+				</textarea>
+			</mat-form-field>
+			<button (click)="sendDebugMsg()"
+				 mat-mini-fab>Send</button>
 		</div>
 	</div>
 	<div class="websocket-console" #st4rsend_console>

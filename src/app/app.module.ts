@@ -13,6 +13,7 @@ import {
 	MatIconModule, 
 	MatCheckboxModule,
 	MatMenuModule,
+	MatSlideToggleModule,
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -75,6 +76,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 		MatIconModule,
 		MatButtonModule,
 		MatMenuModule,
+		MatSlideToggleModule,
 		AppRoutesModule,
 		DragDropModule,
 		ScrollDispatchModule,

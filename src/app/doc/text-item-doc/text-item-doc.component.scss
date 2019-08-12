@@ -1,4 +1,9 @@
 .editButton {
 	width: 30px;
-	float: right;
+}
+
+.item-doc-edit {
+	display: flex;
+	display-direction: column;
+	flex: 1 0 auto;
 }

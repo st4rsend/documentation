@@ -5,8 +5,6 @@
 	display: flex;
 	display-direction: row;
 	flex-wrap: wrap;
-	background-color: #25277d;
-	color: yellow;
 	font-height: 12px;
 	font-family: Roboto; 
 }
@@ -15,7 +13,7 @@
 	display: flex;
 	display-direction: column;
 	flex-grow: 1;
-	justify-content: space-between;
+	justify-content: space-around;
 	flex-wrap: wrap;
 	height: auto;
 	margin: 0;
@@ -31,24 +29,23 @@
 }
 
 .middle-row-left {
-	display: flex;
-	display-direction: row;
-	flex-wrap: wrap;
-	flex-shrink: 1;
 	margin: 0;
-	max-width: 350px;
+	flex: 0 1 230px;
+	margin-left: 5px;
 }
 
 .middle-row-right {
-	display: flex;
-	flex-grow: 1;
+	flex: 1 1 auto;
 	margin: 0;
-	padding: 2px
+	padding: 2px;
+	vertical-align: middle;
 }
 
 .websocket-console {
 	overflow-y: scroll;
-	height: 200px;
+	height: auto;
+	min-height: 1em;
+	max-height: 200px;
 	width: 100%;
 	box-shadow: border-box;
 	background-color: #eeeeee;

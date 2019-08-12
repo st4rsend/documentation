@@ -1,0 +1,16 @@
+.menu-container {
+	display: flex;
+	display-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	background-color: #25277d;
+	color: #eeeeee;
+}
+
+.menu-item-generic {
+	margin: 3px;
+}
+
+.menu-item-refresh {
+	transform: scale(.75);
+}

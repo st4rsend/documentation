@@ -7,7 +7,7 @@ import { ListSelectComponent } from '../../shared/component/list-select/list-sel
 @Component({
   selector: 'app-menu-doc',
   templateUrl: './menu-doc.component.html',
-  styleUrls: ['./menu-doc.component.css'],
+  styleUrls: ['./menu-doc.component.scss'],
 })
 export class MenuDocComponent implements OnInit {
 

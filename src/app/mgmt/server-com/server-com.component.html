@@ -1,15 +1,17 @@
-<div fxFlex fxLayout="row" fxLayoutAlign="space-between center" class="toolbar">
-	<button mat-icon-button [matMenuTriggerFor]="appMenu" aria-label="icon">
-		<mat-icon>menu</mat-icon>
-	</button>
+<div class="app-header">
+	<div class="toolbar-icon">
+		<button mat-icon-button [matMenuTriggerFor]="appMenu">
+			<mat-icon>menu</mat-icon>
+		</button>
+	</div>
 	<mat-menu #appMenu="matMenu">
 		<div class="menu-icon">
 			<a routerLink="/home">
 				<mat-icon>home</mat-icon>
 			</a>
 		</div>
-		<div class="menu-icon">--------</div>
-		<div *ngIf="connectFlag" class="toolbar-menu-item">
+		<div class="menu-item">--------</div>
+		<div *ngIf="connectFlag" class="menu-item">
 			<mat-menu #subMenu="matMenu">
 				<a routerLink="doc/base"><button mat-menu-item>Doc</button></a>
 				<a routerLink="todo/base"><button mat-menu-item>Todo</button></a>
@@ -20,12 +22,12 @@
 			<button mat-menu-item [matMenuTriggerFor]='subMenu'>
 				Applications
 			</button>
-			<div *ngIf="!loginFlag" class="toolbar-menu-item">
+			<div *ngIf="!loginFlag" class="menu-item">
 				<button (click)="login()"
 		 		mat-menu-item color="primary">Login</button>
 			</div>
-			<div class="menu-icon">--------</div>
-			<div *ngIf="loginFlag" class="toolbar-menu-item">
+			<div class="menu-item">--------</div>
+			<div *ngIf="loginFlag" class="menu-item">
 				<button (click)="logout()"
 					mat-menu-item color="warn">Logout</button>
 			</div>
@@ -33,20 +35,20 @@
 				 color="warn">Disconnect
 			</button>
 		</div>
-		<div *ngIf="!connectFlag" class="toolbar-menu-item">
+		<div *ngIf="!connectFlag" class="menu-item">
 			<button mat-menu-item	(click)="connect()"
 				 color="primary">Connect</button>
 		</div>
-		<div *ngIf="!loginFlag" class="menu-icon">--------</div>
-		<div *ngIf="connectFlag && loginFlag" class="toolbar-menu-item">
+		<div *ngIf="!loginFlag" class="menu-item">--------</div>
+		<div *ngIf="connectFlag && loginFlag" class="menu-item">
 			<button (click)="getUserInfo()"
 				mat-menu-item color="primary">Info</button>
 		</div>
-		<div *ngIf="debugFlag" class="toolbar-menu-item">
+		<div *ngIf="debugFlag" class="menu-item">
 			<button (click)="debug(false)"
 				mat-menu-item color="primary">UnDebug</button>
 		</div>
-		<div *ngIf="!debugFlag" class="toolbar-menu-item">
+		<div *ngIf="!debugFlag" class="menu-item">
 			<button (click)="debug(true)"
 				mat-menu-item color="warn">Debug</button>
 		</div>
@@ -55,12 +57,12 @@
 		St4rsend
 	</div>
 	<div class="toolbar-button">
-		<div *ngIf="connectFlag" >
-			<mat-icon>settings_remote</mat-icon>
-		</div>
-		<div *ngIf="loginFlag" >
-			<mat-icon>perm_identity</mat-icon>
-		</div>
+		<span *ngIf="connectFlag" >
+			<mat-icon>import_export</mat-icon>
+		</span>
+		<span *ngIf="loginFlag" >
+			<mat-icon>fingerprint</mat-icon>
+		</span>
 	</div>
 </div>
 <div *ngIf="loginDisplayFlag">
