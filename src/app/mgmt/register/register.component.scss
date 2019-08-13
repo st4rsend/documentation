@@ -1,8 +1,5 @@
 .outerBorder {
-	position: absolute;
-	top: 150px;
-	left: 100px;
-	border: thick solid green;
+	border: thick solid #eeeeee;
 	padding: 10px;
 	background-color: #25277d;
 	color: #eeeeee;
@@ -24,13 +21,14 @@
 	flex-direction: column;
 }
 
+::ng-deep .mat-form-field-label {
+	color: white !important;
+}
+
 .toolbar {
 	display: flex;
 	display-direction: row;
 	justifiy-content: center;
-}
-
-.btn {
 }
 
 .link {

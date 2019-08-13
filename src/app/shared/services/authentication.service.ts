@@ -54,6 +54,10 @@ export class AuthenticationService {
 		this.webSocketSvc.webSocketSubject.next(message1);
 	}
 
+	public registerUser(user: string, password: string, eMail: string) {
+		console.log("Registering\nUser: ", user,"\npassword: ", password,"\ne-mail: ",eMail);
+	}
+
 	public getUserInfo(UID: number) {
 		this.isReady$.next(false);
 		if ((this.authSub === undefined) || (this.authSub.closed === true)) {

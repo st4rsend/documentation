@@ -1,8 +1,8 @@
 <div class="outerBorder" cdkDrag>
 	<div class="header" cdkDragHandle>
-		Login
+		Welcome to register form	
 	</div>
-	<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+	<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 		<div class="form-group">
 			<mat-form-field apparence="outline">
 				<mat-label>Username</mat-label>
@@ -16,16 +16,24 @@
 			<mat-form-field apparence="outline">
 				<mat-label>Password</mat-label>
 					<input type="password" 
+						password
 						formControlName="password"
 						matInput
 						class="form-control"
 						[ngClass]="{'is-invalid':submitted && formControls.password.errors }"/>
 			</mat-form-field>
+			<mat-form-field apparence="outline">
+				<mat-label>e-mail</mat-label>
+					<input email
+						formControlName="eMail"
+						matInput
+						class="form-control"
+						[ngClass]="{'is-invalid':submitted && formControls.eMail.errors }"/>
+			</mat-form-field>
 		</div>
 		<div class="toolbar">
 			<button type="submit" class="btn">Login</button>
-			<a routerLink="/register" (click)="close()" class="link">Register</a>
-			<button (click)="close()" class="btn">Cancel</button>
+			<button routerLink="/home" class="btn">Cancel</button>
 		</div>
 	</form>
 </div>

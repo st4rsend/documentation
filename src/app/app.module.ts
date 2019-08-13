@@ -19,6 +19,7 @@ import {
 import { AppComponent } from './app.component';
 import { AppRoutesModule } from './app-routes.module';
 import { HomeComponent } from './home/home.component';
+import { RegisterComponent } from './mgmt/register/register.component';
 import { DocBaseComponent } from './doc/doc-base/doc-base.component';
 import { MenuDocComponent } from './doc/menu-doc/menu-doc.component';
 import { DynDocComponent } from './doc/dyn-doc/dyn-doc.component';
@@ -46,6 +47,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
   declarations: [
     AppComponent,
 		HomeComponent,
+		RegisterComponent,
 		DocBaseComponent,
 		MenuDocComponent,
 		DynDocComponent,
