@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
 
 	public isConnected: boolean = false;
 	private isConnectedSub: Subscription;
+	public appTheme: string="light-theme";
 
 	constructor( private webSocket: WebSocketService, private router: Router) {}
 
@@ -32,7 +33,7 @@ export class AppComponent implements OnInit {
 			this.router.navigate(['']);
 		}
 	}
-	fromServerComEvent(msg: string) {
-		console.log("AppComponent received msg: ",msg);
+	themeEvent(msg: string) {
+		this.appTheme = msg;
 	}
 }

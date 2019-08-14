@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WebSocketService } from '../../shared/services/websocket.service';
@@ -14,6 +14,7 @@ import { GlobalService } from '../../shared/services/global.service';
 export class ServerComComponent {
 
 	@ViewChild('title', { static: true}) elTitle: ElementRef;
+	@Output() themeEvent = new EventEmitter<string>();
 
 	private subConnect: Subscription;
 	private subDebug: Subscription;
@@ -74,5 +75,15 @@ export class ServerComComponent {
 		}
 		this.elTitle.nativeElement.classList.remove('cursor-notco');
 		this.elTitle.nativeElement.classList.add('cursor-co');
+	}
+
+	public selectTheme(theme: string) {
+		if (theme == 'dark') {
+			this.themeEvent.emit('dark-theme');
+		}
+		if (theme == 'light') {
+			this.themeEvent.emit('light-theme');
+		}
+		
 	}
 }

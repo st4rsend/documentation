@@ -1,0 +1,70 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$light-app-primary: mat-palette($mat-blue-grey);
+$light-app-accent:  mat-palette($mat-purple, A200, A100, A400);
+$light-app-warn:    mat-palette($mat-red);
+
+$light-theme: mat-light-theme($light-app-primary, $light-app-accent, $light-app-warn);
+
+@include angular-material-theme($light-theme);
+
+
+.light-theme {
+	@include angular-material-theme($light-theme);
+	background-color: #FFF4DA;
+	color: #334444;
+	a:link, a:visited {
+		color: blue;
+	};
+	.outer-border {
+		background-color: #FFE6A8;
+	};
+	.item-doc {
+	}
+	.item-edit{
+		background-color: #FFE6A8;
+	}
+	.item-highlight {
+		background-color: #cccccc;
+	}
+	.item-edit-highlight {
+		background-color: #aaccaa;
+	}
+	.item-doc>H1, .item-doc>H2, .item-doc>H3 {
+		color: #60A1B0;
+	}
+}
+
+$dark-app-primary: mat-palette($mat-green);
+$dark-app-accent:  mat-palette($mat-amber, A200, A100, A400);
+$dark-app-warn:    mat-palette($mat-deep-orange);
+
+$dark-theme: mat-dark-theme($dark-app-primary, $dark-app-accent, $dark-app-warn);
+
+.dark-theme {
+	@include angular-material-theme($dark-theme);
+	background-color: #0d2d41;
+	color: #dddddd;
+	a:link, a:visited {
+		color: #dddddd;
+	};
+	.outer-border {
+		background-color: #0e2f44;
+	};
+	.item-doc {
+	}
+	.item-edit{
+		background-color: #305058;
+	}
+	.item-highlight {
+		background-color: #cccccc;
+	}
+	.item-edit-highlight {
+		background-color: #aaccaa;
+	}
+	.item-doc>H1, .item-doc>H2, .item-doc>H3 {
+		color: #ffb734;
+	}
+}

@@ -44,6 +44,17 @@
 			<button (click)="getUserInfo()"
 				mat-menu-item color="primary">Info</button>
 		</div>
+		<div class="menu-item">
+			<mat-menu #themeMenu="matMenu">
+				<button mat-menu-item (click)="selectTheme('light')"
+				 color="primary">Light</button>
+				<button mat-menu-item (click)="selectTheme('dark')"
+				 color="primary">Dark</button>
+			</mat-menu>
+			<button mat-menu-item [matMenuTriggerFor]='themeMenu'>
+				Theme
+			</button>
+		</div>
 		<div *ngIf="debugFlag" class="menu-item">
 			<button (click)="debug(false)"
 				mat-menu-item color="primary">UnDebug</button>
