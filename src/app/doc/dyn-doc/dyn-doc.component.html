@@ -13,7 +13,7 @@
 	<div *cdkVirtualFor="let item of docs; let i = index;" 
 		class="item-edit"
 		(click)="itemFocus(i)"
-		[ngClass]="{'item-edit-highlight': selectedIndex === i}"
+		[ngClass]="selectedIndex === i ? 'doc-item-edit-highlight doc-item-edit-format' : 'doc-item-edit doc-item-edit-format'"
 		cdkDrag>
 		<div class="edit-left">
 			<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
@@ -57,7 +57,7 @@
 	<div *cdkVirtualFor="let item of docs; let i = index;"
 		class="item"
 		(click)="itemFocus(i)"
-		[ngClass]="{'item-highlight': selectedIndex === i}">
+		[ngClass]="selectedIndex === i ? 'doc-item-highlight doc-item-format' : 'doc-item doc-item-format'">
 		<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
 			[itemDoc]=item
 			[editMode]=editMode

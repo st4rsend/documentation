@@ -1,47 +1,61 @@
 @import '~@angular/material/theming';
+@import 'st4rsend-light-palette';
+@import 'st4rsend-dark-palette';
 
 @include mat-core();
 
-$light-app-primary: mat-palette($mat-blue-grey);
-$light-app-accent:  mat-palette($mat-purple, A200, A100, A400);
-$light-app-warn:    mat-palette($mat-red);
+$light-primary: mat-palette($st4rsend-light-primary);
+$light-accent:  mat-palette($mat-purple);
+$light-warn:    mat-palette($mat-red);
 
-$light-theme: mat-light-theme($light-app-primary, $light-app-accent, $light-app-warn);
+$light-background: mat-palette($st4rsend-light-background);
+$light-foreground: mat-palette($st4rsend-light-foreground);
 
-@include angular-material-theme($light-theme);
-
+$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 
 .light-theme {
 	@include angular-material-theme($light-theme);
-	background-color: #FFF4DA;
-	color: #334444;
-	a:link, a:visited {
-		color: blue;
+	background-color: mat-color($light-background,200);
+	color: mat-color($light-foreground,500);
+	a:link, a:visited, .a:link, .a:visited {
+		color: mat-color($light-primary,900);
 	};
 	.outer-border {
-		background-color: #FFE6A8;
+		background-color: mat-color($light-background,500);
 	};
-	.item-doc {
+	.doc-item {
+		background-color: mat-color($light-background,300);
 	}
-	.item-edit{
-		background-color: #FFE6A8;
+	.doc-item-highlight {
+		background-color: mat-color($light-background,800);
 	}
-	.item-highlight {
-		background-color: #cccccc;
+	.doc-item-edit {
+		background-color: mat-color($light-background,400);
 	}
-	.item-edit-highlight {
-		background-color: #aaccaa;
+	.doc-item-edit-highlight {
+		background-color: mat-color($light-background,800);
 	}
-	.item-doc>H1, .item-doc>H2, .item-doc>H3 {
-		color: #60A1B0;
+	.doc-item>H1 {
+		color: mat-color($light-primary, 800);
+		text-align: center;
+	}
+	.doc-item>H1, .doc-item>H2, .doc-item>H3 {
+		color: mat-color($light-primary, 700);
+	}
+	.doc-item>H4, .doc-item>H5 {
+		color: mat-color($light-primary, 600);
+	}
+	.app-header {
+		background-color: mat-color($light-background,600);
 	}
 }
 
-$dark-app-primary: mat-palette($mat-green);
-$dark-app-accent:  mat-palette($mat-amber, A200, A100, A400);
-$dark-app-warn:    mat-palette($mat-deep-orange);
+$dark-primary: mat-palette($mat-green);
+$dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$dark-warn:    mat-palette($mat-deep-orange);
+$dark-background: mat-palette($mat-grey);
 
-$dark-theme: mat-dark-theme($dark-app-primary, $dark-app-accent, $dark-app-warn);
+$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
 .dark-theme {
 	@include angular-material-theme($dark-theme);
@@ -53,18 +67,24 @@ $dark-theme: mat-dark-theme($dark-app-primary, $dark-app-accent, $dark-app-warn)
 	.outer-border {
 		background-color: #0e2f44;
 	};
-	.item-doc {
+	.doc-item {
 	}
-	.item-edit{
+	.doc-item-edit{
 		background-color: #305058;
 	}
-	.item-highlight {
+	.doc-item-highlight {
 		background-color: #cccccc;
 	}
-	.item-edit-highlight {
+	.doc-item-edit-highlight {
 		background-color: #aaccaa;
 	}
-	.item-doc>H1, .item-doc>H2, .item-doc>H3 {
+	.doc-item>H1, .doc-item>H2, .doc-item>H3 {
 		color: #ffb734;
+	}
+	.doc-item>H4, .doc-item>H5 {
+		color: mat-color($dark-primary, 300);
+	}
+	.app-header {
+		background-color: map_get($dark-background, darker);
 	}
 }

@@ -1,16 +1,16 @@
 <div *ngIf="viewMode=='desc' || viewMode=='full'"
-	class="item-doc-description">
+	class="doc-item-description">
 	{{itemDoc.description}}
 </div>
 <div *ngIf="!editMode">
 	<div *ngIf="viewMode=='normal' || viewMode=='full'"
-		[innerHTML]="itemDoc.value" class="item-doc">
+		[innerHTML]="itemDoc.value">
 	</div>
 </div>
-<div *ngIf="editMode" class="item-doc-edit">
+<div *ngIf="editMode">
 	<button (click)='edit();'>Edit</button>
 	<div *ngIf="viewMode=='normal' || viewMode=='full'"
-		[innerHTML]="itemDoc.value" class="item-doc">
+		[innerHTML]="itemDoc.value">
 	</div>
 	<div *ngIf='editing'>
 		<app-edit-item-doc
