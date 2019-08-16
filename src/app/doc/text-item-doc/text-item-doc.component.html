@@ -2,20 +2,15 @@
 	class="doc-item-description">
 	{{itemDoc.description}}
 </div>
-<div *ngIf="!editMode">
-	<div *ngIf="viewMode=='normal' || viewMode=='full'"
-		[innerHTML]="itemDoc.value">
-	</div>
-</div>
-<div *ngIf="editMode">
+<span *ngIf="editMode">
 	<button (click)='edit();'>Edit</button>
-	<div *ngIf="viewMode=='normal' || viewMode=='full'"
-		[innerHTML]="itemDoc.value">
-	</div>
-	<div *ngIf='editing'>
-		<app-edit-item-doc
-			[itemDoc]=itemDoc
-			(itemDocCloseEvent)='itemDocCloseEvent($event)'>
-		</app-edit-item-doc>
-	</div>
+</span>
+<span *ngIf="viewMode=='normal' || viewMode=='full'"
+	[innerHTML]="itemDoc.value">
+</span>
+<div *ngIf='editing'>
+	<app-edit-item-doc
+		[itemDoc]=itemDoc
+		(itemDocCloseEvent)='itemDocCloseEvent($event)'>
+	</app-edit-item-doc>
 </div>

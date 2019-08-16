@@ -12,28 +12,20 @@
 	background-color: #cccccc;
 }
 
-::ng-deep .doc-item-format {
+.doc-item-format {
 	flex: 1 1 auto;
 	border: thin solid green;
 	padding: 0 0 3px 10px;
 	margin: 0;
 	border: thin solid #ffffff;
-	font-family: Roboto;
-	font-style: normal;
-}
-
-::ng-deep .doc-item-format>H1, ::ng-deep .doc-item-format>H2, ::ng-deep .doc-item-format>H3, {
-	margin: 5px 0 5px 0; 
-	padding: 5px 0 5px 25px;
-	font-family: Roboto;
 }
 
 .doc-item-edit-format {
 	display: flex;
 	display-direction: column;
-	padding: 0;
-	margin: 0;
 	border: thin solid red;
+	padding: 0 0 3px 10px;
+	margin: 0;
 	min-height: 54px;
 }
 

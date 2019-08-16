@@ -6,7 +6,7 @@ import { SqlListService, ISqlList } from '../../shared/services/sql-list.service
 @Component({
   selector: 'app-edit-item-doc',
   templateUrl: './edit-item-doc.component.html',
-  styleUrls: ['./edit-item-doc.component.css'],
+  styleUrls: ['./edit-item-doc.component.scss'],
 	providers: [ SqlListService ]
 })
 export class EditItemDocComponent implements OnInit {
@@ -24,6 +24,9 @@ export class EditItemDocComponent implements OnInit {
 	public doc: Doc;
 	public docTypeID: number;
 	public listTypeSelected: boolean;
+
+	public editStyles;
+
 
   constructor(
 		private docService: DocService,
@@ -45,6 +48,11 @@ export class EditItemDocComponent implements OnInit {
 		} else {
 			this.listTypeSelected = false;
 		}
+		this.editStyles = {
+			"left": "50px",
+			"width": "400px",
+			"height": "300px"
+		};
   }
 
 	cancel() {

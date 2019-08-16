@@ -25,66 +25,84 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 	};
 	.doc-item {
 		background-color: mat-color($light-background,300);
+		//font-family: Roboto;
 	}
 	.doc-item-highlight {
 		background-color: mat-color($light-background,800);
 	}
 	.doc-item-edit {
 		background-color: mat-color($light-background,400);
+		//font-family: Roboto;
 	}
 	.doc-item-edit-highlight {
 		background-color: mat-color($light-background,800);
 	}
-	.doc-item>H1 {
-		color: mat-color($light-primary, 800);
-		text-align: center;
-	}
-	.doc-item>H1, .doc-item>H2, .doc-item>H3 {
-		color: mat-color($light-primary, 700);
-	}
-	.doc-item>H4, .doc-item>H5 {
-		color: mat-color($light-primary, 600);
-	}
 	.app-header {
 		background-color: mat-color($light-background,600);
 	}
+	.head-bar {
+		background-color: mat-color($light-background,600);
+	}
+	H1 {
+		color: mat-color($light-primary, 500);
+		text-align: center;
+	}
+	H2, H3 {
+		color: mat-color($light-primary, 800);
+		padding-left: 10px;
+	}
+	H4, H5 {
+		color: mat-color($light-accent, 800);
+	}
 }
 
-$dark-primary: mat-palette($mat-green);
-$dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$dark-primary: mat-palette($st4rsend-dark-primary);
+$dark-accent:  mat-palette($mat-light-green, A200, A100, A400);
 $dark-warn:    mat-palette($mat-deep-orange);
-$dark-background: mat-palette($mat-grey);
+$dark-background: mat-palette($st4rsend-dark-background);
+$dark-foreground: mat-palette($st4rsend-dark-foreground);
 
 $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
 .dark-theme {
 	@include angular-material-theme($dark-theme);
-	background-color: #0d2d41;
-	color: #dddddd;
-	a:link, a:visited {
-		color: #dddddd;
+	background-color: mat-color($dark-background,500);
+	color: mat-color($dark-foreground,500);
+	a:link, a:visited, .a:link, .a:visited {
+		color: mat-color($dark-primary,500);
 	};
 	.outer-border {
-		background-color: #0e2f44;
+		background-color: mat-color($dark-background,500);
 	};
 	.doc-item {
-	}
-	.doc-item-edit{
-		background-color: #305058;
+		background-color: mat-color($dark-background,500);
+		//font-family: Roboto;
 	}
 	.doc-item-highlight {
-		background-color: #cccccc;
+		background-color: mat-color($dark-background,400);
+	}
+	.doc-item-edit {
+		background-color: mat-color($dark-background,600);
+		//font-family: Roboto;
 	}
 	.doc-item-edit-highlight {
-		background-color: #aaccaa;
-	}
-	.doc-item>H1, .doc-item>H2, .doc-item>H3 {
-		color: #ffb734;
-	}
-	.doc-item>H4, .doc-item>H5 {
-		color: mat-color($dark-primary, 300);
+		background-color: mat-color($dark-background,500);
 	}
 	.app-header {
-		background-color: map_get($dark-background, darker);
+		background-color: mat-color($dark-background,800);
+	}
+	.head-bar {
+		background-color: mat-color($dark-background,600);
+	}
+	H1 {
+		color: mat-color($dark-primary, 500);
+		text-align: center;
+	}
+	H2, H3 {
+		color: mat-color($dark-primary, 800);
+		padding-left: 10px;
+	}
+	H4, H5 {
+		color: mat-color($dark-accent, 800);
 	}
 }

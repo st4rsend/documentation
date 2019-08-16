@@ -56,6 +56,7 @@ export class DynDocComponent implements OnInit {
 	}
 
 	drop(event: CdkDragDrop<string[]>) {
+		// disactivated for feeling and conflicts with dragable edit
 		this.swapItem(event.previousIndex, event.currentIndex);
 	}
 
@@ -74,7 +75,6 @@ export class DynDocComponent implements OnInit {
 
 	itemFocus(i: number) {
 		this.selectedIndex = i;
-		//this.viewport.scrollToIndex(i);
 	}
 
 	moveUp(i: number) {

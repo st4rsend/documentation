@@ -1,8 +1,11 @@
-<div class="outerBorder" cdkDrag>
-	<div class="header" cdkDragHandle>
+<div class="outer-border" [ngStyle]="editStyles" cdkDrag>
+	<div class="head-bar" cdkDragHandle>
 		<div class="confirm">
 			<button (click)="validate();">CONFIRM</button>
 			idx: {{doc.idx}}
+		</div>
+		<div>
+			Type:
 			<select 
 				name="docTypeID"
 				[(ngModel)]="docTypeID"
@@ -12,6 +15,8 @@
 					{{docType.value}}
 				</option>
 			</select>
+		</div>
+		<div>
 			Position: 
 			<input type="text" size="5" [(ngModel)]="doc.position">
 		</div>
@@ -31,11 +36,12 @@
 		Child List ID: 
 		<input type="text" size="10" [(ngModel)]="doc.childListID">
 	</div>
-	<div class="text">
-		<textarea type="text" 
-			rows="21" 
-			cols="80" 
-			overflow-y="scroll"
+	<div class="text-area">
+		<textarea  placeholder="Text" matInput
+			cdkTextareaAutosize
+			cdkAutosizeMinRows="10"
+			cdkAutosizeMaxRows="10"
+			#autosize="cdkTextareaAutosize"
 			[(ngModel)]="doc.value">
 		</textarea>
 	</div>
