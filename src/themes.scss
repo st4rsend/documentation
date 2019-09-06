@@ -15,16 +15,16 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 
 .light-theme {
 	@include angular-material-theme($light-theme);
-	background-color: mat-color($light-background,200);
-	color: mat-color($light-foreground,500);
+	background-color: mat-color($light-background,500);
+	color: mat-color($light-foreground,700);
 	a:link, a:visited, .a:link, .a:visited {
 		color: mat-color($light-primary,900);
 	};
 	.outer-border {
-		background-color: mat-color($light-background,500);
+		background-color: mat-color($light-background,800);
 	};
 	.doc-item {
-		background-color: mat-color($light-background,300);
+		background-color: mat-color($light-background,400);
 		//font-family: Roboto;
 	}
 	.doc-item-highlight {
@@ -38,10 +38,10 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 		background-color: mat-color($light-background,800);
 	}
 	.app-header {
-		background-color: mat-color($light-background,600);
+		background-color: mat-color($light-background,900);
 	}
 	.head-bar {
-		background-color: mat-color($light-background,600);
+		background-color: mat-color($light-background,100);
 	}
 	H1 {
 		color: mat-color($light-primary, 500);
@@ -53,6 +53,15 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 	}
 	H4, H5 {
 		color: mat-color($light-accent, 800);
+	}
+	.mat-form-field-label {
+		color: mat-color($light-primary,600);
+	}
+	.mat-form-field-outline{
+		background-color: mat-color($light-background,300);
+	}
+	.mat-menu-content{
+		background: mat-color($light-background,500) !important;
 	}
 }
 

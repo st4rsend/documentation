@@ -1,29 +1,27 @@
 <div class="outer-border" [ngStyle]="editStyles" cdkDrag>
 	<div class="head-bar" cdkDragHandle>
-		<div class="confirm">
-			<button (click)="validate();">CONFIRM</button>
-			idx: {{doc.idx}}
-		</div>
-		<div>
-			Type:
-			<select 
+		<button mat-raised-button color="primary" class="mat-but" (click)="validate();">CONFIRM</button>
+		<mat-label class="mat-item">idx: {{doc.idx}}</mat-label>
+		<mat-form-field class="mat-item">
+			<mat-label>Type</mat-label>
+			<mat-select 
 				name="docTypeID"
 				[(ngModel)]="docTypeID"
-				(change)="docTypeChange()">
-				<option *ngFor="let docType of docTypes" 
+				(selectionChange)="docTypeChange()">
+				<mat-option *ngFor="let docType of docTypes" 
 					[value]="docType.idx">
 					{{docType.value}}
-				</option>
-			</select>
-		</div>
-		<div>
-			Position: 
-			<input type="text" size="5" [(ngModel)]="doc.position">
-		</div>
-		<div class="cancel">
-			<button (click)="reset();">Reset</button>
-			<button (click)="cancel();">Cancel</button>
-		</div>
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field appearance="outline" class="mat-item">
+			<mat-label>Position</mat-label> 
+			<input placeholder="Index" matInput size="3" [(ngModel)]="doc.position">
+		</mat-form-field>
+		<button mat-icon-button color="accent" (click)="reset();">
+			<mat-icon>refresh</mat-icon></button>
+		<button mat-icon-button color="warn" (click)="cancel();">
+			<mat-icon>cancel</mat-icon></button>
 	</div>
 	<div *ngIf="listTypeSelected">
 		LIST TYPE SELECTED
@@ -31,20 +29,22 @@
 			(selectedListEvent)='selectedListEvent($event)'>
 		</app-list-select-doc>
 	</div>
-	<div class="description">
-		<input type="text" size="30" [(ngModel)]="doc.description">
-		Child List ID: 
-		<input type="text" size="10" [(ngModel)]="doc.childListID">
-	</div>
-	<div class="text-area">
-		<textarea  placeholder="Text" matInput
+	<mat-form-field appearance="outline" class="description">
+		<mat-label>Description</mat-label>
+		<input matInput type="text" size="30" [(ngModel)]="doc.description">
+	</mat-form-field>
+	<mat-form-field appearance="outline" class="description">
+		<mat-label>ChildListID</mat-label>
+		<input matInput type="text" size="10" [(ngModel)]="doc.childListID">
+	</mat-form-field>
+	<mat-form-field appearance="outline" class="text-area">
+		<textarea  placeholder="Type here text to be displayed" matInput
 			cdkTextareaAutosize
 			cdkAutosizeMinRows="10"
 			cdkAutosizeMaxRows="10"
-			#autosize="cdkTextareaAutosize"
 			[(ngModel)]="doc.value">
 		</textarea>
-	</div>
+	</mat-form-field>
 	<div class="bottom">
 		<input 
 			type="file"

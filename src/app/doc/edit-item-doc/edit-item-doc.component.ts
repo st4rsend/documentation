@@ -51,7 +51,6 @@ export class EditItemDocComponent implements OnInit {
 		this.editStyles = {
 			"left": "50px",
 			"width": "400px",
-			"height": "300px"
 		};
   }
 
@@ -69,6 +68,7 @@ export class EditItemDocComponent implements OnInit {
 	} 
 
 	docTypeChange() {
+		console.log("doc type change");
 		this.doc.typeID = this.docTypeID;
 		if (this.docTypeID == 4) {
 			this.listTypeSelected = true;

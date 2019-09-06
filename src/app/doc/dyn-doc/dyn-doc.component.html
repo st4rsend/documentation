@@ -13,26 +13,26 @@
 		class="item-edit"
 		(click)="itemFocus(i)"
 		[ngClass]="selectedIndex === i ? 'doc-item-edit-highlight doc-item-edit-format' : 'doc-item-edit doc-item-edit-format'">
-		<div class="edit-left">
-			<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
+		<div [ngSwitch]="item.typeValue" class="edit-left">
+			<app-text-item-doc *ngSwitchCase="'TEXT'"
 				[itemDoc]=item
 				[editMode]=editMode
 				[viewMode]=viewMode
 				(changedEvent)='toBeRefreshed($event)'>
 			</app-text-item-doc>
-			<app-svg-item-doc *ngIf="item.typeValue=='SVG'"
+			<app-svg-item-doc *ngSwitchCase="'SVG'"
 				[itemDoc]=item
 				[editMode]=editMode
 				[viewMode]=viewMode
 				(changedEvent)='toBeRefreshed($event)'>
 			</app-svg-item-doc>
-			<app-url-svg-item-doc *ngIf="item.typeValue=='SVG-URL'"
+			<app-url-svg-item-doc *ngSwitchCase="'SVG-URL'"
 				[itemDoc]=item
 				[editMode]=editMode
 				[viewMode]=viewMode
 				(changedEvent)='toBeRefreshed($event)'>
 			</app-url-svg-item-doc>
-			<app-list-item-doc *ngIf="item.typeValue=='LIST'"
+			<app-list-item-doc *ngSwitchCase="'LIST'"
 				[itemDoc]=item
 				[editMode]=editMode
 				[viewMode]=viewMode
@@ -55,27 +55,29 @@
 	<div *cdkVirtualFor="let item of docs; let i = index;"
 		(click)="itemFocus(i)"
 		[ngClass]="selectedIndex === i ? 'doc-item-highlight doc-item-format' : 'doc-item doc-item-format'">
-		<app-text-item-doc *ngIf="item.typeValue=='TEXT'"
-			[itemDoc]=item
-			[editMode]=editMode
-			[viewMode]=viewMode>
-		</app-text-item-doc>
-		<app-svg-item-doc *ngIf="item.typeValue=='SVG'"
-			[itemDoc]=item
-			[editMode]=editMode
-			[viewMode]=viewMode>
-		</app-svg-item-doc>
-		<app-url-svg-item-doc *ngIf="item.typeValue=='SVG-URL'"
-			[itemDoc]=item
-			[editMode]=editMode
-			[viewMode]=viewMode>
-		</app-url-svg-item-doc>
-		<app-list-item-doc *ngIf="item.typeValue=='LIST'"
-			[itemDoc]=item
-			[editMode]=editMode
-			[viewMode]=viewMode
-			(activateListEvent)='activateList($event)'>
-		</app-list-item-doc>
+		<div [ngSwitch]="item.typeValue">
+			<app-text-item-doc *ngSwitchCase="'TEXT'"
+				[itemDoc]=item
+				[editMode]=editMode
+				[viewMode]=viewMode>
+			</app-text-item-doc>
+			<app-svg-item-doc *ngSwitchCase="'SVG'"
+				[itemDoc]=item
+				[editMode]=editMode
+				[viewMode]=viewMode>
+			</app-svg-item-doc>
+			<app-url-svg-item-doc *ngSwitchCase="'SVG-URL'"
+				[itemDoc]=item
+				[editMode]=editMode
+				[viewMode]=viewMode>
+			</app-url-svg-item-doc>
+			<app-list-item-doc *ngSwitchCase="'LIST'"
+				[itemDoc]=item
+				[editMode]=editMode
+				[viewMode]=viewMode
+				(activateListEvent)='activateList($event)'>
+			</app-list-item-doc>
+		</div>
 	</div>
 	</cdk-virtual-scroll-viewport>
 </ng-template>

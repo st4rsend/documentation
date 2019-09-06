@@ -9,29 +9,29 @@
 .head-bar {
 	cursor: move;
 	display: flex;
-	display-direction: column;
+	display-direction: row; 
 	justify-content: space-between;
+	flex-wrap: wrap;
 }
+
+.mat-item {
+	flex: 1 1 auto;
+	transform: scale(.8);
+}
+
+.mat-but {
+	flex: 1 1 auto;
+}
+
 .bottom {
 	height: 25px;
 	vertical-align: bottom;
 }
 .description {
-	border: thin solid red;
-	//background-color: #999999;
-}
-.cancel {
-	float: right;
-}
-.confirm {
-	float: left;
-}
-.text {
-	//background-color: white;
-	float: bottom;
+//	border: thin solid red;
 }
 
 .text-area {
-	background-color: white;
-	color: black;
+//	background-color: white;
+//	color: black;
 }

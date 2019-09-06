@@ -14,6 +14,7 @@ import {
 	MatCheckboxModule,
 	MatMenuModule,
 	MatSlideToggleModule,
+	MatSelectModule,
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -78,6 +79,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 		MatIconModule,
 		MatButtonModule,
 		MatMenuModule,
+		MatSelectModule,
 		MatSlideToggleModule,
 		AppRoutesModule,
 		DragDropModule,
