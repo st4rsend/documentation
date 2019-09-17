@@ -5,14 +5,16 @@
 		</button>
 	</div>
 	<mat-menu #appMenu="matMenu">
-		<div class="menu-icon">
-			<a routerLink="/home">
-				<mat-icon>home</mat-icon>
-			</a>
+		<div>
+			<button mat-menu-item>
+				<a routerLink="/home">
+					<mat-icon>home</mat-icon>
+				</a>
+			</button>
 		</div>
-		<div class="menu-item"><mat-label>--------</mat-label></div>
-		<div *ngIf="connectFlag" class="menu-item">
-			<mat-menu #subMenu="matMenu">
+		<div ><button mat-menu-item>--------</button></div>
+		<div *ngIf="connectFlag" >
+			<mat-menu #subMenu="matMenu" >
 				<a routerLink="doc/base"><button mat-menu-item>Doc</button></a>
 				<a routerLink="todo/base"><button mat-menu-item>Todo</button></a>
 				<div *ngIf="isLogged">
@@ -22,12 +24,12 @@
 			<button mat-menu-item [matMenuTriggerFor]='subMenu'>
 				Applications
 			</button>
-			<div *ngIf="!loginFlag" class="menu-item">
+			<div *ngIf="!loginFlag" >
 				<button (click)="login()"
 		 		mat-menu-item color="primary">Login</button>
 			</div>
-			<div class="menu-item">--------</div>
-			<div *ngIf="loginFlag" class="menu-item">
+			<div ><button mat-menu-item>--------</button></div>
+			<div *ngIf="loginFlag" >
 				<button (click)="logout()"
 					mat-menu-item color="warn">Logout</button>
 			</div>
@@ -35,17 +37,17 @@
 				 color="warn">Disconnect
 			</button>
 		</div>
-		<div *ngIf="!connectFlag" class="menu-item">
+		<div *ngIf="!connectFlag" >
 			<button mat-menu-item	(click)="connect()"
 				 color="primary">Connect</button>
 		</div>
-		<div *ngIf="!loginFlag" class="menu-item">--------</div>
+		<div *ngIf="!loginFlag"><button mat-menu-item>--------</button></div>
 		<div *ngIf="connectFlag && loginFlag" class="menu-item">
 			<button (click)="getUserInfo()"
 				mat-menu-item color="primary">Info</button>
 		</div>
-		<div class="menu-item">
-			<mat-menu #themeMenu="matMenu">
+		<div >
+			<mat-menu #themeMenu="matMenu" >
 				<button mat-menu-item (click)="selectTheme('light')"
 				 color="primary">Light</button>
 				<button mat-menu-item (click)="selectTheme('dark')"
@@ -55,11 +57,11 @@
 				Theme
 			</button>
 		</div>
-		<div *ngIf="debugFlag" class="menu-item">
+		<div *ngIf="debugFlag" >
 			<button (click)="debug(false)"
 				mat-menu-item color="primary">UnDebug</button>
 		</div>
-		<div *ngIf="!debugFlag" class="menu-item">
+		<div *ngIf="!debugFlag" >
 			<button (click)="debug(true)"
 				mat-menu-item color="warn">Debug</button>
 		</div>

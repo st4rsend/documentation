@@ -20,7 +20,13 @@ export class AppComponent implements OnInit {
 	private isConnectedSub: Subscription;
 	public appTheme: string="light-theme";
 
-	constructor( private webSocket: WebSocketService, private router: Router) {}
+	overlay;
+
+	constructor( 
+		private webSocket: WebSocketService,
+		private router: Router,
+		) {
+		}
 
 	ngOnInit() {
 		this.isConnectedSub = this.webSocket.connected()

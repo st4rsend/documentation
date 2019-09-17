@@ -60,8 +60,12 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 	.mat-form-field-outline{
 		background-color: mat-color($light-background,300);
 	}
-	.mat-menu-content{
-		background: mat-color($light-background,500) !important;
+	.mat-menu-item {
+		background-color: mat-color($light-background,800);
+	}
+	.mat-menu-panel {
+		color: mat-color($light-primary,800);
+		background-color: mat-color($light-background,300);
 	}
 }
 
@@ -113,5 +117,19 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 	}
 	H4, H5 {
 		color: mat-color($dark-accent, 800);
+	}
+	.mat-form-field-label {
+		color: mat-color($dark-primary,600);
+	}
+	.mat-form-field-outline{
+		background-color: mat-color($dark-background,300);
+	}
+	.mat-menu-item {
+		color: mat-color($dark-primary,600);
+		background-color: mat-color($dark-background,700);
+	}
+	.mat-menu-panel {
+		color: mat-color($dark-primary,800);
+		background-color: mat-color($dark-background,300);
 	}
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
+import {OverlayContainer} from '@angular/cdk/overlay';
 
 import { WebSocketService } from '../../shared/services/websocket.service';
 import { AuthenticationService } from '../../shared/services/authentication.service';
@@ -22,14 +23,18 @@ export class ServerComComponent {
 	public loginFlag = false;
 	public loginDisplayFlag = false;
 	public debugFlag: boolean = false;
+	overlay;
 
 	constructor(
+		private overlayContainer: OverlayContainer,
 		private websocketSvc: WebSocketService,
 		private globalSvc: GlobalService,
 		private authSvc: AuthenticationService) {
-		this.subDebug = this.globalSvc.debugFlag$.subscribe( flag => { 
+			this.subDebug = this.globalSvc.debugFlag$.subscribe( flag => { 
 				this.debugFlag = flag; 
-		});
+			});
+		this.overlay = overlayContainer.getContainerElement();
+		this.overlay.classList.add('light-theme');
 	}
 
 	public connect() {
@@ -80,9 +85,13 @@ export class ServerComComponent {
 	public selectTheme(theme: string) {
 		if (theme == 'dark') {
 			this.themeEvent.emit('dark-theme');
+			this.overlay.classList.remove('light-theme');
+			this.overlay.classList.add('dark-theme');
 		}
 		if (theme == 'light') {
 			this.themeEvent.emit('light-theme');
+			this.overlay.classList.remove('dark-theme');
+			this.overlay.classList.add('light-theme');
 		}
 		
 	}

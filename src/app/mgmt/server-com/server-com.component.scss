@@ -38,16 +38,6 @@
 	cursor: default;
 }
 
-.menu-icon {
-	margin: 0;
-	padding-left: 16px;
-	text-align: left;
+::ng-deep .cdk-overlay-container {
+	position: inherit;
 }
-
-.menu-item {
-	margin-left: 10px;
-	margin-right: 10px;
-	font-size: 14px;
-}
-
-

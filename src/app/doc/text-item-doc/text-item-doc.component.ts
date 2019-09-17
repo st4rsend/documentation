@@ -13,7 +13,7 @@ export class TextItemDocComponent implements OnInit {
 	@Input() viewMode: string;
 	@Output() changedEvent = new EventEmitter<boolean>();
 
-	private editing: boolean = false;
+	public editing: boolean = false;
 
   constructor() { }
 
