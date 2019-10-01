@@ -1,5 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Injectable } from '@angular/core';
+import { Overlay } from '@angular/cdk/overlay';
+import {PortalModule, ComponentPortal} from '@angular/cdk/portal';
+
 import { Doc } from '../../shared/model/doc';
+
 
 @Component({
   selector: 'app-text-item-doc',
@@ -15,7 +19,7 @@ export class TextItemDocComponent implements OnInit {
 
 	public editing: boolean = false;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
   }
@@ -29,3 +33,4 @@ export class TextItemDocComponent implements OnInit {
 		this.changedEvent.emit(true);
 	}
 }
+

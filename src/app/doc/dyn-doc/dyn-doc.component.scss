@@ -1,5 +1,5 @@
 .viewport {
-  height: calc(100vh - 130px);
+  height: calc(100vh - 110px);
   min-height: 250px;
   width: auto;
 	margin: 0;
@@ -9,10 +9,11 @@
 	float: top;
 	width: 100%;
 	border-style: none none dotted;
-	background-color: #cccccc;
+	font-weight: bold;
 }
 
 .doc-item-format {
+	//min-height: 100%;
 	flex: 1 1 auto;
 	border: thin solid green;
 	padding: 0 0 3px 10px;

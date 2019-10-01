@@ -7,7 +7,7 @@ import { SqlListService, ISqlList } from '../../shared/services/sql-list.service
   selector: 'app-edit-item-doc',
   templateUrl: './edit-item-doc.component.html',
   styleUrls: ['./edit-item-doc.component.scss'],
-	providers: [ SqlListService ]
+	providers: [ SqlListService ],
 })
 export class EditItemDocComponent implements OnInit {
 
@@ -31,7 +31,7 @@ export class EditItemDocComponent implements OnInit {
   constructor(
 		private docService: DocService,
 		private docTypeListService: SqlListService) {
-			console.log("CREATING edit-item-doc");
+	//		console.log("CREATING edit-item-doc");
 		}
 
   ngOnInit() {
@@ -50,7 +50,8 @@ export class EditItemDocComponent implements OnInit {
 		}
 		this.editStyles = {
 			"left": "50px",
-			"width": "400px",
+			"width": "500px",
+			//"width": "calc (100vw -50px)",
 		};
   }
 
@@ -68,7 +69,7 @@ export class EditItemDocComponent implements OnInit {
 	} 
 
 	docTypeChange() {
-		console.log("doc type change");
+		//console.log("doc type change");
 		this.doc.typeID = this.docTypeID;
 		if (this.docTypeID == 4) {
 			this.listTypeSelected = true;

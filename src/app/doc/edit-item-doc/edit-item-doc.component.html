@@ -1,43 +1,45 @@
 <div class="outer-border" [ngStyle]="editStyles" cdkDrag>
-	<div class="head-bar" cdkDragHandle>
+	<div class="flex-bar">
 		<button mat-raised-button color="primary" class="mat-but" (click)="validate();">CONFIRM</button>
-		<mat-label class="mat-item">idx: {{doc.idx}}</mat-label>
-		<mat-form-field class="mat-item">
+		<mat-label class="idx" cdkDragHandle>idx: {{doc.idx}}</mat-label>
+		<mat-form-field class="select-type">
 			<mat-label>Type</mat-label>
-			<mat-select 
+			<select matNativeControl required
 				name="docTypeID"
 				[(ngModel)]="docTypeID"
-				(selectionChange)="docTypeChange()">
-				<mat-option *ngFor="let docType of docTypes" 
+				(change)="docTypeChange()">
+				<option *ngFor="let docType of docTypes" 
 					[value]="docType.idx">
 					{{docType.value}}
-				</mat-option>
-			</mat-select>
+				</option>
+			</select>
 		</mat-form-field>
-		<mat-form-field appearance="outline" class="mat-item">
+		<mat-form-field appearance="outline" class="position">
 			<mat-label>Position</mat-label> 
-			<input placeholder="Index" matInput size="3" [(ngModel)]="doc.position">
+			<input placeholder="Index" matInput [maxLength]="3" [(ngModel)]="doc.position">
+		</mat-form-field>
+	</div>
+	<div class="flex-bar">
+		<mat-form-field appearance="outline" class="base-text">
+			<mat-label>Description</mat-label>
+			<input matInput type="text" size="20" [(ngModel)]="doc.description">
 		</mat-form-field>
 		<button mat-icon-button color="accent" (click)="reset();">
 			<mat-icon>refresh</mat-icon></button>
 		<button mat-icon-button color="warn" (click)="cancel();">
 			<mat-icon>cancel</mat-icon></button>
 	</div>
-	<div *ngIf="listTypeSelected">
+	<div *ngIf="listTypeSelected" class="flex-bar">
 		LIST TYPE SELECTED
 		<app-list-select-doc 
 			(selectedListEvent)='selectedListEvent($event)'>
 		</app-list-select-doc>
+		<mat-form-field appearance="outline" >
+			<mat-label>ChildListID</mat-label>
+			<input matInput type="text" size="3" [(ngModel)]="doc.childListID">
+		</mat-form-field>
 	</div>
-	<mat-form-field appearance="outline" class="description">
-		<mat-label>Description</mat-label>
-		<input matInput type="text" size="30" [(ngModel)]="doc.description">
-	</mat-form-field>
-	<mat-form-field appearance="outline" class="description">
-		<mat-label>ChildListID</mat-label>
-		<input matInput type="text" size="10" [(ngModel)]="doc.childListID">
-	</mat-form-field>
-	<mat-form-field appearance="outline" class="text-area">
+	<mat-form-field appearance="outline" class="base-text">
 		<textarea  placeholder="Type here text to be displayed" matInput
 			cdkTextareaAutosize
 			cdkAutosizeMinRows="10"

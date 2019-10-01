@@ -37,6 +37,9 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 	.doc-item-edit-highlight {
 		background-color: mat-color($light-background,800);
 	}
+	.doc-item-description {
+		background-color: mat-color($light-background,900);
+	}
 	.app-header {
 		background-color: mat-color($light-background,900);
 	}
@@ -100,6 +103,9 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 	}
 	.doc-item-edit-highlight {
 		background-color: mat-color($dark-background,500);
+	}
+	.doc-item-description {
+		background-color: mat-color($dark-background,300);
 	}
 	.app-header {
 		background-color: mat-color($dark-background,800);
