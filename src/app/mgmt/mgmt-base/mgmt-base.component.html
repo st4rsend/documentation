@@ -19,4 +19,13 @@
 			(listCloseEvent)='docThemeListCloseEvent($event)'>
 		</app-list-mgmt>
 	</div>
+	<button (click)="docDisplayListEdit()">Edit doc Display list</button>
+	<div *ngIf="docDisplayListEditMode">
+		<app-list-mgmt
+			[table]="docDisplayListTable"
+			[index]="docDisplayListIDName"
+			[column]="docDisplayListColumn"
+			[position]="docDisplayListPosition"
+			(listCloseEvent)='docDisplayListCloseEvent($event)'>
+		</app-list-mgmt>
 </div>

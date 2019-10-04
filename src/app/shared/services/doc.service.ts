@@ -53,7 +53,16 @@ export class DocService {
 	public dsUpdateDoc(doc: Doc) {
 		this.dsSubject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
-			.prepareMessage(this.channelID,'DOC','UPDATE_DOC',[doc.idx.toString(), doc.typeID.toString(), doc.description, doc.value, doc.childListID.toString()]);
+			.prepareMessage(this.channelID,'DOC','UPDATE_DOC',[
+				doc.idx.toString(),
+				doc.description,
+				doc.typeID.toString(),
+				doc.value,
+				doc.childListID.toString(),
+				doc.type2ID.toString(),
+				doc.value2,
+				doc.child2ListID.toString(),
+				doc.displayID.toString()]);
 		this.dsSubject.next(message);
 	}
 
@@ -71,10 +80,14 @@ export class DocService {
 		this.dsSubject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
 			.prepareMessage(this.channelID,'DOC','INSERT_DOC',[
-				doc.typeID.toString(),
 				doc.description,
+				doc.typeID.toString(),
 				doc.value,
 				doc.childListID.toString(),
+				doc.type2ID.toString(),
+				doc.value2,
+				doc.child2ListID.toString(),
+				doc.displayID.toString(),
 				this.docListID.toString(),
 				doc.position.toString()]); 
 		this.dsSubject.next(message);
@@ -89,6 +102,7 @@ export class DocService {
 				if ((+scMsg.payload.channelid === this.channelID)
 						&& (scMsg.payload.domain === "DOC")) {
 					if (scMsg.payload.command === "RESP_DOC_BY_ID") {
+						/*
 						this.docs.push(new Doc(
 							+scMsg.payload.data[0],
 							+scMsg.payload.data[1],
@@ -97,6 +111,22 @@ export class DocService {
 							scMsg.payload.data[4],
 							scMsg.payload.data[5],
 							+scMsg.payload.data[6]
+						));
+						*/
+						this.docs.push(new Doc(
+							+scMsg.payload.data[0],
+							+scMsg.payload.data[1],
+							scMsg.payload.data[2],
+							+scMsg.payload.data[3],
+							scMsg.payload.data[4],
+							scMsg.payload.data[5],
+							+scMsg.payload.data[6],
+							+scMsg.payload.data[7],
+							scMsg.payload.data[8],
+							scMsg.payload.data[9],
+							+scMsg.payload.data[10],
+							+scMsg.payload.data[11],
+							scMsg.payload.data[12],
 						));
 					}
 				}

@@ -28,9 +28,11 @@ export class TextItemDocComponent implements OnInit {
 		this.editing = !this.editing;
 	}
 
-	itemDocCloseEvent(value: boolean) {
+	itemDocCloseEvent(altered: boolean) {
 		this.editing = false;
-		this.changedEvent.emit(true);
+		if (altered) {
+			this.changedEvent.emit(true);
+		}
 	}
 }
 

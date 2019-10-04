@@ -19,6 +19,12 @@ export class MgmtBaseComponent implements OnInit {
 	public docThemeListColumn = 'description';
 	public docThemeListPosition = 'position';
 
+	public docDisplayListEditMode: boolean = false;
+	public docDisplayListTable: string = 'documentation_display';
+	public docDisplayListIDName: string = 'ID';
+	public docDisplayListColumn = 'display';
+	public docDisplayListPosition = 'position';
+
   constructor() { }
 
   ngOnInit() {
@@ -34,5 +40,11 @@ export class MgmtBaseComponent implements OnInit {
 	}
 	docThemeListCloseEvent(value: boolean) {
 		this.docThemeListEditMode = value;
+	}
+	docDisplayListEdit(){
+		this.docDisplayListEditMode = !this.docDisplayListEditMode;
+	}
+	docDisplayListCloseEvent(value: boolean) {
+		this.docDisplayListEditMode = value;
 	}
 }
