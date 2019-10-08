@@ -68,8 +68,8 @@ export class ListMgmtComponent implements OnInit {
 		this.listCloseEvent.emit(false);
 	}
 	drop(event: CdkDragDrop<string[]>) {
-		console.log("previousIndex: ", event.previousIndex);
-		console.log("currentIndex: ", event.currentIndex);
+		//console.log("previousIndex: ", event.previousIndex);
+		//console.log("currentIndex: ", event.currentIndex);
 		moveItemInArray(this.newList, event.previousIndex, event.currentIndex);
 	}
 }

@@ -2,6 +2,18 @@
 	<div class="flex-bar">
 		<button mat-raised-button color="primary" class="mat-but" (click)="validate();">CONFIRM</button>
 		<mat-label class="idx" cdkDragHandle>idx: {{doc.idx}}</mat-label>
+		<mat-form-field class="select-type">
+			<mat-label>Display</mat-label>
+			<select matNativeControl required
+				name="docDisplayID"
+				[(ngModel)]="docDisplayID"
+				(change)="docDisplayChange()">
+				<option *ngFor="let docDisplay of docDisplays" 
+					[value]="docDisplay.idx">
+					{{docDisplay.value}}
+				</option>
+			</select>
+		</mat-form-field>
 		<mat-form-field appearance="outline" class="position">
 			<mat-label>Position</mat-label> 
 			<input placeholder="Index" matInput [maxLength]="3" [(ngModel)]="doc.position">

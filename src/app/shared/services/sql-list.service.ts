@@ -9,20 +9,7 @@ export interface ISqlList {
 	position: number;
 }
 
-@Injectable(
-)
-
-export class SqlListService {
-
-	sqlList: Array<ISqlList>;
-
-	selectSub: Subscription;
-	subject: Subject<any>;
-
-	isReady$ = new Subject<boolean>();
-
-	channelID: number;
-
+interface ISqlListDef {
 	table_name: string;
 	idx_name: string;
 	column_name: string;
@@ -30,156 +17,200 @@ export class SqlListService {
 	asFilter: boolean;
 	filter_column_name: string;
 	filter_value: string;
+}
+	
+interface IList {
+	channelID: number;
+	selectSub: Subscription;
+	sqlListDef: ISqlListDef;
+	sqlList: Array<ISqlList>;
+}
+
+@Injectable(
+)
+
+export class SqlListService {
+
+	listMap: Map<string, IList>;
+
+	subject: Subject<any>;
+
+	isReady$ = new Subject<boolean>();
 
   constructor(
 		private webSocketService: WebSocketService,
 		private globalService: GlobalService) { 
-		this.channelID = this.globalService.GetSqlListChannel();
-		this.RemoveFilter;
+	//	this.RemoveFilter;
+		this.listMap = new Map();
 	}
 
 
 	public GetList(): Array<ISqlList> {
-		return this.sqlList as Array<ISqlList>;
+		return this.listMap.get("default").sqlList as Array<ISqlList>;
+	}
+	public GetListKey(key: string): Array<ISqlList> {
+		return this.listMap.get(key).sqlList as Array<ISqlList>;
+	}
+
+	public SetFilterKey(key: string, column: string, value: string){
+		this.listMap.get(key).sqlListDef.filter_column_name = column;
+		this.listMap.get(key).sqlListDef.filter_value = value;
+		this.listMap.get(key).sqlListDef.asFilter = true;
+	}
+	public RemoveFilterKey(key: string){
+		this.listMap.get(key).sqlListDef.filter_column_name = "";
+		this.listMap.get(key).sqlListDef.filter_value = "";
+		this.listMap.get(key).sqlListDef.asFilter = false;
 	}
 
 	public SetFilter(column: string, value: string){
-		this.filter_column_name = column;
-		this.filter_value = value;
-		this.asFilter = true;
+		this.SetFilterKey("default", column, value);
 	}
 	public RemoveFilter(){
-		this.filter_column_name = "";
-		this.filter_value = "";
-		this.asFilter = false;
+		this.RemoveFilterKey("default");
 	}
 
-	public UpdateList(newList: Array<ISqlList>) {
+	public UpdateListKey(key: string, newList: Array<ISqlList>) {
 // TODO Handle correctly things
 		// Add or update members
 		for ( let item in newList ) {
 			if ( newList[item].idx == 0 ) {
 				// added item
 				newList[item].position = +item + 1;
-				this.InsertItem(newList[item]);
+				this.InsertItemKey(key, newList[item]);
 				continue;
 			}
-			if ((newList[item].idx != this.sqlList[item].idx) 
-			|| (newList[item].value != this.sqlList[item].value)) {
+			if ((newList[item].idx != this.listMap.get(key).sqlList[item].idx) 
+			|| (newList[item].value != this.listMap.get(key).sqlList[item].value)) {
 				newList[item].position = +item + 1;
-				this.UpdateItem(newList[item]);
+				this.UpdateItemKey(key, newList[item]);
 				continue;
 			}
 		}
 	}
+	public UpdateList(newList: Array<ISqlList>) {
+		this.UpdateListKey("default", newList);
+	}
 
-	public InitList(table: string, idx: string, column: string, position: string){
-		this.table_name = table;
-		this.idx_name = idx;
-		this.column_name = column;
-		this.position_name = position;
+	public InitList(table: string, idx: string, column: string, position: string) {
+		this.InitListKey("default", table, idx, column, position);
+	}
+
+	public InitListKey(key: string, table: string, idx: string, column: string, position: string) {
+		this.listMap.set(key, {
+			channelID: this.globalService.GetSqlListChannel(),
+			selectSub: undefined,
+			sqlListDef: {
+				table_name: table, 
+				idx_name: idx,
+				column_name: column,
+				position_name: position,
+				asFilter: false,
+				filter_column_name: null,
+				filter_value: null,
+			},
+			sqlList: new Array<ISqlList>(),
+		});
+		this.sqlGetList(key);
+	}
+
+	public sqlGetList(key: string){
+
 		this.isReady$.next(false);
-		this.sqlList  = [];
 		this.subject = this.webSocketService.webSocketSubject;
 
-		if ((this.selectSub === undefined) || (this.selectSub.closed === true)) {
-			this.selectSub = this.subject.subscribe((value) => {
-				this.parse(value);
+		if ((this.listMap.get(key).selectSub === undefined) || (this.listMap.get(key).selectSub.closed === true)) {
+			this.listMap.get(key).selectSub = this.subject.subscribe((value) => {
+				this.parse(key, value);
 			 });
 		}
-		if (this.asFilter) {
+		if (this.listMap.get(key).sqlListDef.asFilter) {
 			let message = this.webSocketService
-				.prepareMessage(this.channelID,'SQL','GET_LIST_FLT',[this.table_name, this.idx_name, this.column_name, this.position_name, this.filter_column_name, this.filter_value] );
-			this.subject.next(message);
-
-		} else {
-			let message = this.webSocketService
-				.prepareMessage(this.channelID,'SQL','GET_LIST',[this.table_name, this.idx_name, this.column_name, this.position_name] );
-			this.subject.next(message);
-		}
-	}
-
-	public UpdateItem(item: ISqlList) {
-		this.subject = this.webSocketService.webSocketSubject;
-		if (this.asFilter){
-			let message = this.webSocketService
-				.prepareMessage(this.channelID,'SQL','UPDATE_LIST_FLT',[
-					this.table_name,
-					this.idx_name,
-					this.column_name,
-					this.position_name,
-					item.idx.toString(),
-					item.value,
-					item.position.toString(),
-					this.filter_column_name,
-					this.filter_value
+				.prepareMessage(this.listMap.get(key).channelID,'SQL','GET_LIST_FLT',[
+					this.listMap.get(key).sqlListDef.table_name,
+					this.listMap.get(key).sqlListDef.idx_name,
+					this.listMap.get(key).sqlListDef.column_name,
+					this.listMap.get(key).sqlListDef.position_name,
+					this.listMap.get(key).sqlListDef.filter_column_name,
+					this.listMap.get(key).sqlListDef.filter_value
 				]);
 			this.subject.next(message);
+
 		} else {
 			let message = this.webSocketService
-				.prepareMessage(this.channelID,'SQL','UPDATE_LIST',[
-					this.table_name,
-					this.idx_name,
-					this.column_name,
-					this.position_name,
-					item.idx.toString(),
-					item.value,
-					item.position.toString()
+				.prepareMessage(this.listMap.get(key).channelID,'SQL','GET_LIST',[
+					this.listMap.get(key).sqlListDef.table_name,
+					this.listMap.get(key).sqlListDef.idx_name,
+					this.listMap.get(key).sqlListDef.column_name,
+					this.listMap.get(key).sqlListDef.position_name
 				]);
 			this.subject.next(message);
 		}
 	}
 
-	public InsertItem(item: ISqlList) {
-		this.subject = this.webSocketService.webSocketSubject;
-		if (this.asFilter) {
-			let message = this.webSocketService
-				.prepareMessage(this.channelID,'SQL','INSERT_LIST_FLT',[
-					this.table_name,
-					this.column_name,
-					this.position_name,
-					item.value,
-					item.position.toString(),
-					this.filter_column_name,
-					this.filter_value
-				]);
-			this.subject.next(message);
-		} else {
-			let message = this.webSocketService
-				.prepareMessage(this.channelID,'SQL','INSERT_LIST',[
-					this.table_name,
-					this.column_name,
-					this.position_name,
-					item.value,
-					item.position.toString()
-				]);
-			this.subject.next(message);
-		}
-	}
-
-	public DeleteItem(idx: number) {
+	public UpdateItemKey(key: string, item: ISqlList) {
 		this.subject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
-			.prepareMessage(this.channelID,'SQL','DELETE_LIST',[
-				this.table_name,
-				this.idx_name,
+			.prepareMessage(this.listMap.get(key).channelID,'SQL','UPDATE_LIST',[
+				this.listMap.get(key).sqlListDef.table_name,
+				this.listMap.get(key).sqlListDef.idx_name,
+				this.listMap.get(key).sqlListDef.column_name,
+				this.listMap.get(key).sqlListDef.position_name,
+				item.idx.toString(),
+				item.value,
+				item.position.toString()
+			]);
+		this.subject.next(message);
+	}
+	public UpdateItem(item: ISqlList) {
+		this.UpdateItemKey("default", item);
+	}
+
+	public InsertItemKey(key: string, item: ISqlList) {
+		this.subject = this.webSocketService.webSocketSubject;
+		let message = this.webSocketService
+			.prepareMessage(this.listMap.get(key).channelID,'SQL','INSERT_LIST',[
+				this.listMap.get(key).sqlListDef.table_name,
+				this.listMap.get(key).sqlListDef.column_name,
+				this.listMap.get(key).sqlListDef.position_name,
+				item.value,
+				item.position.toString()
+			]);
+		this.subject.next(message);
+	}
+	public InsertItem(item: ISqlList) {
+		this.InsertItemKey("default", item);
+	}
+
+	public DeleteItemKey(key: string, idx: number) {
+		this.subject = this.webSocketService.webSocketSubject;
+		let message = this.webSocketService
+			.prepareMessage(this.listMap.get(key).channelID,'SQL','DELETE_LIST',[
+				this.listMap.get(key).sqlListDef.table_name,
+				this.listMap.get(key).sqlListDef.idx_name,
 				idx.toString(),
 			]);
 		this.subject.next(message);
 	}
+	public DeleteItem(idx: number) {
+		this.DeleteItemKey("default", idx);
+	}
 
-	private parse (msg: wsMessage) {
-		if ( (+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SQL")) {
+	private parse (key: string, msg: wsMessage) {
+
+		//if ( (+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SQL")) {
+		if ( (+msg.payload.channelid === this.listMap.get(key).channelID) && (msg.payload.domain === "SQL")) {
 			if (msg.payload.command === "RESP_SQL_LIST") {
-				this.sqlList.push({
+				this.listMap.get(key).sqlList.push({
 					idx: +msg.payload.data[0], 
 					value: msg.payload.data[1],
 					position: +msg.payload.data[2],
 				});
 			}
-			if ((+msg.payload.channelid === this.channelID) && ( msg.payload.command === "EOF")) {
+			//if ((+msg.payload.channelid === this.channelID) && ( msg.payload.command === "EOF")) {
+			if ((+msg.payload.channelid === this.listMap.get(key).channelID) && ( msg.payload.command === "EOF")) {
 				this.isReady$.next(true);
-				this.selectSub.unsubscribe();
+				this.listMap.get(key).selectSub.unsubscribe();
 			}
 		}
 	}

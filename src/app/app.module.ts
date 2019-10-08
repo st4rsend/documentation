@@ -15,6 +15,7 @@ import {
 	MatMenuModule,
 	MatSlideToggleModule,
 	MatSelectModule,
+	MatFormFieldModule,
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -81,6 +82,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 		MatMenuModule,
 		MatSelectModule,
 		MatSlideToggleModule,
+		MatFormFieldModule,
 		AppRoutesModule,
 		DragDropModule,
 		ScrollDispatchModule,

@@ -17,10 +17,18 @@ export class EditItemDocComponent implements OnInit {
 	@Output() itemDocCloseEvent = new EventEmitter<boolean>();
 
 	public docTypes: Array<ISqlList>;
-	public doctypeTable: string = 'documentation_type';
+	public docTypeKey: string = 'type';
+	public docTypeTable: string = 'documentation_type';
 	public docTypeIDName: string = 'ID';
 	public docTypeColumn: string = 'type';
 	public docTypePosition: string = 'position';
+
+	public docDisplays: Array<ISqlList>;
+	public docDisplayKey: string = 'display';
+	public docDisplayTable: string = 'documentation_display';
+	public docDisplayIDName: string = 'ID';
+	public docDisplayColumn: string = 'display';
+	public docDisplayPosition: string = 'position';
 
 	private creation: boolean;
 	public doc: Doc;
@@ -37,17 +45,25 @@ export class EditItemDocComponent implements OnInit {
   constructor(
 		private sanitizer: DomSanitizer,
 		private docService: DocService,
-		private docTypeListService: SqlListService) {
+		private docListService: SqlListService,) {
 	//		console.log("CREATING edit-item-doc");
 		}
 
   ngOnInit() {
-		this.docTypeListService.InitList(
-			this.doctypeTable,
+		this.docListService.InitListKey(
+			this.docTypeKey,
+			this.docTypeTable,
 			this.docTypeIDName,
 			this.docTypeColumn,
 			this.docTypePosition);
-		this.docTypes = this.docTypeListService.GetList();
+		this.docTypes = this.docListService.GetListKey(this.docTypeKey);
+		this.docListService.InitListKey(
+			this.docDisplayKey,
+			this.docDisplayTable,
+			this.docDisplayIDName,
+			this.docDisplayColumn,
+			this.docDisplayPosition);
+		this.docDisplays = this.docListService.GetListKey(this.docDisplayKey);
 		this.reset();
 		
 		if (this.doc.typeID == 4) {
@@ -69,7 +85,9 @@ export class EditItemDocComponent implements OnInit {
 		};
 		//this.editStyles.width = this.sanitizer.bypassSecurityTrustStyle("800px");
 		//console.log("EDITSTYLES: ", this.editStyles);
-		console.log("ITEM: ", this.doc);
+		//console.log("ITEM: ", this.doc);
+		//console.log("List Types: ", this.docTypes);
+		//console.log("List Displays: ", this.docDisplays);
   }
 
 	cancel() {
@@ -103,6 +121,11 @@ export class EditItemDocComponent implements OnInit {
 			this.listType2Selected = false;
 		}
 	}
+	docDisplayChange() {
+		this.doc.displayID = this.docDisplayID;
+		console.log("Display change event: ", this.docDisplayID);
+		console.log("Item: ", this.doc);
+	}
 
 	selectedListEvent(listID: number) {
 		this.doc.childListID = listID;
@@ -116,6 +139,7 @@ export class EditItemDocComponent implements OnInit {
 			this.creation = false;
 			this.docTypeID = this.itemDoc.typeID;
 			this.docType2ID = this.itemDoc.type2ID;
+			this.docDisplayID = this.itemDoc.displayID;
 			this.doc = { ...this.itemDoc};
 		} else {
 			this.creation = true;
