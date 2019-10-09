@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {DomSanitizer} from "@angular/platform-browser";
 
 import { DocService } from '../../shared/services/doc.service';
-import { Doc, DocType } from '../../shared/model/doc';
+import { Doc } from '../../shared/model/doc';
 import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
 
 @Component({
@@ -123,8 +123,6 @@ export class EditItemDocComponent implements OnInit {
 	}
 	docDisplayChange() {
 		this.doc.displayID = this.docDisplayID;
-		console.log("Display change event: ", this.docDisplayID);
-		console.log("Item: ", this.doc);
 	}
 
 	selectedListEvent(listID: number) {

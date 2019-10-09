@@ -1,0 +1,21 @@
+.Row {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+.Column {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+}
+.container-title {
+	display: flex;
+	flex-direction: column;
+	border: thin solid #0000FF;
+}
+.text-item {
+	flex: 1 0 fit-content;
+	text-align: left;
+}

@@ -5,9 +5,49 @@
 <span *ngIf="editMode">
 	<button (click)='edit();'>Edit</button>
 </span>
-<span *ngIf="viewMode=='normal' || viewMode=='full'"
-	[innerHTML]="itemDoc.value">
-</span>
+<div *ngIf="viewMode=='normal' || viewMode=='full'" 
+	[ngClass]="itemDoc.display">
+	<div [ngSwitch]="itemDoc.typeValue">
+		<div *ngSwitchCase="'TEXT'" class="text-item"
+	 		[innerHTML]="itemDoc.value">
+		</div>
+		<div *ngSwitchCase="'SVG'">
+			<app-svg-item-doc
+				[data]=itemDoc.value>
+			</app-svg-item-doc>
+		</div>
+		<app-url-svg-item-doc *ngSwitchCase="'SVG-URL'"
+	 		[data]="itemDoc.value">
+		</app-url-svg-item-doc>
+		<div *ngSwitchCase="'LIST'"
+			align='center'>
+			<p>
+			<button mat-raised-button	(click)="activateChildList([itemDoc.childListID])"
+				color="primary">{{itemDoc.value}}</button>
+			</p>
+		</div>
+	</div>
+	<div [ngSwitch]="itemDoc.type2Value">
+		<div *ngSwitchCase="'TEXT'" class="text-item"
+	 		[innerHTML]="itemDoc.value2">
+		</div>
+		<div *ngSwitchCase="'SVG'">
+			<app-svg-item-doc
+				[data]=itemDoc.value2>
+			</app-svg-item-doc>
+		</div>
+		<app-url-svg-item-doc *ngSwitchCase="'SVG-URL'"
+	 		[data]="itemDoc.value2">
+		</app-url-svg-item-doc>
+		<div *ngSwitchCase="'LIST'"
+			align='center'>
+			<p>
+			<button mat-raised-button	(click)="activateChildList([itemDoc.child2ListID])"
+				color="primary">{{itemDoc.value2}}</button>
+			</p>
+		</div>
+	</div>
+</div>
 <div *ngIf='editing'>
 	<app-edit-item-doc
 		[itemDoc]=itemDoc

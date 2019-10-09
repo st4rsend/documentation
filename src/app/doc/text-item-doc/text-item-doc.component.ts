@@ -16,12 +16,14 @@ export class TextItemDocComponent implements OnInit {
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
 	@Output() changedEvent = new EventEmitter<boolean>();
+	@Output() activateListEvent = new EventEmitter<number>();
 
 	public editing: boolean = false;
 
   constructor() {}
 
   ngOnInit() {
+		//console.log("itemDoc:", this.itemDoc);
   }
 
 	edit() {
@@ -33,6 +35,10 @@ export class TextItemDocComponent implements OnInit {
 		if (altered) {
 			this.changedEvent.emit(true);
 		}
+	}
+
+	activateChildList(value: string) {
+		this.activateListEvent.emit(parseInt(value));
 	}
 }
 
