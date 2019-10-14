@@ -6,12 +6,14 @@
 	<button (click)='edit();'>Edit</button>
 </span>
 <div *ngIf="viewMode=='normal' || viewMode=='full'" 
-	[ngClass]="itemDoc.display">
+	[ngClass]="displayDirCss">
 	<div [ngSwitch]="itemDoc.typeValue">
-		<div *ngSwitchCase="'TEXT'" class="text-item"
+		<div *ngSwitchCase="'TEXT'"
+			[ngClass]="displaySplitCssA" 
 	 		[innerHTML]="itemDoc.value">
 		</div>
-		<div *ngSwitchCase="'SVG'">
+		<div *ngSwitchCase="'SVG'"
+			[ngClass]="displaySplitCssA">
 			<app-svg-item-doc
 				[data]=itemDoc.value>
 			</app-svg-item-doc>
@@ -20,6 +22,7 @@
 	 		[data]="itemDoc.value">
 		</app-url-svg-item-doc>
 		<div *ngSwitchCase="'LIST'"
+			[ngClass]="displaySplitCssA"
 			align='center'>
 			<p>
 			<button mat-raised-button	(click)="activateChildList([itemDoc.childListID])"
@@ -28,10 +31,12 @@
 		</div>
 	</div>
 	<div [ngSwitch]="itemDoc.type2Value">
-		<div *ngSwitchCase="'TEXT'" class="text-item"
+		<div *ngSwitchCase="'TEXT'"
+			[ngClass]="displaySplitCssB"
 	 		[innerHTML]="itemDoc.value2">
 		</div>
-		<div *ngSwitchCase="'SVG'">
+		<div *ngSwitchCase="'SVG'"
+			[ngClass]="displaySplitCssB">
 			<app-svg-item-doc
 				[data]=itemDoc.value2>
 			</app-svg-item-doc>
@@ -40,6 +45,7 @@
 	 		[data]="itemDoc.value2">
 		</app-url-svg-item-doc>
 		<div *ngSwitchCase="'LIST'"
+			[ngClass]="displaySplitCssB"
 			align='center'>
 			<p>
 			<button mat-raised-button	(click)="activateChildList([itemDoc.child2ListID])"

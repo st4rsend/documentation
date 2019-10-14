@@ -30,6 +30,7 @@ export class GlobalService {
 	public debugFlag$ = this.debugFlag.asObservable();
 
 	private webSocketUrl: string = 'wss://st4rsend.net/ws';
+	//private webSocketUrl: string = 'wss://www.st4rsend.net/ws';
 
   constructor() { 
 		this.sqlListChanCntr= 0;

@@ -1,21 +1,44 @@
-.Row {
+.row {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: space-evenly;
+	justify-content: flex-start;
+	margin: 10px 0 0 0;
 }
-.Column {
+.column {
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
 	justify-content: flex-start;
+	margin: 10px 0 0 0;
 }
-.container-title {
-	display: flex;
-	flex-direction: column;
-	border: thin solid #0000FF;
+.column-top {
+	flex: 1 0 auto;
+	box-sizing: border-box;
+	width: 100%;
 }
-.text-item {
-	flex: 1 0 fit-content;
-	text-align: left;
+.column-bottom {
+	flex: 1 0 auto;
+	box-sizing: border-box;
+	width: 100%;
+}
+.row-50-left {
+	flex: 1 0 auto;
+	box-sizing: border-box;
+	width: 44vw;
+}
+.row-33-left {
+	flex: 1 0 auto;
+	box-sizing: border-box;
+	width: 27vw;
+}
+.row-66-left {
+	flex: 1 0 auto;
+	box-sizing: border-box;
+	width: 60vw;
+}
+.row-right {
+	flex: 1 0 auto;
+	box-sizing: border-box;
+	width: 100%;
 }

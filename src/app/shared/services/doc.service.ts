@@ -102,17 +102,6 @@ export class DocService {
 				if ((+scMsg.payload.channelid === this.channelID)
 						&& (scMsg.payload.domain === "DOC")) {
 					if (scMsg.payload.command === "RESP_DOC_BY_ID") {
-						/*
-						this.docs.push(new Doc(
-							+scMsg.payload.data[0],
-							+scMsg.payload.data[1],
-							scMsg.payload.data[2],
-							+scMsg.payload.data[3],
-							scMsg.payload.data[4],
-							scMsg.payload.data[5],
-							+scMsg.payload.data[6]
-						));
-						*/
 						this.docs.push(new Doc(
 							+scMsg.payload.data[0],
 							+scMsg.payload.data[1],

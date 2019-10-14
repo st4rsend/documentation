@@ -16,6 +16,7 @@ export class MenuDocComponent implements OnInit {
 	@Output() editModeEvent = new EventEmitter<boolean>();
 	public docEditMode: boolean = false;
 	@Output() viewModeEvent = new EventEmitter<string>();
+	@Output() refreshEvent = new EventEmitter();
 	public viewMode: string = 'normal';
 
 	public docListTable: string = 'documentation_list';
@@ -39,7 +40,14 @@ export class MenuDocComponent implements OnInit {
 			ready => {
 				if ( ready ) {
 					this.docList.listID = this.docList.list[0].idx;
-					this.docService.dsSetDocListID(this.docList.listID);
+					this.docListChange(this.docList.listID);
+				}
+			});
+		this.docService.isReady$.subscribe(
+			ready => {
+				console.log("DocService Ready is: ", ready);
+				if ( ready ) {
+					this.refreshEvent.emit();
 				}
 			});
   }
@@ -59,6 +67,7 @@ export class MenuDocComponent implements OnInit {
 
 	docRefresh() {
 		this.docService.dsSetDocListID(this.docList.listID);
+		this.refreshEvent.emit();
 	}	
 
 	editModeChange() {

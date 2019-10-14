@@ -19,11 +19,39 @@ export class TextItemDocComponent implements OnInit {
 	@Output() activateListEvent = new EventEmitter<number>();
 
 	public editing: boolean = false;
+	public displayDirCss: string;
+	public displaySplitCssA: string;
+	public displaySplitCssB: string;
 
   constructor() {}
 
   ngOnInit() {
-		//console.log("itemDoc:", this.itemDoc);
+		console.log("itemDoc:", this.itemDoc);
+		if (this.itemDoc.display === "Row-50") {
+			this.displayDirCss = "row";
+			this.displaySplitCssA = "row-50-left";
+			this.displaySplitCssB = "row-right";
+		}
+		if (this.itemDoc.display === "Row-33") {
+			this.displayDirCss = "row";
+			this.displaySplitCssA = "row-33-left";
+			this.displaySplitCssB = "row-right";
+		}
+		if (this.itemDoc.display === "Row-66") {
+			this.displayDirCss = "row";
+			this.displaySplitCssA = "row-66-left";
+			this.displaySplitCssB = "row-right";
+		}
+		if (this.itemDoc.display === "Column") {
+			this.displayDirCss = "column";
+			this.displaySplitCssA = "column-top";
+			this.displaySplitCssB = "column-bottom";
+		}
+		if (this.itemDoc.display === "Solo") {
+			this.displayDirCss = "Column";
+			this.displaySplitCssA = "column-solo";
+			this.displaySplitCssB = "column-solo";
+		}
   }
 
 	edit() {

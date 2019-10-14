@@ -1,7 +1,7 @@
 <div class="container">
 	<app-menu-doc 
 		(editModeEvent)='docEditModeSet($event);' 
-		(docListIDEvent)='docListIDSet($event)'
+		(refreshEvent)='refresh($event)'
 		(viewModeEvent)='docViewModeSet($event)'>
 	</app-menu-doc>
 	<app-dyn-doc 
