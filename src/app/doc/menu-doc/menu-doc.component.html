@@ -1,4 +1,10 @@
 <div class="menu-container">
+	<div class="menu-item-new">
+		<ng-container *ngIf="docEditMode">
+			<BR>
+			<button (click)="newItem()">New</button>
+		</ng-container>
+	</div>
 	<div class="menu-item-generic">
 		Theme<BR> 
 		<app-list-select

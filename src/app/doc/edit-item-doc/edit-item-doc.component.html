@@ -31,18 +31,25 @@
 	</div>
 	<div class="info-box">
 		<div class="info1">
-			<mat-form-field class="select-type">
-				<mat-label>Type</mat-label>
-				<select matNativeControl required
-					name="docTypeID"
-					[(ngModel)]="docTypeID"
-					(change)="docTypeChange()">
-					<option *ngFor="let docType of docTypes" 
-						[value]="docType.idx">
-						{{docType.value}}
-					</option>
-				</select>
-			</mat-form-field>
+			<div class="flex-bar">
+				<mat-form-field class="select-type">
+					<mat-label>Type</mat-label>
+					<select matNativeControl required
+						name="docTypeID"
+						[(ngModel)]="docTypeID"
+						(change)="docTypeChange()">
+						<option *ngFor="let docType of docTypes" 
+							[value]="docType.idx">
+							{{docType.value}}
+						</option>
+					</select>
+				</mat-form-field>
+				<div class="from-file">
+					<input 
+						type="file"
+						(change)="fromFileA($event)">
+				</div>
+			</div>
 			<div *ngIf="listTypeSelected" class="flex-bar">
 				LIST TYPE SELECTED
 				<app-list-select-doc 
@@ -64,18 +71,25 @@
 		</div>
 		<HR>
 		<div class="info2">
-			<mat-form-field class="select-type">
-				<mat-label>Type</mat-label>
-				<select matNativeControl required
-					name="docType2ID"
-					[(ngModel)]="docType2ID"
-					(change)="docType2Change()">
-					<option *ngFor="let docType of docTypes" 
-						[value]="docType.idx">
-						{{docType.value}}
-					</option>
-				</select>
-			</mat-form-field>
+			<div class="flex-bar">
+				<mat-form-field class="select-type">
+					<mat-label>Type</mat-label>
+					<select matNativeControl required
+						name="docType2ID"
+						[(ngModel)]="docType2ID"
+						(change)="docType2Change()">
+						<option *ngFor="let docType of docTypes" 
+							[value]="docType.idx">
+							{{docType.value}}
+						</option>
+					</select>
+				</mat-form-field>
+				<div class="from-file">
+					<input 
+						type="file"
+						(change)="fromFileB($event)">
+				</div>
+			</div>
 			<div *ngIf="listType2Selected" class="flex-bar">
 				LIST TYPE SELECTED
 				<app-list-select-doc 
@@ -95,10 +109,5 @@
 				</textarea>
 			</mat-form-field>
 		</div>
-	</div>
-	<div class="bottom">
-		<input 
-			type="file"
-			(change)="fromFile($event)">
 	</div>
 </div>

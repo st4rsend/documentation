@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, Injectable } from '@angular/core';
+import { Component, OnChanges, Input, Output, EventEmitter, Injectable } from '@angular/core';
 import { Overlay } from '@angular/cdk/overlay';
 import {PortalModule, ComponentPortal} from '@angular/cdk/portal';
 
@@ -10,7 +10,7 @@ import { Doc } from '../../shared/model/doc';
   templateUrl: './text-item-doc.component.html',
   styleUrls: ['./text-item-doc.component.scss']
 })
-export class TextItemDocComponent implements OnInit {
+export class TextItemDocComponent implements OnChanges {
 
 	@Input() itemDoc: Doc;
 	@Input() editMode: boolean;
@@ -25,8 +25,7 @@ export class TextItemDocComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-		console.log("itemDoc:", this.itemDoc);
+	ngOnChanges() {
 		if (this.itemDoc.display === "Row-50") {
 			this.displayDirCss = "row";
 			this.displaySplitCssA = "row-50-left";

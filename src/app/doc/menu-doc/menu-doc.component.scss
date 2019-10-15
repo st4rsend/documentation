@@ -1,5 +1,4 @@
 .menu-container {
-	padding-left: 135px;
 	display: flex;
 	display-direction: row;
 	flex-wrap: wrap;
@@ -12,4 +11,9 @@
 
 .menu-item-refresh {
 	transform: scale(.75);
+}
+
+.menu-item-new {
+	width: 135px;
+	text-align: center;
 }

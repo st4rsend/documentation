@@ -34,24 +34,19 @@ export class ListSelectComponent implements OnInit {
 
 	SetFilter(column: string, value: string){
 		this.sqlListService.SetFilter(column, value);
-		this.initList();
+		this.getList();
 		
 	}
 	RemoveFilter(){
 		this.sqlListService.RemoveFilter();
-		this.initList();
+		this.getList();
 	}
 
 	listChange() {
 		this.listChangeEvent.emit(this.listID);
 	}
 
-	initList() {
-		this.sqlListService.InitList(
-			this.listTable,
-			this.listIDName,
-			this.listColumn,
-			this.listPosition);
+	getList() {
 		this.list = this.sqlListService.GetList();
 		if (this.hasVoid) {
 			this.list.unshift({
@@ -60,5 +55,14 @@ export class ListSelectComponent implements OnInit {
 				position: 0,
 			});
 		}
+	}
+
+	initList() {
+		this.sqlListService.InitList(
+			this.listTable,
+			this.listIDName,
+			this.listColumn,
+			this.listPosition);
+		this.getList();
 	}
 }

@@ -16,7 +16,7 @@ export class MenuDocComponent implements OnInit {
 	@Output() editModeEvent = new EventEmitter<boolean>();
 	public docEditMode: boolean = false;
 	@Output() viewModeEvent = new EventEmitter<string>();
-	@Output() refreshEvent = new EventEmitter();
+	@Output() newItemEvent = new EventEmitter();
 	public viewMode: string = 'normal';
 
 	public docListTable: string = 'documentation_list';
@@ -43,13 +43,6 @@ export class MenuDocComponent implements OnInit {
 					this.docListChange(this.docList.listID);
 				}
 			});
-		this.docService.isReady$.subscribe(
-			ready => {
-				console.log("DocService Ready is: ", ready);
-				if ( ready ) {
-					this.refreshEvent.emit();
-				}
-			});
   }
 
 	docThemeChange(themeID: number) {
@@ -67,7 +60,6 @@ export class MenuDocComponent implements OnInit {
 
 	docRefresh() {
 		this.docService.dsSetDocListID(this.docList.listID);
-		this.refreshEvent.emit();
 	}	
 
 	editModeChange() {
@@ -76,5 +68,9 @@ export class MenuDocComponent implements OnInit {
 
 	viewModeChange() {
 		this.viewModeEvent.emit(this.viewMode);
+	}
+
+	newItem() {
+		this.newItemEvent.emit();
 	}
 }

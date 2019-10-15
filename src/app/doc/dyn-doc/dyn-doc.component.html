@@ -1,7 +1,4 @@
 <div *ngIf="editMode">
-	<div *ngIf='!creating'>
-		<button (click)="docCreateItem()">New</button>
-	</div>
 	<div *ngIf='creating'>
 		<app-edit-item-doc
 			(itemDocCloseEvent)='itemDocCloseEvent($event)'>

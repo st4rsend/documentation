@@ -46,7 +46,6 @@ export class EditItemDocComponent implements OnInit {
 		private sanitizer: DomSanitizer,
 		private docService: DocService,
 		private docListService: SqlListService,) {
-	//		console.log("CREATING edit-item-doc");
 		}
 
   ngOnInit() {
@@ -77,17 +76,12 @@ export class EditItemDocComponent implements OnInit {
 			this.listType2Selected = false;
 		}
 		this.editStyles = {
-			"top": "50px",
+			//"top": "50px",
 			//"left": "50px",
-			"width": "80%",
-			"height": "70%",
+			"width": "90vw",
+			"height": "80vh",
 			//"width": "'calc (100vw -50px)'",
 		};
-		//this.editStyles.width = this.sanitizer.bypassSecurityTrustStyle("800px");
-		//console.log("EDITSTYLES: ", this.editStyles);
-		//console.log("ITEM: ", this.doc);
-		//console.log("List Types: ", this.docTypes);
-		//console.log("List Displays: ", this.docDisplays);
   }
 
 	cancel() {
@@ -147,12 +141,20 @@ export class EditItemDocComponent implements OnInit {
 		}
 	}
 
-	fromFile(file) {
+	fromFileA(file) {
 		var loader = new FileReader();
 		console.log("FILE: ", file);
 		loader.readAsText(file.target.files[0]);
 		loader.onload = (e) => {
 			this.doc.value = loader.result as string;
+		}
+	}
+	fromFileB(file) {
+		var loader = new FileReader();
+		console.log("FILE: ", file);
+		loader.readAsText(file.target.files[0]);
+		loader.onload = (e) => {
+			this.doc.value2 = loader.result as string;
 		}
 	}
 }

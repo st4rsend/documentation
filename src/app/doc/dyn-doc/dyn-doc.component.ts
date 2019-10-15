@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { DocService } from '../../shared/services/doc.service';
@@ -12,10 +12,11 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   templateUrl: './dyn-doc.component.html',
   styleUrls: ['./dyn-doc.component.scss']
 })
-export class DynDocComponent implements OnInit {
+export class DynDocComponent implements OnChanges {
 
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
+	@Input() newItemTrigger: boolean;
 
 	@ViewChild(CdkVirtualScrollViewport, {static: false}) viewport: CdkVirtualScrollViewport;
 
@@ -25,6 +26,7 @@ export class DynDocComponent implements OnInit {
 	public docListID: number;
 	public docs: Array<Doc>;
 	public selectedIndex: number;
+	public newItemFlag: boolean;
 
   constructor(private docService: DocService) {
 		this.docService.isReady$.subscribe(
@@ -36,12 +38,11 @@ export class DynDocComponent implements OnInit {
 			});
 	}
 
-  ngOnInit() {
+  ngOnChanges() {
+		if (this.newItemFlag != this.newItemTrigger) {
+			this.creating = ! this.creating;
+		}
   }
-
-	public docCreateItem() {
-		this.creating = ! this.creating;
-	}
 
 	private itemDocCloseEvent(value: boolean) {
 		this.creating = false;

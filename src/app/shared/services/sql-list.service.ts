@@ -32,9 +32,7 @@ interface IList {
 export class SqlListService {
 
 	listMap: Map<string, IList>;
-
 	subject: Subject<any>;
-
 	isReady$ = new Subject<boolean>();
 
   constructor(
@@ -56,17 +54,20 @@ export class SqlListService {
 		this.listMap.get(key).sqlListDef.filter_column_name = column;
 		this.listMap.get(key).sqlListDef.filter_value = value;
 		this.listMap.get(key).sqlListDef.asFilter = true;
+		this.sqlGetList(key);
 	}
 	public RemoveFilterKey(key: string){
 		this.listMap.get(key).sqlListDef.filter_column_name = "";
 		this.listMap.get(key).sqlListDef.filter_value = "";
 		this.listMap.get(key).sqlListDef.asFilter = false;
+		this.sqlGetList(key);
 	}
 
 	public SetFilter(column: string, value: string){
 		this.SetFilterKey("default", column, value);
 	}
 	public RemoveFilter(){
+		console.log("REMOVE FILTER");
 		this.RemoveFilterKey("default");
 	}
 
@@ -114,10 +115,12 @@ export class SqlListService {
 		this.sqlGetList(key);
 	}
 
-	public sqlGetList(key: string){
+	private sqlGetList(key: string){
 
 		this.isReady$.next(false);
 		this.subject = this.webSocketService.webSocketSubject;
+
+		this.listMap.get(key).sqlList = [];
 
 		if ((this.listMap.get(key).selectSub === undefined) || (this.listMap.get(key).selectSub.closed === true)) {
 			this.listMap.get(key).selectSub = this.subject.subscribe((value) => {
@@ -162,6 +165,7 @@ export class SqlListService {
 			]);
 		this.subject.next(message);
 	}
+
 	public UpdateItem(item: ISqlList) {
 		this.UpdateItemKey("default", item);
 	}
@@ -197,8 +201,6 @@ export class SqlListService {
 	}
 
 	private parse (key: string, msg: wsMessage) {
-
-		//if ( (+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SQL")) {
 		if ( (+msg.payload.channelid === this.listMap.get(key).channelID) && (msg.payload.domain === "SQL")) {
 			if (msg.payload.command === "RESP_SQL_LIST") {
 				this.listMap.get(key).sqlList.push({
@@ -207,7 +209,6 @@ export class SqlListService {
 					position: +msg.payload.data[2],
 				});
 			}
-			//if ((+msg.payload.channelid === this.channelID) && ( msg.payload.command === "EOF")) {
 			if ((+msg.payload.channelid === this.listMap.get(key).channelID) && ( msg.payload.command === "EOF")) {
 				this.isReady$.next(true);
 				this.listMap.get(key).selectSub.unsubscribe();
