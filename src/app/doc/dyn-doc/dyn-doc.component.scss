@@ -1,5 +1,5 @@
 .viewport {
-  height: calc(100vh - 110px);
+  height: calc(100vh - 5em);
   min-height: 250px;
   width: auto;
 	margin: 0;
@@ -15,10 +15,9 @@
 .doc-item-format {
 	display: flex;
 	flex-direction: row;
-	padding: 0 0 3px 10px;
-	margin: 0 3% 0 3%;
+	margin: 0 1% 0 1%;
 	min-height: 70px;
-	border: thin solid #ffffff;
+	//border: thin solid #ffffff;
 }
 
 .edit-left {

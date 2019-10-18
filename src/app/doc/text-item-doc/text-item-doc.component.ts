@@ -29,17 +29,17 @@ export class TextItemDocComponent implements OnChanges {
 		if (this.itemDoc.display === "Row-50") {
 			this.displayDirCss = "row";
 			this.displaySplitCssA = "row-50-left";
-			this.displaySplitCssB = "row-right";
+			this.displaySplitCssB = "row-50-right";
 		}
 		if (this.itemDoc.display === "Row-33") {
 			this.displayDirCss = "row";
 			this.displaySplitCssA = "row-33-left";
-			this.displaySplitCssB = "row-right";
+			this.displaySplitCssB = "row-33-right";
 		}
 		if (this.itemDoc.display === "Row-66") {
 			this.displayDirCss = "row";
 			this.displaySplitCssA = "row-66-left";
-			this.displaySplitCssB = "row-right";
+			this.displaySplitCssB = "row-66-right";
 		}
 		if (this.itemDoc.display === "Column") {
 			this.displayDirCss = "column";

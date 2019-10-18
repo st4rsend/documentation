@@ -77,13 +77,6 @@ func WsSrvDocUpdate(wsContext *WsContext, message *WsMessage) (err error){
 	}
 	var doc Doc
 	var sqlText string
-	/*
-	doc.idx = message.Payload.Data[0]
-	doc.typeID = message.Payload.Data[1]
-	doc.description = message.Payload.Data[2]
-	doc.value = message.Payload.Data[3]
-	doc.childListID.String = message.Payload.Data[4]
-	*/
 	doc.idx = message.Payload.Data[0]
 	doc.description = message.Payload.Data[1]
 	doc.typeID = message.Payload.Data[2]
@@ -153,7 +146,7 @@ func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "insert into documentations (typeID, description, typeID, info, childListID, type2ID, info2, child2ListID, displayID) values (?,?,?,?,?,?,?,?)"
+	sqlText = "insert into documentations (description, typeID, info, childListID, type2ID, info2, child2ListID, displayID) values (?,?,?,?,?,?,?,?)"
 	if doc.childListID.String  == "0" {
 		doc.childListID.Valid = false
 	} else {
@@ -173,10 +166,14 @@ func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 		fmt.Printf("Processing SQL documentations Insert\n")
 	}
 	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
-		doc.typeID,
 		doc.description,
+		doc.typeID,
 		doc.value,
-		doc.childListID)
+		doc.childListID,
+		doc.type2ID,
+		doc.value2,
+		doc.child2ListID,
+		doc.displayID)
 	CheckErr(err)
 	lastID, err := sqlResult.LastInsertId()
 	sqlText = "insert into documentation_set (listID, docID, position) values (?,?,?)"

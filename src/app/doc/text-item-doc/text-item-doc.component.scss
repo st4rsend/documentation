@@ -2,43 +2,47 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: flex-start;
-	margin: 10px 0 0 0;
+	margin:  0 0 10px 0;
 }
 .column {
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
 	justify-content: flex-start;
-	margin: 10px 0 0 0;
+	margin:  0 0 10px 0;
 }
 .column-top {
 	flex: 1 0 auto;
-	box-sizing: border-box;
 	width: 100%;
 }
 .column-bottom {
 	flex: 1 0 auto;
-	box-sizing: border-box;
 	width: 100%;
 }
 .row-50-left {
-	flex: 1 0 auto;
-	box-sizing: border-box;
-	width: 44vw;
+	flex: 0 0 50%;
+	min-width: 44vw;
+	margin:  0 5% 0 0 ;
+}
+.row-50-right {
+	flex: 0 0 50%;
+	min-width: 40vw;
+	margin:  0 0 0 5%;
 }
 .row-33-left {
-	flex: 1 0 auto;
-	box-sizing: border-box;
-	width: 27vw;
+	flex: 0 0 33.33%;
+	min-width: 27vw;
+}
+.row-33-right {
+	flex: 0 0 66.66%;
+	margin:  0 0 0 5%;
 }
 .row-66-left {
-	flex: 1 0 auto;
-	box-sizing: border-box;
-	width: 60vw;
+	flex: 0 0 66.66%;
+	min-width: 66vw;
+	//max-width: 80vw;
 }
-.row-right {
-	flex: 1 0 auto;
-	box-sizing: border-box;
-	width: 100%;
+.row-66-right {
+	flex: 0 0 33.33%;
+	margin:  0 0 0 5%;
 }
