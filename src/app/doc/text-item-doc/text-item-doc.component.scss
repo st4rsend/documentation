@@ -2,47 +2,51 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	margin:  0 0 10px 0;
+	margin:  0 0 3% 0;
 }
 .column {
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
 	justify-content: flex-start;
-	margin:  0 0 10px 0;
+	margin:  0 0 3% 0;
 }
 .column-top {
 	flex: 1 0 auto;
 	width: 100%;
+	margin:  0 0 0 2vw;
 }
 .column-bottom {
 	flex: 1 0 auto;
 	width: 100%;
+	margin:  0 0 0 2vw;
 }
 .row-50-left {
-	flex: 0 0 50%;
+	flex: 0 0 50vw;
 	min-width: 44vw;
-	margin:  0 5% 0 0 ;
+	margin:  0 0 0 2vw;
 }
 .row-50-right {
-	flex: 0 0 50%;
+	flex: 0 0 50vw;
 	min-width: 40vw;
-	margin:  0 0 0 5%;
+	margin:  0 0 0 2vw;
 }
 .row-33-left {
-	flex: 0 0 33.33%;
+	flex: 0 0 33.33vw;
 	min-width: 27vw;
+	margin:  0 0 0 2vw;
 }
 .row-33-right {
-	flex: 0 0 66.66%;
-	margin:  0 0 0 5%;
+	flex: 0 0 66.66vw;
+	margin:  0 0 0 2vw;
 }
 .row-66-left {
-	flex: 0 0 66.66%;
+	flex: 0 0 66.66vw;
 	min-width: 66vw;
-	//max-width: 80vw;
+	max-width: 70vw;
+	margin:  0 0 0 2vw;
 }
 .row-66-right {
-	flex: 0 0 33.33%;
-	margin:  0 0 0 5%;
+	flex: 0 0 33.33vw;
+	margin:  0 0 0 2vw;
 }
