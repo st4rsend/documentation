@@ -6,9 +6,9 @@ import { Doc } from '../../shared/model/doc';
 import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
 
 @Component({
-  selector: 'app-edit-item-doc',
-  templateUrl: './edit-item-doc.component.html',
-  styleUrls: ['./edit-item-doc.component.scss'],
+	selector: 'app-edit-item-doc',
+	templateUrl: './edit-item-doc.component.html',
+	styleUrls: ['./edit-item-doc.component.scss'],
 	providers: [ SqlListService ],
 })
 export class EditItemDocComponent implements OnInit {

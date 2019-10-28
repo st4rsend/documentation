@@ -31,3 +31,16 @@ export class Doc implements IDoc {
 		public display: string,
 	){}
 }
+
+export interface IArticleShort {
+	idx: number;
+	position: number;
+	description: string;
+}
+export class ArticleShort implements IArticleShort {
+	constructor (
+		public idx: number,
+		public position: number,
+		public description: string,
+	){}
+}

@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Subject ,  Subscription } from 'rxjs';
 import { WebSocketService, wsMessage } from './websocket.service';
-import { Doc } from '../model/doc';
+import { Doc, ArticleShort } from '../model/doc';
 
 @Injectable()
 
 export class DocService {
 
 	public docs: Array<Doc>;
+	public articlesShort: Array<ArticleShort>;
+
 	private docListID: number;
+	private articleListID: number;
 
 	dsSelectSub: Subscription;
 	dsSubject: Subject<any>;
@@ -24,6 +27,7 @@ export class DocService {
   constructor( private webSocketService: WebSocketService ) {
 		this.channelID = this.baseChannelID;
 		this.docs = [];
+		this.articlesShort = [];
 		this.dsListIDChanged$.subscribe(
 			idx => {
 				this.docListID = idx;
@@ -48,6 +52,9 @@ export class DocService {
 	}
 	public dsGetDocs(): Array<Doc> {
 		return this.docs;
+	}
+	public getArticlesShort(listID: number): Array<ArticleShort> {
+		return this.articlesShort;
 	}
 
 	public dsUpdateDoc(doc: Doc) {
@@ -129,5 +136,34 @@ export class DocService {
 		let message = this.webSocketService
 			.prepareMessage(this.channelID,'DOC','GET_DOC_BY_ID',[this.docListID.toString()]);
 		this.dsSubject.next(message);
+	}
+
+	public SelectArticlesShort(listID: number) {
+		this.articlesShort=[];
+		this.dsSubject = this.webSocketService.webSocketSubject;
+		this.isReady$.next(false);
+		if (listID != undefined) {	
+			this.dsSelectSub = this.dsSubject.subscribe((scMsg) => {
+				if ((+scMsg.payload.channelid === this.channelID)
+						&& (scMsg.payload.domain === "DOC")) {
+					if (scMsg.payload.command === "RESP_DOC_SHORT_BY_ID") {
+						this.articlesShort.push(new ArticleShort(
+							+scMsg.payload.data[0],
+							+scMsg.payload.data[1],
+							scMsg.payload.data[2],
+						));
+					}
+				}
+				if ((+scMsg.payload.channelid === this.channelID)
+						&& (scMsg.payload.command === "EOF")) {
+					this.isReady$.next(true);
+					this.dsSelectSub.unsubscribe();
+				}		
+			});
+		}
+		let message = this.webSocketService
+			.prepareMessage(this.channelID,'DOC','GET_DOC_SHORT_BY_ID',[listID.toString()]);
+		this.dsSubject.next(message);
+		
 	}
 }

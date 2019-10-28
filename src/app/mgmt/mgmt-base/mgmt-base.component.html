@@ -1,4 +1,4 @@
-<div class="constainer">
+<div class="container">
 	<button (click)="docListEdit()">Edit doc list</button>
 	<div *ngIf="docListEditMode">
 		<app-list-mgmt
@@ -28,4 +28,49 @@
 			[position]="docDisplayListPosition"
 			(listCloseEvent)='docDisplayListCloseEvent($event)'>
 		</app-list-mgmt>
+	</div>
+</div>
+<h1>Associating doc list to theme list</h1>
+<div class="master-select">
+	<div class="master-container"> 
+		<h2>Theme</h2>
+		<select 
+			name="theme"
+			size="5"
+			[(ngModel)]="themeID"
+			(change)="themeChange()">
+			<option *ngFor="let theme of docThemes"
+				[value]="theme.idx">
+				{{theme.value}}
+			</option>
+		</select>
+	</div>
+	<div class="master-container">
+		<h2>List</h2>
+		<select 
+			name="Lists"
+			size="5"
+			[(ngModel)]="listID"
+			(change)="listChange()">
+			<option *ngFor="let list of docLists"
+				[value]="list.idx">
+				{{list.value}}
+			</option>
+		</select>
+	</div>
+</div>
+<div class="master-select">
+	<div class="master-container">
+		<h2>Articles</h2>
+		<select 
+			name="Articles"
+			size="10"
+			[(ngModel)]="articleID"
+			(change)="articleChange()">
+			<option *ngFor="let article of articlesShort"
+				[value]="article.idx">
+				{{article.idx}} {{article.position}} {{article.description}}
+			</option>
+		</select>
+	</div>
 </div>

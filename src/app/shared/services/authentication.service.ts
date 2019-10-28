@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, Subscription, Observable } from 'rxjs';
+import { Subject, BehaviorSubject, Subscription, Observable } from 'rxjs';
 import { WebSocketService, wsMessage } from './websocket.service';
 import { GlobalService } from './global.service';
 
@@ -11,6 +11,7 @@ export class AuthenticationService {
 	private	channelID: number = 1;
 	private userID: number = 0;
 	private userIDSubject$ = new Subject<number>();
+	//private userIDSubject$ = new BehaviorSubject<number>(0);
 
 	private domain: string = 'SEC';
 	private command: string;

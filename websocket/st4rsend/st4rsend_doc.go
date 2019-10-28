@@ -25,6 +25,9 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "GET_DOC_BY_ID" {
 		err = WsSrvGetDocByID(wsContext, message)
 	}
+	if message.Payload.Command == "GET_DOC_SHORT_BY_ID" {
+		err = WsSrvGetDocShortByID(wsContext, message)
+	}
 	if message.Payload.Command == "GET_DOC_LIST" {
 		err = WsSrvGetDocList(wsContext, message)
 	}
@@ -206,6 +209,37 @@ func WsSrvGetDocByID(wsContext *WsContext, message *WsMessage) (err error){
 	response, err = rowsToWsSQLSelect(rows)
 
 	message.Payload.Command = "RESP_DOC_BY_ID"
+	for _, line := range response.Data {
+		message.Payload.Data = line
+		if (wsContext.Verbose > 6) {
+			fmt.Printf("Sending SQL data: %v \n", line )
+		}
+		err = sendMessage(wsContext, &message.Payload)
+		CheckErr(err)
+	}
+	message.Payload.Command = "EOF"
+	message.Payload.Data = nil
+	err = sendMessage(wsContext, &message.Payload)
+	CheckErr(err)
+	return err
+}
+
+func WsSrvGetDocShortByID(wsContext *WsContext, message *WsMessage) (err error){
+	var response *WsSQLSelect
+	err = nil
+	var sqlText string
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	sqlText = "select D.ID, S.position, D.description from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID where L.ID=? order by S.position;"
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText,
+		message.Payload.Data[0])
+	CheckErr(err)
+	defer rows.Close()
+
+	response, err = rowsToWsSQLSelect(rows)
+
+	message.Payload.Command = "RESP_DOC_SHORT_BY_ID"
 	for _, line := range response.Data {
 		message.Payload.Data = line
 		if (wsContext.Verbose > 6) {

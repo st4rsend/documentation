@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, Subscription, Observable } from 'rxjs';
+import { Subject, BehaviorSubject, Subscription, Observable } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 interface timeStamp {
@@ -28,7 +28,7 @@ export class WebSocketService {
 
 
 	private isConnected: boolean = false;
-	private wsConnected$ = new Subject<boolean>();
+	private wsConnected$ = new BehaviorSubject<boolean>(false);
 	private currentSeq: number = 1;
 
 	public webSocketSubject: WebSocketSubject<wsMessage>;
