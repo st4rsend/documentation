@@ -17,6 +17,7 @@ export class MgmtBaseComponent implements OnInit {
 	public docListIDName: string = 'ID';
 	public docListColumn = 'description';
 	public docListPosition = 'position';
+	public docListFilter = 'themeID';
 
 	public docThemeListEditMode: boolean = false;
 	public docThemeListTable: string = 'documentation_theme';
@@ -45,19 +46,21 @@ export class MgmtBaseComponent implements OnInit {
 	public articlesShort: Array<ArticleShort>;
 	public articleListID: number;
 
+	public articleID: number;
+
 
   constructor(
 		private docListService: SqlListService,
 		private docService: DocService) {
 		this.docService.isReady$.subscribe(
 			ready => {
-				console.log("isReady: ", ready);
-				this.articlesShort = this.docService.getArticlesShort(this.articleListID);
+				if (ready) {
+					this.articlesShort = this.docService.getArticlesShort(this.articleListID);
+				}
 			});	 
 	}
 
   ngOnInit() {
-
 		this.docListService.InitListKey(
 			this.docThemeKey,
 			this.docThemeTable,
@@ -72,32 +75,45 @@ export class MgmtBaseComponent implements OnInit {
 			this.docListColumn,
 			this.docListPosition);
 		this.docLists = this.docListService.GetListKey(this.docListKey);
-		console.log(this.docThemes, this.docLists);
-
   }
+
 	docListEdit(){
 		this.docListEditMode = !this.docListEditMode;
 	}
+
 	docListCloseEvent(value: boolean) {
 		this.docListEditMode = value;
 	}
+
 	docThemeListEdit(){
 		this.docThemeListEditMode = !this.docThemeListEditMode;
 	}
+
 	docThemeListCloseEvent(value: boolean) {
 		this.docThemeListEditMode = value;
 	}
+
 	docDisplayListEdit(){
 		this.docDisplayListEditMode = !this.docDisplayListEditMode;
 	}
+
 	docDisplayListCloseEvent(value: boolean) {
 		this.docDisplayListEditMode = value;
-	}
+	
+}
 	themeChange() {
-		console.log("theme: ", this.themeID);
-	}
+		this.docListService.SetFilterKey(
+			this.docListKey.toString(),
+			this.docListFilter,
+			this.themeID.toString());
+		this.docLists = this.docListService.GetListKey(this.docListKey);
+}
+
 	listChange() {
-		console.log("list: ", this.listID);
 		this.docService.SelectArticlesShort(this.listID);
+	}
+
+	articleChange() {
+		console.log("selected articleListID: ", this.articleID);
 	}
 }

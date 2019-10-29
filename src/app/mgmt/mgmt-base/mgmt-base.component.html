@@ -69,7 +69,7 @@
 			(change)="articleChange()">
 			<option *ngFor="let article of articlesShort"
 				[value]="article.idx">
-				{{article.idx}} {{article.position}} {{article.description}}
+				{{article.idx}} - {{article.position}} : {{article.description}}
 			</option>
 		</select>
 	</div>
