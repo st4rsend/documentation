@@ -63,6 +63,7 @@
 	<div class="master-container">
 		<h2>Articles</h2>
 		<select 
+			(dblclick)="articleEdit()"
 			name="Articles"
 			size="10"
 			[(ngModel)]="articleID"
@@ -74,3 +75,5 @@
 		</select>
 	</div>
 </div>
+<template #articleEditContainer>
+</template>

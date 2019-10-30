@@ -1,7 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,
+	ViewChild,
+	ViewContainerRef,
+	ComponentFactoryResolver,
+	ComponentRef,
+	ComponentFactory, } from '@angular/core';
 import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
 import { DocService } from '../../shared/services/doc.service';
 import { ArticleShort } from '../../shared/model/doc';
+
+import { EditItemDocComponent } from '../../doc/edit-item-doc/edit-item-doc.component';
 
 @Component({
   selector: 'app-mgmt-base',
@@ -49,9 +56,13 @@ export class MgmtBaseComponent implements OnInit {
 	public articleID: number;
 
 
+	articleEditComponentRef: any;
+	@ViewChild('articleEditContainer', { static: true, read: ViewContainerRef }) EditItemDocComponent: ViewContainerRef;
+
   constructor(
 		private docListService: SqlListService,
-		private docService: DocService) {
+		private docService: DocService,
+		private resolver: ComponentFactoryResolver,) {
 		this.docService.isReady$.subscribe(
 			ready => {
 				if (ready) {
@@ -115,5 +126,22 @@ export class MgmtBaseComponent implements OnInit {
 
 	articleChange() {
 		console.log("selected articleListID: ", this.articleID);
+	}
+
+	articleEdit() {
+		console.log("Editing article: ", this.articleID);
+		this.EditItemDocComponent.clear();
+		const factory = this.resolver.resolveComponentFactory(EditItemDocComponent);
+		this.articleEditComponentRef = this.EditItemDocComponent.createComponent(factory);
+		this.articleEditComponentRef.instance.itemDocIdx = this.articleID;
+		this.articleEditComponentRef.instance.itemDocCloseEvent.subscribe(
+			value => {
+				 this.itemDocCloseEvent(value);
+			});
+	}
+
+	itemDocCloseEvent(altered: boolean) {
+		console.log("destroying");
+		this.articleEditComponentRef.destroy();
 	}
 }

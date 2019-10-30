@@ -14,6 +14,7 @@ import { SqlListService, ISqlList } from '../../shared/services/sql-list.service
 export class EditItemDocComponent implements OnInit {
 
 	@Input() itemDoc: Doc;
+	@Input() itemDocIdx: number;
 	@Output() itemDocCloseEvent = new EventEmitter<boolean>();
 
 	public docTypes: Array<ISqlList>;
@@ -138,6 +139,10 @@ export class EditItemDocComponent implements OnInit {
 			this.doc = new Doc(0, 0, "", 1, "TEXT", "", 0, 1, "TEXT", "", 0, 1, "Double");
 			this.docTypeID = 1;
 			this.docType2ID = 1;
+		}
+		if (this.itemDocIdx != null) {
+			console.log ("ITEMDOCEDIT IDX: ", this.itemDocIdx);
+			console.log ("DOC LIST ID: ", this.docService.getDocListID());
 		}
 	}
 

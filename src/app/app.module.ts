@@ -90,7 +90,8 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
   ],
   providers: [
 	],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+	entryComponents: [EditItemDocComponent],
 })
 export class AppModule { 
 }
