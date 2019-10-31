@@ -22,6 +22,9 @@ type Doc struct {
 
 func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
+	if message.Payload.Command == "GET_ARTICLE_BY_ID" {
+		err = WsSrvGetArticleByID(wsContext, message)
+	}
 	if message.Payload.Command == "GET_DOC_BY_ID" {
 		err = WsSrvGetDocByID(wsContext, message)
 	}
@@ -190,6 +193,37 @@ func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 	CheckErr(err)
 	return err
 
+}
+
+func WsSrvGetArticleByID(wsContext *WsContext, message *WsMessage) (err error){
+	var response *WsSQLSelect
+	err = nil
+	var sqlText string
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	sqlText = "select D.ID, D.description, T.ID as typeID, T.type, D.info, D.childListID, T2.ID as type2ID, T2.type as type2, D.info2, D.child2LIstID, D.displayID, DSP.display from documentations D left join documentation_type T on D.typeID=T.ID left join documentation_type T2 on D.type2ID=T2.ID left join documentation_display DSP on D.displayID=DSP.ID where D.ID=?"
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText,
+		message.Payload.Data[0])
+	CheckErr(err)
+	defer rows.Close()
+
+	response, err = rowsToWsSQLSelect(rows)
+
+	message.Payload.Command = "RESP_ARTICLE_BY_ID"
+	for _, line := range response.Data {
+		message.Payload.Data = line
+		if (wsContext.Verbose > 6) {
+			fmt.Printf("Sending SQL data: %v \n", line )
+		}
+		err = sendMessage(wsContext, &message.Payload)
+		CheckErr(err)
+	}
+	message.Payload.Command = "EOF"
+	message.Payload.Data = nil
+	err = sendMessage(wsContext, &message.Payload)
+	CheckErr(err)
+	return err
 }
 
 func WsSrvGetDocByID(wsContext *WsContext, message *WsMessage) (err error){

@@ -83,6 +83,19 @@ export class EditItemDocComponent implements OnInit {
 			"height": "80vh",
 			//"width": "'calc (100vw -50px)'",
 		};
+
+		if (this.itemDocIdx != null) {
+			this.docService.SelectArticlesByID(this.itemDocIdx);
+			this.docService.isReadyArticle$.subscribe(
+				ready => {
+					if (ready) {
+						console.log("READY ARTICLE");
+						this.itemDoc = this.docService.getArticle();
+						this.reset();
+					}
+				}
+			);
+		}
   }
 
 	cancel() {

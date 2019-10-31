@@ -9,6 +9,7 @@ export class DocService {
 
 	public docs: Array<Doc>;
 	public articlesShort: Array<ArticleShort>;
+	public article: Doc;
 
 	private docListID: number;
 	private articleListID: number;
@@ -23,6 +24,7 @@ export class DocService {
 	baseChannelID: number = 256;
 
 	isReady$ = new Subject<any>();
+	isReadyArticle$ = new Subject<boolean>();
 
   constructor( private webSocketService: WebSocketService ) {
 		this.channelID = this.baseChannelID;
@@ -43,6 +45,9 @@ export class DocService {
 		this.dsListIDSource.next(idx);
 	}
 
+	public getArticle(): Doc {
+		return this.article;
+	}
 	public getDocListID() {
 		return this.docListID;
 	}
@@ -163,6 +168,45 @@ export class DocService {
 		}
 		let message = this.webSocketService
 			.prepareMessage(this.channelID,'DOC','GET_DOC_SHORT_BY_ID',[listID.toString()]);
+		this.dsSubject.next(message);
+		
+	}
+	
+	public SelectArticlesByID(articleID: number) {
+		this.article = undefined;
+		this.dsSubject = this.webSocketService.webSocketSubject;
+		this.isReadyArticle$.next(false);
+		if (articleID != undefined) {	
+			this.dsSelectSub = this.dsSubject.subscribe((scMsg) => {
+				if ((+scMsg.payload.channelid === this.channelID)
+						&& (scMsg.payload.domain === "DOC")) {
+					if (scMsg.payload.command === "RESP_ARTICLE_BY_ID") {
+						this.article = new Doc(
+							+scMsg.payload.data[0],
+							0,
+							scMsg.payload.data[1],
+							+scMsg.payload.data[2],
+							scMsg.payload.data[3],
+							scMsg.payload.data[4],
+							+scMsg.payload.data[5],
+							+scMsg.payload.data[6],
+							scMsg.payload.data[7],
+							scMsg.payload.data[8],
+							+scMsg.payload.data[9],
+							+scMsg.payload.data[10],
+							scMsg.payload.data[11],
+						);
+					}
+				}
+				if ((+scMsg.payload.channelid === this.channelID)
+						&& (scMsg.payload.command === "EOF")) {
+					this.isReadyArticle$.next(true);
+					this.dsSelectSub.unsubscribe();
+				}		
+			});
+		}
+		let message = this.webSocketService
+			.prepareMessage(this.channelID,'DOC','GET_ARTICLE_BY_ID',[articleID.toString()]);
 		this.dsSubject.next(message);
 		
 	}
