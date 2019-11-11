@@ -49,6 +49,9 @@ export class MgmtBaseComponent implements OnInit {
 
 	public themeID: number =  0;
 	public listID: number = 0;
+	public themeTargetID: number = 0;
+	public themeEdit: string = "Set list theme";
+	public themeEditFlag: boolean = false;
 
 	public articlesShort: Array<ArticleShort>;
 	public articleListID: number;
@@ -110,15 +113,39 @@ export class MgmtBaseComponent implements OnInit {
 
 	docDisplayListCloseEvent(value: boolean) {
 		this.docDisplayListEditMode = value;
-	
-}
+	}
+
+	themeEditChange() {
+		this.themeEditFlag = !this.themeEditFlag;
+		if(this.listID == 0) {
+			this.themeEditFlag = false;
+		}
+		if (this.themeEditFlag) {
+			this.themeEdit="Cancel";
+		} else {
+			this.themeEdit="Set list theme";
+		}
+	}
+
 	themeChange() {
-		this.docListService.SetFilterKey(
-			this.docListKey.toString(),
-			this.docListFilter,
-			this.themeID.toString());
+		if (this.themeID.toString() == "0") {
+			this.docListService.RemoveFilterKey(this.docListKey);
+		} else if (this.themeID.toString() == "-1") {
+			this.docListService.SetFilterKey(
+				this.docListKey,
+				this.docListFilter,
+				"");
+		} else {
+			this.docListService.SetFilterKey(
+				this.docListKey,
+				this.docListFilter,
+				this.themeID.toString());
+		}
 		this.docLists = this.docListService.GetListKey(this.docListKey);
-}
+		this.listID = 0;
+		this.themeEditChange();
+		this.articlesShort = [];
+	}
 
 	listChange() {
 		this.docService.SelectArticlesShort(this.listID);
@@ -126,6 +153,14 @@ export class MgmtBaseComponent implements OnInit {
 
 	articleChange() {
 		console.log("selected articleListID: ", this.articleID);
+	}
+
+	themeTargetChange() {
+		console.log("Target Theme: ", this.themeTargetID);
+	}
+
+	moveListToTheme() {
+		this.docService.SetListTheme(this.listID, this.themeTargetID);
 	}
 
 	articleEdit() {

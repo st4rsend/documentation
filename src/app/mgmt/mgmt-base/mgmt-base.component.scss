@@ -5,14 +5,23 @@
   box-sizing: border-box;
 }
 
-.master-select {
+.flex-row {
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	border: 1px solid blue;
   padding: 5px;
 	margin: 5px;
   box-sizing: border-box;
 }
-.master-container {
+.flex-column {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid red;
+  padding: 5px;
+	margin: 5px;
+  box-sizing: border-box;
+}
+.flex-box {
 	flex: 1 1 auto;
 }

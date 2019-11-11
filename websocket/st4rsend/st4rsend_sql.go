@@ -162,9 +162,16 @@ func WsSrvGetSqlListFlt(wsContext *WsContext, message *WsMessage) (err error){
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "select " + idx_name + "," + column_name + "," + position_name +
-		" from " + table_name + " where " + flt_idx_name + "=" + flt_idx_value +
-		" order by "	+ position_name
+	if (flt_idx_value == "") {
+		sqlText = "select " + idx_name + "," + column_name + "," + position_name +
+			" from " + table_name + " where " + flt_idx_name + " is null" +
+			" order by "	+ position_name
+
+	} else {
+		sqlText = "select " + idx_name + "," + column_name + "," + position_name +
+			" from " + table_name + " where " + flt_idx_name + "=" + flt_idx_value +
+			" order by "	+ position_name
+	}
 	if (wsContext.Verbose > 4) {
 		fmt.Printf("ListFK SQLTEXT: %v\n", sqlText)
 	}

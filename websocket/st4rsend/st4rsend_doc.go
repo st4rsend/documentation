@@ -46,6 +46,9 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "UPDATE_DOC_POS" {
 		err = WsSrvDocUpdatePos(wsContext, message)
 	}
+	if message.Payload.Command == "UPDATE_LIST_THEME" {
+		err = WsSrvDocUpdateListTheme(wsContext, message)
+	}
 	CheckErr(err)
 	return err
 }
@@ -74,6 +77,35 @@ func WsSrvDocUpdatePos(wsContext *WsContext, message *WsMessage) (err error){
 		docID)
 	CheckErr(err)
 	return err
+}
+
+func WsSrvDocUpdateListTheme(wsContext *WsContext, message *WsMessage) (err error) {
+	err = nil
+	if CheckSec(wsContext, "DOC", "WRITE") {
+		return err
+	}
+	var listID string
+	var themeTargetID sql.NullString
+	listID = message.Payload.Data[0]
+	themeTargetID.String = message.Payload.Data[1]
+	if ( themeTargetID.String == "-1" ) {
+		themeTargetID.Valid = false
+	} else {
+		themeTargetID.Valid = true
+	}
+	sqlText := "update documentation_list D set themeID=? where D.ID=?"
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("Updating documentation_list \n")
+	}
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	_, err = wsContext.Db.ExecContext(localContext,sqlText,
+		themeTargetID,
+		listID)
+	CheckErr(err)
+	return err
+
 }
 
 func WsSrvDocUpdate(wsContext *WsContext, message *WsMessage) (err error){

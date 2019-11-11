@@ -240,7 +240,7 @@ func sendMessage(wsContext *WsContext, payload *ComEncap) (err error){
 		Payload: *payload}
 	err = websocket.JSON.Send(wsContext.Conn, &message)
 	CheckErr(err)
-	if wsContext.Verbose > 5 {
+	if wsContext.Verbose > 6 {
 		fmt.Printf("Sending: %v\n", message)
 	}
 

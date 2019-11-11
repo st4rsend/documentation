@@ -31,25 +31,33 @@
 	</div>
 </div>
 <h1>Associating doc list to theme list</h1>
-<div class="master-select">
-	<div class="master-container"> 
+<div class="flex-row">
+	<div class="flex-box"> 
 		<h2>Theme</h2>
 		<select 
 			name="theme"
-			size="5"
+			size="10"
 			[(ngModel)]="themeID"
 			(change)="themeChange()">
+			<option
+				[value]="0">
+				-- All --
+			</option>
 			<option *ngFor="let theme of docThemes"
 				[value]="theme.idx">
 				{{theme.value}}
 			</option>
+			<option
+				[value]="-1">
+				-- Orphans --
+			</option>
 		</select>
 	</div>
-	<div class="master-container">
+	<div class="flex-box">
 		<h2>List</h2>
 		<select 
 			name="Lists"
-			size="5"
+			size="10"
 			[(ngModel)]="listID"
 			(change)="listChange()">
 			<option *ngFor="let list of docLists"
@@ -58,9 +66,36 @@
 			</option>
 		</select>
 	</div>
+	<div class="flex-box">
+		<button (click)="themeEditChange()">{{themeEdit}}</button>
+	</div>
+	<div *ngIf="themeEditFlag" class="flex-box flex-column">
+		<div class="flex-box">
+			Move selected list to below theme
+		</div>
+		<div class="flex-box">
+			<select 
+				name="themeTarget"
+				size="10"
+				[(ngModel)]="themeTargetID"
+				(change)="themeTargetChange()">
+				<option *ngFor="let theme of docThemes"
+					[value]="theme.idx">
+					{{theme.value}}
+				</option>
+				<option
+					[value]="-1">
+					-- Orphans --
+				</option>
+			</select>
+		</div>
+		<div class="flex-box">
+			<button (click)="moveListToTheme()">Submit</button>
+		</div>
+	</div>
 </div>
-<div class="master-select">
-	<div class="master-container">
+<div class="flex-row">
+	<div class="flex-box">
 		<h2>Articles</h2>
 		<select 
 			(dblclick)="articleEdit()"

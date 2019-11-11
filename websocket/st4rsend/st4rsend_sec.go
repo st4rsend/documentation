@@ -30,6 +30,7 @@ func CheckSec(wsContext *WsContext, domain string, action string) bool {
 			}
 		}
 	}
+	fmt.Printf("Access denied\n");
 	return true
 }
 

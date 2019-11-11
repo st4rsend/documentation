@@ -105,6 +105,16 @@ export class DocService {
 		this.dsSubject.next(message);
 	}
 
+	public SetListTheme(listID: number, themeTargetID: number) {
+		console.log ("Moving listID: ", listID, " to themeID: ", themeTargetID);
+		this.dsSubject = this.webSocketService.webSocketSubject;
+		let message = this.webSocketService
+			.prepareMessage(this.channelID,'DOC','UPDATE_LIST_THEME',[
+				listID.toString(),
+				themeTargetID.toString()]);
+		this.dsSubject.next(message);
+	}
+
 	public dsSQLQueryDocs() {
 		this.docs = [];
 		this.dsSubject = this.webSocketService.webSocketSubject;

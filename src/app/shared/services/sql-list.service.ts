@@ -67,7 +67,6 @@ export class SqlListService {
 		this.SetFilterKey("default", column, value);
 	}
 	public RemoveFilter(){
-		console.log("REMOVE FILTER");
 		this.RemoveFilterKey("default");
 	}
 
