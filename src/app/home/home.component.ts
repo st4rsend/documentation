@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { GlobalService } from '../shared/services/global.service';
-import { WebSocketService } from '../shared/services/websocket.service';
-import { AuthenticationService } from '../shared/services/authentication.service';
+import { GlobalService } from '../shared/service/global.service';
+import { WebSocketService } from '../shared/service/websocket.service';
+import { AuthenticationService } from '../shared/service/authentication.service';
 
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { TodoService } from '../../shared/services/todo.service';
-import { SqlListService } from '../../shared/services/sql-list.service';
+import { TodoService } from '../../shared/service/todo.service';
+import { SqlListService } from '../../shared/service/sql-list.service';
 import { Todo } from '../../shared/model/todo';
 
 @Component({

@@ -30,7 +30,7 @@
 		</app-list-mgmt>
 	</div>
 </div>
-<h1>Associating doc list to theme list</h1>
+<h1>Associating</h1>
 <div class="flex-row">
 	<div class="flex-box"> 
 		<h2>Theme</h2>
@@ -108,6 +108,18 @@
 				{{article.idx}} - {{article.position}} : {{article.description}}
 			</option>
 		</select>
+	</div>
+	<div class="flex-box flex-column">
+		<div class="flex-box">
+			<button (click)="delArticleFromList()">Remove from list</button>
+		</div>
+		<div class="flex-box">
+			<button (click)="addArticleToList()">Add to list</button>
+		</div>
+		<div class="flex-box">
+			<button (click)="articleEdit()">Edit</button>
+		</div>
+		
 	</div>
 </div>
 <template #articleEditContainer>

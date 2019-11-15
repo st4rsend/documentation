@@ -4,11 +4,11 @@ import { Component, OnInit,
 	ComponentFactoryResolver,
 	ComponentRef,
 	ComponentFactory, } from '@angular/core';
-import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
-import { DocService } from '../../shared/services/doc.service';
-import { ArticleShort } from '../../shared/model/doc';
+import { SqlListService, ISqlList } from '../../../shared/service/sql-list.service';
+import { DocService } from '../../service/doc.service';
+import { ArticleShort } from '../../model/doc';
 
-import { EditItemDocComponent } from '../../doc/edit-item-doc/edit-item-doc.component';
+import { EditItemDocComponent } from '../../view/edit-item-doc/edit-item-doc.component';
 
 @Component({
   selector: 'app-mgmt-base',
@@ -161,6 +161,14 @@ export class MgmtBaseComponent implements OnInit {
 
 	moveListToTheme() {
 		this.docService.SetListTheme(this.listID, this.themeTargetID);
+	}
+
+	delArticleFromList() {
+		console.log ("Delete articleID: ", this.articleID, " from ListID: ", this.listID); 
+	}
+
+	addArticleToList() {
+		console.log("Add articleID: ", this.articleID, " to lIst has yet to be selected");
 	}
 
 	articleEdit() {

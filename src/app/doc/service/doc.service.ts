@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject ,  Subscription } from 'rxjs';
-import { WebSocketService, wsMessage } from './websocket.service';
+import { WebSocketService, wsMessage } from '../../shared/service/websocket.service';
 import { Doc, ArticleShort } from '../model/doc';
 
 @Injectable()

@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
-import { WebSocketService } from './shared/services/websocket.service';
-import { GlobalService } from './shared/services/global.service';
+import { WebSocketService } from './shared/service/websocket.service';
+import { GlobalService } from './shared/service/global.service';
 
 
 @Component({

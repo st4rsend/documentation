@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AuthenticationService } from '../../shared/services/authentication.service';
+import { AuthenticationService } from '../../shared/service/authentication.service';
 
 @Component({
   selector: 'app-login',

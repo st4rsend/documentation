@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { TodoService } from '../../shared/services/todo.service';
-import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
+import { TodoService } from '../../shared/service/todo.service';
+import { SqlListService, ISqlList } from '../../shared/service/sql-list.service';
 import { Todo } from '../../shared/model/todo';
 
-import { WebSocketService } from '../../shared/services/websocket.service';
+import { WebSocketService } from '../../shared/service/websocket.service';
 import { Subscription } from 'rxjs';
 
 

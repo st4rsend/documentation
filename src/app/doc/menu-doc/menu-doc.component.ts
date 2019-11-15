@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { DocService } from '../../shared/services/doc.service';
+import { DocService } from '../service/doc.service';
 //import { Subscription } from 'rxjs';
 
 import { ListSelectComponent } from '../../shared/component/list-select/list-select.component';

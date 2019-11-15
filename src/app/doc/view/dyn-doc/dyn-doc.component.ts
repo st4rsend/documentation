@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnChanges, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { DocService } from '../../shared/services/doc.service';
-import {Doc} from '../../shared/model/doc';
+import { DocService } from '../../service/doc.service';
+import {Doc} from '../../model/doc';
 
 
 import { FlexLayoutModule } from '@angular/flex-layout';

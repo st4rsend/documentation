@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '
 import { Subscription } from 'rxjs';
 import {OverlayContainer} from '@angular/cdk/overlay';
 
-import { WebSocketService } from '../../shared/services/websocket.service';
-import { AuthenticationService } from '../../shared/services/authentication.service';
-import { GlobalService } from '../../shared/services/global.service';
+import { WebSocketService } from '../shared/service/websocket.service';
+import { AuthenticationService } from '../shared/service/authentication.service';
+import { GlobalService } from '../shared/service/global.service';
 
 @Component({
 	selector: 'app-server-com',

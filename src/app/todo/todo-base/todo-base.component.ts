@@ -4,7 +4,7 @@ import { ListTodoComponent } from '../list-todo/list-todo.component';
 import { CreateTodoComponent } from '../create-todo/create-todo.component';
 import { UpdateTodoComponent } from '../update-todo/update-todo.component';
 
-import {TodoService} from '../../shared/services/todo.service';
+import {TodoService} from '../../shared/service/todo.service';
 
 @Component({
   selector: 'app-todo-base',

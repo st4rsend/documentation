@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {DomSanitizer} from "@angular/platform-browser";
 
-import { DocService } from '../../shared/services/doc.service';
-import { Doc } from '../../shared/model/doc';
-import { SqlListService, ISqlList } from '../../shared/services/sql-list.service';
+import { DocService } from '../../service/doc.service';
+import { Doc } from '../../model/doc';
+import { SqlListService, ISqlList } from '../../../shared/service/sql-list.service';
 
 @Component({
 	selector: 'app-edit-item-doc',

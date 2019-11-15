@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 
-import { Doc } from '../../shared/model/doc';
+import { Doc } from '../../model/doc';
 
 
 @Component({

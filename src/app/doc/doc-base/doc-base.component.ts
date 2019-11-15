@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DocService } from '../../shared/services/doc.service';
+import { DocService } from '../service/doc.service';
 
 @Component({
   selector: 'app-doc-base',

@@ -4,7 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './mgmt/register/register.component';
 import { DocBaseComponent } from './doc/doc-base/doc-base.component';
 import { TodoBaseComponent } from './todo/todo-base/todo-base.component';
-import { MgmtBaseComponent } from './mgmt/mgmt-base/mgmt-base.component';
+import { MgmtBaseComponent } from './doc/admin/mgmt-base/mgmt-base.component';
 
 const appRoutes: Routes = [
 

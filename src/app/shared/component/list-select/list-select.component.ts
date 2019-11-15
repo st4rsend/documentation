@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subject ,  Subscription } from 'rxjs';
-import { SqlListService, ISqlList } from '../../services/sql-list.service';
+import { SqlListService, ISqlList } from '../../service/sql-list.service';
 
 @Component({
   selector: 'app-list-select',

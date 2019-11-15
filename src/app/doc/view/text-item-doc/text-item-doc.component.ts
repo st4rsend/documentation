@@ -2,7 +2,7 @@ import { Component, OnChanges, Input, Output, EventEmitter, Injectable } from '@
 import { Overlay } from '@angular/cdk/overlay';
 import {PortalModule, ComponentPortal} from '@angular/cdk/portal';
 
-import { Doc } from '../../shared/model/doc';
+import { Doc } from '../../model/doc';
 
 
 @Component({

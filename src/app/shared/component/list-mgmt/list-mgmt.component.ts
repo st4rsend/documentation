@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SqlListService, ISqlList } from '../../services/sql-list.service';
+import { SqlListService, ISqlList } from '../../service/sql-list.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({

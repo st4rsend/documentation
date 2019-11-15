@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { WebSocketService, wsMessage } from '../../shared/services/websocket.service';
-import { GlobalService } from '../../shared/services/global.service';
+import { WebSocketService, wsMessage } from '../../shared/service/websocket.service';
+import { GlobalService } from '../../shared/service/global.service';
 
 @Component({
   selector: 'app-mgmt-footer',

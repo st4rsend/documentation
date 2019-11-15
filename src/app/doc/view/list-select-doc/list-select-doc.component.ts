@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { ListSelectComponent } from '../../shared/component/list-select/list-select.component';
+import { ListSelectComponent } from '../../../shared/component/list-select/list-select.component';
 
 @Component({
   selector: 'app-list-select-doc',
