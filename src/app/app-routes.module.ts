@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './mgmt/register/register.component';
-import { DocBaseComponent } from './doc/doc-base/doc-base.component';
+import { DocBaseComponent } from './doc/view/doc-base/doc-base.component';
 import { TodoBaseComponent } from './todo/todo-base/todo-base.component';
 import { MgmtBaseComponent } from './doc/admin/mgmt-base/mgmt-base.component';
 
