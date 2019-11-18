@@ -23,5 +23,7 @@
   box-sizing: border-box;
 }
 .flex-box {
-	flex: 1 1 auto;
+	flex: 0 1 auto;
+	padding: 0 2% 0 2%;
+	min-height: 30px;
 }

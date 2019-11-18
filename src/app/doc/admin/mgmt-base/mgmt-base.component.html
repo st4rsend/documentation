@@ -37,14 +37,14 @@
 		<select 
 			name="theme"
 			size="10"
-			[(ngModel)]="themeID"
+			[(ngModel)]="themeKey"
 			(change)="themeChange()">
 			<option
 				[value]="0">
 				-- All --
 			</option>
-			<option *ngFor="let theme of docThemes"
-				[value]="theme.idx">
+			<option *ngFor="let theme of docThemes | keyvalue"
+				[value]="theme.key">
 				{{theme.value}}
 			</option>
 			<option
@@ -58,16 +58,26 @@
 		<select 
 			name="Lists"
 			size="10"
-			[(ngModel)]="listID"
+			[(ngModel)]="listKey"
 			(change)="listChange()">
-			<option *ngFor="let list of docLists"
-				[value]="list.idx">
-				{{list.value}}
+			<option *ngFor="let list of docLists | keyvalue"
+				[value]="list.key">
+				{{list.value}} 
+			</option>
+			<option
+				[value]="-1">
+				-- Orphans --
 			</option>
 		</select>
 	</div>
-	<div class="flex-box">
-		<button (click)="themeEditChange()">{{themeEdit}}</button>
+	<div class="flex-box flex-column">
+		<div class="flex-box">
+			Selected list:
+		</div>
+		<div *ngIf="docLists.get(listKey)" class="flex-box">
+			{{docLists.get(listKey)}} 
+			<button (click)="themeEditChange()">{{themeEdit}}</button>
+		</div>
 	</div>
 	<div *ngIf="themeEditFlag" class="flex-box flex-column">
 		<div class="flex-box">
@@ -77,10 +87,10 @@
 			<select 
 				name="themeTarget"
 				size="10"
-				[(ngModel)]="themeTargetID"
+				[(ngModel)]="themeTargetKey"
 				(change)="themeTargetChange()">
-				<option *ngFor="let theme of docThemes"
-					[value]="theme.idx">
+				<option *ngFor="let theme of docThemes | keyvalue"
+					[value]="theme.key">
 					{{theme.value}}
 				</option>
 				<option

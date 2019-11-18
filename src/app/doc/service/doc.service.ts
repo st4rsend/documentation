@@ -105,7 +105,7 @@ export class DocService {
 		this.dsSubject.next(message);
 	}
 
-	public SetListTheme(listID: number, themeTargetID: number) {
+	public SetListTheme(listID: string, themeTargetID: string) {
 		console.log ("Moving listID: ", listID, " to themeID: ", themeTargetID);
 		this.dsSubject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
@@ -153,7 +153,7 @@ export class DocService {
 		this.dsSubject.next(message);
 	}
 
-	public SelectArticlesShort(listID: number) {
+	public SelectArticlesShort(listID: string) {
 		this.articlesShort=[];
 		this.dsSubject = this.webSocketService.webSocketSubject;
 		this.isReady$.next(false);
@@ -177,7 +177,7 @@ export class DocService {
 			});
 		}
 		let message = this.webSocketService
-			.prepareMessage(this.channelID,'DOC','GET_DOC_SHORT_BY_ID',[listID.toString()]);
+			.prepareMessage(this.channelID,'DOC','GET_DOC_SHORT_BY_ID',[listID]);
 		this.dsSubject.next(message);
 		
 	}

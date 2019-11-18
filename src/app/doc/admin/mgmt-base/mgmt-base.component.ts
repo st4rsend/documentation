@@ -3,7 +3,8 @@ import { Component, OnInit,
 	ViewContainerRef,
 	ComponentFactoryResolver,
 	ComponentRef,
-	ComponentFactory, } from '@angular/core';
+	ComponentFactory, 
+} from '@angular/core';
 import { SqlListService, ISqlList } from '../../../shared/service/sql-list.service';
 import { DocService } from '../../service/doc.service';
 import { ArticleShort } from '../../model/doc';
@@ -38,26 +39,25 @@ export class MgmtBaseComponent implements OnInit {
 	public docDisplayListColumn = 'display';
 	public docDisplayListPosition = 'position';
 
-	public docThemes: Array<ISqlList>;
+	public docThemes: Map<string, string>;
 	public docThemeKey: string = 'theme';
 	public docThemeTable: string = 'documentation_theme';
 	public docThemeIDName: string = 'ID';
 	public docThemeColumn: string = 'description';
 	public docThemePosition: string = 'position';
-	public docLists: Array<ISqlList>;
+	public docLists: Map<string, string>;
 	public docListKey: string = 'list';
 
-	public themeID: number =  0;
-	public listID: number = 0;
-	public themeTargetID: number = 0;
-	public themeEdit: string = "Set list theme";
+	public listKey: string = "0";
+	public themeKey: string =  "0";
+	public themeTargetKey: string = "";
+	public themeEdit: string = "Change theme";
 	public themeEditFlag: boolean = false;
 
 	public articlesShort: Array<ArticleShort>;
 	public articleListID: number;
 
 	public articleID: number;
-
 
 	articleEditComponentRef: any;
 	@ViewChild('articleEditContainer', { static: true, read: ViewContainerRef }) EditItemDocComponent: ViewContainerRef;
@@ -81,14 +81,14 @@ export class MgmtBaseComponent implements OnInit {
 			this.docThemeIDName,
 			this.docThemeColumn,
 			this.docThemePosition);
-		this.docThemes = this.docListService.GetListKey(this.docThemeKey);
+		this.docThemes = this.docListService.GetMapKey(this.docThemeKey);
 		this.docListService.InitListKey(
 			this.docListKey,
 			this.docListTable,
 			this.docListIDName,
 			this.docListColumn,
 			this.docListPosition);
-		this.docLists = this.docListService.GetListKey(this.docListKey);
+		this.docLists = this.docListService.GetMapKey(this.docListKey);
   }
 
 	docListEdit(){
@@ -117,20 +117,20 @@ export class MgmtBaseComponent implements OnInit {
 
 	themeEditChange() {
 		this.themeEditFlag = !this.themeEditFlag;
-		if(this.listID == 0) {
+		if(this.listKey == "0") {
 			this.themeEditFlag = false;
 		}
 		if (this.themeEditFlag) {
 			this.themeEdit="Cancel";
 		} else {
-			this.themeEdit="Set list theme";
+			this.themeEdit="Change theme";
 		}
 	}
 
 	themeChange() {
-		if (this.themeID.toString() == "0") {
+		if (this.themeKey == "0") {
 			this.docListService.RemoveFilterKey(this.docListKey);
-		} else if (this.themeID.toString() == "-1") {
+		} else if (this.themeKey == "-1") {
 			this.docListService.SetFilterKey(
 				this.docListKey,
 				this.docListFilter,
@@ -139,16 +139,18 @@ export class MgmtBaseComponent implements OnInit {
 			this.docListService.SetFilterKey(
 				this.docListKey,
 				this.docListFilter,
-				this.themeID.toString());
+				this.themeKey);
 		}
-		this.docLists = this.docListService.GetListKey(this.docListKey);
-		this.listID = 0;
+		this.docLists = this.docListService.GetMapKey(this.docListKey);
+		this.listKey = "0";
 		this.themeEditChange();
 		this.articlesShort = [];
 	}
 
 	listChange() {
-		this.docService.SelectArticlesShort(this.listID);
+		this.docService.SelectArticlesShort(this.listKey);
+		this.themeEditFlag = false;
+		this.themeEdit="Change theme";
 	}
 
 	articleChange() {
@@ -156,15 +158,15 @@ export class MgmtBaseComponent implements OnInit {
 	}
 
 	themeTargetChange() {
-		console.log("Target Theme: ", this.themeTargetID);
+		console.log("Target Theme: ", this.themeTargetKey);
 	}
 
 	moveListToTheme() {
-		this.docService.SetListTheme(this.listID, this.themeTargetID);
+		this.docService.SetListTheme(this.listKey, this.themeTargetKey);
 	}
 
 	delArticleFromList() {
-		console.log ("Delete articleID: ", this.articleID, " from ListID: ", this.listID); 
+		console.log ("Delete articleID: ", this.articleID, " from ListKey: ", this.listKey); 
 	}
 
 	addArticleToList() {

@@ -24,6 +24,7 @@ interface IList {
 	selectSub: Subscription;
 	sqlListDef: ISqlListDef;
 	sqlList: Array<ISqlList>;
+	sqlMap: Map<string, string>;
 }
 
 @Injectable(
@@ -48,6 +49,15 @@ export class SqlListService {
 	}
 	public GetListKey(key: string): Array<ISqlList> {
 		return this.listMap.get(key).sqlList as Array<ISqlList>;
+	}
+
+	public GetMap(): Map<string, string> {
+		return this.listMap.get("default").sqlMap as Map<string, string>;
+	}
+	public GetMapKey(key: string): Map<string, string> {
+//		return this.listMap.get(key).sqlList as Array<ISqlList>;
+		return this.listMap.get(key).sqlMap as Map<string, string>;
+	
 	}
 
 	public SetFilterKey(key: string, column: string, value: string){
@@ -110,6 +120,7 @@ export class SqlListService {
 				filter_value: null,
 			},
 			sqlList: new Array<ISqlList>(),
+			sqlMap: new Map<string, string>(),
 		});
 		this.sqlGetList(key);
 	}
@@ -120,6 +131,7 @@ export class SqlListService {
 		this.subject = this.webSocketService.webSocketSubject;
 
 		this.listMap.get(key).sqlList = [];
+		this.listMap.get(key).sqlMap.clear();
 
 		if ((this.listMap.get(key).selectSub === undefined) || (this.listMap.get(key).selectSub.closed === true)) {
 			this.listMap.get(key).selectSub = this.subject.subscribe((value) => {
@@ -207,6 +219,10 @@ export class SqlListService {
 					value: msg.payload.data[1],
 					position: +msg.payload.data[2],
 				});
+				this.listMap.get(key).sqlMap.set(
+					msg.payload.data[0], 
+					msg.payload.data[1],
+				);
 			}
 			if ((+msg.payload.channelid === this.listMap.get(key).channelID) && ( msg.payload.command === "EOF")) {
 				this.isReady$.next(true);
