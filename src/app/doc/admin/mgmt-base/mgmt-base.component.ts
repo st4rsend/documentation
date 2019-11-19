@@ -5,7 +5,6 @@ import { Component, OnInit,
 	ComponentRef,
 	ComponentFactory, 
 } from '@angular/core';
-import { SqlListService, ISqlList } from '../../../shared/service/sql-list.service';
 import { DocService } from '../../service/doc.service';
 import { ArticleShort } from '../../model/doc';
 
@@ -15,7 +14,7 @@ import { EditItemDocComponent } from '../../view/edit-item-doc/edit-item-doc.com
   selector: 'app-mgmt-base',
   templateUrl: './mgmt-base.component.html',
   styleUrls: ['./mgmt-base.component.scss'],
-	providers: [ SqlListService, DocService ],
+	providers: [ DocService ],
 })
 
 export class MgmtBaseComponent implements OnInit {
@@ -39,6 +38,7 @@ export class MgmtBaseComponent implements OnInit {
 	public docDisplayListColumn = 'display';
 	public docDisplayListPosition = 'position';
 
+/*
 	public docThemes: Map<string, string>;
 	public docThemeKey: string = 'theme';
 	public docThemeTable: string = 'documentation_theme';
@@ -46,10 +46,12 @@ export class MgmtBaseComponent implements OnInit {
 	public docThemeColumn: string = 'description';
 	public docThemePosition: string = 'position';
 	public docLists: Map<string, string>;
-	public docListKey: string = 'list';
+*/
+//	public docListKey: string = 'list';
 
 	public listKey: string = "0";
-	public themeKey: string =  "0";
+	public listTargetKey: string = "0";
+	//public themeKey: string =  "0";
 	public themeTargetKey: string = "";
 	public themeEdit: string = "Change theme";
 	public themeEditFlag: boolean = false;
@@ -63,7 +65,6 @@ export class MgmtBaseComponent implements OnInit {
 	@ViewChild('articleEditContainer', { static: true, read: ViewContainerRef }) EditItemDocComponent: ViewContainerRef;
 
   constructor(
-		private docListService: SqlListService,
 		private docService: DocService,
 		private resolver: ComponentFactoryResolver,) {
 		this.docService.isReady$.subscribe(
@@ -75,29 +76,24 @@ export class MgmtBaseComponent implements OnInit {
 	}
 
   ngOnInit() {
-		this.docListService.InitListKey(
-			this.docThemeKey,
-			this.docThemeTable,
-			this.docThemeIDName,
-			this.docThemeColumn,
-			this.docThemePosition);
-		this.docThemes = this.docListService.GetMapKey(this.docThemeKey);
-		this.docListService.InitListKey(
-			this.docListKey,
-			this.docListTable,
-			this.docListIDName,
-			this.docListColumn,
-			this.docListPosition);
-		this.docLists = this.docListService.GetMapKey(this.docListKey);
   }
+
+	docListCloseEvent(value: boolean) {
+		this.docListEditMode = value;
+	}
+
+	listFinderEvent(listID: string) {
+		console.log("Received listID: ", listID);
+		this.listKey = listID;
+		this.docService.SelectArticlesShort(this.listKey);
+		this.themeEditFlag = false;
+		this.themeEdit="Change theme";
+	}
 
 	docListEdit(){
 		this.docListEditMode = !this.docListEditMode;
 	}
 
-	docListCloseEvent(value: boolean) {
-		this.docListEditMode = value;
-	}
 
 	docThemeListEdit(){
 		this.docThemeListEditMode = !this.docThemeListEditMode;
@@ -127,37 +123,12 @@ export class MgmtBaseComponent implements OnInit {
 		}
 	}
 
-	themeChange() {
-		if (this.themeKey == "0") {
-			this.docListService.RemoveFilterKey(this.docListKey);
-		} else if (this.themeKey == "-1") {
-			this.docListService.SetFilterKey(
-				this.docListKey,
-				this.docListFilter,
-				"");
-		} else {
-			this.docListService.SetFilterKey(
-				this.docListKey,
-				this.docListFilter,
-				this.themeKey);
-		}
-		this.docLists = this.docListService.GetMapKey(this.docListKey);
-		this.listKey = "0";
-		this.themeEditChange();
-		this.articlesShort = [];
-	}
-
-	listChange() {
-		this.docService.SelectArticlesShort(this.listKey);
-		this.themeEditFlag = false;
-		this.themeEdit="Change theme";
-	}
-
 	articleChange() {
 		console.log("selected articleListID: ", this.articleID);
 	}
 
 	themeTargetChange() {
+		// To be removed?
 		console.log("Target Theme: ", this.themeTargetKey);
 	}
 
@@ -166,11 +137,11 @@ export class MgmtBaseComponent implements OnInit {
 	}
 
 	delArticleFromList() {
-		console.log ("Delete articleID: ", this.articleID, " from ListKey: ", this.listKey); 
+		this.docService.DelArticleFromList(this.articleID.toString(), this.listKey);
 	}
 
 	addArticleToList() {
-		console.log("Add articleID: ", this.articleID, " to lIst has yet to be selected");
+		this.docService.AddArticleToList(this.articleID.toString(), this.listTargetKey);
 	}
 
 	articleEdit() {

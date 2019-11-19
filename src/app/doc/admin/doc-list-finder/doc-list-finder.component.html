@@ -1,0 +1,40 @@
+<div class="flex-row">
+	<div class="flex-box"> 
+		<h2>Theme</h2>
+		<select 
+			name="theme"
+			size="10"
+			[(ngModel)]="themeKey"
+			(change)="themeChange()">
+			<option
+				[value]="0">
+				-- All --
+			</option>
+			<option *ngFor="let theme of docThemes | keyvalue"
+				[value]="theme.key">
+				{{theme.value}}
+			</option>
+			<option
+				[value]="-1">
+				-- Orphans --
+			</option>
+		</select>
+	</div>
+	<div class="flex-box">
+		<h2>List</h2>
+		<select 
+			name="Lists"
+			size="10"
+			[(ngModel)]="listKey"
+			(change)="listChange()">
+			<option *ngFor="let list of docLists | keyvalue"
+				[value]="list.key">
+				{{list.value}} 
+			</option>
+			<option
+				[value]="-1">
+				-- Orphans --
+			</option>
+		</select>
+	</div>
+</div>

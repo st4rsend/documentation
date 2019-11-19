@@ -41,6 +41,7 @@ import { ListSelectComponent } from './shared/component/list-select/list-select.
 import { ServerComComponent } from './server-com/server-com.component';
 import { MgmtFooterComponent } from './mgmt/mgmt-footer/mgmt-footer.component';
 import { MgmtBaseComponent } from './doc/admin/mgmt-base/mgmt-base.component';
+import { DocListFinderComponent } from './doc/admin/doc-list-finder/doc-list-finder.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
@@ -68,6 +69,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 		ListSelectComponent,
 		MgmtBaseComponent,
 		MgmtFooterComponent,
+		DocListFinderComponent,
     ServerComComponent,
   ],
   imports: [

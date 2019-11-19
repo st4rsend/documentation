@@ -294,12 +294,18 @@ func WsSrvGetDocShortByID(wsContext *WsContext, message *WsMessage) (err error){
 	var response *WsSQLSelect
 	err = nil
 	var sqlText string
+	var rows *sql.Rows
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "select D.ID, S.position, D.description from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID where L.ID=? order by S.position;"
-	rows, err := wsContext.Db.QueryContext(localContext, sqlText,
+	if (message.Payload.Data[0]=="-1") {
+		sqlText = "select D.ID, 0 as position, D.description from documentations D where D.ID not in (select docID from documentation_set S)"
+		rows, err = wsContext.Db.QueryContext(localContext, sqlText)
+	} else {
+		sqlText = "select D.ID, S.position, D.description from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID where L.ID=? order by S.position;"
+		rows, err = wsContext.Db.QueryContext(localContext, sqlText,
 		message.Payload.Data[0])
+	}
 	CheckErr(err)
 	defer rows.Close()
 

@@ -115,6 +115,15 @@ export class DocService {
 		this.dsSubject.next(message);
 	}
 
+	public DelArticleFromList(articleID: string, listID: string) {
+		console.log ("Delete articleID: ", articleID, " from ListID: ", listID);
+	}
+
+	public AddArticleToList(articleID: string, listID: string) {
+		console.log("Add articleID: ", articleID, " to listID: ", listID);
+
+	}
+
 	public dsSQLQueryDocs() {
 		this.docs = [];
 		this.dsSubject = this.webSocketService.webSocketSubject;
@@ -181,7 +190,7 @@ export class DocService {
 		this.dsSubject.next(message);
 		
 	}
-	
+
 	public SelectArticlesByID(articleID: number) {
 		this.article = undefined;
 		this.dsSubject = this.webSocketService.webSocketSubject;

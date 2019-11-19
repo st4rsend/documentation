@@ -32,56 +32,28 @@
 </div>
 <h1>Associating</h1>
 <div class="flex-row">
-	<div class="flex-box"> 
-		<h2>Theme</h2>
-		<select 
-			name="theme"
-			size="10"
-			[(ngModel)]="themeKey"
-			(change)="themeChange()">
-			<option
-				[value]="0">
-				-- All --
-			</option>
-			<option *ngFor="let theme of docThemes | keyvalue"
-				[value]="theme.key">
-				{{theme.value}}
-			</option>
-			<option
-				[value]="-1">
-				-- Orphans --
-			</option>
-		</select>
-	</div>
-	<div class="flex-box">
-		<h2>List</h2>
-		<select 
-			name="Lists"
-			size="10"
-			[(ngModel)]="listKey"
-			(change)="listChange()">
-			<option *ngFor="let list of docLists | keyvalue"
-				[value]="list.key">
-				{{list.value}} 
-			</option>
-			<option
-				[value]="-1">
-				-- Orphans --
-			</option>
-		</select>
-	</div>
-	<div class="flex-box flex-column">
-		<div class="flex-box">
-			Selected list:
-		</div>
-		<div *ngIf="docLists.get(listKey)" class="flex-box">
-			{{docLists.get(listKey)}} 
+	<app-doc-list-finder
+		(docListFinderEvent)='listFinderEvent($event)'>
+	</app-doc-list-finder>
+ 	<div *ngIf="listKey!='0' && listKey!='-1'" class="flex-box flex-column"> 
+		<div  class="flex-box">
 			<button (click)="themeEditChange()">{{themeEdit}}</button>
+		</div>
+		<div *ngIf="themeEditFlag" class="flex-box">
+		<!-- 	List {{docLists.get(listKey)}} -->
+			List  
+		</div>
+		<div *ngIf="themeEditFlag" class="flex-box">
+		<!--	will be moved to theme: {{docThemes.get(themeTargetKey)}} -->
+			will be moved to theme: 
+		</div>
+		<div *ngIf="themeEditFlag" class="flex-box">
+			<button (click)="moveListToTheme()">Submit</button>
 		</div>
 	</div>
 	<div *ngIf="themeEditFlag" class="flex-box flex-column">
 		<div class="flex-box">
-			Move selected list to below theme
+			Target theme
 		</div>
 		<div class="flex-box">
 			<select 
@@ -89,21 +61,23 @@
 				size="10"
 				[(ngModel)]="themeTargetKey"
 				(change)="themeTargetChange()">
+<!--
 				<option *ngFor="let theme of docThemes | keyvalue"
 					[value]="theme.key">
 					{{theme.value}}
 				</option>
+-->
 				<option
 					[value]="-1">
 					-- Orphans --
 				</option>
 			</select>
 		</div>
-		<div class="flex-box">
-			<button (click)="moveListToTheme()">Submit</button>
-		</div>
 	</div>
 </div>
+<!--
+<div *ngIf="listKey=='-1' || (!themeEditFlag && docLists.get(listKey))" class="flex-row">
+-->
 <div class="flex-row">
 	<div class="flex-box">
 		<h2>Articles</h2>

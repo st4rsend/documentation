@@ -1,0 +1,29 @@
+.container {
+	border: 1px solid blue;
+  padding: 5px;
+	margin: 5px;
+  box-sizing: border-box;
+}
+
+.flex-row {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	border: 1px solid blue;
+  padding: 5px;
+	margin: 5px;
+  box-sizing: border-box;
+}
+.flex-column {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid red;
+  padding: 5px;
+	margin: 5px;
+  box-sizing: border-box;
+}
+.flex-box {
+	flex: 0 1 auto;
+	padding: 0 2% 0 2%;
+	min-height: 30px;
+}
