@@ -38,28 +38,18 @@ export class MgmtBaseComponent implements OnInit {
 	public docDisplayListColumn = 'display';
 	public docDisplayListPosition = 'position';
 
-/*
-	public docThemes: Map<string, string>;
-	public docThemeKey: string = 'theme';
-	public docThemeTable: string = 'documentation_theme';
-	public docThemeIDName: string = 'ID';
-	public docThemeColumn: string = 'description';
-	public docThemePosition: string = 'position';
-	public docLists: Map<string, string>;
-*/
-//	public docListKey: string = 'list';
-
 	public listKey: string = "0";
 	public listTargetKey: string = "0";
-	//public themeKey: string =  "0";
 	public themeTargetKey: string = "";
 	public themeEdit: string = "Change theme";
 	public themeEditFlag: boolean = false;
 
 	public articlesShort: Array<ArticleShort>;
 	public articleListID: number;
+	public articleToListFlag: boolean = false;
+	public addArticleToListTarget: string = "0";
 
-	public articleID: number;
+	public articleID: string="0";
 
 	articleEditComponentRef: any;
 	@ViewChild('articleEditContainer', { static: true, read: ViewContainerRef }) EditItemDocComponent: ViewContainerRef;
@@ -83,17 +73,16 @@ export class MgmtBaseComponent implements OnInit {
 	}
 
 	listFinderEvent(listID: string) {
-		console.log("Received listID: ", listID);
 		this.listKey = listID;
 		this.docService.SelectArticlesShort(this.listKey);
 		this.themeEditFlag = false;
-		this.themeEdit="Change theme";
+		this.themeEdit = "Change theme";
+		this.articleID = "0";
 	}
 
 	docListEdit(){
 		this.docListEditMode = !this.docListEditMode;
 	}
-
 
 	docThemeListEdit(){
 		this.docThemeListEditMode = !this.docThemeListEditMode;
@@ -124,11 +113,12 @@ export class MgmtBaseComponent implements OnInit {
 	}
 
 	articleChange() {
-		console.log("selected articleListID: ", this.articleID);
+		this.articleToListFlag = false;
+		this.addArticleToListTarget = "0";
 	}
 
-	themeTargetChange() {
-		// To be removed?
+	themeTargetChange($event: string) {
+		this.themeTargetKey = $event;
 		console.log("Target Theme: ", this.themeTargetKey);
 	}
 
@@ -141,7 +131,22 @@ export class MgmtBaseComponent implements OnInit {
 	}
 
 	addArticleToList() {
-		this.docService.AddArticleToList(this.articleID.toString(), this.listTargetKey);
+		this.articleToListFlag = true;
+	}
+
+	addArticleToListCancel() {
+		this.articleToListFlag = false;
+	}
+	addArticleToListConfirm() {
+		if (this.addArticleToListTarget != "0" 
+			&& this.addArticleToListTarget !="-1") {
+			this.docService.AddArticleToList(this.articleID.toString(), this.addArticleToListTarget);
+		}
+		this.articleChange();
+	}
+
+	addArticleToListFinderEvent(listID: string) {
+		this.addArticleToListTarget = listID;
 	}
 
 	articleEdit() {

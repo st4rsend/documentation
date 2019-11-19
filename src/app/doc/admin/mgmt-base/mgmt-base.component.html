@@ -40,45 +40,24 @@
 			<button (click)="themeEditChange()">{{themeEdit}}</button>
 		</div>
 		<div *ngIf="themeEditFlag" class="flex-box">
-		<!-- 	List {{docLists.get(listKey)}} -->
-			List  
+			Move list to theme: 
 		</div>
 		<div *ngIf="themeEditFlag" class="flex-box">
-		<!--	will be moved to theme: {{docThemes.get(themeTargetKey)}} -->
-			will be moved to theme: 
+			<app-list-select 
+			[listTable]="docThemeListTable"
+			[listIDName]="docThemeListIDName"
+			[listColumn]="docThemeListColumn"
+			[listPosition]="docThemeListPosition"
+			[hasVoid]="true"
+			(listChangeEvent)="themeTargetChange($event)">
+			</app-list-select>
 		</div>
 		<div *ngIf="themeEditFlag" class="flex-box">
 			<button (click)="moveListToTheme()">Submit</button>
 		</div>
 	</div>
-	<div *ngIf="themeEditFlag" class="flex-box flex-column">
-		<div class="flex-box">
-			Target theme
-		</div>
-		<div class="flex-box">
-			<select 
-				name="themeTarget"
-				size="10"
-				[(ngModel)]="themeTargetKey"
-				(change)="themeTargetChange()">
-<!--
-				<option *ngFor="let theme of docThemes | keyvalue"
-					[value]="theme.key">
-					{{theme.value}}
-				</option>
--->
-				<option
-					[value]="-1">
-					-- Orphans --
-				</option>
-			</select>
-		</div>
-	</div>
 </div>
-<!--
-<div *ngIf="listKey=='-1' || (!themeEditFlag && docLists.get(listKey))" class="flex-row">
--->
-<div class="flex-row">
+<div *ngIf="listKey!='0' && !themeEditFlag" class="flex-row">
 	<div class="flex-box">
 		<h2>Articles</h2>
 		<select 
@@ -93,17 +72,29 @@
 			</option>
 		</select>
 	</div>
-	<div class="flex-box flex-column">
-		<div class="flex-box">
-			<button (click)="delArticleFromList()">Remove from list</button>
+	<div *ngIf="articleID!='0'" class="flex-box flex-row">
+		<div *ngIf="!articleToListFlag" class="flex-box flex-column">
+			<div  class="flex-box">
+				<button (click)="delArticleFromList()">Remove from list</button>
+			</div>
+			<div  class="flex-box">
+				<button (click)="addArticleToList()">Add to list</button>
+			</div>
+			<div  class="flex-box">
+				<button (click)="articleEdit()">Edit</button>
+			</div>
 		</div>
-		<div class="flex-box">
-			<button (click)="addArticleToList()">Add to list</button>
+		<div *ngIf="articleToListFlag" class="flex-column flex-box">
+			<div class="flex-box">
+				<button (click)="addArticleToListCancel()">Cancel</button>
+			</div>
+			<app-doc-list-finder
+				(docListFinderEvent)="addArticleToListFinderEvent($event)">
+			</app-doc-list-finder>
+			<div class="flex-box">
+				<button (click)="addArticleToListConfirm()">Confirm</button>
+			</div>
 		</div>
-		<div class="flex-box">
-			<button (click)="articleEdit()">Edit</button>
-		</div>
-		
 	</div>
 </div>
 <template #articleEditContainer>

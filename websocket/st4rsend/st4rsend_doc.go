@@ -49,6 +49,12 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "UPDATE_LIST_THEME" {
 		err = WsSrvDocUpdateListTheme(wsContext, message)
 	}
+	if message.Payload.Command == "DELETE_ARTICLE_LIST" {
+		err = WsSrvDocDeleteArticleList(wsContext, message)
+	}
+	if message.Payload.Command == "ADD_ARTICLE_LIST" {
+		err = WsSrvDocAddArticleList(wsContext, message)
+	}
 	CheckErr(err)
 	return err
 }
@@ -77,6 +83,61 @@ func WsSrvDocUpdatePos(wsContext *WsContext, message *WsMessage) (err error){
 		docID)
 	CheckErr(err)
 	return err
+}
+func WsSrvDocDeleteArticleList(wsContext *WsContext, message *WsMessage) (err error) {
+	err = nil
+	if CheckSec(wsContext, "DOC", "WRITE") {
+		return err
+	}
+
+	var listID string
+	var docID string
+
+	listID = message.Payload.Data[0]
+	docID = message.Payload.Data[1]
+
+	sqlText := "delete from documentation_set where listID=? and docID=?"
+
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("Delete from documentation_set \n")
+	}
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	_, err = wsContext.Db.ExecContext(localContext,sqlText,
+		listID,
+		docID)
+	CheckErr(err)
+	return err
+
+}
+
+func WsSrvDocAddArticleList(wsContext *WsContext, message *WsMessage) (err error) {
+	err = nil
+	if CheckSec(wsContext, "DOC", "WRITE") {
+		return err
+	}
+
+	var listID string
+	var docID string
+
+	listID = message.Payload.Data[0]
+	docID = message.Payload.Data[1]
+
+	sqlText := "insert into documentation_set (ID, listID, docID) values (0, ?, ?)"
+
+	if (wsContext.Verbose > 4) {
+		fmt.Printf("Insert into documentation_set \n")
+	}
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	_, err = wsContext.Db.ExecContext(localContext,sqlText,
+		listID,
+		docID)
+	CheckErr(err)
+	return err
+
 }
 
 func WsSrvDocUpdateListTheme(wsContext *WsContext, message *WsMessage) (err error) {

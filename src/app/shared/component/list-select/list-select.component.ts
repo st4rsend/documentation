@@ -5,7 +5,7 @@ import { SqlListService, ISqlList } from '../../service/sql-list.service';
 @Component({
   selector: 'app-list-select',
   templateUrl: './list-select.component.html',
-  styleUrls: ['./list-select.component.css'],
+  styleUrls: ['./list-select.component.scss'],
 	providers: [ SqlListService ],
 })
 export class ListSelectComponent implements OnInit {

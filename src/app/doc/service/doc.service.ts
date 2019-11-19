@@ -106,22 +106,33 @@ export class DocService {
 	}
 
 	public SetListTheme(listID: string, themeTargetID: string) {
-		console.log ("Moving listID: ", listID, " to themeID: ", themeTargetID);
+		//console.log ("Moving listID: ", listID, " to themeID: ", themeTargetID);
 		this.dsSubject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
 			.prepareMessage(this.channelID,'DOC','UPDATE_LIST_THEME',[
-				listID.toString(),
-				themeTargetID.toString()]);
+				listID,
+				themeTargetID]);
 		this.dsSubject.next(message);
 	}
 
 	public DelArticleFromList(articleID: string, listID: string) {
-		console.log ("Delete articleID: ", articleID, " from ListID: ", listID);
+		//console.log ("Delete articleID: ", articleID, " from ListID: ", listID);
+		this.dsSubject = this.webSocketService.webSocketSubject;
+		let message = this.webSocketService
+			.prepareMessage(this.channelID,'DOC','DELETE_ARTICLE_LIST',[
+				listID,
+				articleID]);
+		this.dsSubject.next(message);
 	}
 
 	public AddArticleToList(articleID: string, listID: string) {
-		console.log("Add articleID: ", articleID, " to listID: ", listID);
-
+		//console.log("Add articleID: ", articleID, " to listID: ", listID);
+		this.dsSubject = this.webSocketService.webSocketSubject;
+		let message = this.webSocketService
+			.prepareMessage(this.channelID,'DOC','ADD_ARTICLE_LIST',[
+				listID,
+				articleID]);
+		this.dsSubject.next(message);
 	}
 
 	public dsSQLQueryDocs() {
