@@ -2,7 +2,12 @@
 	name="listID"
 	[(ngModel)]="listID"
 	(change)="listChange()">
-	<option *ngFor="let item of list" [value]="item.idx">
-		{{item.value}}
+<!--	<option *ngFor="let item of list" [value]="item.idx">
+		{{item.value}} -->
+	<option *ngIf="hasVoid" [value]="0">
+		--- select ---
+	</option>
+	<option *ngFor="let item of list | keyvalue" [value]="item.key">
+		{{item.value}} 
 	</option>
 </select>

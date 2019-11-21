@@ -9,16 +9,16 @@ import { SqlListService, ISqlList } from '../../../shared/service/sql-list.servi
 })
 export class DocListFinderComponent implements OnInit {
 
-	@Output() docListFinderEvent = new EventEmitter<string>();
+	@Output() docListFinderEvent = new EventEmitter<{key: number, value: string}>();
 
-	public docThemes: Map<string, string>;
+	public docThemes: Map<number, string>;
 	public docThemeKey: string = 'theme';
 	public docThemeTable: string = 'documentation_theme';
 	public docThemeIDName: string = 'ID';
 	public docThemeColumn: string = 'description';
 	public docThemePosition: string = 'position';
 
-	public docLists: Map<string, string>;
+	public docLists: Map<number, string>;
 	public docListKey: string = 'list';
 	public docListTable: string = 'documentation_list';
 	public docListIDName: string = 'ID';
@@ -26,8 +26,8 @@ export class DocListFinderComponent implements OnInit {
 	public docListPosition = 'position';
 	public docListFilter = 'themeID';
 
-	public themeKey: string =  "0";
-	public listKey: string = "0";
+	public themeKey: number =  0;
+	public listKey: number = 0;
 
   constructor(
 		private docListService: SqlListService,
@@ -51,13 +51,13 @@ export class DocListFinderComponent implements OnInit {
   }
 
 	listChange() {
-		this.docListFinderEvent.emit(this.listKey);
+		this.docListFinderEvent.emit({key: +this.listKey, value: this.docLists.get(+this.listKey)});
 	}
 
 	themeChange() {
-		if (this.themeKey == "0") {
+		if (this.themeKey == 0) {
 			this.docListService.RemoveFilterKey(this.docListKey);
-		} else if (this.themeKey == "-1") {
+		} else if (this.themeKey == -1) {
 			this.docListService.SetFilterKey(
 				this.docListKey,
 				this.docListFilter,
@@ -66,10 +66,10 @@ export class DocListFinderComponent implements OnInit {
 			this.docListService.SetFilterKey(
 				this.docListKey,
 				this.docListFilter,
-				this.themeKey);
+				this.themeKey.toString());
 		}
 		this.docLists = this.docListService.GetMapKey(this.docListKey);
-		this.listKey = "0";
+		this.listKey = 0;
 		this.listChange();
 	}
 }

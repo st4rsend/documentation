@@ -24,7 +24,7 @@ interface IList {
 	selectSub: Subscription;
 	sqlListDef: ISqlListDef;
 	sqlList: Array<ISqlList>;
-	sqlMap: Map<string, string>;
+	sqlMap: Map<number, string>;
 }
 
 @Injectable(
@@ -51,12 +51,11 @@ export class SqlListService {
 		return this.listMap.get(key).sqlList as Array<ISqlList>;
 	}
 
-	public GetMap(): Map<string, string> {
-		return this.listMap.get("default").sqlMap as Map<string, string>;
+	public GetMap(): Map<number, string> {
+		return this.listMap.get("default").sqlMap as Map<number, string>;
 	}
-	public GetMapKey(key: string): Map<string, string> {
-//		return this.listMap.get(key).sqlList as Array<ISqlList>;
-		return this.listMap.get(key).sqlMap as Map<string, string>;
+	public GetMapKey(key: string): Map<number, string> {
+		return this.listMap.get(key).sqlMap as Map<number, string>;
 	
 	}
 
@@ -120,7 +119,7 @@ export class SqlListService {
 				filter_value: null,
 			},
 			sqlList: new Array<ISqlList>(),
-			sqlMap: new Map<string, string>(),
+			sqlMap: new Map<number, string>(),
 		});
 		this.sqlGetList(key);
 	}
@@ -220,7 +219,7 @@ export class SqlListService {
 					position: +msg.payload.data[2],
 				});
 				this.listMap.get(key).sqlMap.set(
-					msg.payload.data[0], 
+					+msg.payload.data[0], 
 					msg.payload.data[1],
 				);
 			}

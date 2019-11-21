@@ -38,18 +38,20 @@ export class MgmtBaseComponent implements OnInit {
 	public docDisplayListColumn = 'display';
 	public docDisplayListPosition = 'position';
 
-	public listKey: string = "0";
-	public listTargetKey: string = "0";
-	public themeTargetKey: string = "";
+	public listKey: number = 0;
+	public selectedList: string = "";
+	public listTargetKey: number = 0;
+	public themeTargetKey: number = 0;
 	public themeEdit: string = "Change theme";
 	public themeEditFlag: boolean = false;
 
 	public articlesShort: Array<ArticleShort>;
 	public articleListID: number;
 	public articleToListFlag: boolean = false;
-	public addArticleToListTarget: string = "0";
+	public addArticleToTargetListID: number = 0;
+	public addArticleToTargetList: string = "";
 
-	public articleID: string="0";
+	public articleID: number = 0;
 
 	articleEditComponentRef: any;
 	@ViewChild('articleEditContainer', { static: true, read: ViewContainerRef }) EditItemDocComponent: ViewContainerRef;
@@ -72,12 +74,14 @@ export class MgmtBaseComponent implements OnInit {
 		this.docListEditMode = value;
 	}
 
-	listFinderEvent(listID: string) {
-		this.listKey = listID;
+	listFinderEvent(event$: {key: number, value: string}) {
+		this.listKey = event$.key;
+		this.selectedList = event$.value;
+		console.log("selected list: ", event$);
 		this.docService.SelectArticlesShort(this.listKey);
 		this.themeEditFlag = false;
 		this.themeEdit = "Change theme";
-		this.articleID = "0";
+		this.articleID = 0;
 	}
 
 	docListEdit(){
@@ -102,7 +106,7 @@ export class MgmtBaseComponent implements OnInit {
 
 	themeEditChange() {
 		this.themeEditFlag = !this.themeEditFlag;
-		if(this.listKey == "0") {
+		if(this.listKey == 0) {
 			this.themeEditFlag = false;
 		}
 		if (this.themeEditFlag) {
@@ -114,12 +118,12 @@ export class MgmtBaseComponent implements OnInit {
 
 	articleChange() {
 		this.articleToListFlag = false;
-		this.addArticleToListTarget = "0";
+		this.addArticleToTargetListID = 0;
+		this.addArticleToTargetList = "";
 	}
 
-	themeTargetChange($event: string) {
-		this.themeTargetKey = $event;
-		console.log("Target Theme: ", this.themeTargetKey);
+	themeTargetChange(event$: {key: number, value: string}) {
+		this.themeTargetKey = event$.key;
 	}
 
 	moveListToTheme() {
@@ -127,7 +131,7 @@ export class MgmtBaseComponent implements OnInit {
 	}
 
 	delArticleFromList() {
-		this.docService.DelArticleFromList(this.articleID.toString(), this.listKey);
+		this.docService.DelArticleFromList(this.articleID, this.listKey);
 	}
 
 	addArticleToList() {
@@ -138,15 +142,16 @@ export class MgmtBaseComponent implements OnInit {
 		this.articleToListFlag = false;
 	}
 	addArticleToListConfirm() {
-		if (this.addArticleToListTarget != "0" 
-			&& this.addArticleToListTarget !="-1") {
-			this.docService.AddArticleToList(this.articleID.toString(), this.addArticleToListTarget);
+		if (this.addArticleToTargetListID != 0 
+			&& this.addArticleToTargetListID != -1) {
+			this.docService.AddArticleToList(this.articleID, this.addArticleToTargetListID);
 		}
 		this.articleChange();
 	}
 
-	addArticleToListFinderEvent(listID: string) {
-		this.addArticleToListTarget = listID;
+	addArticleToListFinderEvent(event$: {key: number, value: string}) {
+		this.addArticleToTargetListID = event$.key;
+		this.addArticleToTargetList = event$.value;
 	}
 
 	articleEdit() {

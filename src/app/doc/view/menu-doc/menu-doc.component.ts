@@ -36,13 +36,15 @@ export class MenuDocComponent implements OnInit {
 	) { }
 
   ngOnInit() {
+/*
 		this.docList.isReady$.subscribe(
 			ready => {
 				if ( ready ) {
-					this.docList.listID = this.docList.list[0].idx;
-					this.docListChange(this.docList.listID);
+					this.docList.listID = this.docList.list[0].key;
+					this.docListChange({key: this.docList.listID, value:""});
 				}
 			});
+*/
   }
 
 	docThemeChange(themeID: number) {
@@ -54,8 +56,8 @@ export class MenuDocComponent implements OnInit {
 		}
 	}
 
-	docListChange(listID: number) {
-		this.docService.dsSetDocListID(listID);
+	docListChange(evt: {key: number, value: string}) {
+		this.docService.dsSetDocListID(evt.key);
 	}
 
 	docRefresh() {

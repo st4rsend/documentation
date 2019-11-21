@@ -7,7 +7,7 @@
 			[(ngModel)]="themeKey"
 			(change)="themeChange()">
 			<option
-				[value]="0">
+				[value]=0>
 				-- All --
 			</option>
 			<option *ngFor="let theme of docThemes | keyvalue"
@@ -15,7 +15,7 @@
 				{{theme.value}}
 			</option>
 			<option
-				[value]="-1">
+				[value]=-1>
 				-- Orphans --
 			</option>
 		</select>
@@ -32,7 +32,7 @@
 				{{list.value}} 
 			</option>
 			<option
-				[value]="-1">
+				[value]=-1>
 				-- Orphans --
 			</option>
 		</select>

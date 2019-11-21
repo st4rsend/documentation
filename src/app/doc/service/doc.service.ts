@@ -105,33 +105,33 @@ export class DocService {
 		this.dsSubject.next(message);
 	}
 
-	public SetListTheme(listID: string, themeTargetID: string) {
+	public SetListTheme(listID: number, themeTargetID: number) {
 		//console.log ("Moving listID: ", listID, " to themeID: ", themeTargetID);
 		this.dsSubject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
 			.prepareMessage(this.channelID,'DOC','UPDATE_LIST_THEME',[
-				listID,
-				themeTargetID]);
+				listID.toString(),
+				themeTargetID.toString()]);
 		this.dsSubject.next(message);
 	}
 
-	public DelArticleFromList(articleID: string, listID: string) {
+	public DelArticleFromList(articleID: number, listID: number) {
 		//console.log ("Delete articleID: ", articleID, " from ListID: ", listID);
 		this.dsSubject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
 			.prepareMessage(this.channelID,'DOC','DELETE_ARTICLE_LIST',[
-				listID,
-				articleID]);
+				listID.toString(),
+				articleID.toString()]);
 		this.dsSubject.next(message);
 	}
 
-	public AddArticleToList(articleID: string, listID: string) {
+	public AddArticleToList(articleID: number, listID: number) {
 		//console.log("Add articleID: ", articleID, " to listID: ", listID);
 		this.dsSubject = this.webSocketService.webSocketSubject;
 		let message = this.webSocketService
 			.prepareMessage(this.channelID,'DOC','ADD_ARTICLE_LIST',[
-				listID,
-				articleID]);
+				listID.toString(),
+				articleID.toString()]);
 		this.dsSubject.next(message);
 	}
 
@@ -173,7 +173,7 @@ export class DocService {
 		this.dsSubject.next(message);
 	}
 
-	public SelectArticlesShort(listID: string) {
+	public SelectArticlesShort(listID: number) {
 		this.articlesShort=[];
 		this.dsSubject = this.webSocketService.webSocketSubject;
 		this.isReady$.next(false);
@@ -197,7 +197,7 @@ export class DocService {
 			});
 		}
 		let message = this.webSocketService
-			.prepareMessage(this.channelID,'DOC','GET_DOC_SHORT_BY_ID',[listID]);
+			.prepareMessage(this.channelID,'DOC','GET_DOC_SHORT_BY_ID',[listID.toString()]);
 		this.dsSubject.next(message);
 		
 	}

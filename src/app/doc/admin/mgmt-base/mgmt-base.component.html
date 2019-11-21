@@ -40,7 +40,7 @@
 			<button (click)="themeEditChange()">{{themeEdit}}</button>
 		</div>
 		<div *ngIf="themeEditFlag" class="flex-box">
-			Move list to theme: 
+			Move list {{selectedList}} to theme: 
 		</div>
 		<div *ngIf="themeEditFlag" class="flex-box">
 			<app-list-select 
@@ -87,6 +87,9 @@
 		<div *ngIf="articleToListFlag" class="flex-column flex-box">
 			<div class="flex-box">
 				<button (click)="addArticleToListCancel()">Cancel</button>
+			</div>
+			<div>
+				Selected target theme: {{ addArticleToTargetList }}
 			</div>
 			<app-doc-list-finder
 				(docListFinderEvent)="addArticleToListFinderEvent($event)">
