@@ -47,12 +47,12 @@ export class MenuDocComponent implements OnInit {
 */
   }
 
-	docThemeChange(themeID: number) {
-		if ( themeID == 0) {
+	docThemeChange(evt: {key: number, value: string}) {
+		if ( evt.key == 0) {
 			this.docList.RemoveFilter();
 		}
 		else {
-			this.docList.SetFilter(this.docListFilter, themeID.toString());
+			this.docList.SetFilter(this.docListFilter, evt.key.toString());
 		}
 	}
 

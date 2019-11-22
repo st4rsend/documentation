@@ -9,14 +9,12 @@ import { SqlListService, ISqlList } from '../../service/sql-list.service';
 	providers: [ SqlListService ],
 })
 export class ListSelectComponent implements OnInit {
-//	@Output() listChangeEvent = new EventEmitter<number>();
 	@Output() listChangeEvent = new EventEmitter<{key: number, value: string}>();
 	@Input() listTable: string;
 	@Input() listIDName: string;
 	@Input() listColumn: string;
 	@Input() listPosition: string;
 	@Input() hasVoid: boolean;
-	//public list: Array<ISqlList>;
 	public list: Map<number, string>;
 	public listID: number;
 	public isReady$ = new Subject<boolean>();
@@ -26,15 +24,21 @@ export class ListSelectComponent implements OnInit {
   ngOnInit() {
 		this.sqlListService.isReady$.subscribe(
 			ready => {
-				if (ready && (this.list[0] != undefined)) {
-					console.log("hello: ", ready, " this.list: ", this.list);
-					this.listID = this.list[0].idx;
+				if (ready && (this.list != undefined) && !this.hasVoid) {
+					this.listID = this.list.entries().next().value[0];
 					this.listChange();
-					this.isReady$.next(ready);
 				}
+				this.isReady$.next(ready);
 		});
 		this.initList();
   }
+
+	// for *ngFor presentation:
+	// The pipe keyvalue reorders the map.
+	// Hence to be overriden.
+	preserveMapOrder(a, b) {
+		return 1;
+	}
 
 	SetFilter(column: string, value: string){
 		this.sqlListService.SetFilter(column, value);
@@ -52,15 +56,6 @@ export class ListSelectComponent implements OnInit {
 
 	getList() {
 		this.list = this.sqlListService.GetMap();
-		/*
-		if (this.hasVoid) {
-			this.list.unshift({
-				idx: 0,
-				value: "--- select ---",
-				position: 0,
-			});
-		}
-		*/
 	}
 
 	initList() {
