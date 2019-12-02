@@ -145,6 +145,9 @@ export class WebSocketService {
 				this.hbtHoldFail();
 			}, this.hbtHoldTime);
 		}
+		if  ((+msg.payload.channelid === 0) && (msg.payload.domain === "INF")) {
+			console.log("Received Status message: ", msg);
+		}
 	}
 
 	private socketError(err) {

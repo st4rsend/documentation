@@ -14,7 +14,7 @@ import (
 )
 
 // st4rsend reserved variables:
-// ErrorLevel the higher the more verbose (syslog based ; 0 -> silent ; 7 -> debug)
+// Initial Error Level, the higher the more verbose (syslog based ; 0 -> silent ; 7 -> debug)
 var ErrorLevel int = 4
 // Global error management
 // Purpose is defining global error verbosity for non managed errors
@@ -45,7 +45,7 @@ func CheckErr(err error) (ret error){
 }
 
 // Date & Time standard NUX time.h like
-// TO Golang time: 
+// To Golang time: 
 //	 timeVar = time.Unix(WsMessage.Time.SecSinceEpoch, WsMessage.Time.NanoSec)
 // From Golang time: 
 //	TimeStamp{
@@ -71,6 +71,14 @@ type ComEncap struct {
 	Command	string `json:"command, string, omitempty"`
 	Data []string `json:"data, string, omitempty"`
 }
+
+// ComEncap return status structure 
+type CEStatusData struct {
+	ReceivedSequence int64
+	Status string
+	Info	string
+}
+
 // WsContext definition 
 type WsContext struct {
 	Conn *websocket.Conn
@@ -133,10 +141,17 @@ func WsHandler(ws *websocket.Conn) {
 
 	for {
 		var receivedMessage WsMessage
+
 		err := websocket.JSON.Receive(ws, &receivedMessage)
 		if err == nil {
-			err = WsSrvParseMsg(&wsContext, &receivedMessage)
+			status, err := WsSrvParseMsg(&wsContext, &receivedMessage)
 			CheckErr(err)
+			if status != nil {
+				err = sendStatus(&wsContext, &receivedMessage, status)
+				if err != nil {
+					log.Printf("Error sending status: %s",err)
+				}
+			}
 			if err != nil {
 				log.Printf("Handler level error: %s",err)
 			}
@@ -153,66 +168,72 @@ func WsHandler(ws *websocket.Conn) {
 		CheckErr(err)
 		if wsContext.HbtHoldTimeOK == false {
 			if wsContext.Verbose > 3 {
-				fmt.Printf("Heartbeat receive failure %d\n", wsContext.HandlerIndex)
+				fmt.Printf("Heartbeat holdtime timeout for handler %d\n", wsContext.HandlerIndex)
 			}
 			break
 		}
 	}
 }
 
-func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
+func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (status *CEStatusData, err error){
 	err = nil
 	if message.Payload.Domain == "SQL" {
 		err = WsSrvSQLParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return err
+			return nil,err
 		}
 	}
 	if message.Payload.Domain == "TODO" {
 		err = WsSrvTodoWrapper(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return err
+			return nil,err
 		}
 	}
 
 	if message.Payload.Domain == "DOC" {
+		//status, err = WsSrvDocWrapper(wsContext, message)
 		err = WsSrvDocWrapper(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return err
+			return status,err
 		}
+		statusDef := CEStatusData{
+			ReceivedSequence: message.Sequence,
+			Status: "STATUS",
+			Info: "INFO"}
+		status = &statusDef
 	}
 	if message.Payload.Domain == "CMD" {
 		err = WsSrvCMDParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return err
+			return nil,err
 		}
 	}
 	if message.Payload.Domain == "HBT" {
 		err = WsSrvHBTParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return err
+			return nil,err
 		}
 	}
 	if message.Payload.Domain == "INF" {
 		err = WsSrvCMDParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return err
+			return nil,err
 		}
 	}
 	if message.Payload.Domain == "SEC" {
 		err = WsSrvSecParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return err
+			return nil,err
 		}
 	}
-	return err
+	return status, err
 }
 
 func WsSrvINFParseMsg(wsContext *WsContext, message *WsMessage) (err error){
@@ -245,6 +266,22 @@ func sendMessage(wsContext *WsContext, payload *ComEncap) (err error){
 	}
 
 	wsContext.Sequence += 1
+	return err
+}
+
+func sendStatus(wsContext *WsContext, message *WsMessage, status *CEStatusData) (err error){
+	message.Payload.ChannelID = 0
+	message.Payload.Domain = "INF"
+	message.Payload.Command = "APP_CTRL"
+	message.Payload.Data = make ([]string, 3)
+	message.Payload.Data[0] = strconv.FormatInt(status.ReceivedSequence, 10)
+	message.Payload.Data[1] = status.Status
+	message.Payload.Data[2] = status.Info
+	err = sendMessage(wsContext, &message.Payload)
+	fmt.Printf("Send status : %v\n", message.Payload)
+		if err != nil {
+			return err
+	}
 	return err
 }
 
