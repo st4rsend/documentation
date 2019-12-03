@@ -15,6 +15,7 @@ export class MgmtFooterComponent implements OnInit {
 	public debugFlag: boolean;
 	private subConnected: Subscription; 
 	public isConnected: boolean;
+	private backendMsgSub: Subscription;
 
 	public serverVerbosity: string;
 	public clientVerbosity: string;
@@ -27,6 +28,7 @@ export class MgmtFooterComponent implements OnInit {
 	public msgToServer: string = "documentation_list\nID\ndescription\nposition";
 
 	messages: string[];
+	backendMsg: string[];
 
   constructor(
 		private globalSvc: GlobalService,
@@ -48,6 +50,13 @@ export class MgmtFooterComponent implements OnInit {
 				this.isConnected = flag;
 			}
 		);
+		this.backendMsg = [];
+		this.backendMsgSub = this.webSocketSvc.backendMsg$().subscribe(
+			msg => {
+				//this.backendMsg.push(JSON.stringify(msg));
+				this.backendMsg.push(msg);
+				console.log("hello world msg: ", msg);
+			});
 		this.messages = [];
   }
 	

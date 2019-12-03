@@ -30,6 +30,8 @@ func CheckSec(wsContext *WsContext, domain string, action string) bool {
 			}
 		}
 	}
+	wsContext.Status.Level = "SECURITY"
+	wsContext.Status.Info = "Write denied for user " + strconv.FormatInt(wsContext.SecUserID, 10)
 	fmt.Printf("Access denied\n");
 	return true
 }
@@ -132,11 +134,15 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 		}
 		wsContext.SecUserID = UID
 		message.Payload.Data[0] = strconv.FormatInt(UID, 10)
+		wsContext.Status.Level = "SECURITY"
+		wsContext.Status.Info = "Logged as user ID:  " + strconv.FormatInt(wsContext.SecUserID, 10)
 	} else {
 		wsContext.SecUserID = 0
 		if ( wsContext.Verbose > 5 ) {
 			fmt.Printf("LOGIN FAILED\n")
 		}
+		wsContext.Status.Level = "SECURITY"
+		wsContext.Status.Info = "Login failed"
 		message.Payload.Data[0] = "0"
 	}
 	err = sendMessage(wsContext, &message.Payload)

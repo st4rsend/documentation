@@ -73,9 +73,9 @@ type ComEncap struct {
 }
 
 // ComEncap return status structure 
-type CEStatusData struct {
+type WsStatus struct {
 	ReceivedSequence int64
-	Status string
+	Level string
 	Info	string
 }
 
@@ -93,6 +93,7 @@ type WsContext struct {
 	Verbose int
 	SecUserID int64
 	SecToken int64
+	Status WsStatus
 }
 
 type WsSQLSelect struct{
@@ -144,10 +145,10 @@ func WsHandler(ws *websocket.Conn) {
 
 		err := websocket.JSON.Receive(ws, &receivedMessage)
 		if err == nil {
-			status, err := WsSrvParseMsg(&wsContext, &receivedMessage)
+			err := WsSrvParseMsg(&wsContext, &receivedMessage)
 			CheckErr(err)
-			if status != nil {
-				err = sendStatus(&wsContext, &receivedMessage, status)
+			if wsContext.Status.Level != "NONE" {
+				err = sendStatus(&wsContext, &receivedMessage)
 				if err != nil {
 					log.Printf("Error sending status: %s",err)
 				}
@@ -175,65 +176,62 @@ func WsHandler(ws *websocket.Conn) {
 	}
 }
 
-func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (status *CEStatusData, err error){
+func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
+	wsContext.Status.ReceivedSequence = message.Sequence
+	wsContext.Status.Level = "NONE"
+	wsContext.Status.Info = ""
 	if message.Payload.Domain == "SQL" {
 		err = WsSrvSQLParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return nil,err
+			return err
 		}
 	}
 	if message.Payload.Domain == "TODO" {
 		err = WsSrvTodoWrapper(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return nil,err
+			return err
 		}
 	}
 
 	if message.Payload.Domain == "DOC" {
-		//status, err = WsSrvDocWrapper(wsContext, message)
 		err = WsSrvDocWrapper(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return status,err
+			return err
 		}
-		statusDef := CEStatusData{
-			ReceivedSequence: message.Sequence,
-			Status: "STATUS",
-			Info: "INFO"}
-		status = &statusDef
 	}
 	if message.Payload.Domain == "CMD" {
 		err = WsSrvCMDParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return nil,err
+			return err
 		}
 	}
 	if message.Payload.Domain == "HBT" {
 		err = WsSrvHBTParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return nil,err
+			return err
 		}
 	}
 	if message.Payload.Domain == "INF" {
 		err = WsSrvCMDParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return nil,err
+			return err
 		}
 	}
 	if message.Payload.Domain == "SEC" {
 		err = WsSrvSecParseMsg(wsContext, message)
 		CheckErr(err)
 		if err != nil {
-			return nil,err
+			return err
 		}
 	}
-	return status, err
+	return err
 }
 
 func WsSrvINFParseMsg(wsContext *WsContext, message *WsMessage) (err error){
@@ -269,14 +267,14 @@ func sendMessage(wsContext *WsContext, payload *ComEncap) (err error){
 	return err
 }
 
-func sendStatus(wsContext *WsContext, message *WsMessage, status *CEStatusData) (err error){
+func sendStatus(wsContext *WsContext, message *WsMessage) (err error){
 	message.Payload.ChannelID = 0
 	message.Payload.Domain = "INF"
 	message.Payload.Command = "APP_CTRL"
 	message.Payload.Data = make ([]string, 3)
-	message.Payload.Data[0] = strconv.FormatInt(status.ReceivedSequence, 10)
-	message.Payload.Data[1] = status.Status
-	message.Payload.Data[2] = status.Info
+	message.Payload.Data[0] = strconv.FormatInt(wsContext.Status.ReceivedSequence, 10)
+	message.Payload.Data[1] = wsContext.Status.Level
+	message.Payload.Data[2] = wsContext.Status.Info
 	err = sendMessage(wsContext, &message.Payload)
 	fmt.Printf("Send status : %v\n", message.Payload)
 		if err != nil {

@@ -84,6 +84,7 @@ func WsSrvDocUpdatePos(wsContext *WsContext, message *WsMessage) (err error){
 	CheckErr(err)
 	return err
 }
+
 func WsSrvDocDeleteArticleList(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
 	if CheckSec(wsContext, "DOC", "WRITE") {
@@ -109,7 +110,6 @@ func WsSrvDocDeleteArticleList(wsContext *WsContext, message *WsMessage) (err er
 		docID)
 	CheckErr(err)
 	return err
-
 }
 
 func WsSrvDocAddArticleList(wsContext *WsContext, message *WsMessage) (err error) {
@@ -117,7 +117,6 @@ func WsSrvDocAddArticleList(wsContext *WsContext, message *WsMessage) (err error
 	if CheckSec(wsContext, "DOC", "WRITE") {
 		return err
 	}
-
 	var listID string
 	var docID string
 
@@ -326,7 +325,6 @@ func WsSrvGetDocByID(wsContext *WsContext, message *WsMessage) (err error){
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	//sqlText = "select D.ID, T.ID as typeID, T.type, S.position, D.info, D.description, D.childListID from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID left join documentation_type T on D.typeID=T.ID where L.ID=? order by S.position;"
 	sqlText = "select D.ID, S.position, D.description, T.ID as typeID, T.type, D.info, D.childListID, T2.ID as type2ID, T2.type as type2, D.info2, D.child2LIstID, D.displayID, DSP.display from documentation_list L left join documentation_set S on L.ID=S.listID left join documentations D on S.docID=D.ID left join documentation_type T on D.typeID=T.ID left join documentation_type T2 on D.type2ID=T2.ID left join documentation_display DSP on D.displayID=DSP.ID where L.ID=? order by S.position;"
 	rows, err := wsContext.Db.QueryContext(localContext, sqlText,
 		message.Payload.Data[0])

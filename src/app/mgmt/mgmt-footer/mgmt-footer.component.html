@@ -1,3 +1,12 @@
+<div>
+	<div class="websocket-console">
+		<table>
+			<tr *ngFor="let msg of backendMsg.slice().reverse()">
+				<td><pre>{{msg.payload.data[1]}} -- {{msg.payload.data[2]}}</pre></td>
+			</tr>
+		</table>
+	</div>
+</div>
 <div *ngIf="debugFlag" class="debug-panel">
 	<div class="top-row">
 		<div>

@@ -30,6 +30,7 @@ export class WebSocketService {
 	private isConnected: boolean = false;
 	private wsConnected$ = new BehaviorSubject<boolean>(false);
 	private currentSeq: number = 1;
+	private backendMsgSubject = new Subject<any>();
 
 	public webSocketSubject: WebSocketSubject<wsMessage>;
 	private webSocketSubscription: Subscription;
@@ -49,6 +50,10 @@ export class WebSocketService {
 
 	public connected(): Observable<any> {
 		return this.wsConnected$.asObservable();
+	}
+
+	public backendMsg$(): Observable<any> {
+		return this.backendMsgSubject.asObservable();
 	}
 
 	public prepareMessage(channelid: number, domain: string, command: string, data: string[]): wsMessage {
@@ -146,7 +151,7 @@ export class WebSocketService {
 			}, this.hbtHoldTime);
 		}
 		if  ((+msg.payload.channelid === 0) && (msg.payload.domain === "INF")) {
-			console.log("Received Status message: ", msg);
+			this.backendMsgSubject.next(msg);
 		}
 	}
 
