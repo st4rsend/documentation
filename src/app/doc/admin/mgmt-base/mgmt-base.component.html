@@ -35,7 +35,7 @@
 	<app-doc-list-finder
 		(docListFinderEvent)='listFinderEvent($event)'>
 	</app-doc-list-finder>
- 	<div *ngIf="listKey!='0' && listKey!='-1'" class="flex-box flex-column"> 
+ 	<div *ngIf="listKey!=0 && listKey!=-1" class="flex-box flex-column"> 
 		<div  class="flex-box">
 			<button (click)="themeEditChange()">{{themeEdit}}</button>
 		</div>
@@ -57,7 +57,7 @@
 		</div>
 	</div>
 </div>
-<div *ngIf="listKey!='0' && !themeEditFlag" class="flex-row">
+<div *ngIf="listKey!=0 && !themeEditFlag" class="flex-row">
 	<div class="flex-box">
 		<h2>Articles</h2>
 		<select 
