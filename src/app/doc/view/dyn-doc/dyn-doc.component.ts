@@ -18,7 +18,7 @@ export class DynDocComponent implements OnChanges {
 	@Input() viewMode: string;
 	@Input() newItemTrigger: boolean;
 
-	@ViewChild(CdkVirtualScrollViewport, {static: false}) viewport: CdkVirtualScrollViewport;
+	@ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
 
 	private dynTable: Array<Doc>;
 	public creating: boolean = false;
