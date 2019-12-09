@@ -28,6 +28,7 @@
     "npm": "^6.13.2",
     "rxjs": "^6.5.3",
     "rxjs-tslint": "^0.1.7",
+    "serialize-javascript": "^2.1.1",
     "tslib": "^1.10.0",
     "typescript": "^3.6.4",
     "zone.js": "~0.10.2"
