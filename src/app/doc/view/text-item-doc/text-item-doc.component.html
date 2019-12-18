@@ -1,3 +1,4 @@
+<div class="embed">
 <div *ngIf="viewMode=='desc' || viewMode=='full'"
 	class="doc-item-description">
 	{{itemDoc.description}}
@@ -59,4 +60,5 @@
 		[itemDoc]=itemDoc
 		(itemDocCloseEvent)='itemDocCloseEvent($event)'>
 	</app-edit-item-doc>
+</div>
 </div>

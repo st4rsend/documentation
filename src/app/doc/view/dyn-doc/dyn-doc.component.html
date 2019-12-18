@@ -9,8 +9,9 @@
 		class="viewport">
 	<div *cdkVirtualFor="let item of docs; let i = index;" 
 		(click)="itemFocus(i)"
-		[ngClass]="selectedIndex === i ? 'doc-item-highlight doc-item-format' : 'doc-item doc-item-format'">
-		<div class="item">
+		[ngClass]="selectedIndex === i ? 'doc-item-highlight doc-item-format' : 'doc-item-format'">
+		<!-- <div class="item"> -->
+		<div>
 			<app-text-item-doc 
 				[itemDoc]=item
 				[editMode]=editMode

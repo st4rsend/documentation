@@ -1,13 +1,13 @@
-.viewport {
-  height: calc(100vh - 5em);
-  min-height: 250px;
-  width: auto;
-	margin: 0;
+.cdk-virtual-scroll-orientation-vertical {
+	display: flex;
+	min-height: 85vh;
 }
 
+
 .doc-item-description {
+	flex: 1 1 auto;
 	float: top;
-	width: 100%;
+	width: 100vw;
 	border-style: none none dotted;
 	font-weight: bold;
 }
@@ -15,9 +15,10 @@
 .doc-item-format {
 	display: flex;
 	flex-direction: row;
+	flex: 1 1 auto;
+	height: 100%;
 	margin: 0 1% 0 1%;
-	min-height: 70px;
-	//border: thin solid #ffffff;
+//	border: thin solid #00ff00;
 }
 
 .edit-left {
@@ -25,10 +26,6 @@
 	width: auto;
 }
 
-.item {
-	flex: 1 1 auto;
-	overflow-x: hidden;
-}
 
 .edit-right {
 	flex: 0 1 50px;

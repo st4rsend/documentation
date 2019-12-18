@@ -1,13 +1,13 @@
-<body [ngClass]="appTheme">
-	<header>
+<body [ngClass]="appTheme" class="app">
+	<div class="headera">
 		<app-server-com (themeEvent)="themeEvent($event);">
 		</app-server-com>
-		<app-mgmt-footer>
-		</app-mgmt-footer>
-	</header>
+	</div>
 	<div class="corps">
 		<router-outlet></router-outlet>
 	</div>
-	<footer>
-	</footer>
+	<div class="footera">
+		<app-mgmt-footer>
+		</app-mgmt-footer>
+	</div>
 </body>
