@@ -1,6 +1,6 @@
 .cdk-virtual-scroll-orientation-vertical {
 	display: flex;
-	min-height: 85vh;
+	height: calc(100vh - 7em);
 }
 
 
@@ -16,8 +16,8 @@
 	display: flex;
 	flex-direction: row;
 	flex: 1 1 auto;
-	height: 100%;
-	margin: 0 1% 0 1%;
+	//height: 100%;
+	//margin: 0 1% 0 1%;
 //	border: thin solid #00ff00;
 }
 
