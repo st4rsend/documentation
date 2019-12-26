@@ -1,8 +1,15 @@
 .cdk-virtual-scroll-orientation-vertical {
-	display: flex;
-	height: calc(100vh - 7em);
+	//display: flex;
+	//height: calc(100vh - 6em);
+	//height: calc(100vh - ' + statusBarHeight + 'em);
+	//border: thin solid blue;
 }
 
+.viewport {
+	display: flex;
+	//height: calc(100vh - 6em);
+	//border: thick solid red;
+}
 
 .doc-item-description {
 	flex: 1 1 auto;

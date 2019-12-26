@@ -23,6 +23,7 @@ export class ServerComComponent {
 	public loginFlag = false;
 	public loginDisplayFlag = false;
 	public debugFlag: boolean = false;
+
 	overlay;
 
 	constructor(
@@ -30,9 +31,11 @@ export class ServerComComponent {
 		private websocketSvc: WebSocketService,
 		private globalSvc: GlobalService,
 		private authSvc: AuthenticationService) {
-			this.subDebug = this.globalSvc.debugFlag$.subscribe( flag => { 
-				this.debugFlag = flag; 
-			});
+			this.subDebug = this.globalSvc.debugFlag$.subscribe( 
+				flag => { 
+					this.debugFlag = flag; 
+				}
+			);
 		this.overlay = overlayContainer.getContainerElement();
 		this.overlay.classList.add('light-theme');
 	}
@@ -94,5 +97,8 @@ export class ServerComComponent {
 			this.overlay.classList.add('light-theme');
 		}
 		
+	}
+	public setStatusLineCount(count: string) {
+		this.globalSvc.setStatusLineCount(+count);
 	}
 }

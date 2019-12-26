@@ -16,7 +16,8 @@ export class MgmtFooterComponent implements OnInit {
 	private subConnected: Subscription; 
 	public isConnected: boolean;
 	private backendMsgSub: Subscription;
-
+	private subStatusLineCount: Subscription;
+ 
 	public serverVerbosity: string;
 	public clientVerbosity: string;
 
@@ -27,6 +28,8 @@ export class MgmtFooterComponent implements OnInit {
 	private debugCommand: string = 'GET_LIST';
 	public msgToServer: string = "documentation_list\nID\ndescription\nposition";
 
+	public statusLineCount: string = "1em";
+
 	messages: string[];
 	backendMsg: string[];
 
@@ -36,6 +39,12 @@ export class MgmtFooterComponent implements OnInit {
 	) { 
 		this.serverVerbosity = "4";
 		this.clientVerbosity = "4";
+		this.subStatusLineCount = this.globalSvc.statusLineCount$.subscribe(
+			count => {
+				this.statusLineCount = count + "em";
+		//		console.log("Status Line Count: ", this.statusLineCount);
+			}
+		);
 	}
 
   ngOnInit() {
@@ -55,7 +64,7 @@ export class MgmtFooterComponent implements OnInit {
 			msg => {
 				//this.backendMsg.push(JSON.stringify(msg));
 				this.backendMsg.push(msg);
-				console.log("hello world msg: ", msg);
+		//		console.log("hello world msg: ", msg);
 			});
 		this.messages = [];
   }

@@ -3,6 +3,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { DocService } from '../../service/doc.service';
 import {Doc} from '../../model/doc';
+import { GlobalService } from '../../../shared/service/global.service';
 
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -28,7 +29,11 @@ export class DynDocComponent implements OnChanges {
 	public selectedIndex: number;
 	public newItemFlag: boolean;
 
-  constructor(private docService: DocService) {
+	public statusBarHeight: string = "calc(100vh - 6em)";
+
+  constructor(
+			private docService: DocService, 
+			private globalService: GlobalService) {
 		this.docService.isReady$.subscribe(
 			ready => {
 				if ( ready ) {
@@ -36,6 +41,12 @@ export class DynDocComponent implements OnChanges {
 					this.docListID = this.docService.getDocListID();
 				}
 			});
+		this.globalService.statusLineCount$.subscribe(
+			count => {
+				this.statusBarHeight =  "calc(100vh - " + ( count + 5 ) +"em)";
+				console.log("Status Bar height: ", this.statusBarHeight);
+			}
+		);
 	}
 
   ngOnChanges() {

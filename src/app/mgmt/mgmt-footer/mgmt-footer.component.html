@@ -1,5 +1,5 @@
 <div>
-	<div class="websocket-console">
+	<div class="websocket-console" [style.height]="statusLineCount">
 		<table>
 			<tr *ngFor="let msg of backendMsg.slice().reverse()">
 				<td><pre>{{msg.payload.data[1]}} -- {{msg.payload.data[2]}}</pre></td>

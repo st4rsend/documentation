@@ -26,6 +26,10 @@ export class GlobalService {
 	private sqlListChanBase: number = 512;
 	private sqlListChanMax: number = 511;
 
+	private statusLineCount: number;
+	private statusLineCountSubject = new Subject<number>();
+	public statusLineCount$ = this.statusLineCountSubject.asObservable();
+
 	private debugFlag = new Subject<boolean>();
 	public debugFlag$ = this.debugFlag.asObservable();
 
@@ -92,5 +96,14 @@ export class GlobalService {
 
 	public setDebugFlag(flag: boolean) {
 		this.debugFlag.next(flag);
+	}
+
+	public setStatusLineCount(count: number){
+		this.statusLineCount = count;
+		this.statusLineCountSubject.next(this.statusLineCount);
+	}
+
+	public getStatusLineCount() {
+		return this.statusLineCount;
 	}
 }

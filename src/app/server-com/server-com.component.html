@@ -57,6 +57,15 @@
 				Theme
 			</button>
 		</div>
+		<div>
+			<mat-menu #statusLineMenu="matMenu">
+				<button *ngFor="let number of [0,1,2,3,5,10]" mat-menu-item (click)="setStatusLineCount(number)"
+					color="primary">{{number}}</button>
+			</mat-menu>
+			<button mat-menu-item [matMenuTriggerFor]='statusLineMenu'>
+				Status
+			</button>
+		</div>
 		<div *ngIf="debugFlag" >
 			<button (click)="debug(false)"
 				mat-menu-item color="primary">UnDebug</button>
