@@ -9,6 +9,13 @@ import (
 )
 
 func CheckSec(wsContext *WsContext, domain string, action string) bool {
+	if domain == "SECURITY" {
+		if action == "WRITE" {
+			if wsContext.SecUserID > 0 {
+				return false
+			}
+		}
+	}
 	if domain == "LISTE" {
 		if action == "WRITE" {
 			if wsContext.SecUserID > 0 {
@@ -31,8 +38,8 @@ func CheckSec(wsContext *WsContext, domain string, action string) bool {
 		}
 	}
 	wsContext.Status.Level = "SECURITY"
-	wsContext.Status.Info = "Write denied for user " + strconv.FormatInt(wsContext.SecUserID, 10)
-	fmt.Printf("Access denied\n");
+	wsContext.Status.Info = "Change denied for user " + strconv.FormatInt(wsContext.SecUserID, 10)
+	fmt.Printf("change denied\n");
 	return true
 }
 
@@ -65,12 +72,19 @@ func WsSrvSecParseMsg(wsContext *WsContext, message *WsMessage) (err error) {
 	CheckErr(err)
 	return err
 }
+
 func WsSrvSecSetUserPassword(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
+	if CheckSec(wsContext, "SECURITY", "WRITE") {
+		return err
+	}
 	var sqlText string
-	var user = message.Payload.Data[0]
-	var password = message.Payload.Data[1]
-	hash, err := HashPassword(password)
+	//var user = message.Payload.Data[0]
+	var user = strconv.FormatInt(wsContext.SecUserID, 10)
+	var oldPassword = message.Payload.Data[0]
+	var newPassword = message.Payload.Data[1]
+	_ , err = HashPassword(oldPassword)
+	hash, err := HashPassword(newPassword)
 	CheckErr(err)
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)

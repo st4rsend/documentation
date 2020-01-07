@@ -12,7 +12,6 @@
 				</a>
 			</button>
 		</div>
-		<div ><button mat-menu-item>--------</button></div>
 		<div *ngIf="connectFlag" >
 			<mat-menu #subMenu="matMenu" >
 				<a routerLink="doc/base"><button mat-menu-item>Doc</button></a>
@@ -28,10 +27,18 @@
 				<button (click)="login()"
 		 		mat-menu-item color="primary">Login</button>
 			</div>
-			<div ><button mat-menu-item>--------</button></div>
 			<div *ngIf="loginFlag" >
-				<button (click)="logout()"
-					mat-menu-item color="warn">Logout</button>
+				<mat-menu #subUser="matMenu">
+					<button (click)="getUserInfo()"
+						mat-menu-item color="primary">Info</button>
+					<button (click)="logout()"
+						mat-menu-item color="warn">Logout</button>
+					<button (click)="password()"
+						mat-menu-item color="primary">Set password</button>
+				</mat-menu>
+				<button mat-menu-item [matMenuTriggerFor]='subUser'>
+					User
+				</button>
 			</div>
 			<button mat-menu-item (click)="disconnect()"
 				 color="warn">Disconnect
@@ -40,11 +47,6 @@
 		<div *ngIf="!connectFlag" >
 			<button mat-menu-item	(click)="connect()"
 				 color="primary">Connect</button>
-		</div>
-		<div *ngIf="!loginFlag"><button mat-menu-item>--------</button></div>
-		<div *ngIf="connectFlag && loginFlag" class="menu-item">
-			<button (click)="getUserInfo()"
-				mat-menu-item color="primary">Info</button>
 		</div>
 		<div >
 			<mat-menu #themeMenu="matMenu" >
@@ -91,4 +93,9 @@
 	<app-login 
 		(loginCloseEvent)='loginCloseEvent($event)'>
 	</app-login>
+</div>
+<div *ngIf="passwordDisplayFlag">
+	<app-set-password
+		(passwordCloseEvent)='passwordCloseEvent($event)'>
+	</app-set-password>
 </div>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 interface UserGroup {
 	GID: number;
@@ -33,8 +34,7 @@ export class GlobalService {
 	private debugFlag = new Subject<boolean>();
 	public debugFlag$ = this.debugFlag.asObservable();
 
-	private webSocketUrl: string = 'wss://st4rsend.net/ws';
-	//private webSocketUrl: string = 'wss://www.st4rsend.net/ws';
+	private webSocketUrl: string;
 
   constructor() { 
 		this.sqlListChanCntr= 0;
@@ -44,6 +44,7 @@ export class GlobalService {
 			FirstName: "firstName",
 			LastName: "lastName",
 			Groups: []};
+		this.webSocketUrl = environment.webSocketUrl;
 
 	}
 	public setWebSocketUrl(url: string) {

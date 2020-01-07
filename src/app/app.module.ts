@@ -34,6 +34,7 @@ import { ListTodoComponent } from './todo/list-todo/list-todo.component';
 import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
 import { UpdateTodoComponent } from './todo/update-todo/update-todo.component';
 import { LoginComponent } from './mgmt/login/login.component';
+import { SetPasswordComponent } from './mgmt/set-password/set-password.component';
 import { ListMgmtComponent } from './shared/component/list-mgmt/list-mgmt.component';
 import { ListSelectComponent } from './shared/component/list-select/list-select.component';
 import { ServerComComponent } from './server-com/server-com.component';
@@ -64,6 +65,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     CreateTodoComponent,
 		UpdateTodoComponent,
 		LoginComponent,
+		SetPasswordComponent,
 		ListMgmtComponent,
 		ListSelectComponent,
 		MgmtBaseComponent,

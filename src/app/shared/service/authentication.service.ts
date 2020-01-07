@@ -72,6 +72,19 @@ export class AuthenticationService {
 		this.webSocketSvc.webSocketSubject.next(message);
 	}
 
+	public setPassword(oldPassword: string, newPassword: string) {
+		this.isReady$.next(false);
+		if ((this.authSub === undefined) || (this.authSub.closed === true)) {
+			this.authSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
+				this.parseAuth(msg);
+			});
+		}
+		this.message = [];
+		this.message = [oldPassword, newPassword];
+		let message = this.webSocketSvc.prepareMessage(1,"SEC","USR_PWD",this.message);
+		this.webSocketSvc.webSocketSubject.next(message);
+	}
+
 	private parseAuth(msg: wsMessage) {
 
 		if ((+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SEC")) {

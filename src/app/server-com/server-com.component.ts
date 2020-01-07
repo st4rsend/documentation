@@ -22,6 +22,7 @@ export class ServerComComponent {
 	public connectFlag = false;
 	public loginFlag = false;
 	public loginDisplayFlag = false;
+	public passwordDisplayFlag = false;
 	public debugFlag: boolean = false;
 
 	overlay;
@@ -63,18 +64,27 @@ export class ServerComComponent {
 	public login() {
 		this.loginDisplayFlag = !this.loginDisplayFlag;
 	}
+
+	public loginCloseEvent(value: boolean) {
+		this.loginDisplayFlag = false;
+		this.loginFlag = value;
+	}
+
 	public logout() {
 		this.authSvc.logout();
 		this.loginFlag = false;
 	}
 
-	public getUserInfo() {
-		this.authSvc.getUserInfo(5);
+	public password() {
+		this.passwordDisplayFlag = !this.passwordDisplayFlag;
 	}
 
-	public loginCloseEvent(value: boolean) {
-		this.loginDisplayFlag = false;
-		this.loginFlag = value;
+	public passwordCloseEvent(value: boolean) {
+		this.passwordDisplayFlag = false;
+	}
+
+	public getUserInfo() {
+		this.authSvc.getUserInfo(5);
 	}
 
 	public titleClick() {
