@@ -81,7 +81,7 @@ export class AuthenticationService {
 		}
 		this.message = [];
 		this.message = [oldPassword, newPassword];
-		let message = this.webSocketSvc.prepareMessage(1,"SEC","USR_PWD",this.message);
+		let message = this.webSocketSvc.prepareMessage(1,"SEC","SET_PWD",this.message);
 		this.webSocketSvc.webSocketSubject.next(message);
 	}
 

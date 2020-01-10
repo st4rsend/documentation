@@ -81,31 +81,38 @@ func WsSrvSecSetUserPassword(wsContext *WsContext, message *WsMessage) (err erro
 	var sqlText string
 	//var user = message.Payload.Data[0]
 	var user = strconv.FormatInt(wsContext.SecUserID, 10)
+	var DBHash string
 	var oldPassword = message.Payload.Data[0]
 	var newPassword = message.Payload.Data[1]
-	_ , err = HashPassword(oldPassword)
-	hash, err := HashPassword(newPassword)
+	newHash, err := HashPassword(newPassword)
 	CheckErr(err)
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "update users set password='" + hash +
-			"' where identity='" + user + "'"
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Processing user's password update")
+		fmt.Printf("Retrieving password hash for user ID %s", user)
 	}
-	result, err := wsContext.Db.ExecContext(localContext,sqlText)
+	sqlText = "select password from users where ID=?"
+	err = wsContext.Db.QueryRowContext(localContext, sqlText, user).Scan(&DBHash)
 	CheckErr(err)
-	rows, err := result.RowsAffected()
-	CheckErr(err)
-	if rows != 1 {
-		fmt.Printf("expected single row affected, got %d rows affected\n", rows)
-	}
 
-	if (err == nil) {
-	//	err = mysqlUpdatePasswordforuser
-		fmt.Printf("Hash: %s\n", hash)
+	if CheckPasswordHash(oldPassword, DBHash) {
+
+		sqlText = "update users set password=? where ID=?"
+		if (wsContext.Verbose > 4) {
+			fmt.Printf("Processing user's password update")
+		}
+		result, err := wsContext.Db.ExecContext(localContext,sqlText,
+			newHash,
+			user)
 		CheckErr(err)
+		rows, err := result.RowsAffected()
+		CheckErr(err)
+		if rows != 1 {
+			fmt.Printf("expected single row affected, got %d rows affected\n", rows)
+		}
+	} else {
+		fmt.Printf("Password change denied\n")
 	}
 	return err
 }
