@@ -23,6 +23,7 @@ export class ServerComComponent {
 	public loginFlag = false;
 	public loginDisplayFlag = false;
 	public passwordDisplayFlag = false;
+	public registerDisplayFlag = false;
 	public debugFlag: boolean = false;
 
 	overlay;
@@ -81,6 +82,14 @@ export class ServerComComponent {
 
 	public passwordCloseEvent(value: boolean) {
 		this.passwordDisplayFlag = false;
+	}
+
+	public register() {
+		this.registerDisplayFlag = !this.registerDisplayFlag;
+	}
+
+	public registerCloseEvent(value: boolean) {
+		this.registerDisplayFlag = false;
 	}
 
 	public getUserInfo() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AuthenticationService } from '../../shared/service/authentication.service';
@@ -12,6 +12,8 @@ export class RegisterComponent implements OnInit {
 
 	registerForm: FormGroup;
 	submitted = false;
+
+	@Output() registerCloseEvent = new EventEmitter<boolean>();
 
   constructor(
 		private formBuilder: FormBuilder,
@@ -28,7 +30,7 @@ export class RegisterComponent implements OnInit {
 
 	get formControls() { return this.registerForm.controls;}
 
-	onSubmit() {
+	public onSubmit() {
 		this.submitted = true;
 
 		if (this.registerForm.invalid) {
@@ -40,4 +42,7 @@ export class RegisterComponent implements OnInit {
 			this.formControls.eMail.value);
 	}
 	
+	public cancel() {
+		this.registerCloseEvent.emit(false);
+	}
 }

@@ -26,6 +26,7 @@
 			<div *ngIf="!loginFlag" >
 				<button (click)="login()"
 		 		mat-menu-item color="primary">Login</button>
+				<a routerLink="/register"><button mat-menu-item>Register</button></a>
 			</div>
 			<div *ngIf="loginFlag" >
 				<mat-menu #subUser="matMenu">

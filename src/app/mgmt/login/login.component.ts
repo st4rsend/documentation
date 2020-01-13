@@ -53,4 +53,7 @@ export class LoginComponent implements OnInit {
 	close() {
 		this.loginCloseEvent.emit(false);
 	}
+	register() {
+		// TODO: To be habdled correctly
+	}
 }

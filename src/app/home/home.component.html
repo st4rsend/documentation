@@ -1,35 +1,36 @@
 <div class="nav-helper" [ngClass]="{ 'nav-helper': connectFlag }" >
 	<div *ngIf="connectFlag" class="container connected-apps"> 
-		<p><li><a routerLink="/register">Register new user</a></p>
-		<p><li><a routerLink="/doc/base">Doc</a></p>
-		<p><li><a routerLink="/todo/base">Todo</a></p>
+		<p>
+			<li><a routerLink="/doc/base">Doc</a>
+			<li><a routerLink="/todo/base">Todo</a>
+			<li><a routerLink="/register">Register new user</a>
+			<li><a routerLink="/mgmt/base">Management</a>
+		</p>
 	</div>
 <!--
 	<div *ngIf="loginFlag" class="container logged-apps"> 
 		<p><li><a routerLink="/mgmt/base">Management</a></p>
 	</div>
 -->
-	<p><li><a routerLink="/mgmt/base">Management</a></p>
+	<div>
+		THEMING
+	</div>
+	<div>
+		<button mat-button 
+			color="primary">PRIMARY BUTTON</button>
+	</div>
+	<div>
+		<button mat-button 
+			color="accent">ACCENT BUTTON</button>
+	</div>
+	<div>
+		<button mat-button 
+			color="warn">WARN BUTTON</button>
+	</div>
+	<div>
+		<mat-form-field appearance="outline">
+			<mat-label>Domain</mat-label>
+			<input placeholder="placeholder" matInput >
+		</mat-form-field>
+	</div>
 </div>
-<div>
-<div>
-THEMING<BR>
-</div>
-<div>
-<button mat-button 
-color="primary">PRIMARY BUTTON</button>
-</div>
-<div>
-<button mat-button 
-color="accent">ACCENT BUTTON</button>
-</div>
-<div>
-<button mat-button 
-color="warn">WARN BUTTON</button>
-</div>
-<div>
-</div>
-<mat-form-field appearance="outline">
-	<mat-label>Domain</mat-label>
-	<input placeholder="placeholder" matInput >
-</mat-form-field>

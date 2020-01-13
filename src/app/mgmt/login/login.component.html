@@ -1,5 +1,5 @@
-<div class="outer-border" cdkDrag>
-	<div class="header" cdkDragHandle>
+<div class="outer-border">
+	<div class="header">
 		Login
 	</div>
 	<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -24,7 +24,7 @@
 		</div>
 		<div class="toolbar">
 			<button type="submit" class="btn">Login</button>
-			<a routerLink="/register" (click)="close()" class="link">Register</a>
+			<a routerLink="/register"><button class="btn" (click)="register()">Register</button></a>
 			<button (click)="close()" class="btn">Cancel</button>
 		</div>
 	</form>

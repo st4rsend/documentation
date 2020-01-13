@@ -1,16 +1,8 @@
 .outer-border {
-	position: absolute;
-	top: 150px;
-	left: 100px;
-	border: thick solid green;
 	padding: 10px;
-	border-radius: 15px;
-  z-index: 1;
-	//background-color: blue;
 }
 
 .header {
-	cursor: move;
 	text-align: center; 
 }
 
@@ -22,15 +14,15 @@
 .toolbar {
 	display: flex;
 	display-direction: row;
-	justifiy-content: center;
+	justify-content: space-between;
 }
 
 .btn {
+	flex: 0 0 auto;
 }
 
 .link {
 	text-align: center;
 	flex-grow: 1;
-	//color: yellow;
 }
 
