@@ -66,9 +66,14 @@ export class ServerComComponent {
 		this.loginDisplayFlag = !this.loginDisplayFlag;
 	}
 
-	public loginCloseEvent(value: boolean) {
+	public loginCloseEvent(value: string) {
 		this.loginDisplayFlag = false;
-		this.loginFlag = value;
+		if (value == "true") {
+			this.loginFlag = true;
+		}
+		if (value == "register") {
+			this.registerDisplayFlag =  true;
+		}
 	}
 
 	public logout() {

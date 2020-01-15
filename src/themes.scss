@@ -70,6 +70,9 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 		color: mat-color($light-primary,800);
 		background-color: mat-color($light-background,300);
 	}
+	.warning {
+		color: mat-color($light-warn);
+	}
 }
 
 $dark-primary: mat-palette($st4rsend-dark-primary);
@@ -137,5 +140,8 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 	.mat-menu-panel {
 		color: mat-color($dark-primary,800);
 		background-color: mat-color($dark-background,300);
+	}
+	.warning {
+		color: mat-color($dark-warn);
 	}
 }

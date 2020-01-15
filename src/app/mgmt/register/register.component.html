@@ -1,6 +1,6 @@
 <div class="outerBorder">
 	<div class="header">
-		Welcome to register form	
+		<H2>Welcome to register form</H2>
 	</div>
 	<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 		<div class="form-group">
@@ -31,9 +31,13 @@
 						[ngClass]="{'is-invalid':submitted && formControls.eMail.errors }"/>
 			</mat-form-field>
 		</div>
+		<div class="warning">
+			WARNING !!! No password recovery mechanism implemented yet !!!<BR>
+			No e-mail mechanism either
+		</div>
 		<div class="toolbar">
-			<button type="submit" class="btn">Login</button>
-			<a routerLink="/home"><button class="btn">Cancel</button></a>
+			<button type="submit" class="btn">Register</button>
+			<button class="btn" (click)="cancel()">Cancel</button>
 		</div>
 	</form>
 </div>

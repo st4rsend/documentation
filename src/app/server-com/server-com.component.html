@@ -25,8 +25,9 @@
 			</button>
 			<div *ngIf="!loginFlag" >
 				<button (click)="login()"
-		 		mat-menu-item color="primary">Login</button>
-				<a routerLink="/register"><button mat-menu-item>Register</button></a>
+		 			mat-menu-item color="primary">Login</button>
+				<button (click)="register()"
+		 			mat-menu-item color="primary">Register</button>
 			</div>
 			<div *ngIf="loginFlag" >
 				<mat-menu #subUser="matMenu">
@@ -99,4 +100,9 @@
 	<app-set-password
 		(passwordCloseEvent)='passwordCloseEvent($event)'>
 	</app-set-password>
+</div>
+<div *ngIf="registerDisplayFlag">
+	<app-register
+		(registerCloseEvent)='registerCloseEvent($event)'>
+	</app-register>
 </div>
