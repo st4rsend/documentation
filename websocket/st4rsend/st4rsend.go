@@ -92,6 +92,7 @@ type WsContext struct {
 	Sequence int64
 	Verbose int
 	SecUserID int64
+	SecGroupIDs []int64
 	SecToken int64
 	Status WsStatus
 }

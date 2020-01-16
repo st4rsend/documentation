@@ -128,6 +128,7 @@ func WsSrvSecLogout(wsContext *WsContext, message *WsMessage) (err error) {
 func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
 	wsContext.SecUserID = 0
+	wsContext.SecGroupIDs = nil
 	var user = message.Payload.Data[0]
 	var password = message.Payload.Data[1]
 	var hash string
@@ -157,6 +158,8 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 		message.Payload.Data[0] = strconv.FormatInt(UID, 10)
 		wsContext.Status.Level = "SECURITY"
 		wsContext.Status.Info = "Logged as user ID:  " + strconv.FormatInt(wsContext.SecUserID, 10)
+		err = secGroupIDsPopulate(wsContext, UID)
+		CheckErr(err)
 	} else {
 		wsContext.SecUserID = 0
 		if ( wsContext.Verbose > 5 ) {
@@ -170,6 +173,7 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 	message.Payload.Command = "EOF"
 	message.Payload.Data = nil
 	err = sendMessage(wsContext, &message.Payload)
+	fmt.Printf("wscontext GIDs: %v\n", wsContext.SecGroupIDs)
 	return err
 }
 
@@ -244,4 +248,20 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 	return err
 }
 
-
+func secGroupIDsPopulate(wsContext *WsContext, UID int64) (err error) {
+	err = nil
+	var sqlGroupID int64
+	var sqlText = "select G.ID from users U left join usergroup UG on U.ID=UG.userID left join groups G on UG.groupID=G.ID where U.ID=?"
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText, UID)
+	CheckErr(err)
+	defer rows.Close()
+	for rows.Next() {
+		err = rows.Scan(&sqlGroupID)
+		CheckErr(err)
+		wsContext.SecGroupIDs = append(wsContext.SecGroupIDs, sqlGroupID)
+	}
+	return err
+}
