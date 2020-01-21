@@ -23,16 +23,67 @@ func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 		err = WsSrvGetSqlListFlt(wsContext, message)
 	}
 	if message.Payload.Command == "INSERT_LIST" {
-		err = WsSrvInsertSqlList(wsContext, message)
+		if granted, _ := WsSecSqlInsert(wsContext, message) ; granted {
+			err = WsSrvInsertSqlList(wsContext, message)
+		} else {
+			fmt.Printf("Write denied, error: %v\n", err)
+		}
 	}
 	if message.Payload.Command == "UPDATE_LIST" {
-		err = WsSrvUpdateSqlList(wsContext, message)
+		if granted, _ := WsSecSqlWrite(wsContext, message) ; granted {
+			err = WsSrvUpdateSqlList(wsContext, message)
+		} else {
+			fmt.Printf("Write denied, error: %v\n", err)
+		}
 	}
 	if message.Payload.Command == "DELETE_LIST" {
-		err = WsSrvDeleteSqlList(wsContext, message)
+		if granted, _ := WsSecSqlWrite(wsContext, message) ; granted {
+			err = WsSrvDeleteSqlList(wsContext, message)
+		} else {
+			fmt.Printf("Write denied, error: %v\n", err)
+		}
 	}
 	CheckErr(err)
 	return err
+}
+
+func WsSecSqlInsert(wsContext *WsContext, message *WsMessage) (bool, error) {
+	return true, nil
+}
+
+func WsSecSqlWrite(wsContext *WsContext, message *WsMessage) (granted bool, err error) {
+	err = nil
+	granted = false
+	var sqlUserID sql.NullInt64
+	var sqlGroupID sql.NullInt64
+	var sqlGrants sql.NullInt64
+	var secStruct WsSecStruct
+	var sqlText = "select secUserID, secGroupID, secGrants from " +
+		protectSQL(message.Payload.Data[0]) +
+		" where ID=?"
+	listIdx := message.Payload.Data[4]
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText, listIdx)
+	CheckErr(err)
+	defer rows.Close()
+	for rows.Next() {
+		err = rows.Scan(&sqlUserID, &sqlGroupID, &sqlGrants)
+		if err == nil {
+			secStruct.secUserID = sqlToWsGrants(sqlUserID)
+			secStruct.secGroupID = sqlToWsGrants(sqlGroupID)
+			secStruct.secGrants = sqlToWsGrants(sqlGrants)
+			granted, err = secWriteGranted(wsContext, &secStruct)
+			return granted, err
+		} else {
+			fmt.Printf("row scan error: %s\n", err)
+			return false, err
+		}
+	}
+	return false, err
+
+
 }
 
 func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){

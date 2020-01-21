@@ -38,16 +38,14 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 		err = WsSrvGetDocType(wsContext, message)
 	}
 	if message.Payload.Command == "INSERT_DOC" {
-		granted, _ := WsDocSecArticleWrite(wsContext, message)
-		if granted {
+		if granted, _ := WsDocSecArticleInsert(wsContext, message) ; granted {
 			err = WsSrvDocInsert(wsContext, message)
 		} else {
 			fmt.Printf("Write denied, error: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "UPDATE_DOC" {
-		granted, _ := WsDocSecArticleWrite(wsContext, message)
-		if granted {
+		if granted, _ := WsDocSecArticleWrite(wsContext, message) ; granted {
 			err = WsSrvDocUpdate(wsContext, message)
 		} else {
 			fmt.Printf("Write denied, error: %v\n", err)
