@@ -52,16 +52,32 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 		}
 	}
 	if message.Payload.Command == "UPDATE_DOC_POS" {
-		err = WsSrvDocUpdatePos(wsContext, message)
-	}
-	if message.Payload.Command == "UPDATE_LIST_THEME" {
-		err = WsSrvDocUpdateListTheme(wsContext, message)
+		if granted, _ := WsDocSecListWrite(wsContext, message) ; granted {
+			err = WsSrvDocUpdatePos(wsContext, message)
+		} else {
+			fmt.Printf("Write denied, error: %v\n", err)
+		}
 	}
 	if message.Payload.Command == "DELETE_ARTICLE_LIST" {
-		err = WsSrvDocDeleteArticleList(wsContext, message)
+		if granted, _ := WsDocSecListWrite(wsContext, message) ; granted {
+			err = WsSrvDocDeleteArticleList(wsContext, message)
+		} else {
+			fmt.Printf("Write denied, error: %v\n", err)
+		}
 	}
 	if message.Payload.Command == "ADD_ARTICLE_LIST" {
-		err = WsSrvDocAddArticleList(wsContext, message)
+		if granted, _ := WsDocSecListWrite(wsContext, message) ; granted {
+			err = WsSrvDocAddArticleList(wsContext, message)
+		} else {
+			fmt.Printf("Write denied, error: %v\n", err)
+		}
+	}
+	if message.Payload.Command == "UPDATE_LIST_THEME" {
+		if granted, _ := WsDocSecListWrite(wsContext, message) ; granted {
+			err = WsSrvDocUpdateListTheme(wsContext, message)
+		} else {
+			fmt.Printf("Write denied, error: %v\n", err)
+		}
 	}
 	CheckErr(err)
 	return err
