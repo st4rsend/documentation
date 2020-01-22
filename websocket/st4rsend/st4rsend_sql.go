@@ -23,24 +23,24 @@ func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 		err = WsSrvGetSqlListFlt(wsContext, message)
 	}
 	if message.Payload.Command == "INSERT_LIST" {
-		if granted, _ := WsSecSqlInsert(wsContext, message) ; granted {
+		if granted, err := WsSecSqlInsert(wsContext, message) ; granted {
 			err = WsSrvInsertSqlList(wsContext, message)
 		} else {
-			fmt.Printf("Write denied, error: %v\n", err)
+			fmt.Printf("ERROR: Write denied: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "UPDATE_LIST" {
-		if granted, _ := WsSecSqlWrite(wsContext, message) ; granted {
+		if granted, _ := WsSecSqlWrite(wsContext, message.Payload.Data[0], message.Payload.Data[4]) ; granted {
 			err = WsSrvUpdateSqlList(wsContext, message)
 		} else {
-			fmt.Printf("Write denied, error: %v\n", err)
+			fmt.Printf("ERROR: Write denied: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "DELETE_LIST" {
-		if granted, _ := WsSecSqlWrite(wsContext, message) ; granted {
+		if granted, _ := WsSecSqlWrite(wsContext, message.Payload.Data[0], message.Payload.Data[2]) ; granted {
 			err = WsSrvDeleteSqlList(wsContext, message)
 		} else {
-			fmt.Printf("Write denied, error: %v\n", err)
+			fmt.Printf("ERROR: Write denied: %v\n", err)
 		}
 	}
 	CheckErr(err)
@@ -48,42 +48,36 @@ func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 }
 
 func WsSecSqlInsert(wsContext *WsContext, message *WsMessage) (bool, error) {
-	return true, nil
+	if wsContext.SecUserID > 0 {
+		return true, nil
+	} else {
+		return false, fmt.Errorf("ERROR:St4rsend:security:uid 0 requested sql insert")
+	}
 }
 
-func WsSecSqlWrite(wsContext *WsContext, message *WsMessage) (granted bool, err error) {
-	err = nil
-	granted = false
+func WsSecSqlWrite(wsContext *WsContext, tableName string, idx string) (bool, error) {
 	var sqlUserID sql.NullInt64
 	var sqlGroupID sql.NullInt64
 	var sqlGrants sql.NullInt64
 	var secStruct WsSecStruct
 	var sqlText = "select secUserID, secGroupID, secGrants from " +
-		protectSQL(message.Payload.Data[0]) +
+		protectSQL(tableName) +
 		" where ID=?"
-	listIdx := message.Payload.Data[4]
 	localContext := context.Background()
-	err = wsContext.Db.PingContext(localContext)
-	CheckErr(err)
-	rows, err := wsContext.Db.QueryContext(localContext, sqlText, listIdx)
-	CheckErr(err)
-	defer rows.Close()
-	for rows.Next() {
-		err = rows.Scan(&sqlUserID, &sqlGroupID, &sqlGrants)
-		if err == nil {
-			secStruct.secUserID = sqlToWsGrants(sqlUserID)
-			secStruct.secGroupID = sqlToWsGrants(sqlGroupID)
-			secStruct.secGrants = sqlToWsGrants(sqlGrants)
-			granted, err = secWriteGranted(wsContext, &secStruct)
-			return granted, err
-		} else {
-			fmt.Printf("row scan error: %s\n", err)
-			return false, err
-		}
+	err := wsContext.Db.PingContext(localContext)
+	if CheckErr(err) != nil { return false, err }
+	err = wsContext.Db.QueryRowContext(localContext, sqlText, protectSQL(idx)).
+		Scan(&sqlUserID, &sqlGroupID, &sqlGrants)
+	if err == nil {
+		secStruct.secUserID = sqlToWsGrants(sqlUserID)
+		secStruct.secGroupID = sqlToWsGrants(sqlGroupID)
+		secStruct.secGrants = sqlToWsGrants(sqlGrants)
+		granted, err := secWriteGranted(wsContext, &secStruct)
+		return granted, err
+	} else {
+		return false, fmt.Errorf("ERROR:St4rsend:WsSecSqlWrite:row scan error: %w", err)
 	}
 	return false, err
-
-
 }
 
 func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){
@@ -99,13 +93,18 @@ func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "insert into " + table_name + " (" + column_name + "," + position_name + ") values (?,?) "
+	sqlText = "insert into " + table_name +
+		" (" + column_name + "," +
+		position_name + "," +
+		"secUserID, secGrants" +
+		") values (?,?,?,?) "
 	if (wsContext.Verbose > 4) {
 		fmt.Printf("Processing SQL list Insert\n")
 	}
 	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
 		message.Payload.Data[3],
-		message.Payload.Data[4])
+		message.Payload.Data[4],
+		wsContext.SecUserID,764)
 	CheckErr(err)
 	if (wsContext.Verbose > 4) {
 		fmt.Printf("Processing SQL LIST result: %v\n", sqlResult)

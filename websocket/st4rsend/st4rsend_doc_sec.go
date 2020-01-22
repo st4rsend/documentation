@@ -8,12 +8,14 @@ import (
 )
 
 func WsDocSecArticleInsert(wsContext *WsContext, message *WsMessage) (bool, error) {
-	return true, nil
+	if wsContext.SecUserID > 0 {
+		return true, nil
+	} else {
+		return false, fmt.Errorf("ERROR:St4rsend:security:uid 0 requested Doc Article insert")
+	}
 }
 
-func WsDocSecArticleWrite(wsContext *WsContext, message *WsMessage) (granted bool, err error) {
-	err = nil
-	granted = false
+func WsDocSecArticleWrite(wsContext *WsContext, message *WsMessage) (bool, error) {
 	var sqlUserID sql.NullInt64
 	var sqlGroupID sql.NullInt64
 	var sqlGrants sql.NullInt64
@@ -21,29 +23,28 @@ func WsDocSecArticleWrite(wsContext *WsContext, message *WsMessage) (granted boo
 	var sqlText = "select secUserID, secGroupID, secGrants from documentations where ID=?"
 	articleIdx := message.Payload.Data[0]
 	localContext := context.Background()
-	err = wsContext.Db.PingContext(localContext)
-	CheckErr(err)
-	rows, err := wsContext.Db.QueryContext(localContext, sqlText, articleIdx)
-	CheckErr(err)
-	defer rows.Close()
-	for rows.Next() {
-		err = rows.Scan(&sqlUserID, &sqlGroupID, &sqlGrants)
-		if err == nil {
-			secStruct.secUserID = sqlToWsGrants(sqlUserID)
-			secStruct.secGroupID = sqlToWsGrants(sqlGroupID)
-			secStruct.secGrants = sqlToWsGrants(sqlGrants)
-			granted, err = secWriteGranted(wsContext, &secStruct)
-			return granted, err
-		} else {
-			fmt.Printf("row scan error: %s\n", err)
-			return false, err
-		}
+	err := wsContext.Db.PingContext(localContext)
+	if CheckErr(err)!= nil { return false, err }
+	err = wsContext.Db.QueryRowContext(localContext, sqlText, articleIdx).
+		Scan(&sqlUserID, &sqlGroupID, &sqlGrants)
+	if err == nil {
+		secStruct.secUserID = sqlToWsGrants(sqlUserID)
+		secStruct.secGroupID = sqlToWsGrants(sqlGroupID)
+		secStruct.secGrants = sqlToWsGrants(sqlGrants)
+		granted, err := secWriteGranted(wsContext, &secStruct)
+		return granted, err
+	} else {
+			return false, fmt.Errorf("ERROR:St4rsend:WsDocSecArticleWrite:row scan error: %w", err)
 	}
 	return false, err
 }
 
 func WsDocSecListInsert(wsContext *WsContext, message *WsMessage) (bool, error) {
-	return true, nil
+	if wsContext.SecUserID > 0 {
+		return true, nil
+	} else {
+		return false, fmt.Errorf("ERROR:St4rsend:security:uid 0 requested Doc List insert")
+	}
 }
 
 func WsDocSecListWrite(wsContext *WsContext, message *WsMessage) (bool, error) {
@@ -55,23 +56,17 @@ func WsDocSecListWrite(wsContext *WsContext, message *WsMessage) (bool, error) {
 	listIdx := message.Payload.Data[0]
 	localContext := context.Background()
 	err := wsContext.Db.PingContext(localContext)
-	CheckErr(err)
-	rows, err := wsContext.Db.QueryContext(localContext, sqlText, listIdx)
-	CheckErr(err)
-	defer rows.Close()
-	for rows.Next() {
-		err = rows.Scan(&sqlUserID, &sqlGroupID, &sqlGrants)
-		fmt.Printf("RowScan\n")
-		if err == nil {
-			secStruct.secUserID = sqlToWsGrants(sqlUserID)
-			secStruct.secGroupID = sqlToWsGrants(sqlGroupID)
-			secStruct.secGrants = sqlToWsGrants(sqlGrants)
-			granted, err := secWriteGranted(wsContext, &secStruct)
-			return granted, err
-		} else {
-			fmt.Printf("row scan error: %s\n", err)
-			return false, err
-		}
+	if CheckErr(err)!= nil { return false, err }
+	err = wsContext.Db.QueryRowContext(localContext, sqlText, listIdx).
+		Scan(&sqlUserID, &sqlGroupID, &sqlGrants)
+	if err == nil {
+		secStruct.secUserID = sqlToWsGrants(sqlUserID)
+		secStruct.secGroupID = sqlToWsGrants(sqlGroupID)
+		secStruct.secGrants = sqlToWsGrants(sqlGrants)
+		granted, err := secWriteGranted(wsContext, &secStruct)
+		return granted, err
+	} else {
+			return false, fmt.Errorf("ERROR:St4rsend:WsDocSecListWrite:row scan error: %w", err)
 	}
 	return false, err
 }

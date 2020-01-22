@@ -268,7 +268,7 @@ func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
-	sqlText = "insert into documentations (description, typeID, info, childListID, type2ID, info2, child2ListID, displayID) values (?,?,?,?,?,?,?,?)"
+	sqlText = "insert into documentations (description, typeID, info, childListID, type2ID, info2, child2ListID, displayID, secUserID, secGrants) values (?,?,?,?,?,?,?,?,?,?)"
 	if doc.childListID.String  == "0" {
 		doc.childListID.Valid = false
 	} else {
@@ -295,7 +295,9 @@ func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 		doc.type2ID,
 		doc.value2,
 		doc.child2ListID,
-		doc.displayID)
+		doc.displayID,
+		wsContext.SecUserID,
+		764)
 	CheckErr(err)
 	lastID, err := sqlResult.LastInsertId()
 	sqlText = "insert into documentation_set (listID, docID, position) values (?,?,?)"

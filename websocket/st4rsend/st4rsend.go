@@ -15,7 +15,7 @@ import (
 
 // st4rsend reserved variables:
 // Initial Error Level, the higher the more verbose (syslog based ; 0 -> silent ; 7 -> debug)
-var ErrorLevel int = 4
+var ErrorLevel int = 6
 // Global error management
 // Purpose is defining global error verbosity for non managed errors
 // Hence standard error handling to be performed before call to CheckErr
@@ -34,11 +34,11 @@ func CheckErr(err error) (ret error){
 				return err
 			}
 		}
-		if ErrorLevel > 5 {
-			log.Fatal(err)
-		}
-		if ErrorLevel > 3  {
+		if ErrorLevel > 5  {
 			panic(err)
+		}
+		if ErrorLevel > 3 {
+			log.Fatal(err)
 		}
 	}
 	return err
