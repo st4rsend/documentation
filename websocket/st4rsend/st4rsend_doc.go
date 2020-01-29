@@ -226,6 +226,7 @@ func WsSrvDocUpdate(wsContext *WsContext, message *WsMessage) (err error){
 	}
 	if (wsContext.Verbose > 4) {
 		fmt.Printf("\nProcessing SQL Doc update: %+v\n",doc)
+		fmt.Printf("child2ListID: %v\n", doc.child2ListID)
 	}
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)

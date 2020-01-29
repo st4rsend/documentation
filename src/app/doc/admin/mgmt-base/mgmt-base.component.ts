@@ -77,7 +77,6 @@ export class MgmtBaseComponent implements OnInit {
 	listFinderEvent(event$: {key: number, value: string}) {
 		this.listKey = event$.key;
 		this.selectedList = event$.value;
-		console.log("selected list: ", event$);
 		this.docService.SelectArticlesShort(this.listKey);
 		this.themeEditFlag = false;
 		this.themeEdit = "Change theme";
@@ -155,7 +154,6 @@ export class MgmtBaseComponent implements OnInit {
 	}
 
 	articleEdit() {
-		console.log("Editing article: ", this.articleID);
 		this.EditItemDocComponent.clear();
 		const factory = this.resolver.resolveComponentFactory(EditItemDocComponent);
 		this.articleEditComponentRef = this.EditItemDocComponent.createComponent(factory);
@@ -167,7 +165,6 @@ export class MgmtBaseComponent implements OnInit {
 	}
 
 	itemDocCloseEvent(altered: boolean) {
-		console.log("destroying");
 		this.articleEditComponentRef.destroy();
 	}
 }

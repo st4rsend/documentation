@@ -9,7 +9,7 @@ import { ListSelectComponent } from '../../../shared/component/list-select/list-
 export class ListSelectDocComponent implements OnInit {
 
 	@ViewChild('docList', {static: true}) docList: ListSelectComponent;
-	@Output() selectedListEvent = new EventEmitter<number>();
+	@Output() selectedListEvent = new EventEmitter<{key: number, value: string}>();
 
 	public docListTable: string = 'documentation_list';
 	public docListIDName: string = 'ID';
@@ -32,25 +32,30 @@ export class ListSelectDocComponent implements OnInit {
 		this.docList.isReady$.subscribe(
 			ready => {
 				if ( ready ) {
-					this.newListID = this.docList.list[0].idx;;
+					console.log(this.docList.list.values().next());
+					//this.newListID = this.docList.list[0].idx;;
+					//this.newListID = this.docList.values().next();;
 				}
 			});
   }
 
-	docThemeChange(themeID: number) {
-		if ( themeID == 0) {
+	docThemeChangeEvent(theme: {key: number, value: string}) {
+		if ( theme.key == 0) {
 			this.docList.RemoveFilter();
 		}
 		else {
-			this.docList.SetFilter(this.docListFilter, themeID.toString());
+			this.docList.SetFilter(this.docListFilter, String(theme.key));
 		}
 	}
 
-	docListChange(listID: number) {
-		this.newListID = listID;
+	docListChangeEvent(list: {key: number, value: string}) {
+		this.newListID = list.key;
 	}
 
 	confirmListID() {
-		this.selectedListEvent.emit(this.newListID);
+		this.selectedListEvent.emit({
+			key: this.newListID, 
+			value: this.docList.list.get(this.newListID)
+		});
 	}
 }

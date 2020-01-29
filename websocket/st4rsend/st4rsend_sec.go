@@ -127,7 +127,7 @@ func WsSrvSecLogout(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
 	wsContext.SecUserID = 0
 	wsContext.SecGroupIDs = nil
-	if ( wsContext.Verbose > 5 ) {
+	if ( wsContext.Verbose > 4 ) {
 		fmt.Printf("USER LOGOUT\n")
 	}
 	return err
@@ -157,7 +157,7 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 	message.Payload.Data = nil
 	message.Payload.Data = make([]string,1)
 	if CheckPasswordHash(password, hash) {
-		if ( wsContext.Verbose > 5 ) {
+		if ( wsContext.Verbose > 4 ) {
 			fmt.Printf("LOGIN SUCCESS UID: %d, firstname: %s, lastname: %s\n",
 				UID, firstName, lastName)
 		}
@@ -169,7 +169,7 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 		CheckErr(err)
 	} else {
 		wsContext.SecUserID = 0
-		if ( wsContext.Verbose > 5 ) {
+		if ( wsContext.Verbose > 4 ) {
 			fmt.Printf("LOGIN FAILED\n")
 		}
 		wsContext.Status.Level = "SECURITY"
@@ -210,7 +210,7 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 		err = rows.Scan(&UID, &identity, &firstName, &lastName)
 		CheckErr(err)
 	}
-	if ( wsContext.Verbose > 5 ) {
+	if ( wsContext.Verbose > 4 ) {
 		fmt.Printf("GetSecInfo\n")
 		fmt.Printf("User ID: %s, name: %s %s\n", UID, firstName, lastName)
 	}
@@ -239,7 +239,7 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 	for rowsGroup.Next() {
 		err = rowsGroup.Scan(&groupID, &groupDescription, &groupPosition)
 		CheckErr(err)
-		if ( wsContext.Verbose > 5 ) {
+		if ( wsContext.Verbose > 4 ) {
 			fmt.Printf("Member of group ID: %d, groupName: %s, position %d\n", groupID, groupDescription, groupPosition)
 		}
 		message.Payload.Data[0] = strconv.FormatInt(groupID,10)

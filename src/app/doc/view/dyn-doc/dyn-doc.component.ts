@@ -55,7 +55,7 @@ export class DynDocComponent implements OnChanges {
 		}
   }
 
-	private itemDocCloseEvent(value: boolean) {
+	itemDocCloseEvent(value: boolean) {
 		this.creating = false;
 	}
 

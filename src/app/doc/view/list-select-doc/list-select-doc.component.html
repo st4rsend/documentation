@@ -6,7 +6,7 @@
 		[listColumn]="docThemeColumn"
 		[listPosition]="docThemePosition"
 		[hasVoid]="true"
-		(listChangeEvent)='docThemeChange($event)'>
+		(listChangeEvent)='docThemeChangeEvent($event)'>
 	</app-list-select>
 	Select Doc
 	<app-list-select #docList
@@ -14,7 +14,7 @@
 		[listIDName]="docListIDName"
 		[listColumn]="docListColumn"
 		[listPosition]="docListPosition"
-		(listChangeEvent)='docListChange($event)'>
+		(listChangeEvent)='docListChangeEvent($event)'>
 	</app-list-select>
 	<button (click)="confirmListID();">Confirm list</button>
 </div>

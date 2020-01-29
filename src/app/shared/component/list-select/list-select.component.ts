@@ -51,7 +51,7 @@ export class ListSelectComponent implements OnInit {
 	}
 
 	listChange() {
-		this.listChangeEvent.emit({key: this.listID, value: this.list.get(this.listID)});
+		this.listChangeEvent.emit({key: this.listID, value: this.list.get(+this.listID)});
 	}
 
 	getList() {

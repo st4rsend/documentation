@@ -71,6 +71,7 @@ export class EditItemDocComponent implements OnInit {
 		} else {
 			this.listTypeSelected = false;
 		}
+		console.log("this.doc.type2ID: ", this.doc);
 		if (this.doc.type2ID == 4) {
 			this.listType2Selected = true;
 		} else {
@@ -89,7 +90,6 @@ export class EditItemDocComponent implements OnInit {
 			this.docService.isReadyArticle$.subscribe(
 				ready => {
 					if (ready) {
-						console.log("READY ARTICLE");
 						this.itemDoc = this.docService.getArticle();
 						this.reset();
 					}
@@ -112,7 +112,6 @@ export class EditItemDocComponent implements OnInit {
 	} 
 
 	docTypeChange() {
-		//console.log("doc type change");
 		this.doc.typeID = this.docTypeID;
 		if (this.docTypeID == 4) {
 			this.listTypeSelected = true;
@@ -121,7 +120,6 @@ export class EditItemDocComponent implements OnInit {
 		}
 	}
 	docType2Change() {
-		//console.log("doc type change");
 		this.doc.type2ID = this.docType2ID;
 		if (this.docType2ID == 4) {
 			this.listType2Selected = true;
@@ -133,11 +131,11 @@ export class EditItemDocComponent implements OnInit {
 		this.doc.displayID = this.docDisplayID;
 	}
 
-	selectedListEvent(listID: number) {
-		this.doc.childListID = listID;
+	selectedListEvent(list: {key: number, value: string}) {
+		this.doc.childListID = list.key;
 	}
-	selectedList2Event(listID: number) {
-		this.doc.child2ListID = listID;
+	selectedList2Event(list: {key: number, value: string}) {
+		this.doc.child2ListID = list.key;
 	}
 
 	reset() {
@@ -152,10 +150,6 @@ export class EditItemDocComponent implements OnInit {
 			this.doc = new Doc(0, 0, "", 1, "TEXT", "", 0, 1, "TEXT", "", 0, 1, "Double");
 			this.docTypeID = 1;
 			this.docType2ID = 1;
-		}
-		if (this.itemDocIdx != null) {
-			console.log ("ITEMDOCEDIT IDX: ", this.itemDocIdx);
-			console.log ("DOC LIST ID: ", this.docService.getDocListID());
 		}
 	}
 
