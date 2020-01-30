@@ -151,6 +151,8 @@ export class EditItemDocComponent implements OnInit {
 			this.docTypeID = 1;
 			this.docType2ID = 1;
 		}
+		this.docTypeChange();
+		this.docType2Change();
 	}
 
 	fromFileA(file) {
