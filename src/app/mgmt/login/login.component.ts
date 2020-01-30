@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit {
 		});
 		//this.authService.connected().pipe(first()).subscribe(x => {
 		this.authService.connected().subscribe(x => {
-			console.log("X: ", x);
 			if (x > 0) {
 				this.loginCloseEvent.emit("true");
 			}

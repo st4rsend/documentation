@@ -19,13 +19,12 @@ export class AuthenticationService {
 	private message: Array<string>;
 
 	isReady$ = new Subject<boolean>();
-	authSub: Subscription;
+	loginSub: Subscription;
+	registerSub: Subscription;
 
   constructor( 
 		private webSocketSvc: WebSocketService,
-		private globalSvc: GlobalService ) {
-//		console.log("creating authentication service");
-	 }
+		private globalSvc: GlobalService ) { }
 
 	public connected() {
 		return this.userIDSubject$.asObservable();
@@ -44,9 +43,9 @@ export class AuthenticationService {
 	public loginChallenge(user: string, password: string) {
 		this.userID = 0;
 		this.isReady$.next(false);
-		if ((this.authSub === undefined) || (this.authSub.closed === true)) {
-			this.authSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
-				this.parseAuth(msg);
+		if ((this.loginSub === undefined) || (this.loginSub.closed === true)) {
+			this.loginSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
+				this.authParse(msg);
 			});
 		}
 		this.command = "LOGIN";
@@ -55,15 +54,29 @@ export class AuthenticationService {
 		this.webSocketSvc.webSocketSubject.next(message1);
 	}
 
-	public registerUser(user: string, password: string, eMail: string) {
+	public registerUser(user: string, password: string, firstname: string, lastname: string, eMail: string) {
 		console.log("Registering\nUser: ", user,"\npassword: ", password,"\ne-mail: ",eMail);
+		this.isReady$.next(false);
+		if ((this.registerSub === undefined) || (this.registerSub.closed === true)) {
+			this.registerSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
+				this.authParse(msg);
+			});
+		}
+		this.command = "REGISTER";
+		this.message = [user, password, firstname, lastname, eMail];
+		let message1 = this.webSocketSvc.prepareMessage(
+			this.channelID,
+			this.domain,
+			this.command,
+			this.message);
+		this.webSocketSvc.webSocketSubject.next(message1);
 	}
 
 	public getUserInfo(UID: number) {
 		this.isReady$.next(false);
-		if ((this.authSub === undefined) || (this.authSub.closed === true)) {
-			this.authSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
-				this.parseAuth(msg);
+		if ((this.loginSub === undefined) || (this.loginSub.closed === true)) {
+			this.loginSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
+				this.authParse(msg);
 			});
 		}
 		this.message = [];
@@ -74,9 +87,9 @@ export class AuthenticationService {
 
 	public setPassword(oldPassword: string, newPassword: string) {
 		this.isReady$.next(false);
-		if ((this.authSub === undefined) || (this.authSub.closed === true)) {
-			this.authSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
-				this.parseAuth(msg);
+		if ((this.loginSub === undefined) || (this.loginSub.closed === true)) {
+			this.loginSub = this.webSocketSvc.webSocketSubject.subscribe((msg) => {
+				this.authParse(msg);
 			});
 		}
 		this.message = [];
@@ -85,7 +98,7 @@ export class AuthenticationService {
 		this.webSocketSvc.webSocketSubject.next(message);
 	}
 
-	private parseAuth(msg: wsMessage) {
+	private authParse(msg: wsMessage) {
 
 		if ((+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SEC")) {
 			if (msg.payload.command === "RESP_LOGIN") {
@@ -116,10 +129,15 @@ export class AuthenticationService {
 			}
 		
 		}
+		if ((+msg.payload.channelid === this.channelID) && (msg.payload.domain === "SEC")) {
+			if (msg.payload.command === "RESP_REGISTER") {
+				console.log("RESP_REGISTER: ", msg.payload.data);
+			}
+		}
 		if ((+msg.payload.channelid == this.channelID) && (msg.payload.command === "EOF"))	{
 //			console.log ("parseAuth EOF");
 			this.isReady$.next(true);
-			this.authSub.unsubscribe();
+			this.loginSub.unsubscribe();
 		}
 	}
 }

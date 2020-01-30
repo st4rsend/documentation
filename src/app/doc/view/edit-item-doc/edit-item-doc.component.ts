@@ -71,7 +71,6 @@ export class EditItemDocComponent implements OnInit {
 		} else {
 			this.listTypeSelected = false;
 		}
-		console.log("this.doc.type2ID: ", this.doc);
 		if (this.doc.type2ID == 4) {
 			this.listType2Selected = true;
 		} else {

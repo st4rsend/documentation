@@ -23,6 +23,22 @@
 						[ngClass]="{'is-invalid':submitted && formControls.password.errors }"/>
 			</mat-form-field>
 			<mat-form-field apparence="outline">
+				<mat-label>Firstname</mat-label>
+					<input
+						formControlName="firstname"
+						matInput
+						class="form-control"
+						[ngClass]="{'is-invalid':submitted && formControls.firstname.errors }"/>
+			</mat-form-field>
+			<mat-form-field apparence="outline">
+				<mat-label>Lastname</mat-label>
+					<input
+						formControlName="lastname"
+						matInput
+						class="form-control"
+						[ngClass]="{'is-invalid':submitted && formControls.lastname.errors }"/>
+			</mat-form-field>
+			<mat-form-field apparence="outline">
 				<mat-label>e-mail</mat-label>
 					<input email
 						formControlName="eMail"

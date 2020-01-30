@@ -24,6 +24,8 @@ export class RegisterComponent implements OnInit {
 		this.registerForm = this.formBuilder.group({
 			username: ['', Validators.required],
 			password: ['', Validators.required],
+			firstname: [''],
+			lastname: [''],
 			eMail: ['', Validators.required]
 		});
   }
@@ -39,6 +41,8 @@ export class RegisterComponent implements OnInit {
 		this.authService.registerUser(
 			this.formControls.username.value,
 			this.formControls.password.value,
+			this.formControls.firstname.value,
+			this.formControls.lastname.value,
 			this.formControls.eMail.value);
 	}
 	

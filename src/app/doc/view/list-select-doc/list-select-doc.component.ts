@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ListSelectComponent } from '../../../shared/component/list-select/list-select.component';
 
 @Component({
@@ -9,6 +9,7 @@ import { ListSelectComponent } from '../../../shared/component/list-select/list-
 export class ListSelectDocComponent implements OnInit {
 
 	@ViewChild('docList', {static: true}) docList: ListSelectComponent;
+	@Input() docListID: string;
 	@Output() selectedListEvent = new EventEmitter<{key: number, value: string}>();
 
 	public docListTable: string = 'documentation_list';
@@ -33,6 +34,7 @@ export class ListSelectDocComponent implements OnInit {
 			ready => {
 				if ( ready ) {
 					console.log(this.docList.list.values().next());
+					this.docList.listID = +this.docListID;
 					//this.newListID = this.docList.list[0].idx;;
 					//this.newListID = this.docList.values().next();;
 				}

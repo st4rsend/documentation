@@ -66,6 +66,9 @@ func WsSrvSecParseMsg(wsContext *WsContext, message *WsMessage) (err error) {
 	if message.Payload.Command == "LOGIN" {
 		err = WsSrvSecLogin(wsContext, message)
 	}
+	if message.Payload.Command == "REGISTER" {
+		err = WsSrvSecRegister(wsContext, message)
+	}
 	if message.Payload.Command == "SET_PWD" {
 		err = WsSrvSecSetUserPassword(wsContext, message)
 	}
@@ -184,6 +187,35 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 	return err
 }
 
+func WsSrvSecRegister(wsContext *WsContext, message *WsMessage) (err error) {
+	err = nil
+	var user = message.Payload.Data[0]
+	var password = message.Payload.Data[1]
+	var firstname = message.Payload.Data[2]
+	var lastname = message.Payload.Data[3]
+	var eMail = message.Payload.Data[4]
+	var sqlText string = "insert into users (identity, password, firstname, lastname, eMail) values (?,?,?,?,?)"
+	hash, err := HashPassword(password)
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	result, err := wsContext.Db.ExecContext(localContext, sqlText,
+		user,
+		hash,
+		firstname,
+		lastname,
+		eMail)
+	CheckErr(err)
+	rows, err := result.RowsAffected()
+	CheckErr(err)
+	if rows != 1 {
+		fmt.Printf("REGISTER USER: expected single row affected, got %d rows affected\n", rows)
+	} else {
+		fmt.Printf("User registered")
+	}
+	return err
+}
+
 func WsSrvSecGetToken(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
 	fmt.Printf("GetSecToken\n")
@@ -258,7 +290,7 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 func secGroupIDsPopulate(wsContext *WsContext, UID int64) (err error) {
 	err = nil
 	var sqlGroupID int64
-	var sqlText = "select G.ID from users U left join usergroup UG on U.ID=UG.userID left join groups G on UG.groupID=G.ID where U.ID=?"
+	var sqlText = "select G.ID from users U left join usergroup UG on U.ID=UG.userID left join groups G on UG.groupID=G.ID where U.ID=? and G.ID is not null"
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)

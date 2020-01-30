@@ -53,7 +53,8 @@
 			</div>
 			<div *ngIf="listTypeSelected" class="flex-bar">
 				<app-list-select-doc 
-					(selectedListEvent)='selectedListEvent($event)'>
+					(selectedListEvent)='selectedListEvent($event)'
+					[docListID]=doc.childListID>
 				</app-list-select-doc>
 				<mat-form-field appearance="outline" >
 					<mat-label>ChildListID</mat-label>
@@ -93,7 +94,8 @@
 			</div>
 			<div *ngIf="listType2Selected" class="flex-bar">
 				<app-list-select-doc 
-					(selectedListEvent)='selectedList2Event($event)'>
+					(selectedListEvent)='selectedList2Event($event)'
+					[docListID]=doc.child2ListID>
 				</app-list-select-doc>
 				<mat-form-field appearance="outline" >
 					<mat-label>Child2ListID</mat-label>
