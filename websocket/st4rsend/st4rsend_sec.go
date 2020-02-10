@@ -189,6 +189,9 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 
 func WsSrvSecRegister(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
+
+	//fmt.Printf("RegisterDelayORegisterK %v\n", st4rsend.registerDelayOK)
+
 	var user = message.Payload.Data[0]
 	var password = message.Payload.Data[1]
 	var firstname = message.Payload.Data[2]

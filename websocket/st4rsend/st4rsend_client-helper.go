@@ -1,4 +1,5 @@
 package st4rsend
+/*
 import (
 	"crypto/tls"
 	"io"
@@ -59,3 +60,4 @@ func WsSendCMD(wsContext *WsContext, cmd *string) (err error){
 	CheckErr(err)
 	return err
 }
+*/

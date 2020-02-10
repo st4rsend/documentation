@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"log"
 	"time"
-	"golang.org/x/net/websocket"
+	"net/http"
 	//"crypto/tls"
 	"database/sql"
 	"github.com/go-sql-driver/mysql"
+	"github.com/gorilla/websocket"
 	"strconv"
+	"strings"
 )
 
 // st4rsend reserved variables:
@@ -106,13 +108,32 @@ type WsSQLSelect struct{
 // WebSocket Handler
 var handlerIndex int64 = 0
 
-func WsHandler(ws *websocket.Conn) {
+var gorillaUpgrader = websocket.Upgrader{
+	ReadBufferSize: 1024,
+	WriteBufferSize: 1024,
+	CheckOrigin:  func(r *http.Request) bool {
+		for _, header := range r.Header["Origin"] {
+			if strings.Contains(header,"st4rsend.net") {
+				return true
+			}
+		}
+		fmt.Printf("Origin header mismatch, received %v\n", r.Header["Origin"])
+		return false
+	},
+}
+
+func WsHandler(w http.ResponseWriter, r *http.Request) {
 	var wsContext WsContext
 	var err error
 
+	wsContext.Conn, err = gorillaUpgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("Upgrader error: %v\n", err)
+		return
+	}
+
 	handlerIndex++
 
-	wsContext.Conn = ws
 	wsContext.Sequence = 0
 	wsContext.Verbose = ErrorLevel
 	wsContext.HandlerIndex = handlerIndex
@@ -144,7 +165,7 @@ func WsHandler(ws *websocket.Conn) {
 	for {
 		var receivedMessage WsMessage
 
-		err := websocket.JSON.Receive(ws, &receivedMessage)
+		err := wsContext.Conn.ReadJSON(&receivedMessage)
 		if err == nil {
 			err := WsSrvParseMsg(&wsContext, &receivedMessage)
 			CheckErr(err)
@@ -258,7 +279,7 @@ func sendMessage(wsContext *WsContext, payload *ComEncap) (err error){
 			SecSinceEpoch: now.Unix(),
 			NanoSec: int64(now.Nanosecond())},
 		Payload: *payload}
-	err = websocket.JSON.Send(wsContext.Conn, &message)
+	err = wsContext.Conn.WriteJSON(&message)
 	CheckErr(err)
 	if wsContext.Verbose > 6 {
 		fmt.Printf("Sending: %v\n", message)
