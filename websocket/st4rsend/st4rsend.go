@@ -3,7 +3,6 @@ package st4rsend
 import (
 	// io needed for EOF error generation
 	//"io"
-	"fmt"
 	"log"
 	"time"
 	"net/http"
@@ -106,8 +105,7 @@ type WsSQLSelect struct{
 
 // Services
 // WebSocket Handler
-var handlerIndex int64 = 0
-
+// Gorilla websocket upgrader
 var gorillaUpgrader = websocket.Upgrader{
 	ReadBufferSize: 1024,
 	WriteBufferSize: 1024,
@@ -117,14 +115,31 @@ var gorillaUpgrader = websocket.Upgrader{
 				return true
 			}
 		}
-		fmt.Printf("Origin header mismatch, received %v\n", r.Header["Origin"])
+		log.Printf("Origin header mismatch, received %v\n", r.Header["Origin"])
 		return false
 	},
 }
 
-func WsHandler(w http.ResponseWriter, r *http.Request) {
+var handlerIndex int64 = 0
+
+//	Global rate limiter (milliseconds)
+type GlobalLimiter struct {
+	UserCreationRate int64
+	UserCreationGranted bool
+	UserLoginRate int64
+	UserLoginGranted bool
+}
+
+type SpecificHandler struct {
+	Limiter GlobalLimiter
+}
+
+//func WsHandler(w http.ResponseWriter, r *http.Request) {
+func (limiters *SpecificHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var wsContext WsContext
 	var err error
+
+	log.Printf("Limiters: %v\n", limiters)
 
 	wsContext.Conn, err = gorillaUpgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -151,11 +166,11 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 	CheckErr(err)
 
 	if wsContext.Verbose > 4 {
-		fmt.Printf("Handler %d activated\n", wsContext.HandlerIndex)
+		log.Printf("Handler %d activated\n", wsContext.HandlerIndex)
 	}
 	defer	func() {
 		if wsContext.Verbose > 4 {
-			fmt.Printf("Handler %d closed\n", wsContext.HandlerIndex);
+			log.Printf("Handler %d closed\n", wsContext.HandlerIndex);
 		}
 	}()
 
@@ -172,29 +187,37 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 			if wsContext.Status.Level != "NONE" {
 				err = sendStatus(&wsContext, &receivedMessage)
 				if err != nil {
-					log.Printf("Error sending status: %s",err)
+					log.Printf("Error sending status: %v",err)
 				}
 			}
 			if err != nil {
-				log.Printf("Handler level error: %s",err)
+				log.Printf("Error WsSrvparseMsg: %v",err)
 			}
 			if wsContext.Verbose > 6 {
-				fmt.Printf("Received: %v\n", receivedMessage)
+				log.Printf("Received: %v\n", receivedMessage)
 			}
 		}
-		if err != nil && err.Error() == "EOF" {
-			if wsContext.Verbose > 4 {
-				fmt.Printf("EOF received handler %d\n", wsContext.HandlerIndex)
+		if err != nil {
+			if websocket.IsCloseError(err, 1005) {
+				if wsContext.Verbose > 4 {
+					log.Printf("Websocket closed by client for handler %d\n", wsContext.HandlerIndex)
+				}
+				break
+			}
+			if websocket.IsUnexpectedCloseError(err, 1005) {
+				if wsContext.Verbose > 4 {
+					log.Printf("Error WebSocket Unexpected close error code %v\nTODO: NEW close error case to be handled %d\n", err, wsContext.HandlerIndex)
+				}
+				break
+			}
+		}
+		if wsContext.HbtHoldTimeOK == false {
+			if wsContext.Verbose > 3 {
+				log.Printf("Heartbeat holdtime timeout for handler %d\n", wsContext.HandlerIndex)
 			}
 			break
 		}
 		CheckErr(err)
-		if wsContext.HbtHoldTimeOK == false {
-			if wsContext.Verbose > 3 {
-				fmt.Printf("Heartbeat holdtime timeout for handler %d\n", wsContext.HandlerIndex)
-			}
-			break
-		}
 	}
 }
 
@@ -265,7 +288,7 @@ func WsSrvCMDParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "VERBOSITY" {
 		wsContext.Verbose, err = strconv.Atoi(message.Payload.Data[0])
 		if wsContext.Verbose > 4 {
-			fmt.Printf("Vervosity set to: %d for Handler %d\n", wsContext.Verbose, wsContext.HandlerIndex)
+			log.Printf("Vervosity set to: %d for Handler %d\n", wsContext.Verbose, wsContext.HandlerIndex)
 		}
 	}
 	return err
@@ -282,7 +305,7 @@ func sendMessage(wsContext *WsContext, payload *ComEncap) (err error){
 	err = wsContext.Conn.WriteJSON(&message)
 	CheckErr(err)
 	if wsContext.Verbose > 6 {
-		fmt.Printf("Sending: %v\n", message)
+		log.Printf("Sending: %v\n", message)
 	}
 
 	wsContext.Sequence += 1
@@ -298,10 +321,8 @@ func sendStatus(wsContext *WsContext, message *WsMessage) (err error){
 	message.Payload.Data[1] = wsContext.Status.Level
 	message.Payload.Data[2] = wsContext.Status.Info
 	err = sendMessage(wsContext, &message.Payload)
-	fmt.Printf("Send status : %v\n", message.Payload)
-		if err != nil {
-			return err
-	}
+	CheckErr(err)
+	log.Printf("Send status : %v\n", message.Payload)
 	return err
 }
 

@@ -1,7 +1,7 @@
 package st4rsend
 
 import (
-	"fmt"
+	"log"
 	"strconv"
 	"context"
 	"database/sql"
@@ -41,42 +41,42 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 		if granted, _ := WsDocSecArticleInsert(wsContext, message) ; granted {
 			err = WsSrvDocInsert(wsContext, message)
 		} else {
-			fmt.Printf("Write denied, error: %v\n", err)
+			log.Printf("Write denied, error: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "UPDATE_DOC" {
 		if granted, _ := WsDocSecArticleWrite(wsContext, message) ; granted {
 			err = WsSrvDocUpdate(wsContext, message)
 		} else {
-			fmt.Printf("Write denied, error: %v\n", err)
+			log.Printf("Write denied, error: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "UPDATE_DOC_POS" {
 		if granted, _ := WsDocSecListWrite(wsContext, message) ; granted {
 			err = WsSrvDocUpdatePos(wsContext, message)
 		} else {
-			fmt.Printf("Write denied, error: %v\n", err)
+			log.Printf("Write denied, error: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "DELETE_ARTICLE_LIST" {
 		if granted, _ := WsDocSecListWrite(wsContext, message) ; granted {
 			err = WsSrvDocDeleteArticleList(wsContext, message)
 		} else {
-			fmt.Printf("Write denied, error: %v\n", err)
+			log.Printf("Write denied, error: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "ADD_ARTICLE_LIST" {
 		if granted, _ := WsDocSecListWrite(wsContext, message) ; granted {
 			err = WsSrvDocAddArticleList(wsContext, message)
 		} else {
-			fmt.Printf("Write denied, error: %v\n", err)
+			log.Printf("Write denied, error: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "UPDATE_LIST_THEME" {
 		if granted, _ := WsDocSecListWrite(wsContext, message) ; granted {
 			err = WsSrvDocUpdateListTheme(wsContext, message)
 		} else {
-			fmt.Printf("Write denied, error: %v\n", err)
+			log.Printf("Write denied, error: %v\n", err)
 		}
 	}
 	CheckErr(err)
@@ -96,7 +96,7 @@ func WsSrvDocUpdatePos(wsContext *WsContext, message *WsMessage) (err error){
 	position= message.Payload.Data[2]
 	sqlText := "update documentation_set D set position=? where D.listID=? and D.docID=?"
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Updating documentation_set\n")
+		log.Printf("Updating documentation_set\n")
 	}
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
@@ -124,7 +124,7 @@ func WsSrvDocDeleteArticleList(wsContext *WsContext, message *WsMessage) (err er
 	sqlText := "delete from documentation_set where listID=? and docID=?"
 
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Delete from documentation_set \n")
+		log.Printf("Delete from documentation_set \n")
 	}
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
@@ -150,7 +150,7 @@ func WsSrvDocAddArticleList(wsContext *WsContext, message *WsMessage) (err error
 	sqlText := "insert into documentation_set (ID, listID, docID) values (0, ?, ?)"
 
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Insert into documentation_set \n")
+		log.Printf("Insert into documentation_set \n")
 	}
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
@@ -179,7 +179,7 @@ func WsSrvDocUpdateListTheme(wsContext *WsContext, message *WsMessage) (err erro
 	}
 	sqlText := "update documentation_list D set themeID=? where D.ID=?"
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Updating documentation_list \n")
+		log.Printf("Updating documentation_list \n")
 	}
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
@@ -224,9 +224,9 @@ func WsSrvDocUpdate(wsContext *WsContext, message *WsMessage) (err error){
 	} else {
 		doc.displayID.Valid = true
 	}
-	if (wsContext.Verbose > 4) {
-		fmt.Printf("\nProcessing SQL Doc update: %+v\n",doc)
-		fmt.Printf("child2ListID: %v\n", doc.child2ListID)
+	if (wsContext.Verbose > 5) {
+		log.Printf("Processing SQL Doc update: %+v\n",doc)
+		log.Printf("child2ListID: %v\n", doc.child2ListID)
 	}
 	localContext := context.Background()
 	err = wsContext.Db.PingContext(localContext)
@@ -286,7 +286,7 @@ func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 		doc.displayID.Valid = true
 	}
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Processing SQL documentations Insert\n")
+		log.Printf("Processing SQL documentations Insert\n")
 	}
 	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
 		doc.description,
@@ -303,7 +303,7 @@ func WsSrvDocInsert(wsContext *WsContext, message *WsMessage) (err error){
 	lastID, err := sqlResult.LastInsertId()
 	sqlText = "insert into documentation_set (listID, docID, position) values (?,?,?)"
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Processing SQL documentation_set\n")
+		log.Printf("Processing SQL documentation_set\n")
 	}
 	_, err = wsContext.Db.ExecContext(localContext,sqlText,
 		listID,
@@ -333,7 +333,7 @@ func WsSrvGetArticleByID(wsContext *WsContext, message *WsMessage) (err error){
 	for _, line := range response.Data {
 		message.Payload.Data = line
 		if (wsContext.Verbose > 6) {
-			fmt.Printf("Sending SQL data: %v \n", line )
+			log.Printf("Sending SQL data: %v \n", line )
 		}
 		err = sendMessage(wsContext, &message.Payload)
 		CheckErr(err)
@@ -364,7 +364,7 @@ func WsSrvGetDocByID(wsContext *WsContext, message *WsMessage) (err error){
 	for _, line := range response.Data {
 		message.Payload.Data = line
 		if (wsContext.Verbose > 6) {
-			fmt.Printf("Sending SQL data: %v \n", line )
+			log.Printf("Sending SQL data: %v \n", line )
 		}
 		err = sendMessage(wsContext, &message.Payload)
 		CheckErr(err)
@@ -401,7 +401,7 @@ func WsSrvGetDocShortByID(wsContext *WsContext, message *WsMessage) (err error){
 	for _, line := range response.Data {
 		message.Payload.Data = line
 		if (wsContext.Verbose > 6) {
-			fmt.Printf("Sending SQL data: %v \n", line )
+			log.Printf("Sending SQL data: %v \n", line )
 		}
 		err = sendMessage(wsContext, &message.Payload)
 		CheckErr(err)

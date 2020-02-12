@@ -1,13 +1,13 @@
 package st4rsend
 import(
 	"time"
-	"fmt"
+	"log"
 )
 
 func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "HBTINF" {
 		if wsContext.Verbose > 6 {
-			fmt.Printf("Received HeartBeat handler %d\n", wsContext.HandlerIndex)
+			log.Printf("Received HeartBeat handler %d\n", wsContext.HandlerIndex)
 		}
 		StopHBTHoldDownTimer(wsContext)
 		StartHBTHoldDownTimer(wsContext)
@@ -21,7 +21,7 @@ func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 func StartHBTSvc(wsContext *WsContext) (err error){
 	wsContext.HbtTicker = time.NewTicker(time.Duration(wsContext.HbtInterval) * time.Second)
 	if wsContext.Verbose > 5 {
-		fmt.Printf("Starting HeartBeat handler %d\n", wsContext.HandlerIndex)
+		log.Printf("Starting HeartBeat handler %d\n", wsContext.HandlerIndex)
 	}
 	go func() {
 		var message WsMessage
@@ -32,7 +32,7 @@ func StartHBTSvc(wsContext *WsContext) (err error){
 			message.Payload.Command = "HBTINF"
 			message.Payload.Data = nil
 			if wsContext.Verbose > 6 {
-				fmt.Printf("Send HeartBeat handler %d\n", wsContext.HandlerIndex)
+				log.Printf("Send HeartBeat handler %d\n", wsContext.HandlerIndex)
 			}
 			err = sendMessage(wsContext, &message.Payload)
 			CheckErr(err)
@@ -44,7 +44,7 @@ func StartHBTSvc(wsContext *WsContext) (err error){
 	message.Payload.Command = "HBTINF"
 	message.Payload.Data = nil
 	if wsContext.Verbose > 6 {
-		fmt.Printf("Send HeartBeat handler %d\n", wsContext.HandlerIndex)
+		log.Printf("Send HeartBeat handler %d\n", wsContext.HandlerIndex)
 	}
 	err = sendMessage(wsContext, &message.Payload)
 	CheckErr(err)
@@ -53,7 +53,7 @@ func StartHBTSvc(wsContext *WsContext) (err error){
 
 func StopHBTSvc(wsContext *WsContext) (err error){
 	if wsContext.Verbose > 5 {
-		fmt.Printf("Stopping HeartBeat handler %d\n", wsContext.HandlerIndex)
+		log.Printf("Stopping HeartBeat handler %d\n", wsContext.HandlerIndex)
 	}
 	wsContext.HbtTicker.Stop()
 	return nil

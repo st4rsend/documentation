@@ -1,7 +1,7 @@
 package st4rsend
 
 import (
-	"fmt"
+	"log"
 	"golang.org/x/crypto/bcrypt"
 	"database/sql"
 	"context"
@@ -45,7 +45,7 @@ func CheckSec(wsContext *WsContext, domain string, action string) bool {
 	}
 	wsContext.Status.Level = "SECURITY"
 	wsContext.Status.Info = "Change denied for user " + strconv.FormatInt(wsContext.SecUserID, 10)
-	fmt.Printf("change denied\n");
+	log.Printf("change denied\n");
 	return true
 }
 
@@ -99,7 +99,7 @@ func WsSrvSecSetUserPassword(wsContext *WsContext, message *WsMessage) (err erro
 	err = wsContext.Db.PingContext(localContext)
 	CheckErr(err)
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Retrieving password hash for user ID %s", user)
+		log.Printf("Retrieving password hash for user ID %s", user)
 	}
 	sqlText = "select password from users where ID=?"
 	err = wsContext.Db.QueryRowContext(localContext, sqlText, user).Scan(&DBHash)
@@ -109,7 +109,7 @@ func WsSrvSecSetUserPassword(wsContext *WsContext, message *WsMessage) (err erro
 
 		sqlText = "update users set password=? where ID=?"
 		if (wsContext.Verbose > 4) {
-			fmt.Printf("Processing user's password update")
+			log.Printf("Processing user's password update")
 		}
 		result, err := wsContext.Db.ExecContext(localContext,sqlText,
 			newHash,
@@ -118,10 +118,10 @@ func WsSrvSecSetUserPassword(wsContext *WsContext, message *WsMessage) (err erro
 		rows, err := result.RowsAffected()
 		CheckErr(err)
 		if rows != 1 {
-			fmt.Printf("expected single row affected, got %d rows affected\n", rows)
+			log.Printf("expected single row affected, got %d rows affected\n", rows)
 		}
 	} else {
-		fmt.Printf("Password change denied\n")
+		log.Printf("Password change denied\n")
 	}
 	return err
 }
@@ -131,7 +131,7 @@ func WsSrvSecLogout(wsContext *WsContext, message *WsMessage) (err error) {
 	wsContext.SecUserID = 0
 	wsContext.SecGroupIDs = nil
 	if ( wsContext.Verbose > 4 ) {
-		fmt.Printf("USER LOGOUT\n")
+		log.Printf("User logout process\n")
 	}
 	return err
 }
@@ -161,7 +161,7 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 	message.Payload.Data = make([]string,1)
 	if CheckPasswordHash(password, hash) {
 		if ( wsContext.Verbose > 4 ) {
-			fmt.Printf("LOGIN SUCCESS UID: %d, firstname: %s, lastname: %s\n",
+			log.Printf("LOGIN SUCCESS UID: %d, firstname: %s, lastname: %s\n",
 				UID, firstName, lastName)
 		}
 		wsContext.SecUserID = UID
@@ -173,7 +173,7 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 	} else {
 		wsContext.SecUserID = 0
 		if ( wsContext.Verbose > 4 ) {
-			fmt.Printf("LOGIN FAILED\n")
+			log.Printf("LOGIN FAILED\n")
 		}
 		wsContext.Status.Level = "SECURITY"
 		wsContext.Status.Info = "Login failed"
@@ -183,14 +183,14 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 	message.Payload.Command = "EOF"
 	message.Payload.Data = nil
 	err = sendMessage(wsContext, &message.Payload)
-	fmt.Printf("wscontext GIDs: %v\n", wsContext.SecGroupIDs)
+	log.Printf("wscontext GIDs: %v\n", wsContext.SecGroupIDs)
 	return err
 }
 
 func WsSrvSecRegister(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
 
-	//fmt.Printf("RegisterDelayORegisterK %v\n", st4rsend.registerDelayOK)
+	//log.Printf("RegisterDelayORegisterK %v\n", st4rsend.registerDelayOK)
 
 	var user = message.Payload.Data[0]
 	var password = message.Payload.Data[1]
@@ -212,16 +212,16 @@ func WsSrvSecRegister(wsContext *WsContext, message *WsMessage) (err error) {
 	rows, err := result.RowsAffected()
 	CheckErr(err)
 	if rows != 1 {
-		fmt.Printf("REGISTER USER: expected single row affected, got %d rows affected\n", rows)
+		log.Printf("REGISTER USER: expected single row affected, got %d rows affected\n", rows)
 	} else {
-		fmt.Printf("User registered")
+		log.Printf("User registered")
 	}
 	return err
 }
 
 func WsSrvSecGetToken(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
-	fmt.Printf("GetSecToken\n")
+	log.Printf("GetSecToken\n")
 	CheckErr(err)
 	return err
 }
@@ -246,8 +246,8 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 		CheckErr(err)
 	}
 	if ( wsContext.Verbose > 4 ) {
-		fmt.Printf("GetSecInfo\n")
-		fmt.Printf("User ID: %s, name: %s %s\n", UID, firstName, lastName)
+		log.Printf("GetSecInfo\n")
+		log.Printf("User ID: %s, name: %s %s\n", UID, firstName, lastName)
 	}
 	message.Payload.Command = "RESP_USR_INF"
 	message.Payload.Data = nil
@@ -275,7 +275,7 @@ func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 		err = rowsGroup.Scan(&groupID, &groupDescription, &groupPosition)
 		CheckErr(err)
 		if ( wsContext.Verbose > 4 ) {
-			fmt.Printf("Member of group ID: %d, groupName: %s, position %d\n", groupID, groupDescription, groupPosition)
+			log.Printf("Member of group ID: %d, groupName: %s, position %d\n", groupID, groupDescription, groupPosition)
 		}
 		message.Payload.Data[0] = strconv.FormatInt(groupID,10)
 		message.Payload.Data[1] = groupDescription
@@ -338,8 +338,8 @@ func secReadGranted (wsContext *WsContext, secStruct *WsSecStruct) (bool, error)
 }
 
 func secWriteGranted (wsContext *WsContext, secStruct *WsSecStruct) (bool, error) {
-	fmt.Printf("Article secUserID: %d, secGroupID: %d, secGrants: %d\n", secStruct.secUserID, secStruct.secGroupID, secStruct.secGrants)
-	fmt.Printf("ContextUserID: %d, ContextGroupID: %v\n", wsContext.SecUserID, wsContext.SecGroupIDs)
+	log.Printf("Article secUserID: %d, secGroupID: %d, secGrants: %d\n", secStruct.secUserID, secStruct.secGroupID, secStruct.secGrants)
+	log.Printf("ContextUserID: %d, ContextGroupID: %v\n", wsContext.SecUserID, wsContext.SecGroupIDs)
 	var err error = nil
 	var other int64
 	var group int64
@@ -347,7 +347,7 @@ func secWriteGranted (wsContext *WsContext, secStruct *WsSecStruct) (bool, error
 	other = secStruct.secGrants % 10
 	group = ( secStruct.secGrants / 10 ) % 10
 	user = ( secStruct.secGrants / 100 ) % 10
-	fmt.Printf("other: %d, group: %d, user: %d\n", other, group, user)
+	log.Printf("other: %d, group: %d, user: %d\n", other, group, user)
 	if other & 2 == 2 {
 		return true, err
 	}
@@ -369,17 +369,17 @@ func secAdminGranted (wsContext *WsContext, secStruct *WsSecStruct) (granted boo
 	other = secStruct.secGrants % 10
 	group = ( secStruct.secGrants / 10 ) % 10
 	user = ( secStruct.secGrants / 100 ) % 10
-	fmt.Printf("other: %d, group: %d, user: %d\n", other, group, user)
+	log.Printf("other: %d, group: %d, user: %d\n", other, group, user)
 	// confront other 
 	if other & 4 == 4 {
-		fmt.Printf("write granted for other\n")
+		log.Printf("write granted for other\n")
 	}
 	if ( wsContext.SecUserID == secStruct.secUserID ) && ( user & 4 == 4 ) {
-		fmt.Printf("Write granted for user\n")
+		log.Printf("Write granted for user\n")
 	}
 	for _, userGroup := range wsContext.SecGroupIDs {
 		if ( userGroup == secStruct.secGroupID ) && ( group & 4 == 4) {
-			fmt.Printf("Write granted for group\n")
+			log.Printf("Write granted for group\n")
 		}
 	}
 	return false, nil

@@ -2,6 +2,7 @@ package st4rsend
 
 import (
 	"fmt"
+	"log"
 	"regexp"
 	"strconv"
 	"database/sql"
@@ -26,21 +27,21 @@ func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 		if granted, err := WsSecSqlInsert(wsContext, message) ; granted {
 			err = WsSrvInsertSqlList(wsContext, message)
 		} else {
-			fmt.Printf("ERROR: Write denied: %v\n", err)
+			log.Printf("ERROR: Write denied: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "UPDATE_LIST" {
 		if granted, _ := WsSecSqlWrite(wsContext, message.Payload.Data[0], message.Payload.Data[4]) ; granted {
 			err = WsSrvUpdateSqlList(wsContext, message)
 		} else {
-			fmt.Printf("ERROR: Write denied: %v\n", err)
+			log.Printf("ERROR: Write denied: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "DELETE_LIST" {
 		if granted, _ := WsSecSqlWrite(wsContext, message.Payload.Data[0], message.Payload.Data[2]) ; granted {
 			err = WsSrvDeleteSqlList(wsContext, message)
 		} else {
-			fmt.Printf("ERROR: Write denied: %v\n", err)
+			log.Printf("ERROR: Write denied: %v\n", err)
 		}
 	}
 	CheckErr(err)
@@ -99,7 +100,7 @@ func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){
 		"secUserID, secGrants" +
 		") values (?,?,?,?) "
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Processing SQL list Insert\n")
+		log.Printf("Processing SQL list Insert\n")
 	}
 	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
 		message.Payload.Data[3],
@@ -107,7 +108,7 @@ func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){
 		wsContext.SecUserID,764)
 	CheckErr(err)
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Processing SQL LIST result: %v\n", sqlResult)
+		log.Printf("Processing SQL LIST result: %v\n", sqlResult)
 	}
 	return err
 }
@@ -126,13 +127,13 @@ func WsSrvDeleteSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	CheckErr(err)
 	sqlText = "delete from " + table_name + " where " + idx_name + "=?"
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Processing SQL LIST delete\n")
+		log.Printf("Processing SQL LIST delete\n")
 	}
 	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
 		message.Payload.Data[2])
 	CheckErr(err)
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("SQL LIST delete result: %v\n", sqlResult)
+		log.Printf("SQL LIST delete result: %v\n", sqlResult)
 	}
 
 	return err
@@ -154,7 +155,7 @@ func WsSrvUpdateSqlList(wsContext *WsContext, message *WsMessage) (err error){
 	CheckErr(err)
 	sqlText = "update " + table_name + " set " + column_name + "=?, " + position_name + "=? where " + idx_name + "=?"
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("Processing SQL LIST update\n")
+		log.Printf("Processing SQL LIST update\n")
 	}
 	sqlResult, err = wsContext.Db.ExecContext(localContext,sqlText,
 		message.Payload.Data[5],
@@ -162,7 +163,7 @@ func WsSrvUpdateSqlList(wsContext *WsContext, message *WsMessage) (err error){
 		message.Payload.Data[4])
 	CheckErr(err)
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("SQL LIST update result: %v\n", sqlResult)
+		log.Printf("SQL LIST update result: %v\n", sqlResult)
 	}
 	return err
 }
@@ -223,7 +224,7 @@ func WsSrvGetSqlListFlt(wsContext *WsContext, message *WsMessage) (err error){
 			" order by "	+ position_name
 	}
 	if (wsContext.Verbose > 4) {
-		fmt.Printf("ListFK SQLTEXT: %v\n", sqlText)
+		log.Printf("ListFK SQLTEXT: %v\n", sqlText)
 	}
 	rows, err := wsContext.Db.QueryContext(localContext, sqlText)
 	CheckErr(err)
@@ -266,7 +267,7 @@ func rowsToWsSQLSelect(rows *sql.Rows ) (*WsSQLSelect, error) {
 			}
 		}
 		sqlData.Data = append(sqlData.Data, rowValues)
-		//fmt.Printf("selectData TMP: %s\n",sqlData.Data)
+		//log.Printf("selectData TMP: %s\n",sqlData.Data)
 	}
 	return &sqlData, err
 }
