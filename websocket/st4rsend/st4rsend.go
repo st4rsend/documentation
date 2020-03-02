@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/websocket"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 // st4rsend reserved variables:
@@ -96,6 +97,8 @@ type WsContext struct {
 	SecGroupIDs []int64
 	SecToken int64
 	Status WsStatus
+	hbtWg sync.WaitGroup
+	mu sync.Mutex
 }
 
 type WsSQLSelect struct{
@@ -143,7 +146,7 @@ func (limiters *SpecificHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 
 	wsContext.Conn, err = gorillaUpgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Printf("Upgrader error: %v\n", err)
+		log.Printf("Gorilla Upgrader error: %v\n", err)
 		return
 	}
 
@@ -200,11 +203,17 @@ func (limiters *SpecificHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			if websocket.IsCloseError(err, 1005) {
 				if wsContext.Verbose > 4 {
-					log.Printf("Websocket closed by client for handler %d\n", wsContext.HandlerIndex)
+					log.Printf("Websocket 1005 closed by client for handler %d\n", wsContext.HandlerIndex)
 				}
 				break
 			}
-			if websocket.IsUnexpectedCloseError(err, 1005) {
+			if websocket.IsCloseError(err, 1006) {
+				if wsContext.Verbose > 4 {
+					log.Printf("Websocket 1006 abnormal closure for handler %d\n", wsContext.HandlerIndex)
+				}
+				break
+			}
+			if websocket.IsUnexpectedCloseError(err, 1005, 1006) {
 				if wsContext.Verbose > 4 {
 					log.Printf("Error WebSocket Unexpected close error code %v\nTODO: NEW close error case to be handled %d\n", err, wsContext.HandlerIndex)
 				}
@@ -296,19 +305,21 @@ func WsSrvCMDParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 
 func sendMessage(wsContext *WsContext, payload *ComEncap) (err error){
 	now := time.Now()
+	wsContext.mu.Lock()
+	defer wsContext.mu.Unlock()
 	message := WsMessage{
 		Sequence: int64(wsContext.Sequence),
 		Time: TimeStamp{
 			SecSinceEpoch: now.Unix(),
 			NanoSec: int64(now.Nanosecond())},
 		Payload: *payload}
+	wsContext.Sequence += 1
 	err = wsContext.Conn.WriteJSON(&message)
 	CheckErr(err)
 	if wsContext.Verbose > 6 {
 		log.Printf("Sending: %v\n", message)
 	}
 
-	wsContext.Sequence += 1
 	return err
 }
 

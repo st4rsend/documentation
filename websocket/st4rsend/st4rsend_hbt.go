@@ -61,10 +61,15 @@ func StopHBTSvc(wsContext *WsContext) (err error){
 
 func StartHBTHoldDownTimer(wsContext *WsContext) (err error){
 	wsContext.HbtHoldDownTimer = time.NewTimer(time.Second * time.Duration(wsContext.HbtHoldDownTime))
+	wsContext.hbtWg.Add(1)
 	go func() {
+		//wsContext.hbtMutex.RLock()
 		<-wsContext.HbtHoldDownTimer.C
+		wsContext.hbtWg.Done()
 		wsContext.HbtHoldTimeOK = false
+		//wsContext.hbtMutex.RUnlock()
 	}()
+	//wsContext.hbtWg.Wait()
 	return err
 }
 
