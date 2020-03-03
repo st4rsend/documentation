@@ -97,7 +97,9 @@ type WsContext struct {
 	SecGroupIDs []int64
 	SecToken int64
 	Status WsStatus
-	hbtWg sync.WaitGroup
+	chanHbtTimeExpired chan struct{}
+	chanHbtTimeReset chan struct{}
+	chanMessage chan WsMessage
 	mu sync.Mutex
 }
 
@@ -163,6 +165,10 @@ func (limiters *SpecificHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	CheckErr(err)
 	defer wsContext.Db.Close()
 
+	wsContext.chanHbtTimeExpired = make(chan struct{})
+	wsContext.chanHbtTimeReset = make(chan struct{})
+	wsContext.chanMessage = make(chan WsMessage, 10)
+
 	err = StartHBTSvc(&wsContext)
 	CheckErr(err)
 	err = StartHBTHoldDownTimer(&wsContext)
@@ -178,57 +184,62 @@ func (limiters *SpecificHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	}()
 
 	defer StopHBTSvc(&wsContext)
-	defer StopHBTHoldDownTimer(&wsContext)
 
-	for {
-		var receivedMessage WsMessage
-
-		err := wsContext.Conn.ReadJSON(&receivedMessage)
-		if err == nil {
-			err := WsSrvParseMsg(&wsContext, &receivedMessage)
-			CheckErr(err)
-			if wsContext.Status.Level != "NONE" {
-				err = sendStatus(&wsContext, &receivedMessage)
-				if err != nil {
-					log.Printf("Error sending status: %v",err)
-				}
-			}
+	go func(wsContext *WsContext) {
+		for {
+			var receivedMessage WsMessage
+			err := wsContext.Conn.ReadJSON(&receivedMessage)
 			if err != nil {
-				log.Printf("Error WsSrvparseMsg: %v",err)
-			}
-			if wsContext.Verbose > 6 {
-				log.Printf("Received: %v\n", receivedMessage)
-			}
-		}
-		if err != nil {
-			if websocket.IsCloseError(err, 1005) {
-				if wsContext.Verbose > 4 {
-					log.Printf("Websocket 1005 closed by client for handler %d\n", wsContext.HandlerIndex)
+				wsContext.HbtTicker.Stop() // TODO: fix defer call to StopHBTSvc closing ticker too late
+				if websocket.IsCloseError(err, 1005) {
+					if wsContext.Verbose > 4 {
+						log.Printf("Websocket 1005 closed by client for handler %d\n", wsContext.HandlerIndex)
+					}
+					break
 				}
-				break
-			}
-			if websocket.IsCloseError(err, 1006) {
-				if wsContext.Verbose > 4 {
-					log.Printf("Websocket 1006 abnormal closure for handler %d\n", wsContext.HandlerIndex)
+				if websocket.IsCloseError(err, 1006) {
+					if wsContext.Verbose > 4 {
+						log.Printf("Websocket 1006 abnormal closure for handler %d\n", wsContext.HandlerIndex)
+					}
+					break
 				}
-				break
-			}
-			if websocket.IsUnexpectedCloseError(err, 1005, 1006) {
-				if wsContext.Verbose > 4 {
-					log.Printf("Error WebSocket Unexpected close error code %v\nTODO: NEW close error case to be handled %d\n", err, wsContext.HandlerIndex)
+				if websocket.IsUnexpectedCloseError(err, 1005, 1006) {
+					if wsContext.Verbose > 4 {
+						log.Printf("Error WebSocket Unexpected close error code %v\nTODO: NEW close error case to be handled %d\n", err, wsContext.HandlerIndex)
+					}
+					break
 				}
-				break
 			}
+			wsContext.chanMessage <- receivedMessage
 		}
-		if wsContext.HbtHoldTimeOK == false {
-			if wsContext.Verbose > 3 {
-				log.Printf("Heartbeat holdtime timeout for handler %d\n", wsContext.HandlerIndex)
-			}
-			break
+	}(&wsContext)
+
+	loop:
+	for {
+		select {
+			case <-wsContext.chanHbtTimeExpired:
+				log.Printf("HBT HOLD TIME EXPIRED\n")
+				break loop
+			case receivedMessage := <-wsContext.chanMessage:
+				err := WsSrvParseMsg(&wsContext, &receivedMessage)
+				CheckErr(err)
+				if wsContext.Status.Level != "NONE" {
+					err = sendStatus(&wsContext, &receivedMessage)
+					if err != nil {
+						log.Printf("Error sending status: %v",err)
+					}
+				}
+				if err != nil {
+					log.Printf("Error WsSrvparseMsg: %v",err)
+				}
+				if wsContext.Verbose > 6 {
+					log.Printf("Received: %v\n", receivedMessage)
+				}
 		}
-		CheckErr(err)
 	}
+	
 }
+
 
 func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	err = nil
@@ -336,4 +347,3 @@ func sendStatus(wsContext *WsContext, message *WsMessage) (err error){
 	log.Printf("Send status : %v\n", message.Payload)
 	return err
 }
-

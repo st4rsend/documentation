@@ -9,8 +9,7 @@ func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 		if wsContext.Verbose > 6 {
 			log.Printf("Received HeartBeat handler %d\n", wsContext.HandlerIndex)
 		}
-		StopHBTHoldDownTimer(wsContext)
-		StartHBTHoldDownTimer(wsContext)
+		wsContext.chanHbtTimeReset<- struct{}{}
 	}
 	err = nil
 	return err
@@ -25,7 +24,6 @@ func StartHBTSvc(wsContext *WsContext) (err error){
 	}
 	go func() {
 		var message WsMessage
-		//for t := range ticker.C {
 		for range wsContext.HbtTicker.C {
 			message.Payload.ChannelID = 0
 			message.Payload.Domain = "HBT"
@@ -60,20 +58,19 @@ func StopHBTSvc(wsContext *WsContext) (err error){
 }
 
 func StartHBTHoldDownTimer(wsContext *WsContext) (err error){
-	wsContext.HbtHoldDownTimer = time.NewTimer(time.Second * time.Duration(wsContext.HbtHoldDownTime))
-	wsContext.hbtWg.Add(1)
-	go func() {
-		//wsContext.hbtMutex.RLock()
-		<-wsContext.HbtHoldDownTimer.C
-		wsContext.hbtWg.Done()
-		wsContext.HbtHoldTimeOK = false
-		//wsContext.hbtMutex.RUnlock()
-	}()
-	//wsContext.hbtWg.Wait()
+	go func(wsContext *WsContext) {
+		hbtHoldDownTimer := time.NewTimer(time.Second * time.Duration(wsContext.HbtHoldDownTime))
+		loopHbt:
+		for {
+			select {
+				case <-hbtHoldDownTimer.C:
+					wsContext.chanHbtTimeExpired <- struct{}{}
+					break loopHbt
+				case <-wsContext.chanHbtTimeReset:
+					hbtHoldDownTimer.Stop()
+					hbtHoldDownTimer = time.NewTimer(time.Second * time.Duration(wsContext.HbtHoldDownTime))
+			}
+		}
+	}(wsContext)
 	return err
-}
-
-func StopHBTHoldDownTimer(wsContext *WsContext) (err error){
-	wsContext.HbtHoldDownTimer.Stop()
-	return nil
 }
