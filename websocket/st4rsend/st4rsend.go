@@ -17,7 +17,7 @@ import (
 
 // st4rsend reserved variables:
 // Initial Error Level, the higher the more verbose (syslog based ; 0 -> silent ; 7 -> debug)
-var ErrorLevel int = 6
+var ErrorLevel int = 5
 // Global error management
 // Purpose is defining global error verbosity for non managed errors
 // Hence standard error handling to be performed before call to CheckErr
@@ -83,24 +83,25 @@ type WsStatus struct {
 
 // WsContext definition 
 type WsContext struct {
+	mu sync.Mutex
 	Conn *websocket.Conn
 	Db *sql.DB
 	HandlerIndex int64
-	HbtTicker *time.Ticker
-	HbtHoldTimeOK bool
-	HbtHoldDownTimer *time.Timer
-	HbtHoldDownTime int64
-	HbtInterval int64
 	Sequence int64
 	Verbose int
 	SecUserID int64
 	SecGroupIDs []int64
 	SecToken int64
 	Status WsStatus
+	hbtTicker *time.Ticker
+	hbtHoldTimeOK bool
+	hbtHoldDownTimer *time.Timer
+	hbtHoldDownTime int64
+	hbtInterval int64
+	chanWsClosed chan struct{}
+	chanWsMessage chan WsMessage
 	chanHbtTimeExpired chan struct{}
 	chanHbtTimeReset chan struct{}
-	chanMessage chan WsMessage
-	mu sync.Mutex
 }
 
 type WsSQLSelect struct{
@@ -111,6 +112,38 @@ type WsSQLSelect struct{
 // Services
 // WebSocket Handler
 // Gorilla websocket upgrader
+
+var handlerIndex int64 = 0
+var	userRegisterRateTicker *time.Ticker
+var	userLoginRateTicker *time.Ticker
+
+type GlobalConf struct {
+	WsPort int
+	//	Global rate limiter (milliseconds)
+	UserRegisterRate int64
+	UserLoginRate int64
+}
+
+type specificHandler struct {
+	Conf GlobalConf
+}
+
+func ServeWS(conf GlobalConf) {
+	// Starting rate limiter tickers
+	userRegisterRateTicker = time.NewTicker(time.Duration(conf.UserRegisterRate) * time.Millisecond)
+	defer userRegisterRateTicker.Stop()
+	userLoginRateTicker = time.NewTicker(time.Duration(conf.UserLoginRate) * time.Millisecond)
+	defer userLoginRateTicker.Stop()
+	// Starting Http handler
+	wsPortAscii := "localhost:" + strconv.Itoa(conf.WsPort)
+	log.Printf("Starting http server on %s\n", wsPortAscii)
+	http.Handle("/ws", &specificHandler{Conf: conf})
+	err := http.ListenAndServe(wsPortAscii, nil)
+	CheckErr(err)
+
+
+}
+
 var gorillaUpgrader = websocket.Upgrader{
 	ReadBufferSize: 1024,
 	WriteBufferSize: 1024,
@@ -125,26 +158,11 @@ var gorillaUpgrader = websocket.Upgrader{
 	},
 }
 
-var handlerIndex int64 = 0
-
-//	Global rate limiter (milliseconds)
-type GlobalLimiter struct {
-	UserCreationRate int64
-	UserCreationGranted bool
-	UserLoginRate int64
-	UserLoginGranted bool
-}
-
-type SpecificHandler struct {
-	Limiter GlobalLimiter
-}
-
-//func WsHandler(w http.ResponseWriter, r *http.Request) {
-func (limiters *SpecificHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (conf *specificHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var wsContext WsContext
 	var err error
 
-	log.Printf("Limiters: %v\n", limiters)
+	log.Printf("Limiters: %v\n", conf)
 
 	wsContext.Conn, err = gorillaUpgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -157,17 +175,18 @@ func (limiters *SpecificHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	wsContext.Sequence = 0
 	wsContext.Verbose = ErrorLevel
 	wsContext.HandlerIndex = handlerIndex
-	wsContext.HbtHoldTimeOK = true
-	wsContext.HbtInterval = 3
-	wsContext.HbtHoldDownTime = 9
+	wsContext.hbtHoldTimeOK = true
+	wsContext.hbtInterval = 3
+	wsContext.hbtHoldDownTime = 9
 
 	wsContext.Db, err = ConnectSQL(user, password, host, port, database)
 	CheckErr(err)
 	defer wsContext.Db.Close()
 
+	wsContext.chanWsClosed = make(chan struct{})
 	wsContext.chanHbtTimeExpired = make(chan struct{})
 	wsContext.chanHbtTimeReset = make(chan struct{})
-	wsContext.chanMessage = make(chan WsMessage, 10)
+	wsContext.chanWsMessage = make(chan WsMessage, 10)
 
 	err = StartHBTSvc(&wsContext)
 	CheckErr(err)
@@ -175,69 +194,81 @@ func (limiters *SpecificHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	CheckErr(err)
 
 	if wsContext.Verbose > 4 {
-		log.Printf("Handler %d activated\n", wsContext.HandlerIndex)
+		log.Printf("Handler %d, Activated\n", wsContext.HandlerIndex)
 	}
 	defer	func() {
 		if wsContext.Verbose > 4 {
-			log.Printf("Handler %d closed\n", wsContext.HandlerIndex);
+			log.Printf("Handler %d, Closed\n", wsContext.HandlerIndex);
 		}
 	}()
 
 	defer StopHBTSvc(&wsContext)
 
-	go func(wsContext *WsContext) {
+	go func() {
 		for {
 			var receivedMessage WsMessage
 			err := wsContext.Conn.ReadJSON(&receivedMessage)
 			if err != nil {
-				wsContext.HbtTicker.Stop() // TODO: fix defer call to StopHBTSvc closing ticker too late
+				wsContext.hbtTicker.Stop() // TODO: fix defer call to StopHBTSvc closing ticker too late
+				if websocket.IsCloseError(err, 1001) {
+					if wsContext.Verbose > 4 {
+						log.Printf("Handler %d, Websocket code 1001 (going away)\n", wsContext.HandlerIndex)
+					}
+					wsContext.chanWsClosed <- struct{}{}
+					break
+				}
 				if websocket.IsCloseError(err, 1005) {
 					if wsContext.Verbose > 4 {
-						log.Printf("Websocket 1005 closed by client for handler %d\n", wsContext.HandlerIndex)
+						log.Printf("Handler %d, Websocket code 1005 (closed by client)\n", wsContext.HandlerIndex)
 					}
+					wsContext.chanWsClosed <- struct{}{}
 					break
 				}
 				if websocket.IsCloseError(err, 1006) {
 					if wsContext.Verbose > 4 {
-						log.Printf("Websocket 1006 abnormal closure for handler %d\n", wsContext.HandlerIndex)
+						log.Printf("Handler %d, Websocket code 1006 (abnormal closure)\n", wsContext.HandlerIndex)
 					}
+					wsContext.chanWsClosed <- struct{}{}
 					break
 				}
-				if websocket.IsUnexpectedCloseError(err, 1005, 1006) {
+				if websocket.IsUnexpectedCloseError(err, 1001, 1005, 1006) {
 					if wsContext.Verbose > 4 {
-						log.Printf("Error WebSocket Unexpected close error code %v\nTODO: NEW close error case to be handled %d\n", err, wsContext.HandlerIndex)
+						log.Printf("Handler %d, Error WebSocket Unexpected close error code %v\nTODO: NEW close error case to be handled\n", wsContext.HandlerIndex, err)
 					}
+					wsContext.chanWsClosed <- struct{}{}
 					break
 				}
 			}
-			wsContext.chanMessage <- receivedMessage
+			wsContext.chanWsMessage <- receivedMessage
 		}
-	}(&wsContext)
-
+	}()
 	loop:
 	for {
 		select {
-			case <-wsContext.chanHbtTimeExpired:
-				log.Printf("HBT HOLD TIME EXPIRED\n")
+			case <-wsContext.chanWsClosed:
 				break loop
-			case receivedMessage := <-wsContext.chanMessage:
+			case <-wsContext.chanHbtTimeExpired:
+				if wsContext.Verbose > 4 {
+					log.Printf("Handler %d, HeartBeat HoldDown Timer Expired\n", wsContext.HandlerIndex)
+					break loop
+				}
+			case receivedMessage := <-wsContext.chanWsMessage:
 				err := WsSrvParseMsg(&wsContext, &receivedMessage)
 				CheckErr(err)
 				if wsContext.Status.Level != "NONE" {
 					err = sendStatus(&wsContext, &receivedMessage)
 					if err != nil {
-						log.Printf("Error sending status: %v",err)
+						log.Printf("Handler %d, Error sending status: %v", wsContext.HandlerIndex, err)
 					}
 				}
 				if err != nil {
-					log.Printf("Error WsSrvparseMsg: %v",err)
+					log.Printf("Handler %d, Error WsSrvparseMsg: %v", wsContext.HandlerIndex, err)
 				}
 				if wsContext.Verbose > 6 {
-					log.Printf("Received: %v\n", receivedMessage)
+					log.Printf("Handler %d, Received: %v\n", wsContext.HandlerIndex, receivedMessage)
 				}
 		}
 	}
-	
 }
 
 
@@ -306,6 +337,8 @@ func WsSrvINFParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 
 func WsSrvCMDParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "VERBOSITY" {
+		wsContext.mu.Lock()
+		defer wsContext.mu.Unlock()
 		wsContext.Verbose, err = strconv.Atoi(message.Payload.Data[0])
 		if wsContext.Verbose > 4 {
 			log.Printf("Vervosity set to: %d for Handler %d\n", wsContext.Verbose, wsContext.HandlerIndex)

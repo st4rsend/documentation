@@ -146,6 +146,7 @@ export class WebSocketService {
 		}
 		if  ((+msg.payload.channelid === 0) && (msg.payload.domain === "HBT")) {
 			clearTimeout(this.hbtHoldTicker);	
+			console.log("Received HBT");
 			this.hbtHoldTicker = setTimeout(() => {
 				this.hbtHoldFail();
 			}, this.hbtHoldTime);

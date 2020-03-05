@@ -136,6 +136,16 @@ func WsSrvSecLogout(wsContext *WsContext, message *WsMessage) (err error) {
 	return err
 }
 func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
+
+	if ( wsContext.Verbose > 4 ) {
+		log.Printf("Handler %d, Acquiring Login token\n", wsContext.HandlerIndex)
+	}
+	// WARNING: May trigger hold down timer
+	<-userLoginRateTicker.C
+	if ( wsContext.Verbose > 4 ) {
+		log.Printf("Handler %d, Token acquired\n", wsContext.HandlerIndex)
+	}
+
 	err = nil
 	wsContext.SecUserID = 0
 	wsContext.SecGroupIDs = nil
@@ -190,7 +200,14 @@ func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 func WsSrvSecRegister(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
 
-	//log.Printf("RegisterDelayORegisterK %v\n", st4rsend.registerDelayOK)
+	if ( wsContext.Verbose > 4 ) {
+		log.Printf("Handler %d, Acquiring register token\n", wsContext.HandlerIndex)
+	}
+	// WARNING: May trigger hold down timer
+	<-userRegisterRateTicker.C
+	if ( wsContext.Verbose > 4 ) {
+		log.Printf("Handler %d, Register token acquired\n", wsContext.HandlerIndex)
+	}
 
 	var user = message.Payload.Data[0]
 	var password = message.Payload.Data[1]
@@ -225,6 +242,7 @@ func WsSrvSecGetToken(wsContext *WsContext, message *WsMessage) (err error) {
 	CheckErr(err)
 	return err
 }
+
 func WsSrvSecGetUserInfo(wsContext *WsContext, message *WsMessage) (err error) {
 	err = nil
 	if wsContext.SecUserID == 0 {

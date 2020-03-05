@@ -7,7 +7,7 @@ import(
 func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "HBTINF" {
 		if wsContext.Verbose > 6 {
-			log.Printf("Received HeartBeat handler %d\n", wsContext.HandlerIndex)
+			log.Printf("Handler %d, Received HeartBeat\n", wsContext.HandlerIndex)
 		}
 		wsContext.chanHbtTimeReset<- struct{}{}
 	}
@@ -15,23 +15,23 @@ func WsSrvHBTParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	return err
 }
 
-//// HeartBeat(wsContext *WsContext, interval int) (ticker *time.Ticker, err error){
-
 func StartHBTSvc(wsContext *WsContext) (err error){
-	wsContext.HbtTicker = time.NewTicker(time.Duration(wsContext.HbtInterval) * time.Second)
+	wsContext.hbtTicker = time.NewTicker(time.Duration(wsContext.hbtInterval) * time.Second)
 	if wsContext.Verbose > 5 {
-		log.Printf("Starting HeartBeat handler %d\n", wsContext.HandlerIndex)
+		log.Printf("Handler %d, Starting HeartBeat\n", wsContext.HandlerIndex)
 	}
 	go func() {
 		var message WsMessage
-		for range wsContext.HbtTicker.C {
+		for range wsContext.hbtTicker.C {
 			message.Payload.ChannelID = 0
 			message.Payload.Domain = "HBT"
 			message.Payload.Command = "HBTINF"
 			message.Payload.Data = nil
-			if wsContext.Verbose > 6 {
-				log.Printf("Send HeartBeat handler %d\n", wsContext.HandlerIndex)
+			wsContext.mu.Lock()
+			if wsContext.Verbose > 5 {
+				log.Printf("Handler %d, Send HeartBeat\n", wsContext.HandlerIndex)
 			}
+			wsContext.mu.Unlock()
 			err = sendMessage(wsContext, &message.Payload)
 			CheckErr(err)
 		}
@@ -41,8 +41,8 @@ func StartHBTSvc(wsContext *WsContext) (err error){
 	message.Payload.Domain = "HBT"
 	message.Payload.Command = "HBTINF"
 	message.Payload.Data = nil
-	if wsContext.Verbose > 6 {
-		log.Printf("Send HeartBeat handler %d\n", wsContext.HandlerIndex)
+	if wsContext.Verbose > 5 {
+		log.Printf("Handler %d, Send HeartBeat\n", wsContext.HandlerIndex)
 	}
 	err = sendMessage(wsContext, &message.Payload)
 	CheckErr(err)
@@ -51,15 +51,15 @@ func StartHBTSvc(wsContext *WsContext) (err error){
 
 func StopHBTSvc(wsContext *WsContext) (err error){
 	if wsContext.Verbose > 5 {
-		log.Printf("Stopping HeartBeat handler %d\n", wsContext.HandlerIndex)
+		log.Printf("Handler %d, Stopping HeartBeat\n", wsContext.HandlerIndex)
 	}
-	wsContext.HbtTicker.Stop()
+	wsContext.hbtTicker.Stop()
 	return nil
 }
 
 func StartHBTHoldDownTimer(wsContext *WsContext) (err error){
-	go func(wsContext *WsContext) {
-		hbtHoldDownTimer := time.NewTimer(time.Second * time.Duration(wsContext.HbtHoldDownTime))
+	go func() {
+		hbtHoldDownTimer := time.NewTimer(time.Second * time.Duration(wsContext.hbtHoldDownTime))
 		loopHbt:
 		for {
 			select {
@@ -68,9 +68,9 @@ func StartHBTHoldDownTimer(wsContext *WsContext) (err error){
 					break loopHbt
 				case <-wsContext.chanHbtTimeReset:
 					hbtHoldDownTimer.Stop()
-					hbtHoldDownTimer = time.NewTimer(time.Second * time.Duration(wsContext.HbtHoldDownTime))
+					hbtHoldDownTimer = time.NewTimer(time.Second * time.Duration(wsContext.hbtHoldDownTime))
 			}
 		}
-	}(wsContext)
+	}()
 	return err
 }
