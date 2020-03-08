@@ -6,6 +6,8 @@ import (
 	"database/sql"
 	"context"
 	"strconv"
+	"time"
+	"fmt"
 )
 
 type WsSecStruct struct{
@@ -65,9 +67,17 @@ func WsSrvSecParseMsg(wsContext *WsContext, message *WsMessage) (err error) {
 	}
 	if message.Payload.Command == "LOGIN" {
 		err = WsSrvSecLogin(wsContext, message)
+		if err != nil {
+			log.Printf("ERROR: %v", err)
+			err = nil
+		}
 	}
 	if message.Payload.Command == "REGISTER" {
 		err = WsSrvSecRegister(wsContext, message)
+		if err != nil {
+			log.Printf("ERROR: %v", err)
+			err = nil
+		}
 	}
 	if message.Payload.Command == "SET_PWD" {
 		err = WsSrvSecSetUserPassword(wsContext, message)
@@ -135,13 +145,24 @@ func WsSrvSecLogout(wsContext *WsContext, message *WsMessage) (err error) {
 	}
 	return err
 }
+
 func WsSrvSecLogin(wsContext *WsContext, message *WsMessage) (err error) {
 
 	if ( wsContext.Verbose > 4 ) {
 		log.Printf("Handler %d, Acquiring Login token\n", wsContext.HandlerIndex)
 	}
-	// WARNING: May trigger hold down timer
-	<-userLoginRateTicker.C
+	delayExpired := time.NewTimer(time.Duration(wsContext.hbtInterval / 3) * time.Second)
+	loopLoginLimiter:
+	for {
+		select {
+			case <-userLoginRateTicker.C:
+				break loopLoginLimiter
+			case <-delayExpired.C:
+				return fmt.Errorf("WsSrvSecLogin: Global login rate exceeded", err)
+		}
+	}
+	delayExpired.Stop()
+
 	if ( wsContext.Verbose > 4 ) {
 		log.Printf("Handler %d, Token acquired\n", wsContext.HandlerIndex)
 	}
@@ -204,7 +225,17 @@ func WsSrvSecRegister(wsContext *WsContext, message *WsMessage) (err error) {
 		log.Printf("Handler %d, Acquiring register token\n", wsContext.HandlerIndex)
 	}
 	// WARNING: May trigger hold down timer
-	<-userRegisterRateTicker.C
+	delayExpired := time.NewTimer(time.Duration(wsContext.hbtInterval / 3) * time.Second)
+	loopRegisterLimiter:
+	for {
+		select {
+			case <-userRegisterRateTicker.C:
+				break loopRegisterLimiter
+			case <-delayExpired.C:
+				return fmt.Errorf("WsSrvSecRegister: Global register rate exceeded", err)
+		}
+	}
+	delayExpired.Stop()
 	if ( wsContext.Verbose > 4 ) {
 		log.Printf("Handler %d, Register token acquired\n", wsContext.HandlerIndex)
 	}

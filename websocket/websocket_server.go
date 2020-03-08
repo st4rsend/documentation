@@ -7,7 +7,7 @@ import (
 func main() {
 	var confWS = st4rsend.GlobalConf{
 		WsPort: 8000,
-		UserRegisterRate: 30000,
+		UserRegisterRate: 10000,
 		UserLoginRate: 1000,
 	}
 	st4rsend.ServeWS(confWS)

@@ -136,6 +136,7 @@ func ServeWS(conf GlobalConf) {
 	defer userLoginRateTicker.Stop()
 	// Starting Http handler
 	wsPortAscii := "localhost:" + strconv.Itoa(conf.WsPort)
+	log.Printf("Configuration: %+v",conf)
 	log.Printf("Starting http server on %s\n", wsPortAscii)
 	http.Handle("/ws", &specificHandler{Conf: conf})
 	err := http.ListenAndServe(wsPortAscii, nil)

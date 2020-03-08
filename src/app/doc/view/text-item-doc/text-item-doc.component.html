@@ -1,3 +1,9 @@
+<div *ngIf='editing'>
+	<app-edit-item-doc
+		[itemDoc]=itemDoc
+		(itemDocCloseEvent)='itemDocCloseEvent($event)'>
+	</app-edit-item-doc>
+</div>
 <div class="embed">
 <div *ngIf="viewMode=='desc' || viewMode=='full'"
 	class="doc-item-description">
@@ -54,11 +60,5 @@
 			</p>
 		</div>
 	</div>
-</div>
-<div *ngIf='editing'>
-	<app-edit-item-doc
-		[itemDoc]=itemDoc
-		(itemDocCloseEvent)='itemDocCloseEvent($event)'>
-	</app-edit-item-doc>
 </div>
 </div>
