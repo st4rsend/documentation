@@ -11,7 +11,7 @@ export class DocBaseComponent {
 
 	public editMode: boolean = false;
 	public viewMode: string = "normal";
-	public newItemTrigger: boolean = false;
+	public newArticleTrigger: boolean = false;
 
   constructor(
 		private DocService: DocService,
@@ -21,11 +21,15 @@ export class DocBaseComponent {
 		this.editMode = editMode;
 	}
 
-	newItem() {
-		this.newItemTrigger = !this.newItemTrigger;
+	newArticle(flag: boolean) {
+		this.newArticleTrigger = flag;
 	}
 
 	docViewModeSet(viewMode: string){
 		this.viewMode = viewMode;
+	}
+	resetArticleTriggerEvent(){
+		// TODO: Generate bug ... TO BE FIXED
+		//this.newArticleTrigger = false;
 	}
 }

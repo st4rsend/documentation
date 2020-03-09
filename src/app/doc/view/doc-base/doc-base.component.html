@@ -1,12 +1,13 @@
 <div class="doc-base">
 	<app-menu-doc 
-		(editModeEvent)='docEditModeSet($event);' 
-		(newItemEvent)='newItem()'
+		(editModeEvent)='docEditModeSet($event)' 
+		(newArticleEvent)='newArticle($event)'
 		(viewModeEvent)='docViewModeSet($event)'>
 	</app-menu-doc>
 	<app-dyn-doc 
 		[editMode]='editMode' 
 		[viewMode]='viewMode'
-		[newItemTrigger]='newItemTrigger'>
+		[newArticleTrigger]='newArticleTrigger'
+		(resetArticleTriggerEvent)='resetArticleTriggerEvent()'>
 	</app-dyn-doc>
 </div>

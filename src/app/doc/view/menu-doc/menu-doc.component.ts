@@ -16,7 +16,7 @@ export class MenuDocComponent implements OnInit {
 	@Output() editModeEvent = new EventEmitter<boolean>();
 	public docEditMode: boolean = false;
 	@Output() viewModeEvent = new EventEmitter<string>();
-	@Output() newItemEvent = new EventEmitter();
+	@Output() newArticleEvent = new EventEmitter<boolean>();
 	public viewMode: string = 'normal';
 
 	public docListTable: string = 'documentation_list';
@@ -72,7 +72,7 @@ export class MenuDocComponent implements OnInit {
 		this.viewModeEvent.emit(this.viewMode);
 	}
 
-	newItem() {
-		this.newItemEvent.emit();
+	newArticle() {
+		this.newArticleEvent.emit(true);
 	}
 }

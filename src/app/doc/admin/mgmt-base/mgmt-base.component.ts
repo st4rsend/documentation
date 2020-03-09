@@ -2,8 +2,6 @@ import { Component, OnInit,
 	ViewChild,
 	ViewContainerRef,
 	ComponentFactoryResolver,
-	ComponentRef,
-	ComponentFactory, 
 } from '@angular/core';
 import { DocService } from '../../service/doc.service';
 import { ArticleShort } from '../../model/doc';
