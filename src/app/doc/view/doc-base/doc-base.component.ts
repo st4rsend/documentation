@@ -1,5 +1,14 @@
-import { Component } from '@angular/core';
+import { 
+	Component, 
+	OnInit,
+	ViewChild,
+	ViewContainerRef,
+	ComponentFactoryResolver,
+ } from '@angular/core';
+import { EditItemDocComponent } from '../edit-item-doc/edit-item-doc.component';
+
 import { DocService } from '../../service/doc.service';
+import { Doc } from '../../model/doc';
 
 @Component({
   selector: 'app-doc-base',
@@ -7,29 +16,48 @@ import { DocService } from '../../service/doc.service';
   styleUrls: ['./doc-base.component.scss'],
 	providers: [ DocService ],
 })
-export class DocBaseComponent {
+export class DocBaseComponent implements OnInit {
 
 	public editMode: boolean = false;
 	public viewMode: string = "normal";
-	public newArticleTrigger: boolean = false;
+
+	articleEditComponentRef: any;
+	@ViewChild('articleEditContainer', { static: true, read: ViewContainerRef }) EditItemDocComponent: ViewContainerRef;
 
   constructor(
-		private DocService: DocService,
+		private docService: DocService,
+		private resolver: ComponentFactoryResolver,
 	) { }
+
+	ngOnInit() {
+		this.docService.articleEditRequest$.subscribe(
+			article => {
+				this.articleEditComponentCreate(article);
+			}
+		);
+	}
 
 	docEditModeSet(editMode: boolean) {
 		this.editMode = editMode;
 	}
 
-	newArticle(flag: boolean) {
-		this.newArticleTrigger = flag;
-	}
-
 	docViewModeSet(viewMode: string){
 		this.viewMode = viewMode;
 	}
-	resetArticleTriggerEvent(){
-		// TODO: Generate bug ... TO BE FIXED
-		//this.newArticleTrigger = false;
+
+	articleEditComponentCreate(article: Doc) {
+		this.EditItemDocComponent.clear();
+		const factory = this.resolver.resolveComponentFactory(EditItemDocComponent);
+		this.articleEditComponentRef = this.EditItemDocComponent.createComponent(factory);
+		this.articleEditComponentRef.instance.itemDoc = article;
+		this.articleEditComponentRef.instance.itemDocCloseEvent.subscribe(
+			value => {
+				this.articleEditCloseEvent(value);
+			}
+		);
+	}
+
+	articleEditCloseEvent(altered: boolean) {
+		this.articleEditComponentRef.destroy();
 	}
 }

@@ -1,34 +1,30 @@
-import { Component, OnInit, Input, Output, OnChanges, EventEmitter,
+import {
+	Component,
+	OnInit,
+	Input,
+	Output,
+	EventEmitter,
 	ViewChild,
-	ViewContainerRef,
-	ComponentFactoryResolver,
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { DocService } from '../../service/doc.service';
-import {Doc} from '../../model/doc';
+import { Doc } from '../../model/doc';
 import { GlobalService } from '../../../shared/service/global.service';
-import { EditItemDocComponent } from '../edit-item-doc/edit-item-doc.component';
-
 
 @Component({
   selector: 'app-dyn-doc',
   templateUrl: './dyn-doc.component.html',
   styleUrls: ['./dyn-doc.component.scss']
 })
-export class DynDocComponent implements OnChanges {
+
+export class DynDocComponent implements OnInit {
 
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
-	@Input() newArticleTrigger: boolean;
-
-	@Output() resetArticleTriggerEvent = new EventEmitter();
 
 	@ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
-
-	articleEditComponentRef: any;
-	@ViewChild('articleEditContainer', { static: true, read: ViewContainerRef }) EditItemDocComponent: ViewContainerRef;
 
 	private dynTable: Array<Doc>;
 	public creating: boolean = false;
@@ -36,14 +32,16 @@ export class DynDocComponent implements OnChanges {
 	public docListID: number;
 	public docs: Array<Doc>;
 	public selectedIndex: number;
-	public newArticleFlag: boolean;
 
 	public statusBarHeight: string = "calc(100vh - 6em)";
 
   constructor(
 			private docService: DocService, 
 			private globalService: GlobalService,
-			private resolver: ComponentFactoryResolver,) {
+			) {
+	}
+
+	ngOnInit() {
 		this.docService.isReady$.subscribe(
 			ready => {
 				if ( ready ) {
@@ -58,14 +56,6 @@ export class DynDocComponent implements OnChanges {
 			}
 		);
 	}
-
-  ngOnChanges() {
-		if (this.newArticleTrigger) {
-			//this.creating = ! this.creating;
-			this.articleEdit(null)
-			this.resetArticleTriggerEvent.emit();
-		}
-  }
 
 	itemDocCloseEvent(value: boolean) {
 		this.creating = false;
@@ -114,23 +104,10 @@ export class DynDocComponent implements OnChanges {
 	}
 
 	removeFromList(i: number) {
-		console.log ("Remove from list: ", i);
+		console.log ("TODO: Remove from list: ", i);
 	}
 
-	articleEdit(article: Doc) {
-		console.log(article);
-		this.EditItemDocComponent.clear();
-		const factory = this.resolver.resolveComponentFactory(EditItemDocComponent);
-		this.articleEditComponentRef = this.EditItemDocComponent.createComponent(factory);
-		//this.articleEditComponentRef.instance.itemDocIdx = articleID;
-		this.articleEditComponentRef.instance.itemDoc = article;
-		this.articleEditComponentRef.instance.itemDocCloseEvent.subscribe(
-			value => {
-				this.articleEditCloseEvent(value);
-			});
-	}
-
-	articleEditCloseEvent(altered: boolean) {
-		this.articleEditComponentRef.destroy();
+	articleEditEvent(article: Doc){
+		this.docService.articleEdit(article);
 	}
 }

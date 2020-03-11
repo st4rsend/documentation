@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DocService } from '../../service/doc.service';
-//import { Subscription } from 'rxjs';
 
 import { ListSelectComponent } from '../../../shared/component/list-select/list-select.component';
 
@@ -11,12 +10,12 @@ import { ListSelectComponent } from '../../../shared/component/list-select/list-
 })
 export class MenuDocComponent implements OnInit {
 
+	@Output() editModeEvent = new EventEmitter<boolean>();
+	@Output() viewModeEvent = new EventEmitter<string>();
+
 	@ViewChild('docList', {static: true}) docList: ListSelectComponent;
 
-	@Output() editModeEvent = new EventEmitter<boolean>();
 	public docEditMode: boolean = false;
-	@Output() viewModeEvent = new EventEmitter<string>();
-	@Output() newArticleEvent = new EventEmitter<boolean>();
 	public viewMode: string = 'normal';
 
 	public docListTable: string = 'documentation_list';
@@ -73,6 +72,6 @@ export class MenuDocComponent implements OnInit {
 	}
 
 	newArticle() {
-		this.newArticleEvent.emit(true);
+		this.docService.articleEdit(null);
 	}
 }

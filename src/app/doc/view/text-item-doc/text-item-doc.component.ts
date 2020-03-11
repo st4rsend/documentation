@@ -3,6 +3,7 @@ import { Overlay } from '@angular/cdk/overlay';
 import {PortalModule, ComponentPortal} from '@angular/cdk/portal';
 
 import { Doc } from '../../model/doc';
+import { DocService } from '../../service/doc.service';
 
 
 @Component({
@@ -17,13 +18,14 @@ export class TextItemDocComponent implements OnChanges {
 	@Input() viewMode: string;
 	@Output() changedEvent = new EventEmitter<boolean>();
 	@Output() activateListEvent = new EventEmitter<number>();
-	@Output() articleEditEvent = new EventEmitter<Doc>();
 
 	public displayDirCss: string;
 	public displaySplitCssA: string;
 	public displaySplitCssB: string;
 
-  constructor() {}
+  constructor(
+		private docService: DocService,
+	) {}
 
 	ngOnChanges() {
 		if (this.itemDoc.display === "Row-50") {
@@ -54,7 +56,7 @@ export class TextItemDocComponent implements OnChanges {
   }
 
 	edit() {
-		this.articleEditEvent.emit(this.itemDoc);
+		this.docService.articleEdit(this.itemDoc);
 	}
 
 	activateChildList(value: string) {

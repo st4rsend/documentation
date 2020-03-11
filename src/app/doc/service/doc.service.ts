@@ -23,6 +23,9 @@ export class DocService {
 	channelID: number;
 	baseChannelID: number = 256;
 
+	private articleEditSub = new Subject<Doc>();
+	public articleEditRequest$ = this.articleEditSub.asObservable();
+
 	isReady$ = new Subject<any>();
 	isReadyArticle$ = new Subject<boolean>();
 
@@ -35,6 +38,10 @@ export class DocService {
 				this.docListID = idx;
 				this.dsSQLQueryDocs();
 			});
+	}
+
+	public articleEdit(article: Doc){
+		this.articleEditSub.next(article);
 	}
 
 	public setChannelID(channelID: number){
