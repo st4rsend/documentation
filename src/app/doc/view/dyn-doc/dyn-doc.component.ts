@@ -24,7 +24,7 @@ export class DynDocComponent implements OnInit {
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
 
-	@ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
+	//@ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
 
 	private dynTable: Array<Doc>;
 	public creating: boolean = false;
@@ -33,7 +33,7 @@ export class DynDocComponent implements OnInit {
 	public docs: Array<Doc>;
 	public selectedIndex: number;
 
-	public statusBarHeight: string = "calc(100vh - 6em)";
+	//public statusBarHeight: string = "calc(100vh - 3em)";
 
   constructor(
 			private docService: DocService, 
@@ -49,12 +49,14 @@ export class DynDocComponent implements OnInit {
 					this.docListID = this.docService.getDocListID();
 				}
 			});
+		/*
 		this.globalService.statusLineCount$.subscribe(
 			count => {
-				this.statusBarHeight =  "calc(100vh - " + ( count + 5 ) +"em)";
+				this.statusBarHeight =  "calc(100vh - " + ( count + 3 ) +"em)";
 				console.log("Status Bar height: ", this.statusBarHeight);
 			}
 		);
+		*/
 	}
 
 	itemDocCloseEvent(value: boolean) {

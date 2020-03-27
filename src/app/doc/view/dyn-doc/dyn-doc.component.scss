@@ -1,20 +1,23 @@
 .cdk-virtual-scroll-orientation-vertical {
-	//display: flex;
-	//height: calc(100vh - 6em);
 	//height: calc(100vh - ' + statusBarHeight + 'em);
 	//border: thin solid blue;
+	z-index: 1;
+	position: fixed;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	overflow: hidden auto;
 }
 
-.viewport {
-	//display: flex;
-	//height: calc(100vh - 6em);
-	//border: thick solid red;
+.article-panel {
+	width: 100%;
 }
+
 
 .doc-item-description {
 	flex: 1 1 auto;
 	float: top;
-	width: 100vw;
+	//width: 100vw;
 	border-style: none none dotted;
 	font-weight: bold;
 }

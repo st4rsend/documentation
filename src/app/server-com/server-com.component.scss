@@ -2,7 +2,7 @@
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 2;
+	z-index: 1000;
 	width: 100%;
 	pointer-events: none;
 
@@ -49,6 +49,9 @@
 	cursor: default;
 }
 
+.pointer-back {
+	pointer-events: auto;
+}
 //::ng-deep .cdk-overlay-container {
 //	position: inherit;
 //}

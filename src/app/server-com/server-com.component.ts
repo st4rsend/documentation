@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {OverlayContainer} from '@angular/cdk/overlay';
 
@@ -12,7 +12,7 @@ import { GlobalService } from '../shared/service/global.service';
 	styleUrls: ['./server-com.component.scss'],
 })
 
-export class ServerComComponent {
+export class ServerComComponent implements AfterViewInit {
 
 	@ViewChild('title', { static: true}) elTitle: ElementRef;
 	@Output() themeEvent = new EventEmitter<string>();
@@ -40,6 +40,10 @@ export class ServerComComponent {
 			);
 		this.overlay = overlayContainer.getContainerElement();
 		this.overlay.classList.add('light-theme');
+	}
+
+	public ngAfterViewInit() {
+		this.connect();
 	}
 
 	public connect() {

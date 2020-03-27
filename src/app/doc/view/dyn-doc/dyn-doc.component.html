@@ -1,10 +1,12 @@
+<!-- <cdk-virtual-scroll-viewport itemSize="30" 
+	class="viewport" [style.height]="statusBarHeight">
+-->
 <cdk-virtual-scroll-viewport itemSize="30" 
-		class="viewport" [style.height]="statusBarHeight">
+	class="viewport">
 	<div *cdkVirtualFor="let item of docs; let i = index;" 
 		(click)="itemFocus(i)"
 		[ngClass]="selectedIndex === i ? 'doc-item-highlight doc-item-format' : 'doc-item-format'">
-		<!-- <div class="item"> -->
-		<div>
+		<div class="article-panel">
 			<app-text-item-doc 
 				[itemDoc]=item
 				[editMode]=editMode

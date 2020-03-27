@@ -93,17 +93,17 @@
 			</span>
 		</div>
 	</div>
-	<div *ngIf="loginDisplayFlag">
+	<div *ngIf="loginDisplayFlag" class="pointer-back">
 		<app-login 
 			(loginCloseEvent)='loginCloseEvent($event)'>
 		</app-login>
 	</div>
-	<div *ngIf="passwordDisplayFlag">
+	<div *ngIf="passwordDisplayFlag" class="pointer-back">
 		<app-set-password
 			(passwordCloseEvent)='passwordCloseEvent($event)'>
 		</app-set-password>
 	</div>
-	<div *ngIf="registerDisplayFlag">
+	<div *ngIf="registerDisplayFlag" class="pointer-back">
 		<app-register
 			(registerCloseEvent)='registerCloseEvent($event)'>
 		</app-register>
