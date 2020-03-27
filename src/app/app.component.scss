@@ -1,20 +1,5 @@
 .app {
-	height: auto;
-//	border: thick solid #0000ff;
-}
-
-.control-bar {
-	width: 100%;
-	height: auto;
-	border: none;
-}
-
-.corps {
-	height: auto;
-	min-height: 300px;
-//	border: thick solid #0000ff;
-}
-
-.status-bar {
-	height: auto;
+	height: 100%;
+	overflow: hidden;
+	//border: thick solid #0000ff;
 }

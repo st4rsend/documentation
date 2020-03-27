@@ -30,7 +30,7 @@
     "rxjs-tslint": "^0.1.7",
     "serialize-javascript": "^2.1.1",
     "tslib": "^1.11.1",
-    "typescript": "^3.8.3",
+    "typescript": "^3.7.5",
     "zone.js": "^0.10.3"
   },
   "devDependencies": {

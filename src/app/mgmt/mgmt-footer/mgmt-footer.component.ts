@@ -28,7 +28,7 @@ export class MgmtFooterComponent implements OnInit {
 	private debugCommand: string = 'GET_LIST';
 	public msgToServer: string = "documentation_list\nID\ndescription\nposition";
 
-	public statusLineCount: string = "1em";
+	public statusLineCount: string = "0em";
 
 	messages: string[];
 	backendMsg: string[];

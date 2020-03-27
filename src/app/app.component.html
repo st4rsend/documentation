@@ -1,13 +1,5 @@
 <body [ngClass]="appTheme" class="app">
-	<div class="status-bar">
-		<app-mgmt-footer>
-		</app-mgmt-footer>
-	</div>
-	<div class="control-bar">
-		<app-server-com (themeEvent)="themeEvent($event);">
-		</app-server-com>
-	</div>
-	<div class="corps">
-		<router-outlet></router-outlet>
-	</div>
+	<app-server-com (themeEvent)="themeEvent($event);">
+	</app-server-com>
+	<router-outlet></router-outlet>
 </body>

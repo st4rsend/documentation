@@ -1,108 +1,111 @@
-<div class="app-header">
-	<div class="toolbar-icon">
-		<button mat-icon-button [matMenuTriggerFor]="appMenu">
-			<mat-icon>menu</mat-icon>
-		</button>
-	</div>
-	<mat-menu #appMenu="matMenu">
-		<div>
-			<button mat-menu-item>
-				<a routerLink="/home">
-					<mat-icon>home</mat-icon>
-				</a>
+<div class="server-com">
+	<app-mgmt-footer>
+	</app-mgmt-footer>
+	<div class="app-header">
+		<div class="toolbar-icon">
+			<button mat-icon-button [matMenuTriggerFor]="appMenu">
+				<mat-icon>menu</mat-icon>
 			</button>
 		</div>
-		<div *ngIf="connectFlag" >
-			<mat-menu #subMenu="matMenu" >
-				<a routerLink="doc/base"><button mat-menu-item>Doc</button></a>
-				<a routerLink="todo/base"><button mat-menu-item>Todo</button></a>
-				<div *ngIf="loginFlag">
-					<a routerLink="mgmt/base"><button mat-menu-item>Mgmt</button></a>
-				</div>
-			</mat-menu>
-			<button mat-menu-item [matMenuTriggerFor]='subMenu'>
-				Applications
-			</button>
-			<div *ngIf="!loginFlag" >
-				<button (click)="login()"
-		 			mat-menu-item color="primary">Login</button>
-				<button (click)="register()"
-		 			mat-menu-item color="primary">Register</button>
-			</div>
-			<div *ngIf="loginFlag" >
-				<mat-menu #subUser="matMenu">
-					<button (click)="getUserInfo()"
-						mat-menu-item color="primary">Info</button>
-					<button (click)="logout()"
-						mat-menu-item color="warn">Logout</button>
-					<button (click)="password()"
-						mat-menu-item color="primary">Set password</button>
-				</mat-menu>
-				<button mat-menu-item [matMenuTriggerFor]='subUser'>
-					User
+		<mat-menu #appMenu="matMenu">
+			<div>
+				<button mat-menu-item>
+					<a routerLink="/home">
+						<mat-icon>home</mat-icon>
+					</a>
 				</button>
 			</div>
-			<button mat-menu-item (click)="disconnect()"
-				 color="warn">Disconnect
-			</button>
+			<div *ngIf="connectFlag" >
+				<mat-menu #subMenu="matMenu" >
+					<a routerLink="doc/base"><button mat-menu-item>Doc</button></a>
+					<a routerLink="todo/base"><button mat-menu-item>Todo</button></a>
+					<div *ngIf="loginFlag">
+						<a routerLink="mgmt/base"><button mat-menu-item>Mgmt</button></a>
+					</div>
+				</mat-menu>
+				<button mat-menu-item [matMenuTriggerFor]='subMenu'>
+					Applications
+				</button>
+				<div *ngIf="!loginFlag" >
+					<button (click)="login()"
+		 				mat-menu-item color="primary">Login</button>
+					<button (click)="register()"
+		 				mat-menu-item color="primary">Register</button>
+				</div>
+				<div *ngIf="loginFlag" >
+					<mat-menu #subUser="matMenu">
+						<button (click)="getUserInfo()"
+							mat-menu-item color="primary">Info</button>
+						<button (click)="logout()"
+							mat-menu-item color="warn">Logout</button>
+						<button (click)="password()"
+							mat-menu-item color="primary">Set password</button>
+					</mat-menu>
+					<button mat-menu-item [matMenuTriggerFor]='subUser'>
+						User
+					</button>
+				</div>
+				<button mat-menu-item (click)="disconnect()"
+					color="warn">Disconnect
+				</button>
+			</div>
+			<div *ngIf="!connectFlag" >
+				<button mat-menu-item	(click)="connect()"
+					color="primary">Connect</button>
+			</div>
+			<div >
+				<mat-menu #themeMenu="matMenu" >
+					<button mat-menu-item (click)="selectTheme('light')"
+				 		color="primary">Light</button>
+					<button mat-menu-item (click)="selectTheme('dark')"
+				 		color="primary">Dark</button>
+				</mat-menu>
+				<button mat-menu-item [matMenuTriggerFor]='themeMenu'>
+					Theme
+				</button>
+			</div>
+			<div>
+				<mat-menu #statusLineMenu="matMenu">
+					<button *ngFor="let number of [0,1,2,3,5,10]" mat-menu-item (click)="setStatusLineCount(number)"
+						color="primary">{{number}}</button>
+				</mat-menu>
+				<button mat-menu-item [matMenuTriggerFor]='statusLineMenu'>
+					Status
+				</button>
+			</div>
+			<div *ngIf="debugFlag" >
+				<button (click)="debug(false)"
+					mat-menu-item color="primary">UnDebug</button>
+			</div>
+			<div *ngIf="!debugFlag" >
+				<button (click)="debug(true)"
+					mat-menu-item color="warn">Debug</button>
+			</div>
+		</mat-menu>
+		<div #title (click)="titleClick()" class="toolbar-title cursor-notco">
 		</div>
-		<div *ngIf="!connectFlag" >
-			<button mat-menu-item	(click)="connect()"
-				 color="primary">Connect</button>
+		<div class="toolbar-button">
+			<span *ngIf="connectFlag" >
+				<mat-icon>import_export</mat-icon>
+			</span>
+			<span *ngIf="loginFlag" >
+				<mat-icon>fingerprint</mat-icon>
+			</span>
 		</div>
-		<div >
-			<mat-menu #themeMenu="matMenu" >
-				<button mat-menu-item (click)="selectTheme('light')"
-				 color="primary">Light</button>
-				<button mat-menu-item (click)="selectTheme('dark')"
-				 color="primary">Dark</button>
-			</mat-menu>
-			<button mat-menu-item [matMenuTriggerFor]='themeMenu'>
-				Theme
-			</button>
-		</div>
-		<div>
-			<mat-menu #statusLineMenu="matMenu">
-				<button *ngFor="let number of [0,1,2,3,5,10]" mat-menu-item (click)="setStatusLineCount(number)"
-					color="primary">{{number}}</button>
-			</mat-menu>
-			<button mat-menu-item [matMenuTriggerFor]='statusLineMenu'>
-				Status
-			</button>
-		</div>
-		<div *ngIf="debugFlag" >
-			<button (click)="debug(false)"
-				mat-menu-item color="primary">UnDebug</button>
-		</div>
-		<div *ngIf="!debugFlag" >
-			<button (click)="debug(true)"
-				mat-menu-item color="warn">Debug</button>
-		</div>
-	</mat-menu>
-	<div #title (click)="titleClick()" class="toolbar-title cursor-notco">
-		St4rsend
 	</div>
-	<div class="toolbar-button">
-		<span *ngIf="connectFlag" >
-			<mat-icon>import_export</mat-icon>
-		</span>
-		<span *ngIf="loginFlag" >
-			<mat-icon>fingerprint</mat-icon>
-		</span>
+	<div *ngIf="loginDisplayFlag">
+		<app-login 
+			(loginCloseEvent)='loginCloseEvent($event)'>
+		</app-login>
 	</div>
-</div>
-<div *ngIf="loginDisplayFlag">
-	<app-login 
-		(loginCloseEvent)='loginCloseEvent($event)'>
-	</app-login>
-</div>
-<div *ngIf="passwordDisplayFlag">
-	<app-set-password
-		(passwordCloseEvent)='passwordCloseEvent($event)'>
-	</app-set-password>
-</div>
-<div *ngIf="registerDisplayFlag">
-	<app-register
-		(registerCloseEvent)='registerCloseEvent($event)'>
-	</app-register>
+	<div *ngIf="passwordDisplayFlag">
+		<app-set-password
+			(passwordCloseEvent)='passwordCloseEvent($event)'>
+		</app-set-password>
+	</div>
+	<div *ngIf="registerDisplayFlag">
+		<app-register
+			(registerCloseEvent)='registerCloseEvent($event)'>
+		</app-register>
+	</div>
 </div>
