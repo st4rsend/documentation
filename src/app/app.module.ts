@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-// WARN Flex issue targeting es2015 ; Waiting for angular 9?
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -15,6 +14,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { AppComponent } from './app.component';
 import { AppRoutesModule } from './app-routes.module';
@@ -42,9 +43,6 @@ import { MgmtFooterComponent } from './mgmt/mgmt-footer/mgmt-footer.component';
 import { MgmtBaseComponent } from './doc/admin/mgmt-base/mgmt-base.component';
 import { DocListFinderComponent } from './doc/admin/doc-list-finder/doc-list-finder.component';
 
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-//import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -88,7 +86,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 		MatFormFieldModule,
 		AppRoutesModule,
 		DragDropModule,
-		//ScrollDispatchModule,
 		ScrollingModule,
 		FlexLayoutModule,
   ],

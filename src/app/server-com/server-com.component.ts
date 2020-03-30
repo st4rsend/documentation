@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {OverlayContainer} from '@angular/cdk/overlay';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 import { WebSocketService } from '../shared/service/websocket.service';
 import { AuthenticationService } from '../shared/service/authentication.service';
@@ -39,7 +39,7 @@ export class ServerComComponent implements AfterViewInit {
 				}
 			);
 		this.overlay = overlayContainer.getContainerElement();
-		this.overlay.classList.add('light-theme');
+		this.overlay.classList.add('light-menu-theme');
 	}
 
 	public ngAfterViewInit() {
@@ -116,13 +116,13 @@ export class ServerComComponent implements AfterViewInit {
 	public selectTheme(theme: string) {
 		if (theme == 'dark') {
 			this.themeEvent.emit('dark-theme');
-			this.overlay.classList.remove('light-theme');
-			this.overlay.classList.add('dark-theme');
+			this.overlay.classList.remove('light-menu-theme');
+			this.overlay.classList.add('dark-menu-theme');
 		}
 		if (theme == 'light') {
 			this.themeEvent.emit('light-theme');
-			this.overlay.classList.remove('dark-theme');
-			this.overlay.classList.add('light-theme');
+			this.overlay.classList.remove('dark-menu-theme');
+			this.overlay.classList.add('light-menu-theme');
 		}
 		
 	}

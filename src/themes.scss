@@ -13,6 +13,7 @@ $light-foreground: mat-palette($st4rsend-light-foreground);
 
 $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 
+
 .light-theme {
 	@include angular-material-theme($light-theme);
 	background-color: mat-color($light-background,500);
@@ -20,6 +21,7 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 	a:link, a:visited, .a:link, .a:visited {
 		color: mat-color($light-primary,900);
 	};
+
 	.outer-border {
 		background-color: mat-color($light-background,800);
 	};
@@ -63,15 +65,18 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 	.mat-form-field-outline{
 		background-color: mat-color($light-background,300);
 	}
+	.warning {
+		color: mat-color($light-warn);
+	}
+}
+
+.light-menu-theme {
 	.mat-menu-item {
 		background-color: mat-color($light-background,800);
 	}
 	.mat-menu-panel {
 		color: mat-color($light-primary,800);
 		background-color: mat-color($light-background,300);
-	}
-	.warning {
-		color: mat-color($light-warn);
 	}
 }
 
@@ -133,6 +138,12 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 	.mat-form-field-outline{
 		background-color: mat-color($dark-background,300);
 	}
+	.warning {
+		color: mat-color($dark-warn);
+	}
+}
+
+.dark-menu-theme {
 	.mat-menu-item {
 		color: mat-color($dark-primary,600);
 		background-color: mat-color($dark-background,700);
@@ -140,8 +151,5 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 	.mat-menu-panel {
 		color: mat-color($dark-primary,800);
 		background-color: mat-color($dark-background,300);
-	}
-	.warning {
-		color: mat-color($dark-warn);
 	}
 }

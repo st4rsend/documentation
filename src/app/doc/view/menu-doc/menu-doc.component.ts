@@ -1,12 +1,23 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, HostBinding } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 import { DocService } from '../../service/doc.service';
 
 import { ListSelectComponent } from '../../../shared/component/list-select/list-select.component';
+
+const ANIMATION_TIMINGS = '400ms cubic-bezier(0.25, 0.8, 0.25, 1)';
 
 @Component({
   selector: 'app-menu-doc',
   templateUrl: './menu-doc.component.html',
   styleUrls: ['./menu-doc.component.scss'],
+	animations: [
+		trigger('slideContent', [
+			state('void', style({transform: 'translateY(-100%)'})),
+			state('enter', style({transform: 'translateY(0)'})),
+			state('leave', style({transform: 'translateY(-100%)'})),
+			transition('* => *', animate(ANIMATION_TIMINGS)),
+		])
+	]
 })
 export class MenuDocComponent implements OnInit {
 
@@ -14,6 +25,8 @@ export class MenuDocComponent implements OnInit {
 	@Output() viewModeEvent = new EventEmitter<string>();
 
 	@ViewChild('docList', {static: true}) docList: ListSelectComponent;
+
+	animationState: 'void' | 'enter' | 'leave' = 'void';
 
 	public docEditMode: boolean = false;
 	public viewMode: string = 'normal';
@@ -33,6 +46,10 @@ export class MenuDocComponent implements OnInit {
   constructor(
 		private docService: DocService,
 	) { }
+
+	navigatorClick(state) {
+		this.animationState = state;
+	}
 
   ngOnInit() {
 /*

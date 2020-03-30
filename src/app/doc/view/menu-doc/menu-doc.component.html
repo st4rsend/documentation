@@ -1,4 +1,7 @@
-<div class="menu-container">
+<div class="navigator" (click)="navigatorClick('enter')" (mouseenter)="navigatorClick('enter')">
+	NAVIGATOR
+</div>
+<div class="menu-container" [@slideContent]="animationState" (mouseleave)="navigatorClick('leave')">
 	<div class="menu-item-new">
 		<ng-container *ngIf="docEditMode">
 			<BR>
