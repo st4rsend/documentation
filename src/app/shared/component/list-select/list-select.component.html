@@ -1,11 +1,16 @@
-<select 
-	name="listID"
-	[(ngModel)]="listID"
-	(change)="listChange()">
-	<option *ngIf="hasVoid" [value]="0">
-		--- select ---
-	</option>
-	<option *ngFor="let item of list | keyvalue: preserveMapOrder" [value]="item.key"> 
-		{{item.value}} 
-	</option>
-</select>
+<mat-form-field>
+	<mat-label>{{label}}</mat-label>
+	<mat-select
+		panelClass="mymatoption"
+		name="listID"
+		[(ngModel)]="listID"
+		(selectionChange)="listChange()">
+		<mat-option *ngIf="hasVoid" [value]="0">
+			--- select ---
+		</mat-option>
+		<mat-option *ngFor="let item of list | keyvalue: preserveMapOrder"
+			[value]="item.key" panelClass="mymatoption">
+			{{item.value}} 
+		</mat-option>
+	</mat-select>
+</mat-form-field>

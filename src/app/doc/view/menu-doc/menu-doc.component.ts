@@ -43,6 +43,9 @@ export class MenuDocComponent implements OnInit {
 	public docThemeColumn = 'description';
 	public docThemePosition = 'position';
 
+	public themeLabel = "Theme";
+	public docLabel = "Doc";
+
   constructor(
 		private docService: DocService,
 	) { }
@@ -61,6 +64,14 @@ export class MenuDocComponent implements OnInit {
 				}
 			});
 */
+		this.docService.articleFocus$.subscribe(
+			val => {
+				if (val) {
+					this.navigatorClick("leave");
+				}
+			});
+
+
   }
 
 	docThemeChange(evt: {key: number, value: string}) {

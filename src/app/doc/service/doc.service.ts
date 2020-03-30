@@ -26,6 +26,9 @@ export class DocService {
 	private articleEditSub = new Subject<Doc>();
 	public articleEditRequest$ = this.articleEditSub.asObservable();
 
+	private articleFocusSub = new Subject<boolean>();
+	public articleFocus$ = this.articleFocusSub.asObservable();
+
 	isReady$ = new Subject<any>();
 	isReadyArticle$ = new Subject<boolean>();
 
@@ -38,6 +41,10 @@ export class DocService {
 				this.docListID = idx;
 				this.dsSQLQueryDocs();
 			});
+	}
+
+	public emitArticleFocus() {
+		this.articleFocusSub.next(true);
 	}
 
 	public articleEdit(article: Doc){

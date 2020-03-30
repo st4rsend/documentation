@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Subject ,  Subscription } from 'rxjs';
 import { SqlListService, ISqlList } from '../../service/sql-list.service';
 
@@ -6,10 +6,12 @@ import { SqlListService, ISqlList } from '../../service/sql-list.service';
   selector: 'app-list-select',
   templateUrl: './list-select.component.html',
   styleUrls: ['./list-select.component.scss'],
+	encapsulation: ViewEncapsulation.None,
 	providers: [ SqlListService ],
 })
 export class ListSelectComponent implements OnInit {
 	@Output() listChangeEvent = new EventEmitter<{key: number, value: string}>();
+	@Input() label: string;
 	@Input() listTable: string;
 	@Input() listIDName: string;
 	@Input() listColumn: string;

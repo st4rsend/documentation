@@ -1,16 +1,10 @@
 <div class="navigator" (click)="navigatorClick('enter')" (mouseenter)="navigatorClick('enter')">
-	NAVIGATOR
+<h1></h1>
 </div>
-<div class="menu-container" [@slideContent]="animationState" (mouseleave)="navigatorClick('leave')">
-	<div class="menu-item-new">
-		<ng-container *ngIf="docEditMode">
-			<BR>
-			<button (click)="newArticle()">New</button>
-		</ng-container>
-	</div>
+<div class="menu-container app-header" [@slideContent]="animationState" (onFocusOut)="navigatorClick('leave')">
 	<div class="menu-item-generic">
-		Theme<BR> 
 		<app-list-select
+			[label]="themeLabel"
 			[listTable]="docThemeTable"
 			[listIDName]="docThemeIDName"
 			[listColumn]="docThemeColumn"
@@ -20,8 +14,9 @@
 		</app-list-select>
 	</div>
 	<div class="menu-item-generic">
-		Doc<BR>
 		<app-list-select #docList
+			[label]="docLabel"
+			[listTable]="docThemeTable"
 			[listTable]="docListTable"
 			[listIDName]="docListIDName"
 			[listColumn]="docListColumn"
@@ -30,22 +25,27 @@
 		</app-list-select>
 	</div>
 	<div class="menu-item-generic">
-	View mode<BR>
-		<select
-			name="docViewMode"
-			[(ngModel)]="viewMode"
-			(change)="viewModeChange()">
-			<option value="normal" selected>normal</option>
-			<option value="desc">Description only</option>
-			<option value="full">Desc. and item</option>
-		</select>
+		<mat-form-field>
+			<mat-label>View mode</mat-label>
+			<mat-select
+				name="docViewMode"
+				[(ngModel)]="viewMode"
+				(selectionChange)="viewModeChange()">
+				<mat-option value="normal" selected>normal</mat-option>
+				<mat-option value="desc">Description only</mat-option>
+				<mat-option value="full">Desc. and item</mat-option>
+			</mat-select>
+		</mat-form-field>
 	</div>
 	<div class="menu-item-generic">
-		Edit mode<BR>
+		Edit mode
 		<mat-slide-toggle 
 			[(ngModel)]="docEditMode"
 			(change)="editModeChange()">
 		</mat-slide-toggle>
+	</div>
+	<div *ngIf="docEditMode" class="menu-item-new">
+		<button (click)="newArticle()">New</button>
 	</div>
 	<div class="menu-item-generic menu-item-refresh">
 		<button mat-icon-button matPrefix color="primary"

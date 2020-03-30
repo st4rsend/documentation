@@ -1,3 +1,4 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~@angular/material/theming';
 @import 'st4rsend-light-palette';
 @import 'st4rsend-dark-palette';
@@ -64,6 +65,11 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 	}
 	.mat-form-field-outline{
 		background-color: mat-color($light-background,300);
+	}
+
+	.mymatoption.mat-select-panel {
+		background: aqua;
+		border: thin solid #0000ff;
 	}
 	.warning {
 		color: mat-color($light-warn);
