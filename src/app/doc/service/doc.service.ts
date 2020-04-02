@@ -32,6 +32,9 @@ export class DocService {
 	isReady$ = new Subject<any>();
 	isReadyArticle$ = new Subject<boolean>();
 
+	mouseOverArticleTimeout: number = 1000;
+	overArticleTimer;
+
   constructor( private webSocketService: WebSocketService ) {
 		this.channelID = this.baseChannelID;
 		this.docs = [];
@@ -46,6 +49,22 @@ export class DocService {
 	public emitArticleFocus() {
 		this.articleFocusSub.next(true);
 	}
+
+	public mouseOverArticle() {
+		this.cancelOverArticleTimeout();
+		this.overArticleTimer = setTimeout(
+			() => {
+				this.articleFocusSub.next(true);
+			}, this.mouseOverArticleTimeout
+		);
+	}
+
+	public cancelOverArticleTimeout() {
+		if (this.overArticleTimer != undefined) {
+			clearTimeout(this.overArticleTimer);
+		}
+	}
+		
 
 	public articleEdit(article: Doc){
 		this.articleEditSub.next(article);

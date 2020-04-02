@@ -89,9 +89,13 @@ export class DynDocComponent implements OnInit {
 
 	}
 
-	itemFocus(i: number) {
+	public itemFocus(i: number) {
 		this.selectedIndex = i;
 		this.docService.emitArticleFocus();
+	}
+
+	public mouseEnter() {
+		this.docService.mouseOverArticle();
 	}
 
 	moveUp(i: number) {

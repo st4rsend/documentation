@@ -3,7 +3,7 @@
 -->
 <cdk-virtual-scroll-viewport itemSize="30" 
 	class="viewport"
-	(mouseenter)="mouseEnter()">
+	(mouseenter)="mouseEnter(i)">
 <!--
 	<div *cdkVirtualFor="let item of docs; let i = index;" 
 		(click)="itemFocus(i)"

@@ -1,7 +1,7 @@
 <div class="navigator" (click)="navigatorClick('enter')" (mouseenter)="navigatorClick('enter')">
 <h1></h1>
 </div>
-<div class="menu-container app-header" [@slideContent]="animationState" (onFocusOut)="navigatorClick('leave')">
+<div class="menu-container app-header" [@slideContent]="animationState" (mouseenter)="mouseEnter()">
 	<div class="menu-item-generic">
 		<app-list-select
 			[label]="themeLabel"

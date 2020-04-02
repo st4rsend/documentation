@@ -74,6 +74,10 @@ export class MenuDocComponent implements OnInit {
 
   }
 
+	public mouseEnter() {
+		this.docService.cancelOverArticleTimeout();
+	}
+
 	docThemeChange(evt: {key: number, value: string}) {
 		if ( evt.key == 0) {
 			this.docList.RemoveFilter();
