@@ -53,11 +53,11 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 		color: mat-color($light-primary, 500);
 		text-align: center;
 	}
-	H2, H3 {
-		color: mat-color($light-primary, 800);
+	H2, H4 {
+		color: mat-color($light-primary, 700);
 		padding-left: 10px;
 	}
-	H4, H5 {
+	H3, H5 {
 		color: mat-color($light-accent, 800);
 	}
 	.mat-form-field-label {
@@ -131,11 +131,11 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 		color: mat-color($dark-primary, 500);
 		text-align: center;
 	}
-	H2, H3 {
+	H2, H4 {
 		color: mat-color($dark-primary, 800);
 		padding-left: 10px;
 	}
-	H4, H5 {
+	H3, H5 {
 		color: mat-color($dark-accent, 800);
 	}
 	.mat-form-field-label {

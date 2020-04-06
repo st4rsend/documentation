@@ -1,11 +1,8 @@
-<div class="embed">
+<div [ngClass]="editMode ? 'embed edit-mode' : 'embed'">
 	<div *ngIf="viewMode=='desc' || viewMode=='full'"
 		class="doc-item-description">
 		{{itemDoc.description}}
 	</div>
-	<span *ngIf="editMode">
-		<button (click)='edit();'>Edit</button>
-	</span>
 	<div *ngIf="viewMode=='normal' || viewMode=='full'" 
 		[ngClass]="displayDirCss">
 		<div [ngSwitch]="itemDoc.typeValue">
@@ -54,5 +51,8 @@
 				</p>
 			</div>
 		</div>
+	</div>
+	<div class="edit-panel" *ngIf="editMode">
+		<button mat-icon-button color="warn" (click)='edit();'><mat-icon>edit</mat-icon></button>
 	</div>
 </div>

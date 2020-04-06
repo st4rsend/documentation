@@ -1,9 +1,15 @@
 .embed {
-	//width: 95vw;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
-	//border: thin solid #0000ff;
+	overflow: none;
+}
+.edit-mode {
+	border: thin dashed #cc0000;
+	border-radius: 15px;
+}
+
+.edit-panel {
+	text-align: center;
 }
 
 .row {
@@ -11,7 +17,7 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	margin:  0 0 3% 0;
+	margin:  3% 0 0 0;
 }
 .column {
 	width: 100%;
@@ -19,17 +25,17 @@
 	flex-direction: column;
 	flex-wrap: wrap;
 	justify-content: flex-start;
-	margin:  0 0 3% 0;
+	margin:  3% 0 0 0;
 }
 .column-top {
 	flex: 1 0 auto;
 	width: 100%;
-	margin:  0 0 0 2vw;
+	padding:  0 1% 0 2%;
 }
 .column-bottom {
 	flex: 1 0 auto;
 	width: 100%;
-	margin:  0 0 0 2vw;
+	padding:  0 1% 0 2%;
 }
 .row-50-left {
 	flex: 0 0 50vw;
