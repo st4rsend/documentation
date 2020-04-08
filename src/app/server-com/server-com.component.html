@@ -4,14 +4,14 @@
 	<div class="app-header">
 		<div class="toolbar-icon">
 			<button mat-icon-button [matMenuTriggerFor]="appMenu">
-				<mat-icon>menu</mat-icon>
+				<mat-icon color="primary">menu</mat-icon>
 			</button>
 		</div>
 		<mat-menu #appMenu="matMenu">
 			<div>
 				<button mat-menu-item>
 					<a routerLink="/home">
-						<mat-icon>home</mat-icon>
+						<mat-icon color="primary">home</mat-icon>
 					</a>
 				</button>
 			</div>
@@ -86,10 +86,10 @@
 		</div>
 		<div class="toolbar-button">
 			<span *ngIf="connectFlag" >
-				<mat-icon>import_export</mat-icon>
+				<mat-icon color="accent">import_export</mat-icon>
 			</span>
 			<span *ngIf="loginFlag" >
-				<mat-icon>fingerprint</mat-icon>
+				<mat-icon color="accent">fingerprint</mat-icon>
 			</span>
 		</div>
 	</div>

@@ -1,9 +1,11 @@
-.cdk-virtual-scroll-orientation-vertical {
+//.cdk-virtual-scroll-orientation-vertical {
+.viewport {
 	//border: thin solid blue;
 	z-index: 1;
 	position: fixed;
-	top: 0;
-	height: 100%;
+	//top: 0;
+	//top: 1em;
+	//height: calc(100% - 1em);
 	width: 100%;
 	overflow: hidden auto;
 }

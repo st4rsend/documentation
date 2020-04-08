@@ -2,6 +2,7 @@
 	margin: 0 0 10px 15px;
 	padding: 0 0 10px 15px;
 	height: 100%;
+	overflow: auto;
 }
 
 .container {
@@ -20,4 +21,19 @@
 .logged-apps {
 	margin-top:20px;
 	margin-bottom:20px;
+}
+
+p+p {
+	text-indent: 0;
+}
+
+
+*>p {
+	display: inline-block;
+	
+}
+
+*p>li {
+	//display: inline-flex;
+	text-ident: 0;
 }

@@ -32,8 +32,10 @@ export class DynDocComponent implements OnInit {
 	public docListID: number;
 	public docs: Array<Doc>;
 	public selectedIndex: number;
-
-	//public statusBarHeight: string = "calc(100vh - 3em)";
+	//public viewHeight: string = "calc(100% - 1.5em)";
+	public viewHeight: string = "calc(100% - 0em)";
+	//public statusBarHeight: string = "1.5em";
+	public statusBarHeight: string = "0em";
 
   constructor(
 			private docService: DocService, 
@@ -49,14 +51,15 @@ export class DynDocComponent implements OnInit {
 					this.docListID = this.docService.getDocListID();
 				}
 			});
-		/*
 		this.globalService.statusLineCount$.subscribe(
 			count => {
-				this.statusBarHeight =  "calc(100vh - " + ( count + 3 ) +"em)";
+				//this.statusBarHeight =  "calc(" + ( count + 1.5 ) + "em)";
+				this.statusBarHeight =  "calc(" + ( count ) + "em)";
+				//this.viewHeight =  "calc(100% - " + ( count + 1.5 ) + "em)";
+				this.viewHeight =  "calc(100% - " + ( count ) + "em)";
 				console.log("Status Bar height: ", this.statusBarHeight);
 			}
 		);
-		*/
 	}
 
 	itemDocCloseEvent(value: boolean) {
