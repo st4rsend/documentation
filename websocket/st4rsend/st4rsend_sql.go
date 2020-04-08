@@ -24,39 +24,49 @@ func WsSrvSQLParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 		err = WsSrvGetSqlListFlt(wsContext, message)
 	}
 	if message.Payload.Command == "INSERT_LIST" {
-		if granted, err := WsSecSqlInsert(wsContext, message) ; granted {
-			err = WsSrvInsertSqlList(wsContext, message)
-		} else {
+		err = WsSecSqlInsert(wsContext, message)
+		if err != nil {
 			log.Printf("ERROR: Write denied: %v\n", err)
+			return err
+		}
+		err = WsSrvInsertSqlList(wsContext, message)
+		if err != nil {
+			log.Printf("List insertion error: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "UPDATE_LIST" {
-		if granted, _ := WsSecSqlWrite(wsContext, message.Payload.Data[0], message.Payload.Data[4]) ; granted {
-			err = WsSrvUpdateSqlList(wsContext, message)
-		} else {
+		err = WsSecSqlWrite(wsContext, message.Payload.Data[0], message.Payload.Data[4])
+		if err == nil {
 			log.Printf("ERROR: Write denied: %v\n", err)
+		}
+		err = WsSrvUpdateSqlList(wsContext, message)
+		if err != nil {
+			log.Printf("List update error: %v\n", err)
 		}
 	}
 	if message.Payload.Command == "DELETE_LIST" {
-		if granted, _ := WsSecSqlWrite(wsContext, message.Payload.Data[0], message.Payload.Data[2]) ; granted {
-			err = WsSrvDeleteSqlList(wsContext, message)
-		} else {
+		err = WsSecSqlWrite(wsContext, message.Payload.Data[0], message.Payload.Data[2])
+		if err != nil {
 			log.Printf("ERROR: Write denied: %v\n", err)
+		}
+		err = WsSrvDeleteSqlList(wsContext, message)
+		if err != nil {
+			log.Printf("List delete error: %v\n", err)
 		}
 	}
 	CheckErr(err)
 	return err
 }
 
-func WsSecSqlInsert(wsContext *WsContext, message *WsMessage) (bool, error) {
+func WsSecSqlInsert(wsContext *WsContext, message *WsMessage) (error) {
 	if wsContext.SecUserID > 0 {
-		return true, nil
+		return nil
 	} else {
-		return false, fmt.Errorf("ERROR:St4rsend:security:uid 0 requested sql insert")
+		return fmt.Errorf("List insert denied : uid 0 requested sql insert")
 	}
 }
 
-func WsSecSqlWrite(wsContext *WsContext, tableName string, idx string) (bool, error) {
+func WsSecSqlWrite(wsContext *WsContext, tableName string, idx string) (error) {
 	var sqlUserID sql.NullInt64
 	var sqlGroupID sql.NullInt64
 	var sqlGrants sql.NullInt64
@@ -66,19 +76,19 @@ func WsSecSqlWrite(wsContext *WsContext, tableName string, idx string) (bool, er
 		" where ID=?"
 	localContext := context.Background()
 	err := wsContext.Db.PingContext(localContext)
-	if CheckErr(err) != nil { return false, err }
+	if CheckErr(err) != nil { return err }
 	err = wsContext.Db.QueryRowContext(localContext, sqlText, protectSQL(idx)).
 		Scan(&sqlUserID, &sqlGroupID, &sqlGrants)
 	if err == nil {
 		secStruct.secUserID = sqlToWsGrants(sqlUserID)
 		secStruct.secGroupID = sqlToWsGrants(sqlGroupID)
 		secStruct.secGrants = sqlToWsGrants(sqlGrants)
-		granted, err := secWriteGranted(wsContext, &secStruct)
-		return granted, err
-	} else {
-		return false, fmt.Errorf("ERROR:St4rsend:WsSecSqlWrite:row scan error: %w", err)
+		err = secWriteGranted(wsContext, &secStruct)
+		if err != nil {
+			return fmt.Errorf("WsSecSqlWrite:row scan error: %v", err)
+		}
 	}
-	return false, err
+	return nil
 }
 
 func WsSrvInsertSqlList(wsContext *WsContext, message *WsMessage) (err error){

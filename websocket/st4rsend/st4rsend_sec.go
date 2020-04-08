@@ -386,10 +386,9 @@ func secReadGranted (wsContext *WsContext, secStruct *WsSecStruct) (bool, error)
 	return false, nil
 }
 
-func secWriteGranted (wsContext *WsContext, secStruct *WsSecStruct) (bool, error) {
+func secWriteGranted (wsContext *WsContext, secStruct *WsSecStruct) (error) {
 	log.Printf("Article secUserID: %d, secGroupID: %d, secGrants: %d\n", secStruct.secUserID, secStruct.secGroupID, secStruct.secGrants)
 	log.Printf("ContextUserID: %d, ContextGroupID: %v\n", wsContext.SecUserID, wsContext.SecGroupIDs)
-	var err error = nil
 	var other int64
 	var group int64
 	var user int64
@@ -398,20 +397,20 @@ func secWriteGranted (wsContext *WsContext, secStruct *WsSecStruct) (bool, error
 	user = ( secStruct.secGrants / 100 ) % 10
 	log.Printf("other: %d, group: %d, user: %d\n", other, group, user)
 	if other & 2 == 2 {
-		return true, err
+		return nil
 	}
 	if ( wsContext.SecUserID == secStruct.secUserID ) && ( user & 2 == 2 ) {
-		return true, err
+		return nil
 	}
 	for _, userGroup := range wsContext.SecGroupIDs {
 		if ( userGroup == secStruct.secGroupID ) && ( group & 2 == 2) {
-			return true, err
+			return nil
 		}
 	}
-	return false, nil
+	return fmt.Errorf("SecWriteGranted:  Access denied")
 }
 
-func secAdminGranted (wsContext *WsContext, secStruct *WsSecStruct) (granted bool, err error) {
+func secAdminGranted (wsContext *WsContext, secStruct *WsSecStruct) (error) {
 	var other int64
 	var group int64
 	var user int64
@@ -422,16 +421,19 @@ func secAdminGranted (wsContext *WsContext, secStruct *WsSecStruct) (granted boo
 	// confront other 
 	if other & 4 == 4 {
 		log.Printf("write granted for other\n")
+		//return nil
 	}
 	if ( wsContext.SecUserID == secStruct.secUserID ) && ( user & 4 == 4 ) {
 		log.Printf("Write granted for user\n")
+		//return nil
 	}
 	for _, userGroup := range wsContext.SecGroupIDs {
 		if ( userGroup == secStruct.secGroupID ) && ( group & 4 == 4) {
 			log.Printf("Write granted for group\n")
+		//return nil
 		}
 	}
-	return false, nil
+	return fmt.Errorf("SecAdminGranted:  Access denied")
 
 }
 func sqlToWsGrants(sqlValue sql.NullInt64) (int64) {

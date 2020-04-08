@@ -40,7 +40,7 @@ func CheckErr(err error) (ret error){
 			panic(err)
 		}
 		if ErrorLevel > 3 {
-			log.Fatal(err)
+			log.Printf("CheckErr: %v", err)
 		}
 	}
 	return err
@@ -255,7 +255,7 @@ func (conf *specificHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 			case receivedMessage := <-wsContext.chanWsMessage:
 				err := WsSrvParseMsg(&wsContext, &receivedMessage)
-				CheckErr(err)
+				//CheckErr(err)
 				if wsContext.Status.Level != "NONE" {
 					err = sendStatus(&wsContext, &receivedMessage)
 					if err != nil {
@@ -263,7 +263,10 @@ func (conf *specificHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 				if err != nil {
-					log.Printf("Handler %d, Error WsSrvparseMsg: %v", wsContext.HandlerIndex, err)
+					log.Printf("Handler %d, Error: %v", wsContext.HandlerIndex, err)
+					wsContext.Status.Level = "SECURITY"
+					wsContext.Status.Info = err.Error()
+					sendStatus(&wsContext, &receivedMessage)
 				}
 				if wsContext.Verbose > 6 {
 					log.Printf("Handler %d, Received: %v\n", wsContext.HandlerIndex, receivedMessage)
@@ -280,53 +283,35 @@ func WsSrvParseMsg(wsContext *WsContext, message *WsMessage) (err error){
 	wsContext.Status.Info = ""
 	if message.Payload.Domain == "SQL" {
 		err = WsSrvSQLParseMsg(wsContext, message)
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
+		return err
 	}
 	if message.Payload.Domain == "TODO" {
 		err = WsSrvTodoWrapper(wsContext, message)
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
+		return err
 	}
 
 	if message.Payload.Domain == "DOC" {
 		err = WsSrvDocWrapper(wsContext, message)
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
+		return err
 	}
 	if message.Payload.Domain == "CMD" {
 		err = WsSrvCMDParseMsg(wsContext, message)
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
+		return err
 	}
 	if message.Payload.Domain == "HBT" {
 		err = WsSrvHBTParseMsg(wsContext, message)
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
+		return err
 	}
 	if message.Payload.Domain == "INF" {
 		err = WsSrvCMDParseMsg(wsContext, message)
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
+		return err
 	}
 	if message.Payload.Domain == "SEC" {
 		err = WsSrvSecParseMsg(wsContext, message)
-		CheckErr(err)
-		if err != nil {
-			return err
-		}
+		return err
+	}
+	if err != nil {
+		log.Printf("APP ERROR: %v\n", err)
 	}
 	return err
 }
