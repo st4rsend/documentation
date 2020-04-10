@@ -1,0 +1,25 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { EditTextareaDocComponent } from './edit-textarea-doc.component';
+
+describe('EditTextareaDocComponent', () => {
+  let component: EditTextareaDocComponent;
+  let fixture: ComponentFixture<EditTextareaDocComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ EditTextareaDocComponent ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(EditTextareaDocComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

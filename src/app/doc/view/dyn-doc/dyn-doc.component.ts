@@ -33,9 +33,11 @@ export class DynDocComponent implements OnInit {
 	public docs: Array<Doc>;
 	public selectedIndex: number;
 	//public viewHeight: string = "calc(100% - 1.5em)";
-	public viewHeight: string = "calc(100% - 0em)";
+	//public viewHeight: string = "calc(100% - 0em)";
+	public viewHeight: string;
 	//public statusBarHeight: string = "1.5em";
-	public statusBarHeight: string = "0em";
+	//public statusBarHeight: string = "0em";
+	public statusBarHeight: string;
 
   constructor(
 			private docService: DocService, 
@@ -53,11 +55,8 @@ export class DynDocComponent implements OnInit {
 			});
 		this.globalService.statusLineCount$.subscribe(
 			count => {
-				//this.statusBarHeight =  "calc(" + ( count + 1.5 ) + "em)";
 				this.statusBarHeight =  "calc(" + ( count ) + "em)";
-				//this.viewHeight =  "calc(100% - " + ( count + 1.5 ) + "em)";
 				this.viewHeight =  "calc(100% - " + ( count ) + "em)";
-				console.log("Status Bar height: ", this.statusBarHeight);
 			}
 		);
 	}

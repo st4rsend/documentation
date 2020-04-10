@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, HostBinding } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { DocService } from '../../service/doc.service';
+import { GlobalService } from '../../../shared/service/global.service';
 
 import { ListSelectComponent } from '../../../shared/component/list-select/list-select.component';
 
@@ -46,8 +47,11 @@ export class MenuDocComponent implements OnInit {
 	public themeLabel = "Theme";
 	public docLabel = "Doc";
 
+	public statusBarHeight: string;
+
   constructor(
 		private docService: DocService,
+		private globalService: GlobalService,
 	) { }
 
 	navigatorClick(state) {
@@ -71,7 +75,12 @@ export class MenuDocComponent implements OnInit {
 				}
 			});
 
-
+		this.globalService.statusLineCount$.subscribe(
+			count => {
+				this.statusBarHeight =  "calc(" + ( count ) + "em)";
+				console.log("MenuDoc: statusBarHeight: ", this.statusBarHeight);
+			}
+		);
   }
 
 	public mouseEnter() {

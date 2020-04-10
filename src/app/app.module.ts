@@ -25,6 +25,7 @@ import { DocBaseComponent } from './doc/view/doc-base/doc-base.component';
 import { MenuDocComponent } from './doc/view/menu-doc/menu-doc.component';
 import { DynDocComponent } from './doc/view/dyn-doc/dyn-doc.component';
 import { EditItemDocComponent } from './doc/view/edit-item-doc/edit-item-doc.component';
+import { EditTextareaDocComponent } from './doc/view/edit-textarea-doc/edit-textarea-doc.component';
 import { TextItemDocComponent } from './doc/view/text-item-doc/text-item-doc.component';
 import { SvgItemDocComponent } from './doc/view/svg-item-doc/svg-item-doc.component';
 import { UrlSvgItemDocComponent } from './doc/view/url-svg-item-doc/url-svg-item-doc.component';
@@ -53,6 +54,7 @@ import { DocListFinderComponent } from './doc/admin/doc-list-finder/doc-list-fin
 		MenuDocComponent,
 		DynDocComponent,
 		EditItemDocComponent,
+		EditTextareaDocComponent,
 		TextItemDocComponent,
 		SvgItemDocComponent,
 		UrlSvgItemDocComponent,

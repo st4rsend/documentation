@@ -1,0 +1,13 @@
+<div class="outer-border">
+	<div class="top-bar">
+		<button (click)="validate()">Submit</button>
+		<button (click)="cancel()">Cancel</button>
+	</div>
+	<mat-form-field class="textarea">
+		<textarea class="doc-item-edit" matInput
+			[(ngModel)]="newText"
+			cdkTextareaAutosize
+			cdkAutosizeMinRows="10">
+		</textarea>
+	</mat-form-field>
+</div>

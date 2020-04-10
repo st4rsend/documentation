@@ -1,10 +1,10 @@
 .outer-border {
 	position: absolute;
+  z-index: 3;
 	//top: 50px;
 	//left: 100px;
-	border: thick dashed red;
+	border: thin dashed red;
 	border-radius: 8px;
-  z-index: 1000;
 	overflow-y: auto;
 }
 .flex-bar {

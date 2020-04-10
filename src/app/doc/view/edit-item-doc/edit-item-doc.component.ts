@@ -1,9 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component,
+	OnInit, Input, Output, EventEmitter,
+	ViewChild, ViewContainerRef,
+	ComponentFactoryResolver } from '@angular/core';
 import {DomSanitizer} from "@angular/platform-browser";
 
 import { DocService } from '../../service/doc.service';
 import { Doc } from '../../model/doc';
 import { SqlListService, ISqlList } from '../../../shared/service/sql-list.service';
+import { EditTextareaDocComponent } from '../edit-textarea-doc/edit-textarea-doc.component';
 
 @Component({
 	selector: 'app-edit-item-doc',
@@ -42,9 +46,13 @@ export class EditItemDocComponent implements OnInit {
 
 	public editStyles;
 
+	editTextareaComponentRef: any;
+	@ViewChild('editTextareaContainer',	{ static: true, read: ViewContainerRef }) EditTextareaDocComponent: ViewContainerRef;
+
 
   constructor(
 		private sanitizer: DomSanitizer,
+		private editTextareaResolver: ComponentFactoryResolver,
 		private docService: DocService,
 		private docListService: SqlListService,) {
 		}
@@ -169,5 +177,25 @@ export class EditItemDocComponent implements OnInit {
 		loader.onload = (e) => {
 			this.doc.value2 = loader.result as string;
 		}
+	}
+
+	public valueDoubleClick() {
+		this.EditTextareaDocComponent.clear();
+		const factory = this.editTextareaResolver.resolveComponentFactory(EditTextareaDocComponent);
+		this.editTextareaComponentRef = this.EditTextareaDocComponent.createComponent(factory);
+		this.editTextareaComponentRef.instance.text = this.doc.value;
+		this.editTextareaComponentRef.instance.textareaCloseEvent.subscribe(
+			value => {
+				this.editTextareaCloseEvent(value);
+			}
+		);
+	}
+
+	public editTextareaCloseEvent(value: string) {
+		if ( value != undefined ) {
+			console.log("value: ", value);
+			this.doc.value = value;
+		}
+		this.editTextareaComponentRef.destroy();
 	}
 }

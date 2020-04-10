@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 interface UserGroup {
@@ -28,7 +28,7 @@ export class GlobalService {
 	private sqlListChanMax: number = 511;
 
 	private statusLineCount: number;
-	private statusLineCountSubject = new Subject<number>();
+	private statusLineCountSubject = new BehaviorSubject<number>(0);
 	public statusLineCount$ = this.statusLineCountSubject.asObservable();
 
 	private debugFlag = new Subject<boolean>();
