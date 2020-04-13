@@ -85,10 +85,10 @@ export class EditItemDocComponent implements OnInit {
 			this.listType2Selected = false;
 		}
 		this.editStyles = {
-			"top": "5vh",
-			"left": "5vw",
-			"width": "90vw",
-			"height": "auto",
+			"top": "5%",
+			"left": "5%",
+			"width": "90%",
+			"height": "90%",
 			//"width": "'calc (100vw -50px)'",
 		};
 

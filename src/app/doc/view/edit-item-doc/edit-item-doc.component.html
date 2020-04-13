@@ -1,7 +1,22 @@
+<div class="grey-overlay">
+</div>
 <div class="outer-border" [ngStyle]="editStyles" cdkDrag>
 	<div class="flex-bar">
-		<button mat-raised-button color="primary" class="mat-but" (click)="validate();">CONFIRM</button>
+		<button mat-icon-button class="mat-but" 
+			color="accent" (click)="reset();">
+			<mat-icon>refresh</mat-icon>
+		</button>
+		<button mat-icon-button class="mat-but" 
+			color="warn" (click)="cancel();">
+			<mat-icon>cancel</mat-icon>
+		</button>
 		<mat-label class="idx" cdkDragHandle>idx: {{doc.idx}}</mat-label>
+		<button mat-raised-button color="primary" 
+			class="mat-but" (click)="validate();">
+			<mat-label>CONFIRM</mat-label>
+		</button>
+	</div>
+	<div class="flex-bar">
 		<mat-form-field class="select-type">
 			<mat-label>Display</mat-label>
 			<select matNativeControl required
@@ -14,6 +29,8 @@
 				</option>
 			</select>
 		</mat-form-field>
+		<div class="filler">
+		</div>
 		<mat-form-field appearance="outline" class="position">
 			<mat-label>Position</mat-label> 
 			<input placeholder="Index" matInput [maxLength]="3" [(ngModel)]="doc.position">
@@ -24,10 +41,6 @@
 			<mat-label>Description</mat-label>
 			<input matInput type="text" size="20" [(ngModel)]="doc.description">
 		</mat-form-field>
-		<button mat-icon-button color="accent" (click)="reset();">
-			<mat-icon>refresh</mat-icon></button>
-		<button mat-icon-button color="warn" (click)="cancel();">
-			<mat-icon>cancel</mat-icon></button>
 	</div>
 	<div class="info-box">
 		<div class="info1">
@@ -44,6 +57,8 @@
 						</option>
 					</select>
 				</mat-form-field>
+				<div class="filler">
+				</div>
 				<div class="from-file">
 					<input 
 						type="file"
@@ -86,6 +101,8 @@
 						</option>
 					</select>
 				</mat-form-field>
+				<div class="filler">
+				</div>
 				<div class="from-file">
 					<input 
 						type="file"

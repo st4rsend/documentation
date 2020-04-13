@@ -5,6 +5,8 @@ import {
 	ViewContainerRef,
 	ComponentFactoryResolver,
  } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+
 import { EditItemDocComponent } from '../edit-item-doc/edit-item-doc.component';
 
 import { DocService } from '../../service/doc.service';
@@ -25,11 +27,19 @@ export class DocBaseComponent implements OnInit {
 	@ViewChild('articleEditContainer', { static: true, read: ViewContainerRef }) EditItemDocComponent: ViewContainerRef;
 
   constructor(
+		private route: ActivatedRoute,
 		private docService: DocService,
 		private resolver: ComponentFactoryResolver,
 	) { }
 
 	ngOnInit() {
+		this.route.paramMap.subscribe(
+			params => {
+				console.log("ID: ",params.get('id'));
+				this.docService.dsSetDocListID(+params.get('id'));
+			}
+		); 
+
 		this.docService.articleEditRequest$.subscribe(
 			article => {
 				this.articleEditComponentCreate(article);

@@ -2,7 +2,8 @@
 		<H1>Quick links</H1>
 	<div *ngIf="connectFlag" class="container connected-apps"> 
 		<p>
-			<li><a routerLink="/doc/base">Enter documentation application</a>
+			<li><a [routerLink]="['/doc/base', 2]">Enter application</a>
+			<li><a [routerLink]="['/doc/base','9']">About the author</a>
 			<li><a routerLink="/mgmt/base">Admin corner</a>
 		</p>
 	</div>
@@ -11,23 +12,6 @@
 		<p><li><a routerLink="/mgmt/base">Management</a></p>
 	</div>
 -->
-	<H1>HowTo</H1>
-	<H2>Description</H2>
-	Cette application est un essai de documentation pour étude des technologies ci-dessous:
-		<li>La présentation client en mode Single Page Application (SPA) s'appuie sur le framework Angular 2+.</li>
-		<li>Les services cloud Google Compute Engine (GCE) fournissent l'infrastructure de production qui héberge les services servers www ansi que l'espace de développement.</li>
-		<li>Le système d'exploitation Debian anime les serveurs de production (DataCenter side).</li>
-		<li>Côté "Office/Bureau" le système d'exploitation Windows 10 héberge le Subsystem Linux (WSL) pour accès SSH distant aux environnements de développement (WSL Terminal + VIM), ainsi que les navigateurs webs pour la visualisation.
-		<li>Le serveur web NGINX couplé aux services de load balancing front pour groupe d'instances GCE.</li>
-		<li>La base de donnée MariaDB.</li>
-		<li>Le language GO pour le développement côté server (backend).</li>
-		<li>Un protocol de communication propriétaire s'appuyant sur la technologie websocket (RFC 6455).</li>
-	<H2>Navigation</H2>
-	<p>Le symbole <mat-icon color="primary">menu</mat-icon> dans le coin supérieur gauche propose par simple click l'ouverture du menu générique de l'application.</p>
-	<p>Dans le coin supérieur droit deux icones indiquent le statut de la relation client server:
-		<li><mat-icon color="accent">import_export</mat-icon> Une connexion opérationnelle.</li>
-		<li><mat-icon color="accent">fingerprint</mat-icon> Un utilisateur identifié.</li>
-	</p>
 
 	<div>
 		<H1>THEMING</H1>

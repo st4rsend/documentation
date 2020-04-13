@@ -1,12 +1,10 @@
-
 .server-com {
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 1000;
+	z-index: 10;
 	width: 100%;
 	pointer-events: none;
-
 }
 .app-header {
 	display: flex;

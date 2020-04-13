@@ -9,7 +9,7 @@ const appRoutes: Routes = [
 
 	{ path: '', redirectTo: 'home', pathMatch: 'full' },
 	{ path: 'home', component: HomeComponent },
-	{ path: 'doc/base', component: DocBaseComponent },
+	{ path: 'doc/base/:id', component: DocBaseComponent },
 	{ path: 'todo/base', component: TodoBaseComponent },
 	{ path: 'mgmt/base', component: MgmtBaseComponent },
 ];

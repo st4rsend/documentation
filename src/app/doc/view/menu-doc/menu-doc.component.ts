@@ -78,7 +78,6 @@ export class MenuDocComponent implements OnInit {
 		this.globalService.statusLineCount$.subscribe(
 			count => {
 				this.statusBarHeight =  "calc(" + ( count ) + "em)";
-				console.log("MenuDoc: statusBarHeight: ", this.statusBarHeight);
 			}
 		);
   }
