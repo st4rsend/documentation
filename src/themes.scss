@@ -23,6 +23,16 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 		color: mat-color($light-primary,900);
 	};
 
+	.primary-color {
+		color: mat-color($light-primary,500);
+	}
+	.accent-color {
+		color: mat-color($light-accent,500);
+	}
+	.warn-color {
+		color: mat-color($light-warn,500);
+	}
+
 	.outer-border {
 		background-color: mat-color($light-background,800);
 	};
@@ -101,6 +111,15 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 	a:link, a:visited, .a:link, .a:visited {
 		color: mat-color($dark-primary,500);
 	};
+	.primary-color {
+		color: mat-color($dark-primary,500);
+	}
+	.accent-color {
+		color: mat-color($dark-accent,500);
+	}
+	.warn-color {
+		color: mat-color($dark-warn,500);
+	}
 	.outer-border {
 		background-color: mat-color($dark-background,500);
 	};

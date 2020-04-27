@@ -191,10 +191,30 @@ export class EditItemDocComponent implements OnInit {
 		);
 	}
 
+	public value2DoubleClick() {
+		this.EditTextareaDocComponent.clear();
+		const factory = this.editTextareaResolver.resolveComponentFactory(EditTextareaDocComponent);
+		this.editTextareaComponentRef = this.EditTextareaDocComponent.createComponent(factory);
+		this.editTextareaComponentRef.instance.text = this.doc.value2;
+		this.editTextareaComponentRef.instance.textareaCloseEvent.subscribe(
+			value => {
+				this.editTextarea2CloseEvent(value);
+			}
+		);
+	}
+
 	public editTextareaCloseEvent(value: string) {
 		if ( value != undefined ) {
 			console.log("value: ", value);
 			this.doc.value = value;
+		}
+		this.editTextareaComponentRef.destroy();
+	}
+
+	public editTextarea2CloseEvent(value: string) {
+		if ( value != undefined ) {
+			console.log("value: ", value);
+			this.doc.value2 = value;
 		}
 		this.editTextareaComponentRef.destroy();
 	}

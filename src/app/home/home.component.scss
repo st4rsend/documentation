@@ -10,8 +10,8 @@
 }
 
 .connected-apps {
-	margin-top:20px;
-	margin-bottom:20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 .connected-apps>li {
 	margin-block-start: .5em;
@@ -19,8 +19,32 @@
 }
 
 .logged-apps {
-	margin-top:20px;
-	margin-bottom:20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.theming-table {
+	display: table;
+}
+
+.theming-table-caption {
+	display: table-caption;
+	text-align: center;
+}
+
+.theming-table-body {
+	display: table-row-group;
+}
+
+.theming-table-row {
+	display: table-row;
+	height: 3em;
+}
+
+.theming-table-cell {
+	padding-left: 10px;
+	display: table-cell;
+	font-size: 1.3em;
 }
 
 p+p {
@@ -28,12 +52,14 @@ p+p {
 }
 
 
-*>p {
-	display: inline-block;
-	
-}
+//*>p {
+//	display: inline-block;
+//}
 
 *p>li {
 	//display: inline-flex;
+	text-ident: 0;
+}
+li {
 	text-ident: 0;
 }

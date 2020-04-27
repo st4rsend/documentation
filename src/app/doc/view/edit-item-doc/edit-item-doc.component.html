@@ -125,7 +125,8 @@
 					cdkTextareaAutosize
 					cdkAutosizeMinRows="5"
 					cdkAutosizeMaxRows="10"
-					[(ngModel)]="doc.value2">
+					[(ngModel)]="doc.value2"
+					(dblclick)="value2DoubleClick()">
 				</textarea>
 			</mat-form-field>
 		</div>

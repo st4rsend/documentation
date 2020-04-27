@@ -100,7 +100,7 @@ export class MenuDocComponent implements OnInit {
 	}
 
 	docRefresh() {
-		this.docService.dsSetDocListID(this.docList.listID);
+		this.docService.refresh();
 	}	
 
 	editModeChange() {

@@ -1,7 +1,21 @@
 <div class="outer-border">
 	<div class="top-bar">
-		<button (click)="validate()">Submit</button>
-		<button (click)="cancel()">Cancel</button>
+		<button mat-icon-button class="mat-but"
+			color="accent"
+			(click)="refresh()">
+			<mat-icon>refresh</mat-icon>
+		</button>
+		<button mat-icon-button class="mat-but"
+			color="warn"
+			(click)="cancel()">
+			<mat-icon>cancel</mat-icon>
+		</button>
+		<mat-label class="top-filler"> </mat-label>
+		<button mat-raised-button color="primary" class="mat-but"
+			color="primary" 
+			(click)="validate()">
+			<mat-label>Confirm</mat-label>
+		</button>
 	</div>
 	<mat-form-field class="textarea">
 		<textarea class="doc-item-edit" matInput

@@ -5,10 +5,27 @@
 	left: 5% ;
 	width: 90%;
 	height: 90%;
-	border: thick dashed red;
+	border-color: silver;
+	border-style: ridge;
 	opacity: 1;
 }
 
+.top-bar {
+	flex: auto;
+	display: flex;
+	display-direction: row;
+	justify-content: space-between;
+}
+
+.mat-but {
+	margin: 2px;
+	flex: 0 0 auto;
+}
+
+.top-filler {
+	flex: 1 0 auto;
+	text-align: center;
+}
 .textarea {
 	width: 100%;
 	height: 100%;

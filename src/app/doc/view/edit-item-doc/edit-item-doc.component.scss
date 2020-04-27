@@ -1,5 +1,5 @@
 .grey-overlay {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -9,7 +9,7 @@
 }
 
 .outer-border {
-	position: absolute;
+	position: fixed;
   z-index: 3;
 	//top: 50px;
 	//border-width: thick;

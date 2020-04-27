@@ -65,6 +65,9 @@ export class DocService {
 		}
 	}
 		
+	public refresh() {
+		this.dsListIDSource.next(this.docListID);
+	}
 
 	public articleEdit(article: Doc){
 		this.articleEditSub.next(article);

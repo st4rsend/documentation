@@ -1,5 +1,6 @@
-<div class="nav-helper" [ngClass]="{ 'nav-helper': connectFlag }" >
-		<H1>Quick links</H1>
+<div class="nav-helper">
+	<H1 style="text-indent: 5em; text-align: left;"> Welcome to St4rsend</H1>
+	<H2>Quick links</H2>
 	<div *ngIf="connectFlag" class="container connected-apps"> 
 		<p>
 			<li><a [routerLink]="['/doc/base', 2]">Enter application</a>
@@ -7,31 +8,73 @@
 			<li><a routerLink="/mgmt/base">Admin corner</a>
 		</p>
 	</div>
+	<div *ngIf="!connectFlag" class="container">
+		<p>
+		La connection automatique a échoué.
+		</p>
+		<p>
+		Veuillez rafraichir la page ou essayer l'option connecter du Menu.
+		</p>
+	</div>
 <!--
 	<div *ngIf="loginFlag" class="container logged-apps"> 
 		<p><li><a routerLink="/mgmt/base">Management</a></p>
 	</div>
 -->
-
-	<div>
-		<H1>THEMING</H1>
-	</div>
-	<div>
-		<button mat-button 
-			color="primary">PRIMARY BUTTON</button>
-	</div>
-	<div>
-		<button mat-button 
-			color="accent">ACCENT BUTTON</button>
-	</div>
-	<div>
-		<button mat-button 
-			color="warn">WARN BUTTON</button>
-	</div>
-	<div>
-		<mat-form-field appearance="outline">
-			<mat-label>Domain</mat-label>
-			<input placeholder="placeholder" matInput >
-		</mat-form-field>
+<H1 style="text-indent: 5em; text-align: left;">Introduction</H1>
+<H3>Fonctionnement</H3>
+<p>Le symbole <mat-icon color="primary">menu</mat-icon> dans le coin supérieur gauche propose par simple click l'ouverture du menu générique de l'application.</p>
+<p>Dans le coin supérieur droit deux icones indiquent le statut de la relation client server:
+<li><mat-icon color="accent">import_export</mat-icon> Une connexion opérationnelle.</li>
+<li><mat-icon color="accent">fingerprint</mat-icon> Un utilisateur identifié.</li>
+</p>
+<p>Déplacer le curseur vers la zone haute de la page fait apparaitre un menu déroulant de navigation.</p>
+<p>Les modifications ne sont autorisés que par un utilisateur identifié, une logique inspirée des systèmes type Unix est en cours.</p>
+<div>
+	<div class="theming-table">
+		<div class="theming-table-caption">
+			<H2>THEMING</H2>
+		</div>
+		<div class="theming-table-body">
+			<div class="theming-table-row">
+				<div class="theming-table-cell">
+					<span class="primary-color">Primary color</span>
+				</div>
+				<div class="theming-table-cell">
+					<button mat-raised-button 
+						color="primary">Primary button</button>
+				</div>
+			</div>
+			<div class="theming-table-row">
+				<div class="theming-table-cell">
+					<span class="accent-color">Accent color</span>
+				</div>
+				<div class="theming-table-cell">
+					<button mat-raised-button
+						color="accent">Accent button</button>
+				</div>
+			</div>
+			<div class="theming-table-row">
+				<div class="theming-table-cell">
+					<span class="warn-color">Warn color</span>
+				</div>		
+				<div class="theming-table-cell">
+					<button mat-raised-button
+						color="warn">Warn button</button>
+				</div>
+			</div>
+		</div>
+			<div class="theming-table-row">
+				<div class="theming-table-cell">
+					Input box 
+				</div>
+				<div class="theming-table-cell">
+					<mat-form-field appearance="outline">
+						<mat-label>Domain</mat-label>
+						<input placeholder="placeholder" matInput >
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

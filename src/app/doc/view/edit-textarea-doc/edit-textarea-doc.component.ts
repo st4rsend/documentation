@@ -25,5 +25,8 @@ export class EditTextareaDocComponent implements OnInit {
 	cancel() {
 		this.textareaCloseEvent.emit(undefined);
 	}
+	refresh() {
+		this.newText = this.text;
+	}
 
 }
