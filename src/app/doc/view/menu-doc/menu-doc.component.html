@@ -8,29 +8,38 @@
 	[style.top]="statusBarHeight" 
 	[@slideContent]="animationState" 
 	(mouseenter)="mouseEnter()">
-	<div class="menu-item-generic">
-		<app-list-select
-			[label]="themeLabel"
-			[listTable]="docThemeTable"
-			[listIDName]="docThemeIDName"
-			[listColumn]="docThemeColumn"
-			[listPosition]="docThemePosition"
-			[hasVoid]="true"
-			(listChangeEvent)="docThemeChange($event)">
-		</app-list-select>
+	<div class="menu-tabs-bar">
+		<div class="menu-tab"
+			(click)="setTabFilter()">
+			Filter
+		</div>
+		<div class="menu-tab"
+			(click)="setTabMap()">
+			Nav
+		</div>
+		<div class="menu-tab"
+			(click)="setTabMode()">
+			Mode
+		</div>
+		<div class="menu-tab"
+			(click)="setTabOptions()">
+			Options
+		</div>
 	</div>
-	<div class="menu-item-generic">
-		<app-list-select #docList
-			[label]="docLabel"
-			[listTable]="docThemeTable"
-			[listTable]="docListTable"
-			[listIDName]="docListIDName"
-			[listColumn]="docListColumn"
-			[listPosition]="docListPosition"
-			(listChangeEvent)="docListChange($event)">
-		</app-list-select>
+	<div *ngIf="navFilter">
+		<app-nav-filter>
+		</app-nav-filter>
 	</div>
-	<div class="menu-item-generic">
+	<div *ngIf="navMap">
+		<app-nav-map>
+		</app-nav-map>
+	</div>
+	<div *ngIf="navOptions">
+		<app-nav-options>
+		</app-nav-options>
+	</div>
+	<div *ngIf="navMode">
+		<div class="menu-item-generic">
 		<mat-form-field>
 			<mat-label>View mode</mat-label>
 			<mat-select
@@ -42,21 +51,22 @@
 				<mat-option value="full">Desc. and item</mat-option>
 			</mat-select>
 		</mat-form-field>
-	</div>
-	<div class="menu-item-generic">
+		</div>
+		<div class="menu-item-generic">
 		Edit mode
 		<mat-slide-toggle color="warn"
 			[(ngModel)]="docEditMode"
 			(change)="editModeChange()">
 		</mat-slide-toggle>
-	</div>
-	<div *ngIf="docEditMode" class="menu-item-new">
+		</div>
+		<div *ngIf="docEditMode" class="menu-item-new">
 		<button (click)="newArticle()">New</button>
-	</div>
-	<div class="menu-item-generic menu-item-refresh">
+		</div>
+		<div class="menu-item-generic menu-item-refresh">
 		<button mat-icon-button matPrefix color="primary"
 			mat-mini-fab (click)="docRefresh()">
 			<mat-icon>refresh</mat-icon>
 		</button>
+		</div>
 	</div>
 </div>

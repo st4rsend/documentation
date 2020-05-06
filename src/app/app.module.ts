@@ -23,6 +23,9 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './mgmt/register/register.component';
 import { DocBaseComponent } from './doc/view/doc-base/doc-base.component';
 import { MenuDocComponent } from './doc/view/menu-doc/menu-doc.component';
+import { NavFilterComponent } from './doc/view/menu-doc/nav-filter/nav-filter.component';
+import { NavMapComponent } from './doc/view/menu-doc/nav-map/nav-map.component';
+import { NavOptionsComponent } from './doc/view/menu-doc/nav-options/nav-options.component';
 import { DynDocComponent } from './doc/view/dyn-doc/dyn-doc.component';
 import { EditItemDocComponent } from './doc/view/edit-item-doc/edit-item-doc.component';
 import { EditTextareaDocComponent } from './doc/view/edit-textarea-doc/edit-textarea-doc.component';
@@ -52,6 +55,9 @@ import { DocListFinderComponent } from './doc/admin/doc-list-finder/doc-list-fin
 		RegisterComponent,
 		DocBaseComponent,
 		MenuDocComponent,
+		NavFilterComponent,
+		NavMapComponent,
+		NavOptionsComponent,
 		DynDocComponent,
 		EditItemDocComponent,
 		EditTextareaDocComponent,

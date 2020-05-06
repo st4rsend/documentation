@@ -1,0 +1,22 @@
+<div class="menu-item-generic">
+	<app-list-select
+		[label]="themeLabel"
+		[listTable]="docThemeTable"
+		[listIDName]="docThemeIDName"
+		[listColumn]="docThemeColumn"
+		[listPosition]="docThemePosition"
+		[hasVoid]="true"
+		(listChangeEvent)="docThemeChange($event)">
+	</app-list-select>
+</div>
+<div class="menu-item-generic">
+	<app-list-select #docList
+		[label]="docLabel"
+		[listTable]="docThemeTable"
+		[listTable]="docListTable"
+		[listIDName]="docListIDName"
+		[listColumn]="docListColumn"
+		[listPosition]="docListPosition"
+		(listChangeEvent)="docListChange($event)">
+	</app-list-select>
+</div>

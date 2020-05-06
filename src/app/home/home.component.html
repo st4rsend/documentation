@@ -8,12 +8,14 @@
 			<li><a routerLink="/mgmt/base">Admin corner</a>
 		</p>
 	</div>
-	<div *ngIf="!connectFlag" class="container">
+	<div *ngIf="!connectFlag" class="not-connected">
 		<p>
-		La connection automatique a échoué.
+		La connexion (websocket) n'est pas opérationnelle.
+		<BR>Celle-ci est nécessaire au fonctionnement de l'application.
 		</p>
 		<p>
-		Veuillez rafraichir la page ou essayer l'option connecter du Menu.
+		L'option Connect du menu <mat-icon color="primary">menu</mat-icon> permet une tentative de connexion.
+		<BR>Un rechargement ou rafraichissement de la page est une autre approche de résolution.
 		</p>
 	</div>
 <!--

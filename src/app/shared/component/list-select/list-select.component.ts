@@ -28,7 +28,9 @@ export class ListSelectComponent implements OnInit {
 			ready => {
 				if (ready && (this.list != undefined) && !this.hasVoid) {
 					this.listID = this.list.entries().next().value[0];
-					//this.listChange();
+					if ( this.list.size == 1 ) {
+						this.listChange();
+					}
 				}
 				this.isReady$.next(ready);
 		});
@@ -53,7 +55,6 @@ export class ListSelectComponent implements OnInit {
 	}
 
 	listChange() {
-		console.log("ListChange");
 		this.listChangeEvent.emit({key: this.listID, value: this.list.get(+this.listID)});
 	}
 

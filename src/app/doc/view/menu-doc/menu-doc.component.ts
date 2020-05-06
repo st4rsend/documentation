@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, HostBinding } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, HostBinding } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { DocService } from '../../service/doc.service';
 import { GlobalService } from '../../../shared/service/global.service';
@@ -25,29 +25,17 @@ export class MenuDocComponent implements OnInit {
 	@Output() editModeEvent = new EventEmitter<boolean>();
 	@Output() viewModeEvent = new EventEmitter<string>();
 
-	@ViewChild('docList', {static: true}) docList: ListSelectComponent;
-
 	animationState: 'void' | 'enter' | 'leave' = 'void';
 
 	public docEditMode: boolean = false;
 	public viewMode: string = 'normal';
 
-	public docListTable: string = 'documentation_list';
-	public docListIDName: string = 'ID';
-	public docListColumn = 'description';
-	public docListPosition = 'position';
-	public docListFilter = 'themeID';
-
-	public docThemeEditMode: boolean = false;
-	public docThemeTable: string = 'documentation_theme';
-	public docThemeIDName: string = 'ID';
-	public docThemeColumn = 'description';
-	public docThemePosition = 'position';
-
-	public themeLabel = "Theme";
-	public docLabel = "Doc";
-
 	public statusBarHeight: string;
+
+	public navFilter: boolean = true;
+	public navMap: boolean = false;
+	public navOptions: boolean = false;
+	public navMode: boolean = false;
 
   constructor(
 		private docService: DocService,
@@ -86,17 +74,32 @@ export class MenuDocComponent implements OnInit {
 		this.docService.cancelOverArticleTimeout();
 	}
 
-	docThemeChange(evt: {key: number, value: string}) {
-		if ( evt.key == 0) {
-			this.docList.RemoveFilter();
-		}
-		else {
-			this.docList.SetFilter(this.docListFilter, evt.key.toString());
-		}
+	public setTabMode() {
+		this.navMode = true;
+		this.navFilter = false;
+		this.navMap = false;
+		this.navOptions = false;
+	}
+	
+	public setTabMap() {
+		this.navMode = false;
+		this.navFilter = false;
+		this.navMap = true;
+		this.navOptions = false;
 	}
 
-	docListChange(evt: {key: number, value: string}) {
-		this.docService.dsSetDocListID(evt.key);
+	public setTabFilter() {
+		this.navMode = false;
+		this.navFilter = true;
+		this.navMap = false;
+		this.navOptions = false;
+	}
+
+	public setTabOptions() {
+		this.navMode = false;
+		this.navFilter = false;
+		this.navMap = false;
+		this.navOptions = true;
 	}
 
 	docRefresh() {

@@ -1,7 +1,6 @@
 .navigator {
 	z-index: 2;
 	position: fixed;
-	left: 0;
 	width: 100%;
 }
 
@@ -11,14 +10,22 @@
 	width: 80%;
 	margin: 0 10% 0 10%;
 	padding: 5%;
-	display: flex;
-	display-direction: row;
-	flex-wrap: wrap;
-	justify-content: space-around;
+	//display: flex;
+	//display-direction: row;
+	//flex-wrap: wrap;
+	//justify-content: space-around;
 	border-radius: 15px;
 	opacity: .87;
 }
 
+.menu-tabs-bar {
+	display: flex;
+	display-direction: row;
+	justify-content: space-around;
+}
+.menu-tab {
+	flex: 1 1 auto;
+}
 .menu-item-generic {
 	margin: 3px;
 }

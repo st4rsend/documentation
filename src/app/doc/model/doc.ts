@@ -44,3 +44,57 @@ export class ArticleShort implements IArticleShort {
 		public description: string,
 	){}
 }
+
+export interface INavElement {
+	idx: number;
+	description: string;
+}
+
+export class NavElement implements INavElement {
+	constructor (
+		public idx: number,
+		public description: string,
+	){}
+}
+
+export class NavHistory {
+	private navStack: Array<NavElement>;
+	private index: number;
+
+	constructor() {
+		this.index = 0;
+		this.navStack = [];
+	}
+
+	public push(element) {
+		this.navStack[this.index] = element;
+		this.index = this.index + 1;
+	}
+
+	public pop() {
+		this.index = this.index - 1;
+		return this.navStack.pop();
+	}
+
+	public size() {
+		return this.index;
+	}
+
+	public last() {
+		return this.navStack[this.index-1];
+	}
+
+	public isEmpty() {
+		return this.index === 0;
+	}
+
+	public getList() {
+		var cursor = this.index - 1;
+		var list: Array<NavElement> = [];
+		while (cursor > 0) {
+			list[this.index-cursor] = this.navStack[cursor];
+			cursor--;
+		}
+		return list;
+	}
+}

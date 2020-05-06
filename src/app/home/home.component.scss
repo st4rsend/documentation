@@ -5,13 +5,15 @@
 	overflow: auto;
 }
 
-.container {
-	font-size: 26px;
+.not-connected {
+	font-size: 1.2em;
+	font-style: italic;
 }
 
 .connected-apps {
 	margin-top: 20px;
 	margin-bottom: 20px;
+	font-size: 1.3em;
 }
 .connected-apps>li {
 	margin-block-start: .5em;
