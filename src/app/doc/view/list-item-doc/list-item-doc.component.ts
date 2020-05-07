@@ -15,7 +15,7 @@ export class ListItemDocComponent implements OnInit {
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
 	@Output() changedEvent = new EventEmitter<boolean>();
-	@Output() activateListEvent = new EventEmitter<number>();
+	@Output() activateListEvent = new EventEmitter<{key: number, value: string}>();
 
 	private editing: boolean = false;
 
@@ -32,7 +32,7 @@ export class ListItemDocComponent implements OnInit {
 		this.changedEvent.emit(true);
 	}
 
-	activateChildList(value: string) {
-		this.activateListEvent.emit(parseInt(value));
+	activateChildList(value: string, description: string) {
+		this.activateListEvent.emit({key: parseInt(value), value: description});
 	}
 }

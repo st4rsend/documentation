@@ -2,28 +2,34 @@
 	[style.top]="statusBarHeight"
 	(click)="navigatorClick('enter')" 
 	(mouseenter)="navigatorClick('enter')">
-<h1></h1>
+	<h1></h1>
 </div>
 <div class="menu-container app-header" 
 	[style.top]="statusBarHeight" 
 	[@slideContent]="animationState" 
 	(mouseenter)="mouseEnter()">
 	<div class="menu-tabs-bar">
-		<div class="menu-tab"
+		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navFilter}"
 			(click)="setTabFilter()">
 			Filter
 		</div>
-		<div class="menu-tab"
+		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navMap}"
 			(click)="setTabMap()">
 			Nav
 		</div>
-		<div class="menu-tab"
+		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navMode}"
 			(click)="setTabMode()">
 			Mode
 		</div>
-		<div class="menu-tab"
+		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navOptions}"
 			(click)="setTabOptions()">
 			Options
+		</div>
+		<div class="menu-item-generic menu-item-refresh">
+		<button mat-icon-button matPrefix color="primary"
+			mat-mini-fab (click)="docRefresh()">
+			<mat-icon>refresh</mat-icon>
+		</button>
 		</div>
 	</div>
 	<div *ngIf="navFilter">
@@ -59,14 +65,14 @@
 			(change)="editModeChange()">
 		</mat-slide-toggle>
 		</div>
+		<div class="menu-item-generic">
+		Sticky navigator
+		<mat-slide-toggle color="warn"
+			[(ngModel)]="navStickyMode">
+		</mat-slide-toggle>
+		</div>
 		<div *ngIf="docEditMode" class="menu-item-new">
 		<button (click)="newArticle()">New</button>
-		</div>
-		<div class="menu-item-generic menu-item-refresh">
-		<button mat-icon-button matPrefix color="primary"
-			mat-mini-fab (click)="docRefresh()">
-			<mat-icon>refresh</mat-icon>
-		</button>
 		</div>
 	</div>
 </div>

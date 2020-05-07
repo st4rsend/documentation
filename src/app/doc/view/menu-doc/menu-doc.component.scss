@@ -9,7 +9,7 @@
 	z-index: 3;
 	width: 80%;
 	margin: 0 10% 0 10%;
-	padding: 5%;
+	padding: 0 5% 0 5%;
 	//display: flex;
 	//display-direction: row;
 	//flex-wrap: wrap;
@@ -25,13 +25,27 @@
 }
 .menu-tab {
 	flex: 1 1 auto;
+	// Theme defined
+	padding: 2px 0 0 0;
+	border-radius: 2px;
+	text-indent: .5em;
 }
+.menu-tab-highlight {
+	flex: 1 1 auto;
+	// Theme defined
+	border-style: inset;
+}
+
 .menu-item-generic {
+	flex: 1 1 auto;
 	margin: 3px;
 }
 
 .menu-item-refresh {
-	transform: scale(.75);
+	margin: 0;
+	padding: 0;
+	height: 1em;
+	transform: scale(.5);
 }
 
 .menu-item-new {

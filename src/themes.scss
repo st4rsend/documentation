@@ -60,6 +60,14 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 		background-color: mat-color($light-background,100);
 	}
 
+	.menu-tab {
+		background-color: mat-color($light-background,700);
+	}
+
+	.menu-tab-highlight {
+		background-color: mat-color($light-background,300);
+	}
+
 	H1 {
 		color: mat-color($light-primary, 500);
 		text-align: center;
@@ -147,6 +155,15 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 	.head-bar {
 		background-color: mat-color($dark-background,600);
 	}
+
+	.menu-tab {
+		background-color: mat-color($dark-background,700);
+	}
+
+	.menu-tab-highlight {
+		background-color: mat-color($dark-background,300);
+	}
+
 	H1 {
 		color: mat-color($dark-primary, 500);
 		text-align: center;

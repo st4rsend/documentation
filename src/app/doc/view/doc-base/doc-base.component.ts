@@ -35,8 +35,7 @@ export class DocBaseComponent implements OnInit {
 	ngOnInit() {
 		this.route.paramMap.subscribe(
 			params => {
-				console.log("ID: ",params.get('id'));
-				this.docService.dsSetDocListID(+params.get('id'));
+				this.docService.dsSetDocListID(+params.get('id'),"root");
 			}
 		); 
 
@@ -69,5 +68,8 @@ export class DocBaseComponent implements OnInit {
 
 	articleEditCloseEvent(altered: boolean) {
 		this.articleEditComponentRef.destroy();
+		if (altered) {
+			this.docService.refresh();
+		}
 	}
 }

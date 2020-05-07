@@ -28,6 +28,7 @@ export class MenuDocComponent implements OnInit {
 	animationState: 'void' | 'enter' | 'leave' = 'void';
 
 	public docEditMode: boolean = false;
+	public navStickyMode: boolean = false;
 	public viewMode: string = 'normal';
 
 	public statusBarHeight: string;
@@ -47,18 +48,9 @@ export class MenuDocComponent implements OnInit {
 	}
 
   ngOnInit() {
-/*
-		this.docList.isReady$.subscribe(
-			ready => {
-				if ( ready ) {
-					this.docList.listID = this.docList.list[0].key;
-					this.docListChange({key: this.docList.listID, value:""});
-				}
-			});
-*/
 		this.docService.articleFocus$.subscribe(
 			val => {
-				if (val) {
+				if (val && !this.navStickyMode) {
 					this.navigatorClick("leave");
 				}
 			});
@@ -71,7 +63,7 @@ export class MenuDocComponent implements OnInit {
   }
 
 	public mouseEnter() {
-		this.docService.cancelOverArticleTimeout();
+		this.docService.cancelNavigatorTimeout();
 	}
 
 	public setTabMode() {

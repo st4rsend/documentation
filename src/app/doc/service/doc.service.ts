@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject ,  Subscription } from 'rxjs';
 import { WebSocketService, wsMessage } from '../../shared/service/websocket.service';
-import { Doc, ArticleShort } from '../model/doc';
+import { Doc, ArticleShort, NavHistory, NavElement } from '../model/doc';
 
 @Injectable()
 
@@ -13,6 +13,8 @@ export class DocService {
 
 	private docListID: number;
 	private articleListID: number;
+
+	private historic: NavHistory = new NavHistory();
 
 	dsSelectSub: Subscription;
 	dsSubject: Subject<any>;
@@ -32,8 +34,8 @@ export class DocService {
 	isReady$ = new Subject<any>();
 	isReadyArticle$ = new Subject<boolean>();
 
-	mouseOverArticleTimeout: number = 1000;
-	overArticleTimer;
+	mouseNavigatorTimeout: number = 1000;
+	navigatorTimer;
 
   constructor( private webSocketService: WebSocketService ) {
 		this.channelID = this.baseChannelID;
@@ -51,20 +53,24 @@ export class DocService {
 	}
 
 	public mouseOverArticle() {
-		this.cancelOverArticleTimeout();
-		this.overArticleTimer = setTimeout(
+		this.cancelNavigatorTimeout();
+		this.navigatorTimer = setTimeout(
 			() => {
 				this.articleFocusSub.next(true);
-			}, this.mouseOverArticleTimeout
+			}, this.mouseNavigatorTimeout
 		);
 	}
 
-	public cancelOverArticleTimeout() {
-		if (this.overArticleTimer != undefined) {
-			clearTimeout(this.overArticleTimer);
+	public cancelNavigatorTimeout() {
+		if (this.navigatorTimer != undefined) {
+			clearTimeout(this.navigatorTimer);
 		}
 	}
 		
+	public getHistoric() {
+		return this.historic.getList();
+	}
+
 	public refresh() {
 		this.dsListIDSource.next(this.docListID);
 	}
@@ -77,8 +83,10 @@ export class DocService {
 		this.channelID = this.baseChannelID + channelID;
 	}
 
-	public dsSetDocListID(idx: number) {
+	public dsSetDocListID(idx: number, description: string) {
 		this.dsListIDSource.next(idx);
+		let navElement = new NavElement(this.docListID, description);
+		this.historic.push(navElement);
 	}
 
 	public getArticle(): Doc {

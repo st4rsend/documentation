@@ -24,19 +24,13 @@ export class DynDocComponent implements OnInit {
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
 
-	//@ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
-
 	private dynTable: Array<Doc>;
 	public creating: boolean = false;
 
 	public docListID: number;
 	public docs: Array<Doc>;
 	public selectedIndex: number;
-	//public viewHeight: string = "calc(100% - 1.5em)";
-	//public viewHeight: string = "calc(100% - 0em)";
 	public viewHeight: string;
-	//public statusBarHeight: string = "1.5em";
-	//public statusBarHeight: string = "0em";
 	public statusBarHeight: string;
 
   constructor(
@@ -63,14 +57,16 @@ export class DynDocComponent implements OnInit {
 
 	itemDocCloseEvent(value: boolean) {
 		this.creating = false;
+		this.docService.refresh();
 	}
 
 	toBeRefreshed(evt: boolean) {
 		this.docService.dsSQLQueryDocs();
 	}
 
-	activateList(evt: number) {
-		this.docService.dsSetDocListID(evt);
+
+	activateList(evt: {key: number, value: string}) {
+		this.docService.dsSetDocListID(evt.key, evt.value);
 	}
 
 	drop(event: CdkDragDrop<string[]>) {

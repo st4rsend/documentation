@@ -1,1 +1,12 @@
-<p>nav-map works!</p>
+<div>
+<button mat-icon-button matPrefix color="primary"
+	mat-mini-fab (click)="getHistoric()">
+	refresh
+</button>
+<H3>HISTORIC</H3>
+<ul>
+	<li *ngFor="let navElement of historic">
+	{{ navElement.idx }} --- {{ navElement.description }}
+	</li>
+</ul>
+</div>

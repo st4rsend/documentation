@@ -47,6 +47,6 @@ export class NavFilterComponent implements OnInit {
 	}
 
 	docListChange(evt: {key: number, value: string}) {
-		this.docService.dsSetDocListID(evt.key);
+		this.docService.dsSetDocListID(evt.key, evt.value);
 	}
 }

@@ -13,7 +13,7 @@
 </div>
 <div *ngIf="viewMode=='normal' || viewMode=='full'" align='center'>
 	<p>
-	<button mat-raised-button	(click)="activateChildList([itemDoc.childListID])"
+	<button mat-raised-button	(click)="activateChildList([itemDoc.childListID], [itemDoc.value])"
 		 color="primary">{{itemDoc.value}}</button>
 	</p>
 </div>

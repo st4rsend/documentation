@@ -91,8 +91,8 @@ export class NavHistory {
 	public getList() {
 		var cursor = this.index - 1;
 		var list: Array<NavElement> = [];
-		while (cursor > 0) {
-			list[this.index-cursor] = this.navStack[cursor];
+		while (cursor >= 0) {
+			list[this.index - cursor -1] = this.navStack[cursor];
 			cursor--;
 		}
 		return list;

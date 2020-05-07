@@ -17,7 +17,7 @@ export class TextItemDocComponent implements OnChanges {
 	@Input() editMode: boolean;
 	@Input() viewMode: string;
 	@Output() changedEvent = new EventEmitter<boolean>();
-	@Output() activateListEvent = new EventEmitter<number>();
+	@Output() activateListEvent = new EventEmitter<{key: number, value: string}>();
 
 	public displayDirCss: string;
 	public displaySplitCssA: string;
@@ -59,8 +59,8 @@ export class TextItemDocComponent implements OnChanges {
 		this.docService.articleEdit(this.itemDoc);
 	}
 
-	activateChildList(value: string) {
-		this.activateListEvent.emit(parseInt(value));
+	activateChildList(value: string, description: string) {
+		this.activateListEvent.emit({key: parseInt(value), value: description});
 	}
 }
 
