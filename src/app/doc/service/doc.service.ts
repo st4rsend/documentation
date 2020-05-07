@@ -68,7 +68,7 @@ export class DocService {
 	}
 		
 	public getHistoric() {
-		return this.historic.getList();
+		return this.historic.getListFromStart();
 	}
 
 	public refresh() {

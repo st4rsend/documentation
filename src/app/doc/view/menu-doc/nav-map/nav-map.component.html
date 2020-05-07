@@ -1,12 +1,18 @@
 <div>
+<div>
 <button mat-icon-button matPrefix color="primary"
 	mat-mini-fab (click)="getHistoric()">
 	refresh
 </button>
+<button mat-icon-button matPrefix color="primary"
+	mat-mini-fab (click)="historicBack()">
+	Back
+</button>
+</div>
 <H3>HISTORIC</H3>
 <ul>
 	<li *ngFor="let navElement of historic">
-	{{ navElement.idx }} --- {{ navElement.description }}
+	{{ navElement.idx }} --- {{ navElement.description }} -- {{ tracker }}
 	</li>
 </ul>
 </div>

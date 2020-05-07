@@ -15,14 +15,26 @@ export class NavMapComponent implements OnInit {
 
   constructor(
 		private docService: DocService,
-	) { }
+	) {
+		this.docService.dsListIDChanged$.subscribe(
+			idx => {
+				this.getHistoric();
+			}
+		);
+	}
 
   ngOnInit(): void {
+		this.getHistoric();
   }
 
 	public getHistoric() {
 		this.historic = this.docService.getHistoric();
-		console.log("HISTORIC: ", this.historic);
+	}
+
+	public historicBack() {
+		let ele = this.historic.pop()
+		ele = this.historic.pop()
+		this.docService.dsSetDocListID(ele.idx, ele.description);
 	}
 
 }

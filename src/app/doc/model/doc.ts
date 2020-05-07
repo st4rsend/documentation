@@ -88,12 +88,21 @@ export class NavHistory {
 		return this.index === 0;
 	}
 
-	public getList() {
+	public getListFromLast() {
 		var cursor = this.index - 1;
 		var list: Array<NavElement> = [];
 		while (cursor >= 0) {
 			list[this.index - cursor -1] = this.navStack[cursor];
 			cursor--;
+		}
+		return list;
+	}
+	public getListFromStart() {
+		var cursor = 0;
+		var list: Array<NavElement> = [];
+		while (cursor < this.index) {
+			list[cursor] = this.navStack[cursor];
+			cursor++;
 		}
 		return list;
 	}
