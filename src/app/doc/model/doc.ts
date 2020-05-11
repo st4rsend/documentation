@@ -66,18 +66,27 @@ export class NavHistory {
 		this.navStack = [];
 	}
 
+	public size() {
+		return this.index;
+	}
+
 	public push(element) {
 		this.navStack[this.index] = element;
 		this.index = this.index + 1;
 	}
 
 	public pop() {
-		this.index = this.index - 1;
-		return this.navStack.pop();
+		if (this.index > 0) {
+			this.index = this.index - 1;
+			return this.navStack.pop();
+		} else {
+			return this.navStack[0];
+		}
 	}
 
-	public size() {
-		return this.index;
+	public back() {
+		this.pop();
+		return this.pop();
 	}
 
 	public last() {

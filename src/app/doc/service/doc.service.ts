@@ -71,6 +71,14 @@ export class DocService {
 		return this.historic.getListFromStart();
 	}
 
+	public historicBack() {
+		if (this.historic.size() > 1) {
+			return this.historic.back();
+		} else {
+			return this.historic.last();
+		}
+	}
+
 	public refresh() {
 		this.dsListIDSource.next(this.docListID);
 	}
@@ -84,9 +92,9 @@ export class DocService {
 	}
 
 	public dsSetDocListID(idx: number, description: string) {
-		this.dsListIDSource.next(idx);
-		let navElement = new NavElement(this.docListID, description);
+		let navElement = new NavElement(idx, description);
 		this.historic.push(navElement);
+		this.dsListIDSource.next(idx);
 	}
 
 	public getArticle(): Doc {
