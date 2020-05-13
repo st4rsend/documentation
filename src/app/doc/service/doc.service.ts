@@ -85,6 +85,15 @@ export class DocService {
 		}
 	}
 
+	public historicCursor() {
+		return this.historic.getCursor();
+	}
+
+	public historicNav(cursor: number) {
+		this.historic.setCursor(cursor);
+		this.dsListIDSource.next(this.historic.getIdx(cursor));
+	}
+
 	public refresh() {
 		this.dsListIDSource.next(this.docListID);
 	}

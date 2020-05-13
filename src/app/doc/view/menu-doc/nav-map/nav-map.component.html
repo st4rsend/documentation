@@ -1,8 +1,12 @@
-<div>
-<H3>HISTORIC</H3>
-<ul>
-	<li *ngFor="let navElement of historic">
-	{{ navElement.idx }} --- {{ navElement.description }} -- {{ tracker }}
-	</li>
-</ul>
+<div class="nav-container">
+	<div class="historic-container">
+		<div class="historic-title">
+			Historic
+		</div>
+		<div *ngFor="let navElement of historic ; index as i"
+			[ngClass]="i==cursor ? 'historic-item historic-highlight' : 'historic-item'"
+			(click)="activateHistoric(i)">
+			{{ navElement.description }} i:{{i}} cursor: {{cursor}}
+		</div>
+	</div>
 </div>

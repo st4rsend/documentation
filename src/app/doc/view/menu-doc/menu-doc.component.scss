@@ -15,7 +15,7 @@
 	//flex-wrap: wrap;
 	//justify-content: space-around;
 	border-radius: 15px;
-	opacity: .87;
+	opacity: .92;
 }
 
 .menu-tabs-bar {
@@ -24,31 +24,60 @@
 	justify-content: space-around;
 }
 .menu-tab {
-	flex: 1 1 auto;
 	// Theme defined
-	padding: 2px 0 0 0;
-	border-radius: 2px;
+	padding: .2em 0 .2em 0;
+	flex: 1 1 auto;
+	border-style: groove;
 	text-indent: .5em;
+	cursor: pointer;
 }
 .menu-tab-highlight {
-	flex: 1 1 auto;
 	// Theme defined
+	flex: 1 1 auto;
 	border-style: inset;
 }
 
-.menu-item-generic {
-	flex: 1 1 auto;
-	margin: 3px;
+.menu-nav {
+	flex: 0 1 auto;
+	display: flex;
+	display-direction: row;
+	justify-content: flex-end;
 }
 
-.menu-item-refresh {
-	margin: 0;
+.menu-nav-item {
+	flex: 0 1 auto;
+	margin: 0 1em 0 1em 0;
 	padding: 0;
 	height: 1em;
-	transform: scale(.5);
+	transform: scale(.6);
 }
 
 .menu-item-new {
 	width: 135px;
+	text-align: center;
+}
+
+.mode-container {
+	display: flex;
+	display-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	margin: 1em 0 0 0;
+}
+.mode-item {
+	flex: 1 1 auto;
+	margin: 0 2em 1em 2em;
+	vertical-align: middle;
+}
+
+.menu-new {
+	display: flex;
+	display-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+.button-new {
+	flex: 1 1 auto;
+	margin: 0 0 1em 0;
 	text-align: center;
 }

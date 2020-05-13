@@ -15,7 +15,7 @@
 		</div>
 		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navFilter}"
 			(click)="setTabFilter()">
-			Filter
+			search
 		</div>
 		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navMode}"
 			(click)="setTabMode()">
@@ -25,23 +25,25 @@
 			(click)="setTabOptions()">
 			Options
 		</div>
-		<div class="menu-item-generic menu-item-refresh">
-			<button mat-icon-button matPrefix color="primary"
-				mat-mini-fab (click)="docBack()">
-				<mat-icon>arrow_back_ios</mat-icon>
-			</button>
-		</div>
-		<div class="menu-item-generic menu-item-refresh">
-			<button mat-icon-button matPrefix color="primary"
-				mat-mini-fab (click)="docForward()">
-				<mat-icon>arrow_forward_ios</mat-icon>
-			</button>
-		</div>
-		<div class="menu-item-generic menu-item-refresh">
-			<button mat-icon-button matPrefix color="primary"
-				mat-mini-fab (click)="docRefresh()">
-				<mat-icon>refresh</mat-icon>
-			</button>
+		<div class="menu-nav">
+			<div class="menu-nav-item">
+				<button mat-icon-button matPrefix color="primary"
+					mat-mini-fab (click)="docBack()">
+					<mat-icon>arrow_back_ios</mat-icon>
+				</button>
+			</div>
+			<div class="menu-nav-item">
+				<button mat-icon-button matPrefix color="primary"
+					mat-mini-fab (click)="docForward()">
+					<mat-icon>arrow_forward_ios</mat-icon>
+				</button>
+			</div>
+			<div class="menu-nav-item">
+				<button mat-icon-button matPrefix color="primary"
+					mat-mini-fab (click)="docRefresh()">
+					<mat-icon>refresh</mat-icon>
+				</button>
+			</div>
 		</div>
 	</div>
 	<div *ngIf="navFilter">
@@ -56,35 +58,40 @@
 		<app-nav-options>
 		</app-nav-options>
 	</div>
-	<div *ngIf="navMode">
-		<div class="menu-item-generic">
-		<mat-form-field>
-			<mat-label>View mode</mat-label>
-			<mat-select
-				name="docViewMode"
-				[(ngModel)]="viewMode"
-				(selectionChange)="viewModeChange()">
-				<mat-option value="normal" selected>normal</mat-option>
-				<mat-option value="desc">Description only</mat-option>
-				<mat-option value="full">Desc. and item</mat-option>
-			</mat-select>
-		</mat-form-field>
+	<div *ngIf="navMode" class="mode-container">
+		<div class="mode-item">
+			Sticky navigator
+			<mat-slide-toggle color="warn"
+				[(ngModel)]="navStickyMode">
+			</mat-slide-toggle>
 		</div>
-		<div class="menu-item-generic">
-		Edit mode
-		<mat-slide-toggle color="warn"
-			[(ngModel)]="docEditMode"
-			(change)="editModeChange()">
-		</mat-slide-toggle>
+		<div class="mode-item">
+			<mat-form-field>
+				<mat-label>View mode</mat-label>
+				<mat-select
+					name="docViewMode"
+					[(ngModel)]="viewMode"
+					(selectionChange)="viewModeChange()">
+					<mat-option value="normal" selected>normal</mat-option>
+					<mat-option value="desc">Description only</mat-option>
+					<mat-option value="full">Desc. and item</mat-option>
+				</mat-select>
+			</mat-form-field>
 		</div>
-		<div class="menu-item-generic">
-		Sticky navigator
-		<mat-slide-toggle color="warn"
-			[(ngModel)]="navStickyMode">
-		</mat-slide-toggle>
+		<div class="mode-item">
+			Edit mode
+			<mat-slide-toggle color="warn"
+				[(ngModel)]="docEditMode"
+				(change)="editModeChange()">
+			</mat-slide-toggle>
 		</div>
-		<div *ngIf="docEditMode" class="menu-item-new">
-		<button (click)="newArticle()">New</button>
+	</div>
+	<div *ngIf="docEditMode" class="menu-new">
+		<div class="button-new">
+			<button mat-raised-button color="accent" (click)="newArticle()">New article</button>
+		</div>
+		<div class="button-new">
+			<button mat-raised-button color="accent" >New list</button>
 		</div>
 	</div>
 </div>

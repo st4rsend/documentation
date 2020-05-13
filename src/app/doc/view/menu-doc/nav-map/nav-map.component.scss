@@ -1,0 +1,20 @@
+.nav-container {
+	margin: 1em 0 1em 0;
+	display: flex;
+	display-direction: row;
+	flex-wrap: wrap;
+}
+
+.historic-container {
+	flex: 0 1 auto;
+	border-style: groove;
+}
+.historic-title {
+	border-style: groove;
+}
+.historic-item {
+	cursor: pointer;
+}
+.historic-highlight {
+	border: thin solid blue;
+}

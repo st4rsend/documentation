@@ -64,7 +64,7 @@ export class NavHistory {
 
 	constructor() {
 		this.count = 0;
-		this.cursor = 0;
+		this.cursor = -1;
 		this.navStack = [];
 	}
 
@@ -88,7 +88,7 @@ export class NavHistory {
 
 	public addElement(element) {
 		// clean from cursor pos
-		while (this.cursor < this.count) {
+		while (this.cursor < this.count- 1) {
 			this.pop();
 		}
 		// add past cursor pos
@@ -96,44 +96,58 @@ export class NavHistory {
 	}
 
 	public forward() {
-		if (this.cursor < this.count) {
+		if (this.cursor < this.count - 1) {
 			this.cursor++;
 		}
 		return  this.cursor;
 	}
 
 	public back() {
-		if (this.cursor > 1) {
+		if (this.cursor > 0) {
 			this.cursor--;
 		}
 		return this.cursor;
 	}
 
+	public getCursor() {
+		return this.cursor;
+	}
+
+	public setCursor(cursor: number) {
+		if (cursor > -1 && cursor < this.count) {
+			this.cursor = cursor;
+		}
+	}
+
 	public toLast() {
-		this.cursor = this.count;
+		this.cursor = this.count - 1;
 		return this.cursor;
 	}
 
 	public toFirst() {
 		if (this.count > 0) {
-			this.cursor = 1;
-		} else {
 			this.cursor = 0;
+		} else {
+			this.cursor = -1;
 		}
 		return this.cursor;
 	}
 
 	public getCurrentElement(){
-		if (this.cursor > 0) {
-			return this.navStack[this.cursor-1];
+		if (this.cursor >= 0) {
+			return this.navStack[this.cursor];
 		} else {
 			return undefined;
 		}
 	}
 
+	public getIdx(cursor: number) {
+		return this.navStack[cursor].idx
+	}
+
 	public getCurrentIdx() {
 		if (this.count > 0) {
-			return this.navStack[this.cursor-1].idx;
+			return this.navStack[this.cursor].idx;
 		} else {
 			return undefined;
 		}
