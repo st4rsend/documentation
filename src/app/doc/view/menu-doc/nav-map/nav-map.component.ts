@@ -32,8 +32,7 @@ export class NavMapComponent implements OnInit {
 	}
 
 	public historicBack() {
-		let ele = this.docService.historicBack()
-		this.docService.dsSetDocListID(ele.idx, ele.description);
+		this.docService.historicBack();
 	}
 
 }

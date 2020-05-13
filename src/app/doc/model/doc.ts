@@ -59,59 +59,105 @@ export class NavElement implements INavElement {
 
 export class NavHistory {
 	private navStack: Array<NavElement>;
-	private index: number;
+	private count: number;
+	private cursor: number;
 
 	constructor() {
-		this.index = 0;
+		this.count = 0;
+		this.cursor = 0;
 		this.navStack = [];
 	}
 
 	public size() {
-		return this.index;
+		return this.count;
 	}
 
-	public push(element) {
-		this.navStack[this.index] = element;
-		this.index = this.index + 1;
+	private push(element: NavElement) {
+		this.navStack[this.count] = element;
+		this.count = this.count + 1;
 	}
 
-	public pop() {
-		if (this.index > 0) {
-			this.index = this.index - 1;
+	private pop() {
+		if (this.count > 0) {
+			this.count = this.count - 1;
 			return this.navStack.pop();
 		} else {
-			return this.navStack[0];
+			return undefined;
 		}
 	}
 
-	public back() {
-		this.pop();
-		return this.pop();
+	public addElement(element) {
+		// clean from cursor pos
+		while (this.cursor < this.count) {
+			this.pop();
+		}
+		// add past cursor pos
+		this.push(element);
 	}
 
-	public last() {
-		return this.navStack[this.index-1];
+	public forward() {
+		if (this.cursor < this.count) {
+			this.cursor++;
+		}
+		return  this.cursor;
+	}
+
+	public back() {
+		if (this.cursor > 1) {
+			this.cursor--;
+		}
+		return this.cursor;
+	}
+
+	public toLast() {
+		this.cursor = this.count;
+		return this.cursor;
+	}
+
+	public toFirst() {
+		if (this.count > 0) {
+			this.cursor = 1;
+		} else {
+			this.cursor = 0;
+		}
+		return this.cursor;
+	}
+
+	public getCurrentElement(){
+		if (this.cursor > 0) {
+			return this.navStack[this.cursor-1];
+		} else {
+			return undefined;
+		}
+	}
+
+	public getCurrentIdx() {
+		if (this.count > 0) {
+			return this.navStack[this.cursor-1].idx;
+		} else {
+			return undefined;
+		}
 	}
 
 	public isEmpty() {
-		return this.index === 0;
+		return this.count === 0;
 	}
 
 	public getListFromLast() {
-		var cursor = this.index - 1;
+		var index = this.count - 1;
 		var list: Array<NavElement> = [];
-		while (cursor >= 0) {
-			list[this.index - cursor -1] = this.navStack[cursor];
-			cursor--;
+		while (index >= 0) {
+			list[this.count - index - 1] = this.navStack[index];
+			index--;
 		}
 		return list;
 	}
 	public getListFromStart() {
-		var cursor = 0;
+		var index = 0;
 		var list: Array<NavElement> = [];
-		while (cursor < this.index) {
-			list[cursor] = this.navStack[cursor];
-			cursor++;
+		while (index < this.count) {
+			list[index] = this.navStack[index];
+			index++;
 		}
 		return list;
 	}

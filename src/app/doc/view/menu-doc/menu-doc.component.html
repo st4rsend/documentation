@@ -9,13 +9,13 @@
 	[@slideContent]="animationState" 
 	(mouseenter)="mouseEnter()">
 	<div class="menu-tabs-bar">
-		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navFilter}"
-			(click)="setTabFilter()">
-			Filter
-		</div>
 		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navMap}"
 			(click)="setTabMap()">
 			Nav
+		</div>
+		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navFilter}"
+			(click)="setTabFilter()">
+			Filter
 		</div>
 		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navMode}"
 			(click)="setTabMode()">
@@ -26,10 +26,22 @@
 			Options
 		</div>
 		<div class="menu-item-generic menu-item-refresh">
-		<button mat-icon-button matPrefix color="primary"
-			mat-mini-fab (click)="docRefresh()">
-			<mat-icon>refresh</mat-icon>
-		</button>
+			<button mat-icon-button matPrefix color="primary"
+				mat-mini-fab (click)="docBack()">
+				<mat-icon>arrow_back_ios</mat-icon>
+			</button>
+		</div>
+		<div class="menu-item-generic menu-item-refresh">
+			<button mat-icon-button matPrefix color="primary"
+				mat-mini-fab (click)="docForward()">
+				<mat-icon>arrow_forward_ios</mat-icon>
+			</button>
+		</div>
+		<div class="menu-item-generic menu-item-refresh">
+			<button mat-icon-button matPrefix color="primary"
+				mat-mini-fab (click)="docRefresh()">
+				<mat-icon>refresh</mat-icon>
+			</button>
 		</div>
 	</div>
 	<div *ngIf="navFilter">

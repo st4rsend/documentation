@@ -72,10 +72,16 @@ export class DocService {
 	}
 
 	public historicBack() {
-		if (this.historic.size() > 1) {
-			return this.historic.back();
-		} else {
-			return this.historic.last();
+		if (this.historic.size() > 0) {
+			this.historic.back();
+			this.dsListIDSource.next(this.historic.getCurrentIdx());
+		}
+	}
+
+	public historicForward() {
+		if (this.historic.size() > 0) {
+			this.historic.forward();
+			this.dsListIDSource.next(this.historic.getCurrentIdx());
 		}
 	}
 
@@ -92,8 +98,11 @@ export class DocService {
 	}
 
 	public dsSetDocListID(idx: number, description: string) {
-		let navElement = new NavElement(idx, description);
-		this.historic.push(navElement);
+		if (idx != this.historic.getCurrentIdx()) {
+			let navElement = new NavElement(idx, description);
+			this.historic.addElement(navElement);
+			this.historic.toLast();
+		}
 		this.dsListIDSource.next(idx);
 	}
 

@@ -33,8 +33,8 @@ export class MenuDocComponent implements OnInit {
 
 	public statusBarHeight: string;
 
-	public navFilter: boolean = true;
-	public navMap: boolean = false;
+	public navFilter: boolean = false;
+	public navMap: boolean = true;
 	public navOptions: boolean = false;
 	public navMode: boolean = false;
 
@@ -94,19 +94,27 @@ export class MenuDocComponent implements OnInit {
 		this.navOptions = true;
 	}
 
-	docRefresh() {
+	public docRefresh() {
 		this.docService.refresh();
 	}	
 
-	editModeChange() {
+	public docBack() {
+		this.docService.historicBack();
+	}
+
+	public docForward() {
+		this.docService.historicForward();
+	}
+
+	public editModeChange() {
 		this.editModeEvent.emit(this.docEditMode);
 	}
 
-	viewModeChange() {
+	public viewModeChange() {
 		this.viewModeEvent.emit(this.viewMode);
 	}
 
-	newArticle() {
+	public newArticle() {
 		this.docService.articleEdit(null);
 	}
 }
