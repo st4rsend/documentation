@@ -22,7 +22,14 @@ export class NavMapComponent implements OnInit {
 		this.docService.dsListIDChanged$.subscribe(
 			idx => {
 				this.getHistoric();
-				this.getAncestors();
+			}
+		);
+		this.docService.articleParentsReady$.subscribe(
+			value => {
+				if (value) {
+					this.ancestors = this.docService.getAncestors();
+					console.log("Ancestor: ", this.ancestors);
+				}
 			}
 		);
 	}

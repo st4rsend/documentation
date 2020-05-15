@@ -20,6 +20,8 @@ export class DocService {
 	dsSelectSub: Subscription;
 	dsSubject: Subject<any>;
 
+	dsParentSub: Subscription;
+
 	private dsListIDSource = new Subject<number>();
 	public dsListIDChanged$ = this.dsListIDSource.asObservable();
 
@@ -34,6 +36,8 @@ export class DocService {
 
 	isReady$ = new Subject<any>();
 	isReadyArticle$ = new Subject<boolean>();
+
+	articleParentsReady$ = new Subject<boolean>();
 
 	mouseNavigatorTimeout: number = 1000;
 	navigatorTimer;
@@ -72,14 +76,34 @@ export class DocService {
 		return this.historic.getListFromStart();
 	}
 
-	public getAncestors() {
+	public updateAncestors() {
 		this.ancestors.flush();
-		let element =  new NavElement(2, "description 2");
-		this.ancestors.push(element);
-		let element2 =  new NavElement(9, "description 9");
-		this.ancestors.push(element2);
-		let element3 =  new NavElement(5, "description 5");
-		this.ancestors.push(element3);
+		this.dsSubject = this.webSocketService.webSocketSubject;
+		this.articleParentsReady$.next(false);
+		if (this.docListID != undefined) {
+			this.dsParentSub = this.dsSubject.subscribe((scMsg) => {
+				if ((+scMsg.payload.channelid === this.channelID)
+						&& (scMsg.payload.domain === "DOC")) {
+					if (scMsg.payload.command === "RESP_ARTICLE_PARENT") {
+						this.ancestors.push(new NavElement(
+							+scMsg.payload.data[0],
+							scMsg.payload.data[1],
+						));
+					}
+				}
+				if ((+scMsg.payload.channelid === this.channelID)
+						&& (scMsg.payload.command === "EOF")) {
+					this.articleParentsReady$.next(true);
+					this.dsParentSub.unsubscribe();
+				}		
+			});
+		}
+		let message = this.webSocketService
+			.prepareMessage(this.channelID,'DOC','GET_ARTICLE_PARENT',[this.docListID.toString()]);
+		this.dsSubject.next(message);
+	}
+
+	public getAncestors() {
 		return this.ancestors.getAncestors();
 	}
 
@@ -251,6 +275,7 @@ export class DocService {
 						&& (scMsg.payload.command === "EOF")) {
 					this.isReady$.next(true);
 					this.dsSelectSub.unsubscribe();
+					this.updateAncestors();
 				}		
 			});
 		}

@@ -37,6 +37,9 @@ func WsSrvDocWrapper(wsContext *WsContext, message *WsMessage) (err error){
 	if message.Payload.Command == "GET_DOC_TYPE" {
 		err = WsSrvGetDocType(wsContext, message)
 	}
+	if message.Payload.Command == "GET_ARTICLE_PARENT" {
+		err = WsSrvGetArticleParent(wsContext, message)
+	}
 	if message.Payload.Command == "INSERT_DOC" {
 		err = WsDocSecArticleInsert(wsContext, message)
 		if err == nil {
@@ -323,6 +326,38 @@ func WsSrvGetArticleByID(wsContext *WsContext, message *WsMessage) (err error){
 	response, err = rowsToWsSQLSelect(rows)
 
 	message.Payload.Command = "RESP_ARTICLE_BY_ID"
+	for _, line := range response.Data {
+		message.Payload.Data = line
+		if (wsContext.Verbose > 6) {
+			log.Printf("Sending SQL data: %v \n", line )
+		}
+		err = sendMessage(wsContext, &message.Payload)
+		CheckErr(err)
+	}
+	message.Payload.Command = "EOF"
+	message.Payload.Data = nil
+	err = sendMessage(wsContext, &message.Payload)
+	CheckErr(err)
+	return err
+}
+
+func WsSrvGetArticleParent(wsContext *WsContext, message *WsMessage) (err error){
+	var response *WsSQLSelect
+	err = nil
+	var sqlText string
+	localContext := context.Background()
+	err = wsContext.Db.PingContext(localContext)
+	CheckErr(err)
+	sqlText = "select L.ID, L.description from documentations D left join documentation_set S on D.ID=S.docID left join documentation_list L on S.listID=L.ID where D.childListID=? or D.child2LIstID=?;"
+	rows, err := wsContext.Db.QueryContext(localContext, sqlText,
+		message.Payload.Data[0],
+		message.Payload.Data[0])
+	CheckErr(err)
+	defer rows.Close()
+
+	response, err = rowsToWsSQLSelect(rows)
+
+	message.Payload.Command = "RESP_ARTICLE_PARENT"
 	for _, line := range response.Data {
 		message.Payload.Data = line
 		if (wsContext.Verbose > 6) {
