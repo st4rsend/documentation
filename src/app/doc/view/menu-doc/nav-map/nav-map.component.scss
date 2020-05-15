@@ -1,20 +1,21 @@
-.nav-container {
+.map-container {
 	margin: 1em 0 1em 0;
 	display: flex;
 	display-direction: row;
+	justify-content: space-around;
 	flex-wrap: wrap;
 }
 
-.historic-container {
+.list-container {
 	flex: 0 1 auto;
 	border-style: groove;
 }
-.historic-title {
+.list-title {
 	border-style: groove;
 }
-.historic-item {
+.list-item {
 	cursor: pointer;
 }
-.historic-highlight {
+.list-highlight {
 	border: thin solid blue;
 }

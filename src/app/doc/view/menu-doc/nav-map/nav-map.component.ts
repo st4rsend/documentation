@@ -11,9 +11,10 @@ import { NavElement, NavHistory } from '../../../model/doc';
 export class NavMapComponent implements OnInit {
 
 	public historic: Array<NavElement>;	
-	public keys;
+	public ancestors: Array<NavElement>;
 
-	public cursor: number = 0;
+	public historicCursor: number = 0;
+	public ancestorsCursor: number = 0;
 
   constructor(
 		private docService: DocService,
@@ -21,23 +22,30 @@ export class NavMapComponent implements OnInit {
 		this.docService.dsListIDChanged$.subscribe(
 			idx => {
 				this.getHistoric();
+				this.getAncestors();
 			}
 		);
 	}
 
   ngOnInit(): void {
 		this.getHistoric();
+		this.getAncestors();
   }
 
 	public getHistoric() {
-		this.cursor = this.docService.historicCursor();
+		this.historicCursor = this.docService.historicCursor();
 		this.historic = this.docService.getHistoric();
 	}
 
-	public historicBack() {
-		this.docService.historicBack();
+	public getAncestors() {
+		this.ancestors = this.docService.getAncestors();
 	}
+
 	public activateHistoric(cursor: number) {
 		this.docService.historicNav(cursor);
+	}
+
+	public activateAncestor(cursor: number) {
+		this.docService.ancestorsNav(cursor);
 	}
 }

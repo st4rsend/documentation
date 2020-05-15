@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject ,  Subscription } from 'rxjs';
 import { WebSocketService, wsMessage } from '../../shared/service/websocket.service';
-import { Doc, ArticleShort, NavHistory, NavElement } from '../model/doc';
+import { Doc, ArticleShort, NavHistory, NavAncestors, NavElement } from '../model/doc';
 
 @Injectable()
 
@@ -15,6 +15,7 @@ export class DocService {
 	private articleListID: number;
 
 	private historic: NavHistory = new NavHistory();
+	private ancestors: NavAncestors = new NavAncestors();
 
 	dsSelectSub: Subscription;
 	dsSubject: Subject<any>;
@@ -71,6 +72,17 @@ export class DocService {
 		return this.historic.getListFromStart();
 	}
 
+	public getAncestors() {
+		this.ancestors.flush();
+		let element =  new NavElement(2, "description 2");
+		this.ancestors.push(element);
+		let element2 =  new NavElement(9, "description 9");
+		this.ancestors.push(element2);
+		let element3 =  new NavElement(5, "description 5");
+		this.ancestors.push(element3);
+		return this.ancestors.getAncestors();
+	}
+
 	public historicBack() {
 		if (this.historic.size() > 0) {
 			this.historic.back();
@@ -92,6 +104,10 @@ export class DocService {
 	public historicNav(cursor: number) {
 		this.historic.setCursor(cursor);
 		this.dsListIDSource.next(this.historic.getIdx(cursor));
+	}
+
+	public ancestorsNav(idx: number) {
+		this.dsListIDSource.next(idx);
 	}
 
 	public refresh() {

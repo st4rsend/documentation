@@ -1,12 +1,22 @@
-<div class="nav-container">
-	<div class="historic-container">
-		<div class="historic-title">
+<div class="map-container">
+	<div class="list-container">
+		<div class="list-title">
 			Historic
 		</div>
 		<div *ngFor="let navElement of historic ; index as i"
-			[ngClass]="i==cursor ? 'historic-item historic-highlight' : 'historic-item'"
+			[ngClass]="i==historicCursor ? 'list-item list-highlight' : 'list-item'"
 			(click)="activateHistoric(i)">
-			{{ navElement.description }} i:{{i}} cursor: {{cursor}}
+			{{ navElement.description }}
+		</div>
+	</div>
+	<div class="list-container">
+		<div class="list-title">
+			Ancestors
+		</div>
+		<div *ngFor="let ancestor of ancestors"
+			class="list-item"
+			(click)="activateAncestor(ancestor.idx)">
+			{{ ancestor.description }}
 		</div>
 	</div>
 </div>

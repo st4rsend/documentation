@@ -57,6 +57,42 @@ export class NavElement implements INavElement {
 	){}
 }
 
+export class NavAncestors {
+	private navStack: Array<NavElement>;
+	private count: number;
+	
+	constructor() {
+		this.count =  0;
+		this.navStack =  [];
+	}
+
+	public size() {
+		return this.count;
+	}
+
+	public push(element: NavElement) {
+		this.navStack[this.count] = element;
+		this.count = this.count + 1;
+	}
+
+	public flush() {
+		while (this.count > 0) {
+			this.navStack.pop();
+			this.count--;
+		}
+	}
+
+	public getAncestors() {
+		var index = 0;
+		var list: Array<NavElement> = [];
+		while (index < this.count) {
+			list[index] = this.navStack[index];
+			index++;
+		}
+		return list;
+	}
+}
+
 export class NavHistory {
 	private navStack: Array<NavElement>;
 	private count: number;
