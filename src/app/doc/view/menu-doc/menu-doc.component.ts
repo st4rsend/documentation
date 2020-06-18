@@ -50,8 +50,15 @@ export class MenuDocComponent implements OnInit {
   ngOnInit() {
 		this.docService.articleFocus$.subscribe(
 			val => {
-				if (val && !this.navStickyMode) {
-					this.navigatorClick("leave");
+				if (this.animationState == "enter") {
+					if (val && !this.navStickyMode) {
+						this.navigatorClick("leave");
+					}
+				}
+				else {
+					if ( val ) {
+						this.navigatorClick("enter");
+					}
 				}
 			});
 

@@ -28,7 +28,6 @@ export class NavMapComponent implements OnInit {
 			value => {
 				if (value) {
 					this.ancestors = this.docService.getAncestors();
-					console.log("Ancestor: ", this.ancestors);
 				}
 			}
 		);
