@@ -35,7 +35,7 @@ export class DocBaseComponent implements OnInit {
 	ngOnInit() {
 		this.route.paramMap.subscribe(
 			params => {
-				this.docService.dsSetDocListID(+params.get('id'),"root");
+				//this.docService.dsSetDocListID(+params.get('id'),"root");
 			}
 		); 
 

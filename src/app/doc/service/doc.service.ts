@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject ,  Subscription } from 'rxjs';
 import { WebSocketService, wsMessage } from '../../shared/service/websocket.service';
 import { Doc, ArticleShort, NavHistory, NavAncestors, NavElement } from '../model/doc';
@@ -42,7 +43,9 @@ export class DocService {
 	mouseNavigatorTimeout: number = 1000;
 	navigatorTimer;
 
-  constructor( private webSocketService: WebSocketService ) {
+  constructor(
+		private webSocketService: WebSocketService,
+		private router: Router ) {
 		this.channelID = this.baseChannelID;
 		this.docs = [];
 		this.articlesShort = [];
@@ -153,6 +156,8 @@ export class DocService {
 			this.historic.toLast();
 		}
 		this.dsListIDSource.next(idx);
+		console.log("Router Navigate idx: ", idx);
+		this.router.navigate(['/doc/base', idx]);
 	}
 
 	public getArticle(): Doc {

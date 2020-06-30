@@ -9,6 +9,7 @@ const appRoutes: Routes = [
 
 	{ path: '', redirectTo: 'home', pathMatch: 'full' },
 	{ path: 'home', component: HomeComponent },
+	//{ path: 'doc/base/:id', component: DocBaseComponent },
 	{ path: 'doc/base/:id', component: DocBaseComponent },
 	{ path: 'todo/base', component: TodoBaseComponent },
 	{ path: 'mgmt/base', component: MgmtBaseComponent },
@@ -18,7 +19,10 @@ const appRoutes: Routes = [
 @NgModule({
   imports: [
 //    CommonModule
-		RouterModule.forRoot(appRoutes),
+		RouterModule.forRoot(
+			appRoutes,
+//			{ enableTracing: true }
+		),
   ],
 	exports: [
 		RouterModule
