@@ -34,10 +34,6 @@ import { SvgItemDocComponent } from './doc/view/svg-item-doc/svg-item-doc.compon
 import { UrlSvgItemDocComponent } from './doc/view/url-svg-item-doc/url-svg-item-doc.component';
 import { ListItemDocComponent } from './doc/view/list-item-doc/list-item-doc.component';
 import { ListSelectDocComponent } from './doc/view/list-select-doc/list-select-doc.component';
-import { TodoBaseComponent } from './todo/todo-base/todo-base.component';
-import { ListTodoComponent } from './todo/list-todo/list-todo.component';
-import { CreateTodoComponent } from './todo/create-todo/create-todo.component';
-import { UpdateTodoComponent } from './todo/update-todo/update-todo.component';
 import { LoginComponent } from './mgmt/login/login.component';
 import { SetPasswordComponent } from './mgmt/set-password/set-password.component';
 import { ListMgmtComponent } from './shared/component/list-mgmt/list-mgmt.component';
@@ -66,10 +62,6 @@ import { DocListFinderComponent } from './doc/admin/doc-list-finder/doc-list-fin
 		UrlSvgItemDocComponent,
 		ListItemDocComponent,
 		ListSelectDocComponent,
-		TodoBaseComponent,
-    ListTodoComponent,
-    CreateTodoComponent,
-		UpdateTodoComponent,
 		LoginComponent,
 		SetPasswordComponent,
 		ListMgmtComponent,

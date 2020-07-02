@@ -45,7 +45,6 @@ export class DynDocComponent implements OnInit {
 		this.docService.isReady$.subscribe(
 			ready => {
 				if ( ready ) {
-					console.log("DocService READY");
 					this.docs = this.docService.dsGetDocs();
 					this.docListID = this.docService.getDocListID();
 				}
@@ -69,7 +68,7 @@ export class DynDocComponent implements OnInit {
 
 
 	activateList(evt: {key: number, value: string}) {
-		this.docService.navigate(evt.key, evt.value);
+		this.router.navigate(['doc/base', evt.key, evt.value]);
 	}
 
 	drop(event: CdkDragDrop<string[]>) {
