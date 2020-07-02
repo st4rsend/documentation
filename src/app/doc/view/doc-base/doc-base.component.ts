@@ -30,12 +30,17 @@ export class DocBaseComponent implements OnInit {
 		private route: ActivatedRoute,
 		private docService: DocService,
 		private resolver: ComponentFactoryResolver,
-	) { }
+	) { 
+			console.log("DocBase Constructor");
+		}
 
 	ngOnInit() {
+		console.log("DocBase ngOnInit");
 		this.route.paramMap.subscribe(
 			params => {
+				this.docService.navigate(+params.get('id'),"root");
 				//this.docService.dsSetDocListID(+params.get('id'),"root");
+				console.log("DocBase reaceived new docid: ", params.get('id'));
 			}
 		); 
 

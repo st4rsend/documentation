@@ -149,15 +149,18 @@ export class DocService {
 		this.channelID = this.baseChannelID + channelID;
 	}
 
-	public dsSetDocListID(idx: number, description: string) {
+	public navigate(idx: number, description: string) {
 		if (idx != this.historic.getCurrentIdx()) {
 			let navElement = new NavElement(idx, description);
 			this.historic.addElement(navElement);
 			this.historic.toLast();
 		}
+		//this.router.navigate(['doc/base', idx]);
 		this.dsListIDSource.next(idx);
-		console.log("Router Navigate idx: ", idx);
-		this.router.navigate(['/doc/base', idx]);
+	}
+
+	public dsSetDocListID(idx: number, description: string) {
+		this.dsListIDSource.next(idx);
 	}
 
 	public getArticle(): Doc {
@@ -251,6 +254,7 @@ export class DocService {
 	}
 
 	public dsSQLQueryDocs() {
+		console.log("QUERY DOC");
 		this.docs = [];
 		this.dsSubject = this.webSocketService.webSocketSubject;
 		this.isReady$.next(false);

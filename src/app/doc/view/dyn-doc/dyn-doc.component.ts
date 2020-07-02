@@ -6,6 +6,7 @@ import {
 	EventEmitter,
 	ViewChild,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -36,6 +37,7 @@ export class DynDocComponent implements OnInit {
   constructor(
 			private docService: DocService, 
 			private globalService: GlobalService,
+			private router: Router,
 			) {
 	}
 
@@ -43,6 +45,7 @@ export class DynDocComponent implements OnInit {
 		this.docService.isReady$.subscribe(
 			ready => {
 				if ( ready ) {
+					console.log("DocService READY");
 					this.docs = this.docService.dsGetDocs();
 					this.docListID = this.docService.getDocListID();
 				}
@@ -66,7 +69,7 @@ export class DynDocComponent implements OnInit {
 
 
 	activateList(evt: {key: number, value: string}) {
-		this.docService.dsSetDocListID(evt.key, evt.value);
+		this.docService.navigate(evt.key, evt.value);
 	}
 
 	drop(event: CdkDragDrop<string[]>) {
