@@ -29,13 +29,13 @@
 			<div class="menu-nav-item">
 				<button mat-icon-button matPrefix color="primary"
 					mat-mini-fab (click)="docBack()">
-					<mat-icon>arrow_back_ios</mat-icon>
+					<mat-icon>arrow_upward</mat-icon>
 				</button>
 			</div>
 			<div class="menu-nav-item">
 				<button mat-icon-button matPrefix color="primary"
 					mat-mini-fab (click)="docForward()">
-					<mat-icon>arrow_forward_ios</mat-icon>
+					<mat-icon>arrow_downward</mat-icon>
 				</button>
 			</div>
 			<div class="menu-nav-item">
@@ -58,7 +58,7 @@
 		<app-nav-options>
 		</app-nav-options>
 	</div>
-	<div *ngIf="navMode" class="mode-container">
+	<div *ngIf="navMode" class="mode-container menu-tab-highlight">
 		<div class="mode-item">
 			Sticky navigator
 			<mat-slide-toggle color="warn"
