@@ -32,7 +32,6 @@ import { EditTextareaDocComponent } from './doc/view/edit-textarea-doc/edit-text
 import { TextItemDocComponent } from './doc/view/text-item-doc/text-item-doc.component';
 import { SvgItemDocComponent } from './doc/view/svg-item-doc/svg-item-doc.component';
 import { UrlSvgItemDocComponent } from './doc/view/url-svg-item-doc/url-svg-item-doc.component';
-import { ListItemDocComponent } from './doc/view/list-item-doc/list-item-doc.component';
 import { ListSelectDocComponent } from './doc/view/list-select-doc/list-select-doc.component';
 import { LoginComponent } from './mgmt/login/login.component';
 import { SetPasswordComponent } from './mgmt/set-password/set-password.component';
@@ -60,7 +59,6 @@ import { DocListFinderComponent } from './doc/admin/doc-list-finder/doc-list-fin
 		TextItemDocComponent,
 		SvgItemDocComponent,
 		UrlSvgItemDocComponent,
-		ListItemDocComponent,
 		ListSelectDocComponent,
 		LoginComponent,
 		SetPasswordComponent,

@@ -59,7 +59,8 @@ export class TextItemDocComponent implements OnChanges {
 		this.docService.articleEdit(this.itemDoc);
 	}
 
-	activateChildList(value: string, description: string) {
+	activateChildList(value: string, description: string, $event) {
+		$event.stopPropagation();
 		this.activateListEvent.emit({key: parseInt(value), value: description});
 	}
 }
