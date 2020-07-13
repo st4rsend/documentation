@@ -46,44 +46,46 @@
 			</div>
 		</div>
 	</div>
-	<div *ngIf="navFilter">
-		<app-nav-filter>
-		</app-nav-filter>
-	</div>
-	<div *ngIf="navMap">
-		<app-nav-map>
-		</app-nav-map>
-	</div>
-	<div *ngIf="navOptions">
-		<app-nav-options>
-		</app-nav-options>
-	</div>
-	<div *ngIf="navMode" class="mode-container menu-tab-highlight">
-		<div class="mode-item">
-			Sticky navigator
-			<mat-slide-toggle color="warn"
-				[(ngModel)]="navStickyMode">
-			</mat-slide-toggle>
-		</div>
-		<div class="mode-item">
-			<mat-form-field>
-				<mat-label>View mode</mat-label>
-				<mat-select
-					name="docViewMode"
-					[(ngModel)]="viewMode"
-					(selectionChange)="viewModeChange()">
-					<mat-option value="normal" selected>normal</mat-option>
-					<mat-option value="desc">Description only</mat-option>
-					<mat-option value="full">Desc. and item</mat-option>
-				</mat-select>
-			</mat-form-field>
-		</div>
-		<div class="mode-item">
-			Edit mode
-			<mat-slide-toggle color="warn"
-				[(ngModel)]="docEditMode"
-				(change)="editModeChange()">
-			</mat-slide-toggle>
+	<div class="menu-tab-container menu-tab-highlight">
+		<ng-template [ngIf]="navFilter">
+			<app-nav-filter>
+			</app-nav-filter>
+		</ng-template>
+		<ng-template [ngIf]="navMap">
+			<app-nav-map>
+			</app-nav-map>
+		</ng-template>
+		<ng-template [ngIf]="navOptions">
+			<app-nav-options>
+			</app-nav-options>
+		</ng-template>
+		<div *ngIf="navMode" class="mode-container">
+			<div class="mode-item">
+				Sticky navigator
+				<mat-slide-toggle color="warn"
+					[(ngModel)]="navStickyMode">
+				</mat-slide-toggle>
+			</div>
+			<div class="mode-item">
+				<mat-form-field>
+					<mat-label>View mode</mat-label>
+					<mat-select
+						name="docViewMode"
+						[(ngModel)]="viewMode"
+						(selectionChange)="viewModeChange()">
+						<mat-option value="normal" selected>normal</mat-option>
+						<mat-option value="desc">Description only</mat-option>
+						<mat-option value="full">Desc. and item</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="mode-item">
+				Edit mode
+				<mat-slide-toggle color="warn"
+					[(ngModel)]="docEditMode"
+					(change)="editModeChange()">
+				</mat-slide-toggle>
+			</div>
 		</div>
 	</div>
 	<div *ngIf="docEditMode" class="menu-new">

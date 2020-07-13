@@ -36,6 +36,11 @@
 	border-style: inset;
 }
 
+.menu-tab-container {
+	margin: .5em 0 .5em 0;
+
+}
+
 .menu-nav {
 	flex: 0 1 auto;
 	display: flex;
@@ -61,7 +66,6 @@
 	display-direction: row;
 	flex-wrap: wrap;
 	justify-content: space-around;
-	margin: .5em 0 0 0;
 }
 .mode-item {
 	flex: 1 1 auto;

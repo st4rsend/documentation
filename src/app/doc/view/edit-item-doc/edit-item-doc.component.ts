@@ -205,7 +205,6 @@ export class EditItemDocComponent implements OnInit {
 
 	public editTextareaCloseEvent(value: string) {
 		if ( value != undefined ) {
-			console.log("value: ", value);
 			this.doc.value = value;
 		}
 		this.editTextareaComponentRef.destroy();
@@ -213,7 +212,6 @@ export class EditItemDocComponent implements OnInit {
 
 	public editTextarea2CloseEvent(value: string) {
 		if ( value != undefined ) {
-			console.log("value: ", value);
 			this.doc.value2 = value;
 		}
 		this.editTextareaComponentRef.destroy();

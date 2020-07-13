@@ -23,7 +23,7 @@
 				[ngClass]="displaySplitCssA"
 				align='center'>
 				<p>
-				<button mat-raised-button	(click)="activateChildList([itemDoc.childListID], [itemDoc.value], $event)"
+				<button mat-raised-button	(click)="activateChildList([itemDoc.childListID], itemDoc.value, $event)"
 					color="primary">{{itemDoc.value}}</button>
 				</p>
 			</div>

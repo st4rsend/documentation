@@ -64,7 +64,7 @@ export class DocService {
 		this.cancelNavigatorTimeout();
 		this.navigatorTimer = setTimeout(
 			() => {
-				this.articleFocusSub.next(true);
+				this.articleFocusSub.next(false);
 			}, this.mouseNavigatorTimeout
 		);
 	}
