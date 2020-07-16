@@ -1,5 +1,9 @@
+<H1> Admin corner</H1>
 <div class="container">
 	<button (click)="docListEdit()">Edit doc list</button>
+	<button (click)="docThemeListEdit()">Edit doc Theme list</button>
+	<button (click)="docDisplayListEdit()">Edit doc Display list</button>
+</div>
 	<div *ngIf="docListEditMode">
 		<app-list-mgmt
 			[table]="docListTable"
@@ -9,7 +13,6 @@
 			(listCloseEvent)='docListCloseEvent($event)'>
 		</app-list-mgmt>
 	</div>
-	<button (click)="docThemeListEdit()">Edit doc Theme list</button>
 	<div *ngIf="docThemeListEditMode">
 		<app-list-mgmt
 			[table]="docThemeListTable"
@@ -19,7 +22,6 @@
 			(listCloseEvent)='docThemeListCloseEvent($event)'>
 		</app-list-mgmt>
 	</div>
-	<button (click)="docDisplayListEdit()">Edit doc Display list</button>
 	<div *ngIf="docDisplayListEditMode">
 		<app-list-mgmt
 			[table]="docDisplayListTable"
@@ -29,8 +31,7 @@
 			(listCloseEvent)='docDisplayListCloseEvent($event)'>
 		</app-list-mgmt>
 	</div>
-</div>
-<h1>Associating</h1>
+<h2>Associating</h2>
 <div class="flex-row">
 	<app-doc-list-finder
 		(docListFinderEvent)='listFinderEvent($event)'>
@@ -59,7 +60,7 @@
 </div>
 <div *ngIf="listKey!=0 && !themeEditFlag" class="flex-row">
 	<div class="flex-box">
-		<h2>Articles</h2>
+		<h3>Articles</h3>
 		<select 
 			(dblclick)="articleEdit()"
 			name="Articles"

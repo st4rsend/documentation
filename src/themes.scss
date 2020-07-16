@@ -33,9 +33,29 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 		color: mat-color($light-warn,500);
 	}
 
+	.grey-overlay {
+		position: fixed;
+		z-index: 2;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0,0,0,0.5);
+	}
 	.outer-border {
+		position: fixed;
+  	z-index: 3;
+		border-color: silver;
+		border-radius: 8px;
+		border-style: ridge;
+		overflow-y: auto;
 		background-color: mat-color($light-background,800);
-	};
+		top: 5%;
+		left: 5%;
+		height: 90%;
+		width: 90%;
+	}
+	
 	.doc-item {
 		background-color: mat-color($light-background,400);
 		//font-family: Roboto;
@@ -129,9 +149,28 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 	.warn-color {
 		color: mat-color($dark-warn,500);
 	}
+	.grey-overlay {
+		position: fixed;
+		z-index: 2;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0,0,0,0.5);
+	}
 	.outer-border {
-		background-color: mat-color($dark-background,500);
-	};
+		position: fixed;
+  	z-index: 3;
+		border-color: silver;
+		border-radius: 8px;
+		border-style: ridge;
+		overflow-y: auto;
+		background-color: mat-color($dark-background,600);
+		top: 5%;
+		left: 5%;
+		height: 90%;
+		width: 90%;
+	}
 	.doc-item {
 		background-color: mat-color($dark-background,500);
 		//font-family: Roboto;

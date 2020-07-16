@@ -1,13 +1,7 @@
 .outer-border {
-	position: fixed;
 	z-index: 4;
-	top: 5%;
-	left: 5% ;
-	width: 90%;
-	height: 90%;
-	border-color: silver;
-	border-style: ridge;
-	opacity: 1;
+	border-radius: 0;
+	//opacity: 1;
 }
 
 .top-bar {
