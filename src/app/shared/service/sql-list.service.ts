@@ -19,6 +19,8 @@ interface ISqlListDef {
 	asFilter: boolean;
 	filter_column_name: string;
 	filter_value: string;
+	humanRating_value: number;
+	calcRating_value: number;
 }
 	
 interface IList {
@@ -81,6 +83,10 @@ export class SqlListService {
 		this.RemoveFilterKey("default");
 	}
 
+	public setDepth(value: number) {
+		console.log("SetDepth: ", value);
+	}
+
 	public UpdateListKey(key: string, newList: Array<ISqlList>) {
 // TODO Handle correctly things
 		// Add or update members
@@ -92,7 +98,8 @@ export class SqlListService {
 				continue;
 			}
 			if ((newList[item].idx != this.listMap.get(key).sqlList[item].idx) 
-			|| (newList[item].value != this.listMap.get(key).sqlList[item].value)) {
+			|| (newList[item].value != this.listMap.get(key).sqlList[item].value)
+			|| (newList[item].humanRating != this.listMap.get(key).sqlList[item].humanRating)) {
 				newList[item].position = +item + 1;
 				this.UpdateItemKey(key, newList[item]);
 				continue;
@@ -119,6 +126,8 @@ export class SqlListService {
 				asFilter: false,
 				filter_column_name: null,
 				filter_value: null,
+				humanRating_value: 7,
+				calcRating_value: 0,
 			},
 			sqlList: new Array<ISqlList>(),
 			sqlMap: new Map<number, string>(),
@@ -147,7 +156,9 @@ export class SqlListService {
 					this.listMap.get(key).sqlListDef.column_name,
 					this.listMap.get(key).sqlListDef.position_name,
 					this.listMap.get(key).sqlListDef.filter_column_name,
-					this.listMap.get(key).sqlListDef.filter_value
+					this.listMap.get(key).sqlListDef.filter_value,
+					this.listMap.get(key).sqlListDef.humanRating_value.toString(),
+					this.listMap.get(key).sqlListDef.calcRating_value.toString(),
 				]);
 			this.subject.next(message);
 
@@ -157,7 +168,9 @@ export class SqlListService {
 					this.listMap.get(key).sqlListDef.table_name,
 					this.listMap.get(key).sqlListDef.idx_name,
 					this.listMap.get(key).sqlListDef.column_name,
-					this.listMap.get(key).sqlListDef.position_name
+					this.listMap.get(key).sqlListDef.position_name,
+					this.listMap.get(key).sqlListDef.humanRating_value.toString(),
+					this.listMap.get(key).sqlListDef.calcRating_value.toString(),
 				]);
 			this.subject.next(message);
 		}
@@ -173,7 +186,8 @@ export class SqlListService {
 				this.listMap.get(key).sqlListDef.position_name,
 				item.idx.toString(),
 				item.value,
-				item.position.toString()
+				item.position.toString(),
+				item.humanRating.toString(),
 			]);
 		this.subject.next(message);
 	}
@@ -190,7 +204,8 @@ export class SqlListService {
 				this.listMap.get(key).sqlListDef.column_name,
 				this.listMap.get(key).sqlListDef.position_name,
 				item.value,
-				item.position.toString()
+				item.position.toString(),
+				item.humanRating.toString(),
 			]);
 		this.subject.next(message);
 	}
@@ -220,7 +235,7 @@ export class SqlListService {
 					value: msg.payload.data[1],
 					position: +msg.payload.data[2],
 					humanRating: +msg.payload.data[3],
-					calcRating: 0,
+					calcRating: +msg.payload.data[4],
 				});
 				this.listMap.get(key).sqlMap.set(
 					+msg.payload.data[0], 

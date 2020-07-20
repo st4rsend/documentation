@@ -17,7 +17,7 @@
 			</div>
 			<div *ngIf="connectFlag" >
 				<mat-menu #subMenu="matMenu" >
-					<a [routerLink]="['doc/base','2']"><button mat-menu-item>Doc</button></a>
+					<a [routerLink]="['doc/base',2, 'St4rsend menu']"><button mat-menu-item>Doc</button></a>
 					<div *ngIf="loginFlag">
 						<a routerLink="mgmt/base"><button mat-menu-item>Mgmt</button></a>
 					</div>

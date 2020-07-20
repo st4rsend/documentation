@@ -5,42 +5,37 @@
 	// theme defined
 }
 .header {
-	height: 25px;
+	height: 2em;
 	vertical-align: top;
 	opacity: 1;	
 }
 .bottom {
-	height: 25px;
+	height: 1.5em;
 	vertical-align: bottom;
 }
 .description {
 	border: thin solid red;
 	background-color: #999999;
+	text-align: center;
 }
 .cancel {
 	float: right;
 }
-.confirm {
-	float: left;
-}
-
 .item-list {
-	width: 300px;
-	max-width: 100%;
-	border: solid 1px blue;
-	overflow: hidden;
-	display: block;
+	width: auto;
+	margin: 0 10% 5% 10%;
+	border: solid 1px silver;
 }
 .item-box {
 	border-radius: 1px;
-	border: thin solid blue;
-	float: bottom;
-	background-color: #FFFFFF;
-	display: block;
+	border: thin solid silver;
+	//float: bottom;
+}
+.input-number {
+	text-align: center;
 }
 .item-handle {
-	position: relative;
-	float: right;
-	color: #ccc;
 	cursor: move;
+	text-align: center;
+	width: 2em;
 }

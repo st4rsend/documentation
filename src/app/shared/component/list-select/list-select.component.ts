@@ -54,6 +54,9 @@ export class ListSelectComponent implements OnInit {
 		this.getList();
 	}
 
+	public setDepth(value: number) {
+		this.sqlListService.setDepth(value);
+	}
 	listChange() {
 		this.listChangeEvent.emit({key: this.listID, value: this.list.get(+this.listID)});
 	}

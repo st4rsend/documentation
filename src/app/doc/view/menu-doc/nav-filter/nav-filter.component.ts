@@ -8,7 +8,7 @@ import { ListSelectComponent } from '../../../../shared/component/list-select/li
 @Component({
   selector: 'app-nav-filter',
   templateUrl: './nav-filter.component.html',
-  styleUrls: ['./nav-filter.component.css']
+  styleUrls: ['./nav-filter.component.scss']
 })
 export class NavFilterComponent implements OnInit {
 
@@ -29,6 +29,7 @@ export class NavFilterComponent implements OnInit {
 	public themeLabel = "Theme";
 	public docLabel = "Doc";
 
+	public searchDepth: number = 3;
 
   constructor(
 		private docService: DocService,
@@ -48,5 +49,9 @@ export class NavFilterComponent implements OnInit {
 
 	docListChange(evt: {key: number, value: string}) {
 		this.docService.navigate(evt.key, evt.value);
+	}
+
+	public setDepth() {
+		this.docList.setDepth(this.searchDepth);
 	}
 }

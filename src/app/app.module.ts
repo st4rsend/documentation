@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatSliderModule} from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -81,6 +82,7 @@ import { DocListFinderComponent } from './doc/admin/doc-list-finder/doc-list-fin
 		MatMenuModule,
 		MatSelectModule,
 		MatSlideToggleModule,
+		MatSliderModule,
 		MatFormFieldModule,
 		AppRoutesModule,
 		DragDropModule,

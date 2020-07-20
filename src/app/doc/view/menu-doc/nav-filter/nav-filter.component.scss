@@ -1,0 +1,12 @@
+.search-container {
+	margin: 1em 0 1em 0;
+	display: flex;
+	display-direction: row;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+.search-list {
+	flex: 0 1 auto;
+}
+
