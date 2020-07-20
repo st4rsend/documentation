@@ -7,6 +7,8 @@ export interface ISqlList {
 	idx: number;
 	value: string;
 	position: number;
+	humanRating: number;
+	calcRating: number;
 }
 
 interface ISqlListDef {
@@ -54,9 +56,9 @@ export class SqlListService {
 	public GetMap(): Map<number, string> {
 		return this.listMap.get("default").sqlMap as Map<number, string>;
 	}
+
 	public GetMapKey(key: string): Map<number, string> {
 		return this.listMap.get(key).sqlMap as Map<number, string>;
-	
 	}
 
 	public SetFilterKey(key: string, column: string, value: string){
@@ -217,6 +219,8 @@ export class SqlListService {
 					idx: +msg.payload.data[0], 
 					value: msg.payload.data[1],
 					position: +msg.payload.data[2],
+					humanRating: +msg.payload.data[3],
+					calcRating: 0,
 				});
 				this.listMap.get(key).sqlMap.set(
 					+msg.payload.data[0], 

@@ -28,15 +28,19 @@ export class ListMgmtComponent implements OnInit {
 
 	}
 
-	allowDelete() {
+	public allowDelete() {
 		this.deleteMode = !this.deleteMode;
 	}
 
-  ngOnInit() {
-		this.isReady = this.listService.isReady$.subscribe( (value) => { this.listReady( value); });
+  public ngOnInit() {
+		this.isReady = this.listService.isReady$.subscribe( 
+			(value) => {
+				this.listReady( value);
+			});
 		this.listService.InitList(this.table, this.index, this.column, this.position);
   }
-	listReady(value: boolean) {
+
+	public listReady(value: boolean) {
 		if ( value == true ) {
 			this.list = this.listService.GetList();
 			this.newList = this.list.map(e => ({ ... e }));
@@ -46,28 +50,28 @@ export class ListMgmtComponent implements OnInit {
 		}
 	}
 
-	newItem() {
-		this.newList.push({idx: 0, value: "", position: 0});
+	public newItem() {
+		this.newList.push({idx: 0, value: "", position: 0, humanRating: 0, calcRating: 0});
 	}
 
-	deleteItem(idx: number) {
+	public deleteItem(idx: number) {
 		this.listService.DeleteItem(idx);
 		this.listService.InitList(this.table, this.index, this.column, this.position);
 	}
 
 
-	validate() {
+	public validate() {
 		this.listService.UpdateList(this.newList);
 		this.listService.InitList(this.table, this.index, this.column, this.position);
 	}
 
-	reset() {
+	public reset() {
 		this.listService.InitList(this.table, this.index, this.column, this.position);
 	}
-	cancel() {
+	public cancel() {
 		this.listCloseEvent.emit(false);
 	}
-	drop(event: CdkDragDrop<string[]>) {
+	public drop(event: CdkDragDrop<string[]>) {
 		//console.log("previousIndex: ", event.previousIndex);
 		//console.log("currentIndex: ", event.currentIndex);
 		moveItemInArray(this.newList, event.previousIndex, event.currentIndex);
