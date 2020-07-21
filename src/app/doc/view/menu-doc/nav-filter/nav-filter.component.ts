@@ -35,10 +35,10 @@ export class NavFilterComponent implements OnInit {
 		private docService: DocService,
 	) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
   }
 
-	docThemeChange(evt: {key: number, value: string}) {
+	public docThemeChange(evt: {key: number, value: string}) {
 		if ( evt.key == 0) {
 			this.docList.RemoveFilter();
 		}
@@ -47,8 +47,10 @@ export class NavFilterComponent implements OnInit {
 		}
 	}
 
-	docListChange(evt: {key: number, value: string}) {
-		this.docService.navigate(evt.key, evt.value);
+	public docListChange(evt: {key: number, value: string}) {
+		if ( evt.key > 0) {
+			this.docService.navigate(evt.key, evt.value);
+		}
 	}
 
 	public setDepth() {

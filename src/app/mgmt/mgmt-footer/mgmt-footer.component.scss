@@ -6,11 +6,14 @@
 	width: 100px;
 }
 .debug-panel {
+	position: fixed;
 	display: flex;
 	display-direction: row;
 	flex-wrap: wrap;
 	font-height: 12px;
 	font-family: Roboto; 
+	background-color: #eeeeee;
+	pointer-events: auto;
 }
 
 .top-row {
