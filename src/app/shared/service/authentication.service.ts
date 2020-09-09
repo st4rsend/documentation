@@ -10,8 +10,9 @@ export class AuthenticationService {
 
 	private	channelID: number = 1;
 	private userID: number = 0;
-	private userIDSubject$ = new Subject<number>();
-	//private userIDSubject$ = new BehaviorSubject<number>(0);
+	//private userIDSubject$ = new Subject<number>();
+	private userIDSubject$ = new BehaviorSubject<number>(0);
+	public userId$ = this.userIDSubject$.asObservable();
 
 	private domain: string = 'SEC';
 	private command: string;

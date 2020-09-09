@@ -94,7 +94,6 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 	}
 	H2, H4 {
 		color: mat-color($light-accent, 700);
-		padding-left: 10px;
 	}
 	H3, H5 {
 		color: mat-color($light-primary, 800);
@@ -209,7 +208,6 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 	}
 	H2, H4 {
 		color: mat-color($dark-primary, 800);
-		padding-left: 10px;
 	}
 	H3, H5 {
 		color: mat-color($dark-accent, 800);

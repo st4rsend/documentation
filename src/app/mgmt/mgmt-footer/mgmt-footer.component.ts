@@ -54,13 +54,13 @@ export class MgmtFooterComponent implements OnInit {
 				this.debugFlag = flag;
 			 }
 		);
-		this.subConnected = this.webSocketSvc.connected().subscribe(
+		this.subConnected = this.webSocketSvc.connected$.subscribe(
 			flag => {
 				this.isConnected = flag;
 			}
 		);
 		this.backendMsg = [];
-		this.backendMsgSub = this.webSocketSvc.backendMsg$().subscribe(
+		this.backendMsgSub = this.webSocketSvc.backendMsg$.subscribe(
 			msg => {
 				//this.backendMsg.push(JSON.stringify(msg));
 				this.backendMsg.push(msg);

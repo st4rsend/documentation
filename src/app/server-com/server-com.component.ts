@@ -18,7 +18,9 @@ export class ServerComComponent implements AfterViewInit {
 	@Output() themeEvent = new EventEmitter<string>();
 
 	private subConnect: Subscription;
+	private subLogin: Subscription;
 	private subDebug: Subscription;
+	private userId = 0;
 	public connectFlag = false;
 	public loginFlag = false;
 	public loginDisplayFlag = false;
@@ -38,6 +40,23 @@ export class ServerComComponent implements AfterViewInit {
 					this.debugFlag = flag; 
 				}
 			);
+		this.subConnect = this.websocketSvc.connected$.subscribe(status => {
+			this.connectFlag = status;
+			if (status==false && this.userId>0) {
+				this.authSvc.logout();
+			}
+		});
+		this.subLogin = this.authSvc.userId$.subscribe(
+			id => {
+				this.userId = id;
+				console.log("Received UserID: ", id);
+				if (id > 0) {
+					this.loginFlag = true;
+				} else {
+					this.loginFlag = false;
+				}
+			}
+		);
 		this.overlay = overlayContainer.getContainerElement();
 		this.overlay.classList.add('light-menu-theme');
 	}
@@ -47,9 +66,6 @@ export class ServerComComponent implements AfterViewInit {
 	}
 
 	public connect() {
-		this.subConnect = this.websocketSvc.connected().subscribe(status => {
-			this.connectFlag = status;
-		});
 		this.websocketSvc.connect(this.globalSvc.getWebSocketUrl());
 	}
 
@@ -72,9 +88,6 @@ export class ServerComComponent implements AfterViewInit {
 
 	public loginCloseEvent(value: string) {
 		this.loginDisplayFlag = false;
-		if (value == "true") {
-			this.loginFlag = true;
-		}
 		if (value == "register") {
 			this.registerDisplayFlag =  true;
 		}
@@ -82,7 +95,6 @@ export class ServerComComponent implements AfterViewInit {
 
 	public logout() {
 		this.authSvc.logout();
-		this.loginFlag = false;
 	}
 
 	public password() {

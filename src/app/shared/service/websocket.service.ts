@@ -48,13 +48,8 @@ export class WebSocketService {
 		this.trackSubs = [];
 	}
 
-	public connected(): Observable<any> {
-		return this.wsConnected$.asObservable();
-	}
-
-	public backendMsg$(): Observable<any> {
-		return this.backendMsgSubject.asObservable();
-	}
+	public connected$ = this.wsConnected$.asObservable();
+	public backendMsg$ = this.backendMsgSubject.asObservable();
 
 	public prepareMessage(channelid: number, domain: string, command: string, data: string[]): wsMessage {
 		let message: wsMessage = {
@@ -79,7 +74,7 @@ export class WebSocketService {
 		this.webSocketSubscription = this.webSocketSubject.subscribe(
 			(msg) => this.webSocketParse(msg),
 			(err) => this.socketError(err),
-			() => this.wsConnected$.next(false)
+			() => this.wsConnected$.next(false) // called when con closed
 		);
 		this.hbtTicker = setInterval(
 			() => {

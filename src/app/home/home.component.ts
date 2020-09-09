@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
 	{}
 
   ngOnInit() {
-		this.subConnect = this.webSocketSvc.connected().subscribe(
+		this.subConnect = this.webSocketSvc.connected$.subscribe(
 			flag => {
 				this.connectFlag = flag;
 			}

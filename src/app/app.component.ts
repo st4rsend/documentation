@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
 		}
 
 	ngOnInit() {
-		this.isConnectedSub = this.webSocket.connected()
+		this.isConnectedSub = this.webSocket.connected$
 			.subscribe( value => { this.connectStatusChange(value) });
 		this.router.navigate(['']);
 	}
