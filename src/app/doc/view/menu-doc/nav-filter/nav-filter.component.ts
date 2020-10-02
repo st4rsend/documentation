@@ -29,7 +29,7 @@ export class NavFilterComponent implements OnInit {
 	public themeLabel = "Theme";
 	public docLabel = "Doc";
 
-	public searchDepth: number = 8;
+	public searchDepth: number = 10;
 
   constructor(
 		private docService: DocService,

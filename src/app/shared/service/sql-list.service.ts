@@ -84,7 +84,13 @@ export class SqlListService {
 	}
 
 	public setDepth(value: number) {
-		console.log("SetDepth: ", value);
+		this.SetDepthKey("default", value);
+	}
+
+	public SetDepthKey(key: string, value: number) {
+		console.log("SetDepth: ", key, value);
+		this.listMap.get(key).sqlListDef.humanRating_value = 10 - value;
+		this.sqlGetList(key);
 	}
 
 	public UpdateListKey(key: string, newList: Array<ISqlList>) {
@@ -126,7 +132,7 @@ export class SqlListService {
 				asFilter: false,
 				filter_column_name: null,
 				filter_value: null,
-				humanRating_value: 7,
+				humanRating_value: 0,
 				calcRating_value: 0,
 			},
 			sqlList: new Array<ISqlList>(),
