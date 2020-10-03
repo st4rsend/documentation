@@ -13,6 +13,7 @@ import { ListSelectComponent } from '../../../../shared/component/list-select/li
 export class NavFilterComponent implements OnInit {
 
 	@ViewChild('docList', {static: true}) docList: ListSelectComponent;
+	@ViewChild('docTheme', {static: true}) docTheme: ListSelectComponent;
 
 	public docListTable: string = 'documentation_list';
 	public docListIDName: string = 'ID';
@@ -55,5 +56,6 @@ export class NavFilterComponent implements OnInit {
 
 	public setDepth() {
 		this.docList.setDepth(this.searchDepth);
+		this.docTheme.setDepth(this.searchDepth);
 	}
 }

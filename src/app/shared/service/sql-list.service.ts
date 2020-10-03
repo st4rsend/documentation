@@ -88,8 +88,7 @@ export class SqlListService {
 	}
 
 	public SetDepthKey(key: string, value: number) {
-		console.log("SetDepth: ", key, value);
-		this.listMap.get(key).sqlListDef.humanRating_value = 10 - value;
+		this.listMap.get(key).sqlListDef.humanRating_value = value;
 		this.sqlGetList(key);
 	}
 
@@ -132,8 +131,8 @@ export class SqlListService {
 				asFilter: false,
 				filter_column_name: null,
 				filter_value: null,
-				humanRating_value: 0,
-				calcRating_value: 0,
+				humanRating_value: 10,
+				calcRating_value: 10,
 			},
 			sqlList: new Array<ISqlList>(),
 			sqlMap: new Map<number, string>(),
