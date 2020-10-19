@@ -33,7 +33,7 @@ export class ListSelectDocComponent implements OnInit {
 		this.docList.isReady$.subscribe(
 			ready => {
 				if ( ready ) {
-					console.log(this.docList.list.values().next());
+					//console.log(this.docList.list.values().next());
 					this.docList.listID = +this.docListID;
 					//this.newListID = this.docList.list[0].idx;;
 					//this.newListID = this.docList.values().next();;

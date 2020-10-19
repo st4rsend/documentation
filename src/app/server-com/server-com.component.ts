@@ -49,7 +49,6 @@ export class ServerComComponent implements AfterViewInit {
 		this.subLogin = this.authSvc.userId$.subscribe(
 			id => {
 				this.userId = id;
-				console.log("Received UserID: ", id);
 				if (id > 0) {
 					this.loginFlag = true;
 				} else {
