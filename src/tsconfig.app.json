@@ -2,7 +2,8 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "types": []
+    "types": ["mathjax"]
+    //"types": [""]
   },
 	"angularCompilerOptions": {
 		"enableIvy": true

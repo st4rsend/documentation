@@ -43,6 +43,7 @@ import { MgmtFooterComponent } from './mgmt/mgmt-footer/mgmt-footer.component';
 import { MgmtBaseComponent } from './doc/admin/mgmt-base/mgmt-base.component';
 import { DocListFinderComponent } from './doc/admin/doc-list-finder/doc-list-finder.component';
 
+import { MathModule } from './shared/mathjax/math.module';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { DocListFinderComponent } from './doc/admin/doc-list-finder/doc-list-fin
 		DragDropModule,
 		ScrollingModule,
 		FlexLayoutModule,
+		MathModule.forRoot(),
   ],
   providers: [
 	],
