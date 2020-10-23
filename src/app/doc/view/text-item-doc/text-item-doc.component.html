@@ -19,6 +19,27 @@
 			<app-url-svg-item-doc *ngSwitchCase="'SVG-URL'"
 	 			[data]="itemDoc.value">
 			</app-url-svg-item-doc>
+			<div *ngSwitchCase="'MATHJAX'"
+				[ngClass]="displaySplitCssA">
+				<app-mathjax-item-doc
+					[pres]="inner"
+					[data]=itemDoc.value>
+				</app-mathjax-item-doc>
+			</div>
+			<div *ngSwitchCase="'MATHLATEX'"
+				[ngClass]="displaySplitCssA">
+				<app-mathjax-item-doc
+					[pres]="latex"
+					[data]=itemDoc.value>
+				</app-mathjax-item-doc>
+			</div>
+			<div *ngSwitchCase="'MATHML'"
+				[ngClass]="displaySplitCssA">
+				<app-mathjax-item-doc
+					[pres]="mathml"
+					[data]=itemDoc.value>
+				</app-mathjax-item-doc>
+			</div>
 			<div *ngSwitchCase="'LIST'"
 				[ngClass]="displaySplitCssA"
 				align='center'>
@@ -42,6 +63,27 @@
 			<app-url-svg-item-doc *ngSwitchCase="'SVG-URL'"
 	 			[data]="itemDoc.value2">
 			</app-url-svg-item-doc>
+			<div *ngSwitchCase="'MATHJAX'"
+				[ngClass]="displaySplitCssB">
+				<app-mathjax-item-doc
+					[pres]="inner"
+					[data]=itemDoc.value2>
+				</app-mathjax-item-doc>
+			</div>
+			<div *ngSwitchCase="'MATHLATEX'"
+				[ngClass]="displaySplitCssB">
+				<app-mathjax-item-doc
+					[pres]="latex"
+					[data]=itemDoc.value2>
+				</app-mathjax-item-doc>
+			</div>
+			<div *ngSwitchCase="'MATHML'"
+				[ngClass]="displaySplitCssB">
+				<app-mathjax-item-doc
+					[pres]="mathml"
+					[data]=itemDoc.value2>
+				</app-mathjax-item-doc>
+			</div>
 			<div *ngSwitchCase="'LIST'"
 				[ngClass]="displaySplitCssB"
 				align='center'>

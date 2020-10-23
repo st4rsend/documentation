@@ -20,7 +20,7 @@ export class MathServiceImpl implements MathService {
   private readonly notifier: ReplaySubject<boolean>;
 
   constructor() {
-    console.log(`service constructor`);
+    //console.log(`service constructor`);
     this.notifier = new ReplaySubject<boolean>();
     window.hubReady = this.notifier;
   }

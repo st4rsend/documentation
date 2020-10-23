@@ -8,7 +8,7 @@ import {MathDirective} from './math.directive';
 })
 export class MathModule {
   constructor(mathService: MathServiceImpl) {
-    console.log(`constructor module`);
+    //console.log(`constructor module`);
     // see https://docs.mathjax.org/en/latest/advanced/dynamic.html
     const script = document.createElement('script') as HTMLScriptElement;
     script.type = 'text/javascript';
@@ -35,7 +35,7 @@ export class MathModule {
 
 
   public static forRoot(): ModuleWithProviders<MathModule> {
-    console.log(`for root`);
+    //console.log(`for root`);
     return {
       ngModule: MathModule,
       providers: [{provide: MathServiceImpl, useClass: MathServiceImpl}]

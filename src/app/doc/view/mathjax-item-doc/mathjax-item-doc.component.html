@@ -1,0 +1,18 @@
+<div [ngSwitch]="pres">
+	<div *ngSwitchCase="'inner'">
+		<div 
+			[appMath]
+			[innerHTML]="mathjax">
+		</div>
+	</div>
+	<div *ngSwitchCase="'latex'">
+		<div
+			[appMath]="mathjaxLatex">
+		</div>
+	</div>
+	<div *ngSwitchCase="'mathml'">
+		<div 
+			[appMath]="mathjaxMathml">
+		</div>
+	</div>
+</div>

@@ -22,6 +22,9 @@ export class TextItemDocComponent implements OnChanges {
 	public displayDirCss: string;
 	public displaySplitCssA: string;
 	public displaySplitCssB: string;
+	public inner: string = "inner"
+	public latex: string = "latex"
+	public mathml: string = "mathml"
 
   constructor(
 		private docService: DocService,
