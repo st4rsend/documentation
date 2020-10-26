@@ -32,8 +32,19 @@
 </p>
 <p>
 <b>Seul un utilisateur identifié est authorisé à opérer des modifications sur les contenus.</b>
-<BR><b>Attention:</b><i>L'ensemble des fonctionnalités de modification restent accessibles à titre informatif. Cependant les changements de contenu demandés par un utilisateur non identifié seront refusés par le backend, et donc perdues à validation.</i>
+<BR><b>Attention:</b><i>L'ensemble des fonctionnalités de modification restent accessibles à titre informatif. Cependant les changements de contenu demandés par un utilisateur non identifié seront refusés par le backend, et donc perdus à validation.</i>
 </p>
+<p><b>Le backend est stoppé à la 59ème minute et redémarré à 00. Dans ce laps de temps la connexion websocket est perdue ainsi que tout changement en cours.</b></p>
+<H2>Confort</H2>
+<H3>Question</H3>
+Avez-vous vraiment besoin de 3 écrans?
+<H3>Réponse</H3>
+<li>J'ai besoin de 2 écrans pour travailler confortablement.</li>
+<li>Mon chat ne peut se positionner que devant 1 seul écran à la fois.</li>
+<H3>Conclusion</H3>
+<li>J'ai définitivement besoin de 3 écrans.</li>
+<H3>Corrollaire</H3>
+<li><b>@Schrodïnger: </b>Je t'interdis ne serait-ce que d'observer mon chat!</li>
 <div>
 	<div class="theming-table">
 		<div class="theming-table-caption">
@@ -74,20 +85,11 @@
 				</div>
 				<div class="theming-table-cell">
 					<mat-form-field appearance="outline">
-						<mat-label>Domain</mat-label>
+						<mat-label>Text</mat-label>
 						<input placeholder="placeholder" matInput >
 					</mat-form-field>
 				</div>
 			</div>
 		</div>
 	</div>
-<h4>latex</h4>
-<div [appMath]="mathLatex"></div>
-<h4> mathml</h4>
-<div [appMath]="mathMl"></div>
-
-<h4>inner html</h4>
-<div [appMath]>
-  $E = mc^2$
-</div>
 </div>
