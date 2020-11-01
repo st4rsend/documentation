@@ -276,6 +276,8 @@ export class DocService {
 				}
 				if ((+scMsg.payload.channelid === this.channelID)
 						&& (scMsg.payload.command === "EOF")) {
+					
+					//console.log("RECEIVED: ", this.docs);
 					this.isReady$.next(true);
 					this.dsSelectSub.unsubscribe();
 					this.updateAncestors();
