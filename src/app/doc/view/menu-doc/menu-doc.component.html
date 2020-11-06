@@ -9,22 +9,6 @@
 	[@slideContent]="animationState" 
 	(mouseenter)="mouseEnter()">
 	<div class="menu-tabs-bar">
-		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navMap}"
-			(click)="setTabMap()">
-			Nav
-		</div>
-		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navFilter}"
-			(click)="setTabFilter()">
-			search
-		</div>
-		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navMode}"
-			(click)="setTabMode()">
-			Mode
-		</div>
-		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navOptions}"
-			(click)="setTabOptions()">
-			Options
-		</div>
 		<div class="menu-nav">
 			<div class="menu-nav-item">
 				<button mat-icon-button matPrefix color="primary"
@@ -44,6 +28,22 @@
 					<mat-icon>refresh</mat-icon>
 				</button>
 			</div>
+		</div>
+		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navMap}"
+			(click)="setTabMap()">
+			Nav
+		</div>
+		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navFilter}"
+			(click)="setTabFilter()">
+			search
+		</div>
+		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navMode}"
+			(click)="setTabMode()">
+			Mode
+		</div>
+		<div class="menu-tab" [ngClass]="{'menu-tab-highlight': navOptions}"
+			(click)="setTabOptions()">
+			Options
 		</div>
 	</div>
 	<div class="menu-tab-container menu-tab-highlight">
