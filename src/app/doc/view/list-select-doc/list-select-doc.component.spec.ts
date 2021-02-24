@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ListSelectDocComponent } from './list-select-doc.component';
 
@@ -6,7 +6,7 @@ describe('ListSelectDocComponent', () => {
   let component: ListSelectDocComponent;
   let fixture: ComponentFixture<ListSelectDocComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ListSelectDocComponent ]
     })

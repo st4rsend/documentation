@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ListSelectComponent } from './list-select.component';
 
@@ -6,7 +6,7 @@ describe('ListSelectComponent', () => {
   let component: ListSelectComponent;
   let fixture: ComponentFixture<ListSelectComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ListSelectComponent ]
     })
