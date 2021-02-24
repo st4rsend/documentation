@@ -17,9 +17,10 @@ const appRoutes: Routes = [
   imports: [
 //    CommonModule
 		RouterModule.forRoot(
-			appRoutes,
+			appRoutes, {
+				scrollPositionRestoration: 'enabled',
 //			{ enableTracing: true }
-		),
+		}),
   ],
 	exports: [
 		RouterModule
