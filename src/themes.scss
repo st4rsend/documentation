@@ -1,36 +1,35 @@
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 @import 'st4rsend-light-palette';
 @import 'st4rsend-dark-palette';
 
-@include mat-core();
+@include mat.core();
 
-$light-primary: mat-palette($st4rsend-light-primary);
-$light-accent:  mat-palette($mat-indigo);
-$light-warn:    mat-palette($mat-red);
+$light-primary: mat.define-palette($st4rsend-light-primary);
+$light-accent:  mat.define-palette(mat.$indigo-palette);
+$light-warn:    mat.define-palette(mat.$red-palette);
 
-$light-background: mat-palette($st4rsend-light-background);
-$light-foreground: mat-palette($st4rsend-light-foreground);
+$light-background: mat.define-palette($st4rsend-light-background);
+$light-foreground: mat.define-palette($st4rsend-light-foreground);
 
-$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+$light-theme: mat.define-light-theme($light-primary, $light-accent, $light-warn);
 
 
 .light-theme {
-	@include angular-material-theme($light-theme);
-	background-color: mat-color($light-background,500);
-	color: mat-color($light-foreground,700);
+	@include mat.all-component-themes($light-theme);
+	background-color: mat.get-color-from-palette($light-background,500);
+	color: mat.get-color-from-palette($light-foreground,700);
 	a:link, a:visited, .a:link, .a:visited {
-		color: mat-color($light-primary,900);
+		color: mat.get-color-from-palette($light-primary,900);
 	};
 
 	.primary-color {
-		color: mat-color($light-primary,500);
+		color: mat.get-color-from-palette($light-primary,500);
 	}
 	.accent-color {
-		color: mat-color($light-accent,500);
+		color: mat.get-color-from-palette($light-accent,500);
 	}
 	.warn-color {
-		color: mat-color($light-warn,500);
+		color: mat.get-color-from-palette($light-warn,500);
 	}
 
 	.grey-overlay {
@@ -49,7 +48,7 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 		border-radius: 8px;
 		border-style: ridge;
 		overflow-y: auto;
-		background-color: mat-color($light-background,800);
+		background-color: mat.get-color-from-palette($light-background,800);
 		top: 5%;
 		left: 5%;
 		height: 90%;
@@ -57,52 +56,52 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 	}
 	
 	.doc-item {
-		background-color: mat-color($light-background,400);
+		background-color: mat.get-color-from-palette($light-background,400);
 		//font-family: Roboto;
 	}
 	.doc-item-highlight {
-		background-color: mat-color($light-background,800);
+		background-color: mat.get-color-from-palette($light-background,800);
 	}
 	.doc-item-edit {
-		background-color: mat-color($light-background,400);
+		background-color: mat.get-color-from-palette($light-background,400);
 		//font-family: Roboto;
 	}
 	.doc-item-edit-highlight {
-		background-color: mat-color($light-background,800);
+		background-color: mat.get-color-from-palette($light-background,800);
 	}
 	.doc-item-description {
-		background-color: mat-color($light-background,900);
+		background-color: mat.get-color-from-palette($light-background,900);
 	}
 	.app-header {
-		background-color: mat-color($light-background,900);
+		background-color: mat.get-color-from-palette($light-background,900);
 	}
 	.head-bar {
-		background-color: mat-color($light-background,100);
+		background-color: mat.get-color-from-palette($light-background,100);
 	}
 
 	.menu-tab {
-		background-color: mat-color($light-background,700);
+		background-color: mat.get-color-from-palette($light-background,700);
 	}
 
 	.menu-tab-highlight {
-		background-color: mat-color($light-background,400);
+		background-color: mat.get-color-from-palette($light-background,400);
 	}
 
 	H1 {
-		color: mat-color($light-primary, 500);
+		color: mat.get-color-from-palette($light-primary, 500);
 		text-align: center;
 	}
 	H2, H4 {
-		color: mat-color($light-accent, 700);
+		color: mat.get-color-from-palette($light-accent, 700);
 	}
 	H3, H5 {
-		color: mat-color($light-primary, 800);
+		color: mat.get-color-from-palette($light-primary, 800);
 	}
 	.mat-form-field-label {
-		color: mat-color($light-primary,600);
+		color: mat.get-color-from-palette($light-primary,600);
 	}
 	.mat-form-field-outline{
-		background-color: mat-color($light-background,300);
+		background-color: mat.get-color-from-palette($light-background,300);
 	}
 
 	.mymatoption.mat-select-panel {
@@ -110,43 +109,43 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 		border: thin solid #0000ff;
 	}
 	.warning {
-		color: mat-color($light-warn);
+		color: mat.get-color-from-palette($light-warn);
 	}
 }
 
 .light-menu-theme {
 	.mat-menu-item {
-		background-color: mat-color($light-background,800);
+		background-color: mat.get-color-from-palette($light-background,800);
 	}
 	.mat-menu-panel {
-		color: mat-color($light-primary,800);
-		background-color: mat-color($light-background,300);
+		color: mat.get-color-from-palette($light-primary,800);
+		background-color: mat.get-color-from-palette($light-background,300);
 	}
 }
 
-$dark-primary: mat-palette($st4rsend-dark-primary);
-$dark-accent:  mat-palette($mat-light-green, A200, A100, A400);
-$dark-warn:    mat-palette($mat-deep-orange);
-$dark-background: mat-palette($st4rsend-dark-background);
-$dark-foreground: mat-palette($st4rsend-dark-foreground);
+$dark-primary: mat.define-palette($st4rsend-dark-primary);
+$dark-accent:  mat.define-palette(mat.$light-green-palette, A200, A100, A400);
+$dark-warn:    mat.define-palette(mat.$deep-orange-palette);
+$dark-background: mat.define-palette($st4rsend-dark-background);
+$dark-foreground: mat.define-palette($st4rsend-dark-foreground);
 
-$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+$dark-theme: mat.define-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
 .dark-theme {
-	@include angular-material-theme($dark-theme);
-	background-color: mat-color($dark-background,500);
-	color: mat-color($dark-foreground,500);
+	@include mat.all-component-themes($dark-theme);
+	background-color: mat.get-color-from-palette($dark-background,500);
+	color: mat.get-color-from-palette($dark-foreground,500);
 	a:link, a:visited, .a:link, .a:visited {
-		color: mat-color($dark-primary,500);
+		color: mat.get-color-from-palette($dark-primary,500);
 	};
 	.primary-color {
-		color: mat-color($dark-primary,500);
+		color: mat.get-color-from-palette($dark-primary,500);
 	}
 	.accent-color {
-		color: mat-color($dark-accent,500);
+		color: mat.get-color-from-palette($dark-accent,500);
 	}
 	.warn-color {
-		color: mat-color($dark-warn,500);
+		color: mat.get-color-from-palette($dark-warn,500);
 	}
 	.grey-overlay {
 		position: fixed;
@@ -164,72 +163,72 @@ $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 		border-radius: 8px;
 		border-style: ridge;
 		overflow-y: auto;
-		background-color: mat-color($dark-background,600);
+		background-color: mat.get-color-from-palette($dark-background,600);
 		top: 5%;
 		left: 5%;
 		height: 90%;
 		width: 90%;
 	}
 	.doc-item {
-		background-color: mat-color($dark-background,500);
+		background-color: mat.get-color-from-palette($dark-background,500);
 		//font-family: Roboto;
 	}
 	.doc-item-highlight {
-		background-color: mat-color($dark-background,400);
+		background-color: mat.get-color-from-palette($dark-background,400);
 	}
 	.doc-item-edit {
-		background-color: mat-color($dark-background,600);
+		background-color: mat.get-color-from-palette($dark-background,600);
 		//font-family: Roboto;
 	}
 	.doc-item-edit-highlight {
-		background-color: mat-color($dark-background,500);
+		background-color: mat.get-color-from-palette($dark-background,500);
 	}
 	.doc-item-description {
-		background-color: mat-color($dark-background,300);
+		background-color: mat.get-color-from-palette($dark-background,300);
 	}
 	.app-header {
-		background-color: mat-color($dark-background,800);
+		background-color: mat.get-color-from-palette($dark-background,800);
 	}
 	.head-bar {
-		background-color: mat-color($dark-background,600);
+		background-color: mat.get-color-from-palette($dark-background,600);
 	}
 
 	.menu-tab {
-		background-color: mat-color($dark-background,700);
+		background-color: mat.get-color-from-palette($dark-background,700);
 	}
 
 	.menu-tab-highlight {
-		background-color: mat-color($dark-background,300);
+		background-color: mat.get-color-from-palette($dark-background,300);
 	}
 
 	H1 {
-		color: mat-color($dark-primary, 500);
+		color: mat.get-color-from-palette($dark-primary, 500);
 		text-align: center;
 	}
 	H2, H4 {
-		color: mat-color($dark-primary, 800);
+		color: mat.get-color-from-palette($dark-primary, 800);
 	}
 	H3, H5 {
-		color: mat-color($dark-accent, 800);
+		color: mat.get-color-from-palette($dark-accent, 800);
 	}
 	.mat-form-field-label {
-		color: mat-color($dark-primary,600);
+		color: mat.get-color-from-palette($dark-primary,600);
 	}
 	.mat-form-field-outline{
-		background-color: mat-color($dark-background,300);
+		background-color: mat.get-color-from-palette($dark-background,300);
 	}
 	.warning {
-		color: mat-color($dark-warn);
+		color: mat.get-color-from-palette($dark-warn);
 	}
 }
 
 .dark-menu-theme {
 	.mat-menu-item {
-		color: mat-color($dark-primary,600);
-		background-color: mat-color($dark-background,700);
+		color: mat.get-color-from-palette($dark-primary,600);
+		background-color: mat.get-color-from-palette($dark-background,700);
 	}
 	.mat-menu-panel {
-		color: mat-color($dark-primary,800);
-		background-color: mat-color($dark-background,300);
+		color: mat.get-color-from-palette($dark-primary,800);
+		background-color: mat.get-color-from-palette($dark-background,300);
 	}
 }
