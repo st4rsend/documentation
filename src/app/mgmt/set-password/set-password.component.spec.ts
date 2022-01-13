@@ -8,8 +8,9 @@ describe('SetPasswordComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SetPasswordComponent ]
-    })
+    declarations: [SetPasswordComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

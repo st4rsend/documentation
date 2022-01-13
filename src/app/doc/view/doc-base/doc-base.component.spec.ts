@@ -8,8 +8,9 @@ describe('DocBaseComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DocBaseComponent ]
-    })
+    declarations: [DocBaseComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

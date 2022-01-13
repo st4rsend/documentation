@@ -8,8 +8,9 @@ describe('DynDocComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DynDocComponent ]
-    })
+    declarations: [DynDocComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

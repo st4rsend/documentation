@@ -8,8 +8,9 @@ describe('MgmtBaseComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MgmtBaseComponent ]
-    })
+    declarations: [MgmtBaseComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

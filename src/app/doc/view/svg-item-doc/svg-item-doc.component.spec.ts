@@ -8,8 +8,9 @@ describe('SvgItemDocComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SvgItemDocComponent ]
-    })
+    declarations: [SvgItemDocComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

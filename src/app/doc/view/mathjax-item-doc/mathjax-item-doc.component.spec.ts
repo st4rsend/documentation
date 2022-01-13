@@ -8,8 +8,9 @@ describe('MathjaxItemDocComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MathjaxItemDocComponent ]
-    })
+    declarations: [MathjaxItemDocComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   });
 

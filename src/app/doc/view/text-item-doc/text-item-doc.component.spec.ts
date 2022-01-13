@@ -8,8 +8,9 @@ describe('TextItemDocComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TextItemDocComponent ]
-    })
+    declarations: [TextItemDocComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

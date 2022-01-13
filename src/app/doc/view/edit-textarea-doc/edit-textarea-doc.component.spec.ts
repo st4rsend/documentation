@@ -8,8 +8,9 @@ describe('EditTextareaDocComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditTextareaDocComponent ]
-    })
+    declarations: [EditTextareaDocComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

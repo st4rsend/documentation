@@ -8,8 +8,9 @@ describe('UrlSvgItemDocComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ UrlSvgItemDocComponent ]
-    })
+    declarations: [UrlSvgItemDocComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

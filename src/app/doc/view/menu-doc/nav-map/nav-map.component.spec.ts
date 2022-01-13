@@ -8,8 +8,9 @@ describe('NavMapComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavMapComponent ]
-    })
+    declarations: [NavMapComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

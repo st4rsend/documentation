@@ -8,8 +8,9 @@ describe('ListSelectDocComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListSelectDocComponent ]
-    })
+    declarations: [ListSelectDocComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

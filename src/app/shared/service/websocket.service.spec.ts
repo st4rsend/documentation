@@ -5,8 +5,9 @@ import { WebsocketService } from './websocket.service';
 describe('WebsocketService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [WebsocketService]
-    });
+    providers: [WebsocketService],
+    teardown: { destroyAfterEach: false }
+});
   });
 
   it('should be created', inject([WebsocketService], (service: WebsocketService) => {

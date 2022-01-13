@@ -8,8 +8,9 @@ describe('EditItemDocComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditItemDocComponent ]
-    })
+    declarations: [EditItemDocComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

@@ -8,8 +8,9 @@ describe('ListMgmtComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListMgmtComponent ]
-    })
+    declarations: [ListMgmtComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

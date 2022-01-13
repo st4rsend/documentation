@@ -8,8 +8,9 @@ describe('MgmtFooterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MgmtFooterComponent ]
-    })
+    declarations: [MgmtFooterComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

@@ -8,8 +8,9 @@ describe('NavOptionsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavOptionsComponent ]
-    })
+    declarations: [NavOptionsComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

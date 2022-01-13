@@ -8,8 +8,9 @@ describe('DocListFinderComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DocListFinderComponent ]
-    })
+    declarations: [DocListFinderComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 
