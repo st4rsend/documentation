@@ -4,7 +4,8 @@
 
 export const environment = {
 	production: false,
-	webSocketUrl: "wss://st4rsend.net/wsdoc"
+	webSocketUrl: "wss://st4rsend.net/wsdoc",
+	baseURL: "/",
 };
 
 /*

@@ -16,7 +16,7 @@ $light-theme: mat.define-light-theme($light-primary, $light-accent, $light-warn)
 
 .light-theme {
 	@include mat.all-component-themes($light-theme);
-	background-color: mat.get-color-from-palette($light-background,500);
+	background-color: mat.get-color-from-palette($light-background,A100);
 	color: mat.get-color-from-palette($light-foreground,700);
 	a:link, a:visited, .a:link, .a:visited {
 		color: mat.get-color-from-palette($light-primary,900);

@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { APP_BASE_HREF } from '@angular/common';
+import { environment } from '../environments/environment';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -93,7 +95,7 @@ import { MathModule } from './shared/mathjax/math.module';
         FlexLayoutModule,
         MathModule.forRoot(),
     ],
-    providers: [],
+    providers: [ {provide: APP_BASE_HREF, useValue: environment.baseURL} ],
     bootstrap: [AppComponent]
 })
 export class AppModule { 
